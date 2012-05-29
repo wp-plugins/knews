@@ -12,7 +12,7 @@ Finally, newsletters are multilingual, quick and professional.
 
 == Description ==
 
-Knews is a powerful multilingual language plug-in that allows you to **build professional looking newsletters**, segment subscribers in different mailing lists as well as segment them by language all in a matter of minutes.
+Knews is a powerful multilingual plug-in that allows you to **build professional looking newsletters**, segment subscribers in different mailing lists as well as segment them by language all in a matter of minutes.
 
 Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) editor. Based on templates, with no need to know HTML.
 
@@ -25,7 +25,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
-* **Multilingual language back office**: English, German, French, Italian, Spanish and Catalan.
+* **Multilingual back office**: English, German, French, Italian, Spanish and Catalan.
 * **Widget** for subscriber and surfing language capture.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
