@@ -145,3 +145,9 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 = 1.0.0 =
 
 * Habemus Plugin!!!
+
+== Upgrade Notice ==
+
+* Template Casablanca improvements: background and layout issues with Gmail solved
+
+* Duplication of newsletters option added (not necessary start from scratch every newsletter)
