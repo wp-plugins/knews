@@ -89,7 +89,7 @@ msgstr "Und sind in diesem Datenimport geblockt:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:649
-msgid "And they have not been imported:"
+msgid "And there have not been imported:"
 msgstr "Und sind nicht importiert worden:"
 
 #. Text in echo
@@ -1030,13 +1030,13 @@ msgstr "Es existiert bereits ein Newsletter mit gleichem Namen!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
-msgid "They have been created:"
-msgstr "Sind erstellt worden:"
+msgid "There have been created:"
+msgstr "Es sind erstellt worden:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
-msgid "They have been updated:"
-msgstr "Sind aktualisiert worden:"
+msgid "There have been updated:"
+msgstr "Es sind aktualisiert worden:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:356
@@ -1777,7 +1777,7 @@ msgstr "Senden gelöscht"
 msgid "Submit priority updated"
 msgstr "Sendepriorität aktualisiert"
 
-msgid "Use Wordpress’s built-in CRON framework."
+msgid "Use WordPress's built-in CRON framework."
 msgstr "Bitte Built-in WordPress CRON Framework benutzen."
 
 msgid "This option no requires configuration, but in less traffic sites can be slow to submit"
@@ -1788,4 +1788,16 @@ msgstr "Bitte die Emulation von JavaScript CRON benutzen."
 
 msgid "This option requires you to keep a window open during submission and does not allow deferred submits"
 msgstr "Diese Option benötigt ein offenes Fenster während gesendet wird, aufgeschobenes Senden ist nicht möglich."
+
+msgid "Check all mailing lists"
+msgstr "Markieren Sie alle Mailing-Listen"
+
+msgid "Uncheck all mailing lists"
+msgstr "Deaktivieren Sie alle Mailing-Listen"
+
+msgid "Duplicate"
+msgstr "Duplikat"
+
+msgid "Duplicate this newsletter"
+msgstr "Duplizieren Sie diesen Newsletter"
 

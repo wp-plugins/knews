@@ -89,7 +89,7 @@ msgstr "Et ont été bloqués lors de cette importation :"
 
 #. Text in echo
 #: admin/knews_admin_import.php:649
-msgid "And they have not been imported:"
+msgid "And there have not been imported:"
 msgstr "Et ont été importés :"
 
 #. Text in echo
@@ -641,7 +641,7 @@ msgstr "Veuillez maintenant cliquer ici, une fenêtre émulant CRON avec JavaScr
 #. Text in echo
 #: admin/knews_admin_import.php:646
 msgid "Of which have been successfully imported:"
-msgstr "Dont ont été correctement importés :"
+msgstr "Ils ont été correctement importés :"
 
 #. Text in function
 #: admin/knews_admin_submits.php:16
@@ -1030,12 +1030,12 @@ msgstr "Ce nom a déjà été donné à une autre newsletter !"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
-msgid "They have been created:"
+msgid "There have been created:"
 msgstr "Ils ont été créés :"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
-msgid "They have been updated:"
+msgid "There have been updated:"
 msgstr "Ils ont été actualisés :"
 
 #. Text in echo
@@ -1777,7 +1777,7 @@ msgstr "Envoi éliminé"
 msgid "Submit priority updated"
 msgstr "Priorité d'envoi actualisée"
 
-msgid "Use Wordpress’s built-in CRON framework."
+msgid "Use WordPress's built-in CRON framework."
 msgstr "Utiliser la fonction CRON interne de WordPress."
 
 msgid "This option no requires configuration, but in less traffic sites can be slow to submit"
@@ -1788,4 +1788,16 @@ msgstr "Utiliser l'émulation CRON de JavaScript."
 
 msgid "This option requires you to keep a window open during submission and does not allow deferred submits"
 msgstr "Cette option exige de maintenir une fenêtre ouverte pendant que l'envoi est en cours et ne permet pas la programmation d'envois différés"
+
+msgid "Check all mailing lists"
+msgstr "Marquez tous les listes d'abonnés"
+
+msgid "Uncheck all mailing lists"
+msgstr "Éteignez tous les listes d'abonnés"
+
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+msgid "Duplicate this newsletter"
+msgstr "Dupliquer ce bulletin"
 
