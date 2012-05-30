@@ -604,11 +604,11 @@ function print_state($step, $where) {
 				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/green_led.gif" width="20" height="20" alt="OK" /></td><td><?php _e('Of which have been successfully imported:','knews');?></td><td><?php echo $import_users_ok; ?> <?php _e('users','knews');?></td></tr>
 				<?php } ?>
 				<?php if ($knews_import_users_error != 0) { ?>
-				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td><?php _e('And they have not been imported:','knews')?></td><td><?php echo $knews_import_users_error; ?> <?php _e('users','knews');?></td></tr>
+				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td><?php _e('And there have not been imported:','knews')?></td><td><?php echo $knews_import_users_error; ?> <?php _e('users','knews');?></td></tr>
 				<?php } ?>
-				<tr><td>&nbsp;</td><td><?php _e('They have been created:','knews'); ?></td><td><?php echo $import_users_new; ?> <?php _e('users','knews');?></td></tr>
+				<tr><td>&nbsp;</td><td><?php _e('There have been created:','knews'); ?></td><td><?php echo $import_users_new; ?> <?php _e('users','knews');?></td></tr>
 				<?php if ($import_users_overwrite != 0) { ?>
-				<tr><td>&nbsp;</td><td><?php _e('They have been updated:','knews'); ?></td><td><?php echo $import_users_overwrite; ?> <?php _e('users','knews');?></td></tr>
+				<tr><td>&nbsp;</td><td><?php _e('There have been updated:','knews'); ?></td><td><?php echo $import_users_overwrite; ?> <?php _e('users','knews');?></td></tr>
 				<?php } ?>
 				<?php if ($import_users_confirm != 0) { ?>
 				<tr>

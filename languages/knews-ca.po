@@ -89,7 +89,7 @@ msgstr "I han estat bloquejats en aquesta importació:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:649
-msgid "And they have not been imported:"
+msgid "And there have not been imported:"
 msgstr "I no han estat importats:"
 
 #. Text in echo
@@ -1030,12 +1030,12 @@ msgstr "Ja hi ha una altra newsletter amb el mateix nom!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
-msgid "They have been created:"
+msgid "There have been created:"
 msgstr "Han estat creats:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
-msgid "They have been updated:"
+msgid "There have been updated:"
 msgstr "Han estat actualitzats:"
 
 #. Text in echo
@@ -1777,7 +1777,7 @@ msgstr "Enviament eliminat"
 msgid "Submit priority updated"
 msgstr "Prioritat d'enviament actualitzada"
 
-msgid "Use Wordpress’s built-in CRON framework."
+msgid "Use WordPress's built-in CRON framework."
 msgstr "Usar la funció CRON interna de WordPress"
 
 msgid "This option no requires configuration, but in less traffic sites can be slow to submit"
@@ -1788,4 +1788,16 @@ msgstr "Usar la emulació de CRON per JavaScript."
 
 msgid "This option requires you to keep a window open during submission and does not allow deferred submits"
 msgstr "Aquesta opció requereix mantenir una finestra oberta mentre es realitza l'enviament i no permet programar enviaments diferits"
+
+msgid "Check all mailing lists"
+msgstr "Marcar totes les llistes de correu"
+
+msgid "Uncheck all mailing lists"
+msgstr "Desmarcar totes les llistes de correu"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Duplicate this newsletter"
+msgstr "Duplicar aquesta newsletter"
 
