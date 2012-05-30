@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 = Features =
 
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
-* **Multilingual** language: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
+* **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
 * Support for **SMTP** sending.
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
@@ -39,9 +39,9 @@ A WYSIWYG Editor Demo:
 **Admin languages:**
 
 * English - en_US (Knews Team)
-* French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com)
-* German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com)
-* Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com)
+* French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
+* German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
+* Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com )
 * Spanish - es_ES (Knews Team)
 * Catalan - ca (Knews Team)
 
@@ -135,6 +135,12 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 7. The Casablanca Template and a sample customisation (Christmas).
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Template Casablanca improvements: background and layout issues with Gmail solved
+
+* Duplication of newsletters option added (not necessary start from scratch every newsletter)
 
 = 1.0.0 =
 
