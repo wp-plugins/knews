@@ -1801,3 +1801,12 @@ msgstr "Duplikat"
 msgid "Duplicate this newsletter"
 msgstr "Duplizieren Sie diesen Newsletter"
 
+msgid "Apply change and refresh image"
+msgstr "Übernehmen Sie die Änderungen und Aktualisieren des Bildes"
+
+msgid "Undo image changes"
+msgstr "Rückgängig Bild ändert"
+
+msgid "Properties image"
+msgstr "Bild-Eigenschaften"
+

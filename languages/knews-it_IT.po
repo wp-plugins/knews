@@ -1790,14 +1790,23 @@ msgid "This option requires you to keep a window open during submission and does
 msgstr "Non puoi programmare un invio differito. Devi usare una finestra ausiliare (emulazione di CRON per JavaScript) fino ad invio terminato 	"
 
 msgid "Check all mailing lists"
-msgstr ""
+msgstr "Segna tutte le mailing list"
 
 msgid "Uncheck all mailing lists"
-msgstr ""
+msgstr "Deselezionare tutte le mailing list"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplica"
 
 msgid "Duplicate this newsletter"
-msgstr ""
+msgstr "Duplica questa newsletter"
+
+msgid "Apply change and refresh image"
+msgstr "Applica le modifiche e l'immagine di aggiornamento"
+
+msgid "Undo image changes"
+msgstr "Annullare le modifiche di immagine"
+
+msgid "Properties image"
+msgstr "proprietà immagine"
 

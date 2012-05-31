@@ -1801,3 +1801,12 @@ msgstr "Duplicar"
 msgid "Duplicate this newsletter"
 msgstr "Duplicar aquesta newsletter"
 
+msgid "Apply change and refresh image"
+msgstr "Aplicar canvis i refrescar la imatge"
+
+msgid "Undo image changes"
+msgstr "Desfer els canvis d'imatge"
+
+msgid "Properties image"
+msgstr "Propietats de la imatge"
+
