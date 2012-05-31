@@ -1,10 +1,10 @@
 === Knews Multilingual Newsletters ===
 Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
-Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
+Tags: newsletter, email, mail, emailing, multi language, multilingual, multilanguage, wysiwyg, editor, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,10 +136,15 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.0.2 =
+
+* WYSIWYG improvements:
+- Resolved change image bug when no link is provided (thanks to Alfredo Pradanos)
+- Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
+
 = 1.0.1 =
 
 * Template Casablanca improvements: background and layout issues with Gmail solved
-
 * Duplication of newsletters option added (not necessary start from scratch every newsletter)
 
 = 1.0.0 =
@@ -148,6 +153,13 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Upgrade Notice ==
 
-* Template Casablanca improvements: background and layout issues with Gmail solved
+= 1.0.2 =
 
+* WYSIWYG improvements:
+- Resolved change image bug when no link is provided (thanks to Alfredo Pradanos)
+- Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
+
+= 1.0.1 =
+
+* Template Casablanca improvements: background and layout issues with Gmail solved
 * Duplication of newsletters option added (not necessary start from scratch every newsletter)
