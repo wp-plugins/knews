@@ -38,6 +38,95 @@ parent.jQuery(document).ready( function () {
 		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
 		return false;
 	});
+	parent.jQuery('span.img_handler a.rredraw_image', document).live('click', function(e) {
+
+		parent.referer_image = parent.jQuery(this).parent().next();
+
+		clean_resize_handlers();
+
+		parent.callback_img('<img src="' + parent.jQuery(parent.referer_image).attr('src')+ '" />');		
+		return false;
+	});
+	parent.jQuery('span.img_handler a.uundo_image', document).live('click', function(e) {
+
+		parent.jQuery(parent.referer_image_size).attr('height', parent.resizing_image_h_undo);
+		parent.jQuery(parent.referer_image_size).attr('width', parent.resizing_image_w_undo);
+
+		clean_resize_handlers();
+		return false;
+	});
+	parent.jQuery('img.editable', document).live('click', function(e) {
+		
+		if (parent.referer_image_size != this) {
+		
+			clean_resize_handlers();
+	
+			parent.jQuery(this).prev().append('<a href="#" class="rredraw_image" title="' + parent.sharp_image + '"></a>');
+			parent.jQuery(this).prev().append('<a href="#" class="uundo_image" title="' + parent.undo_image + '"></a>');
+	
+			ww = parseInt(parent.jQuery(this).attr('width'), 10);
+			hh = parseInt(parent.jQuery(this).attr('height'), 10);
+			tt = parseInt(parent.jQuery(this).offset().top, 10);
+			ll = parseInt(parent.jQuery(this).offset().left, 10);
+
+			parent.resizing_image_w_undo=ww;
+			parent.resizing_image_h_undo=hh;
+
+			parent.referer_image_size = this;
+			
+			parent.resizing_image_style=parent.jQuery(this).attr('style');
+			
+			parent.jQuery(this)
+				.css('outline', 'dashed #000 1px')
+				.css('position','absolute')
+				.css('left',ll)
+				.css('top',tt)
+				.after('<div style="width:' + ww + 'px; height:' + hh + 'px;" class="image_spacer">&nbsp;</div>');
+	
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_s" handlertype="s">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_se" handlertype="se">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_e" handlertype="e">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_ne" handlertype="ne">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_n" handlertype="n">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_nw" handlertype="nw">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_w" handlertype="w">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_sw" handlertype="sw">');
+			
+			move_resize_handlers(ww, hh, tt, ll);
+		}
+		return false;
+	});
+	parent.jQuery('span.img_resizer', document)
+		.live('mousedown', function(e) {
+
+			ww = parseInt(parent.jQuery(parent.referer_image_size).attr('width'), 10);
+			hh = parseInt(parent.jQuery(parent.referer_image_size).attr('height'), 10);
+			tt = parseInt(parent.jQuery(parent.referer_image_size).offset().top, 10);
+			ll = parseInt(parent.jQuery(parent.referer_image_size).offset().left, 10);
+
+			parent.resizing_image_t=tt;
+			parent.resizing_image_l=ll;
+			parent.resizing_image_w=ww;
+			parent.resizing_image_h=hh;
+
+			parent.resizing_image=parent.jQuery(this).attr('handlertype');
+			
+			parent.resizing_image_x=parent.ratoliX;
+			parent.resizing_image_y=parent.ratoliY;
+			
+			parent.resizing_image_handler_x=parent.jQuery(this).offset().left;
+			parent.resizing_image_handler_y=parent.jQuery(this).offset().top;
+
+			return false;
+		})
+		.live('mouseup', function(e) {
+			parent.resizing_image='';
+			return false;
+		})
+		.live('click', function(e) {
+			return false;
+		});
+
 	parent.jQuery(document).bind('keypress keydown click', function() {
 		update_editor();
 	});
@@ -455,86 +544,34 @@ function b_justify(justify) {
 	}
 }
 
-/*function write_tags() {
-	ntag=0;
-	if (info_node().startContainer == info_node().endContainer) {
-		in_node = info_node().startContainer;
-	} else {
-		in_node = info_node().commonAncestorContainer;
+function move_resize_handlers(ww, hh, tt, ll) {
+	parent.jQuery('span.img_resizer_s', document).css('left', ll + Math.floor(ww/2) - 4).css('top', tt + hh - 4);
+	parent.jQuery('span.img_resizer_se', document).css('left', ll + ww - 4).css('top', tt + hh - 4);
+	parent.jQuery('span.img_resizer_e', document).css('left', ll + ww - 4).css('top', tt + Math.floor(hh/2) - 4);
+	parent.jQuery('span.img_resizer_ne', document).css('left', ll + ww - 4).css('top', tt - 4);
+	parent.jQuery('span.img_resizer_n', document).css('left', ll + Math.floor(ww/2) - 4).css('top', tt - 4);
+	parent.jQuery('span.img_resizer_nw', document).css('left', ll - 4).css('top', tt - 4);
+	parent.jQuery('span.img_resizer_w', document).css('left', ll - 4).css('top', tt + Math.floor(hh/2) - 4);
+	parent.jQuery('span.img_resizer_sw', document).css('left', ll - 4).css('top', tt + hh - 4);
+	
+	parent.jQuery(parent.referer_image_size).prev().css('left', ll).css('top', tt);
+}
+
+function clean_resize_handlers() {
+
+	parent.jQuery('a.rredraw_image, a.uundo_image', document).remove();
+
+	parent.jQuery('span.img_resizer',document).remove();
+	parent.jQuery('div.image_spacer', document).remove();
+
+	if (parent.referer_image_size!='') {
+		parent.jQuery(parent.referer_image_size).attr('style', parent.resizing_image_style);
+
+		tt = parseInt(parent.jQuery(parent.referer_image_size).offset().top, 10);
+		ll = parseInt(parent.jQuery(parent.referer_image_size).offset().left, 10);
+		parent.jQuery(parent.referer_image_size).prev().css('left', ll).css('top', tt);
 	}
-	//alert(info_node().commonAncestorContainer == info_node().endContainer);
-	//in_node = info_node().commonAncestorContainer;
-	
-	//Tags
-	tags='';
 
-	while (true) {
-		if (in_node.tagName!=undefined) {
-			tag_name = in_node.tagName;
-			
-			if (tag_name=='SPAN') {
-				spanstyle=parent.jQuery(in_node).attr('style');
-				if (typeof spanstyle !== "undefined") {
-					spanstyle=spanstyle.split(' ').join('');
-					spanstyle=spanstyle.split(';').join('');
-	
-					if (spanstyle=='font-weight:bold') tag_name='b';
-					if (spanstyle=='font-style:italic') tag_name='i';
-					if (spanstyle=='text-decoration:line-through') tag_name='stroke';
-				}
-			}
-			
-			tags = '<a href="#" onclick="selecttag(' + ntag + '); return false;">&lt;' + tag_name.toLowerCase() + '&gt;</a> ' + tags;
-			tagsnav[ntag]=in_node;
-			ntag++;
-		}
-		in_node = in_node.parentNode;
-		if (in_node.className == 'content_editable' && in_node.tagName == 'SPAN') break;
-	}
-	parent.jQuery('#tagsnav').html(tags);
-}*/
-/*function inside_editor() {
-	/*if (parent.jQuery(find_tag( info_node().commonAncestorContainer )).
-		closest('span.content_editable').length == 0) return false;
-
-	return true;
-}*/
-/*function in_tag(tag, strict) {
-	//aixó no funciona pq el closest no fa cas del context!!!
-	//mirar el b_justify que ho fa bé!!!
-	/*
-	in_node = info_node();
-	
-	node_common = in_node.commonAncestorContainer;
-	in_common = parent.jQuery(find_tag(node_common)).closest(tag, context[0]);
-	alert(parent.jQuery(find_tag(node_common)).closest(tag).html() + in_common.length);
-	if (in_common.length > 0) return node_common;
-	
-	if (strict) return false;
-	
-	node_start=in_node.startContainer;
-	in_start = parent.jQuery(find_tag(node_start)).closest(tag);
-	if (in_start.length > 0) return node_start;
-
-	node_end=in_node.endContainer;
-	in_end = parent.jQuery(find_tag(node_end)).closest(tag);
-	if (in_end.length > 0) return node_end;
-
-	return false;	
-}*/
-/*function info_node() {
-	var selection = window.getSelection(); //what the user has selected
-	var range = selection.getRangeAt(0); //the first range of the selection
-	if (range.startContainer != range.endContainer) {
-		alert (range.startOffset + ' / ' + range.endOffset) ;
-	}
-	//range.commonAncestorContainer, range.startContainer, range.startOffset, range.endContainer, range.endOffset
-	
-	return range;
-}*/
-/*function xivato (node) {
-	alert(node.nodeType + ' * ' + node.nodeName + ' * ' + node.nodeValue + ' * ' + find_tag(node).tagName );
-}*/
-
-
+	parent.referer_image_size='';
+}
 

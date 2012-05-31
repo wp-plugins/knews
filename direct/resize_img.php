@@ -20,13 +20,29 @@ if ($Knews_plugin) {
 	$width= intval($Knews_plugin->get_safe('width'));
 	$height= intval($Knews_plugin->get_safe('height'));
 
+	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+
+	$pos = strrpos($url_img, "-");
+	if ($pos !== false) { 
+		$pos2 = strrpos($url_img, ".");
+		
+		if ($pos2 !== false) { 
+			$try_original = substr($url_img, 0, $pos) . substr($url_img, $pos2);
+			$try_original2 = substr($try_original, strpos($try_original, 'wp-content'));
+
+			if (is_file($absolute_dir . $try_original2)) $url_img = $try_original;
+		}
+	}
+	
 	echo knews_get_url_img($url_img, $width, $height);
 }
 
 function knews_get_url_img($img_url, $width, $height, $cut = true) {
+	
+	global $absolute_dir;
+	
     if ($img_url != '') {
 		
-		$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
 
 		// cut the url
 		$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));

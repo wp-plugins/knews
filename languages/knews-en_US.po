@@ -89,8 +89,8 @@ msgstr "And have been blocked in this import:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:649
-msgid "And they have not been imported:"
-msgstr "And they have not been imported:"
+msgid "And there have not been imported:"
+msgstr "And there have not been imported:"
 
 #. Text in echo
 #: admin/knews_admin_lists.php:155
@@ -1030,13 +1030,13 @@ msgstr "There is already another newsletter with the same name!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
-msgid "They have been created:"
-msgstr "They have been created:"
+msgid "There have been created:"
+msgstr "There have been created:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
-msgid "They have been updated:"
-msgstr "They have been updated:"
+msgid "There have been updated:"
+msgstr "There have been updated:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:356
@@ -1777,8 +1777,8 @@ msgstr "Submit deleted"
 msgid "Submit priority updated"
 msgstr "Submit priority updated"
 
-msgid "Use Wordpress’s built-in CRON framework."
-msgstr "Use Wordpress’s built-in CRON framework."
+msgid "Use WordPress's built-in CRON framework."
+msgstr "Use WordPress's built-in CRON framework."
 
 msgid "This option no requires configuration, but in less traffic sites can be slow to submit"
 msgstr "This option no requires configuration, but in less traffic sites can be slow to submit"
@@ -1788,4 +1788,25 @@ msgstr "Use the JavaScript CRON emulation."
 
 msgid "This option requires you to keep a window open during submission and does not allow deferred submits"
 msgstr "This option requires you to keep a window open during submission and does not allow deferred submits"
+
+msgid "Check all mailing lists"
+msgstr "Check all mailing lists"
+
+msgid "Uncheck all mailing lists"
+msgstr "Uncheck all mailing lists"
+
+msgid "Duplicate"
+msgstr "Duplicate"
+
+msgid "Duplicate this newsletter"
+msgstr "Duplicate this newsletter"
+
+msgid "Apply change and refresh image"
+msgstr "Apply changes and refresh image"
+
+msgid "Undo image changes"
+msgstr "Undo image changes"
+
+msgid "Properties image"
+msgstr "Properties image"
 

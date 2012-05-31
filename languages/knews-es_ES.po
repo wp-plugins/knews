@@ -89,7 +89,7 @@ msgstr "Y han sido bloqueados en esta importación:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:649
-msgid "And they have not been imported:"
+msgid "And there have not been imported:"
 msgstr "Y no han sido importados:"
 
 #. Text in echo
@@ -1030,12 +1030,12 @@ msgstr "Ya hay otra newsletter con el mismo nombre!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
-msgid "They have been created:"
+msgid "There have been created:"
 msgstr "Han sido creados:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
-msgid "They have been updated:"
+msgid "There have been updated:"
 msgstr "Han sido actualizados:"
 
 #. Text in echo
@@ -1777,7 +1777,7 @@ msgstr "Envío eliminado"
 msgid "Submit priority updated"
 msgstr "Prioridad de envío actualizada"
 
-msgid "Use Wordpress’s built-in CRON framework."
+msgid "Use WordPress's built-in CRON framework."
 msgstr "Usar la función CRON interna de WordPress."
 
 msgid "This option no requires configuration, but in less traffic sites can be slow to submit"
@@ -1788,4 +1788,25 @@ msgstr "Usar la emulación de CRON por JavaScript."
 
 msgid "This option requires you to keep a window open during submission and does not allow deferred submits"
 msgstr "Esta opción requiere mantener una ventana abierta mientras se realiza el envío y no permite programar envíos diferidos"
+
+msgid "Check all mailing lists"
+msgstr "Marcar todas las listas de correo"
+
+msgid "Uncheck all mailing lists"
+msgstr "Desactivar todas las listas de correo"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Duplicate this newsletter"
+msgstr "Duplicar esta newsletter"
+
+msgid "Apply change and refresh image"
+msgstr "Aplicar cambios y refrescar la imagen"
+
+msgid "Undo image changes"
+msgstr "Deshacer los cambios de imagen"
+
+msgid "Properties image"
+msgstr "Propiedades de la imagen"
 

@@ -14,6 +14,20 @@
 		echo '<div class="updated"><p>' . __('Newsletter deleted','knews') . '</p></div>';
 	}
 
+	if ($Knews_plugin->get_safe('da')=='duplicate') {
+		$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . intval($Knews_plugin->get_safe('did'));
+		$results = $wpdb->get_results( $query );
+		
+		if ($results) {
+		
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container) VALUES ('(copy)" . $results[0]->name . "', '" . $results[0]->subject . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "')";
+			
+			$results = $wpdb->query($sql);
+echo $wpdb->last_error;
+			echo '<div class="updated"><p>' . __('Newsletter duplicated','knews') . '</p></div>';
+		}
+	}
+
 	if ($Knews_plugin->post_safe('action')=='delete_news') {
 		$query = "SELECT * FROM " . KNEWS_NEWSLETTERS;
 		$results = $wpdb->get_results( $query );
@@ -91,12 +105,12 @@ function enfocar() {
 							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $list->id . '" value="1"></th>';
 							echo '<td class="name_' . $list->id  . '"><strong><a href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . $list->name . '</a></strong>';
 
-							echo '<div class="row-actions"><span><a title="' . __('Edit this newsletter', 'knews') . '" href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . __('Edit', 'knews') . '</a> | </span>';
+							echo '<div class="row-actions" style="position:absolute;"><span><a title="' . __('Edit this newsletter', 'knews') . '" href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . __('Edit', 'knews') . '</a> | </span>';
 							
 							echo '<span><a href="#" title="' . __('Rename this newsletter', 'knews') . '" onclick="rename(' . $list->id . '); return false;">' . __('Rename', 'knews') . '</a> | </span>';
 							echo '<span><a href="' . KNEWS_URL . '/direct/knews_read_email.php?id=' . $list->id . '" target="_blank" title="' . __('Open a preview in a new window', 'knews') . '">' . __('Preview', 'knews') . '</a> | </span>';
 							echo '<span><a href="admin.php?page=knews_news&section=send&id=' . $list->id . '" title="' . __('Submit this newsletter', 'knews') . '">' . __('Submit', 'knews') . '</a> | </span>';
-							
+							echo '<span><a href="admin.php?page=knews_news&da=duplicate&did=' . $list->id . '" title="' . __('Duplicate this newsletter', 'knews') . '">' . __('Duplicate', 'knews') . '</a> | </span>';
 							echo '<span class="trash"><a href="admin.php?page=knews_news&da=delete&nid=' . $list->id . '" title="' . __('Delete definitely this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 
 							echo '<td>' . $Knews_plugin->humanize_dates($list->created, 'mysql') . '</td>';

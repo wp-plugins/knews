@@ -31,6 +31,9 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	submit_news='<?php bloginfo('url');?>/wp-admin/admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
 	
 	edit_image= "<?php echo __('Edit image','knews'); ?>";
+	sharp_image= "<?php echo __('Apply change and refresh image','knews'); ?>";
+	undo_image= "<?php echo __('Undo image changes','knews'); ?>";
+	properties_image= "<?php echo __('Properties image','knews'); ?>";
 	post_handler= "<?php echo __('Insert post/page content','knews'); ?>";
 	free_handler= "<?php echo __('Free text content','knews'); ?>";
 	move_handler= "<?php echo __('Move module','knews'); ?>";
