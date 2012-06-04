@@ -1,10 +1,10 @@
 === Knews Multilingual Newsletters ===
 Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
-Tags: newsletter, email, mail, emailing, multi language, multilingual, multilanguage, wysiwyg, editor, smtp, cron, batch sending, mailing list
+Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,7 @@ A WYSIWYG Editor Demo:
 
 = Future release =
 
+* Support for Multisite (comming soon).
 * Continued improvement of the WYSIWYG editor.
 * Statistics.
 * More templates.
@@ -136,11 +137,18 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.0.3 =
+
+* MAJOR BUGS in Windows webservers (thanks to Hans-Heinz Bieling)
+* Resolved WYSIWYG editor issues in Macintosh Chrome (thanks to Max Schanfarber)
+* Minor bug in modal window after subscription on twenty elevens theme (thanks to Esa Rantanen)
+* Fixed customised messages bug (thanks to Hans-Heinz Bieling)
+
 = 1.0.2 =
 
 * WYSIWYG improvements:
-- Resolved change image bug when no link is provided (thanks to Alfredo Pradanos)
-- Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
+* Solved change image bug when no link is provided (thanks to Alfredo Pradanos)
+* Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
 
 = 1.0.1 =
 
@@ -153,11 +161,18 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Upgrade Notice ==
 
+= 1.0.3 =
+
+* MAJOR BUGS in Windows webservers (thanks to Hans-Heinz Bieling)
+* Resolved WYSIWYG editor issues in Macintosh Chrome (thanks to Max Schanfarber)
+* Minor bug in modal window after subscription on twenty elevens theme (thanks to Esa Rantanen)
+* Fixed customised messages bug (thanks to Hans-Heinz Bieling)
+
 = 1.0.2 =
 
 * WYSIWYG improvements:
-- Resolved change image bug when no link is provided (thanks to Alfredo Pradanos)
-- Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
+* Solved change image bug when no link is provided (thanks to Alfredo Pradanos)
+* Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
 
 = 1.0.1 =
 
