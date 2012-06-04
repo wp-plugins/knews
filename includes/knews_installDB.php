@@ -23,8 +23,8 @@ $sql =	"CREATE TABLE " .KNEWS_EXTRA_FIELDS . " (
 	   )$charset_collate;
 	   
 		INSERT INTO " .KNEWS_EXTRA_FIELDS . " (id, name, show_table, token) VALUES 
-		(1, 'nombre', 1, '%nombre%'),
-		(2, 'apellido', 0, '%apellido%');";
+		(1, 'name', 1, '%name%'),
+		(2, 'sourname', 0, '%sourname%');";
 
 dbDelta($sql);
 
@@ -47,8 +47,8 @@ $sql =	"CREATE TABLE " .KNEWS_LISTS . " (
 		UNIQUE KEY id (id)
 	   )$charset_collate;
 	   
-		INSERT INTO " .KNEWS_LISTS . " (id, name, open, open_registered) VALUES 
-		(1, 'Default list', 1, 1);";
+		INSERT INTO " .KNEWS_LISTS . " (id, name, open, open_registered, langs) VALUES 
+		(1, 'Default list', 1, 1, '');";
 
 dbDelta($sql);
 

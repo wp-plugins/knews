@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.0.2
+Version: 1.0.3
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -596,6 +596,9 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function printWidget($args) {
+
+			global $knewsOptions;
+
 			if (! $this->initialized) $this->init();
 
 			$knews_lists = $this->tellMeLists();
@@ -606,15 +609,17 @@ if (!class_exists("KnewsPlugin")) {
 
 				$lang = $this->pageLang();
 
-				if (is_array($args)) echo $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['language_code']) . $args['after_title'];
+				if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
+
+				if (is_array($args)) echo $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
 			?>
 				<div class="knews_add_user">
 					<form action="<?php echo $this->printAddUserUrl(); ?>" method="post">
-						<label for="email"><?php echo $this->get_custom_text('widget_label', $lang['language_code']); ?></label>
+						<label for="email"><?php echo $this->get_custom_text('widget_label', $lang['localized_code']); ?></label>
 						<input type="text" id="email" name="email" value="" />
 						<?php $this->printListsSelector($knews_lists); ?>
 						<?php $this->printLangHidden(); ?>
-						<input type="submit" value="<?php echo $this->get_custom_text('widget_button', $lang['language_code']); ?>" />
+						<input type="submit" value="<?php echo $this->get_custom_text('widget_button', $lang['localized_code']); ?>" />
 					</form>
 				</div>
 			<?php
@@ -883,7 +888,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.0.2');
+		define('KNEWS_VERSION', '1.0.3');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -952,6 +957,8 @@ if (!function_exists("Knews_plugin_ap")) {
 	
 	function knews_popup() {
 		if (isset($_GET['subscription']) || isset($_GET['unsubscribe'])) {
+			global $Knews_plugin;
+			if (! $Knews_plugin->initialized) $Knews_plugin->init();
 			require( KNEWS_DIR . '/includes/dialogs.php');
 		}
 	}

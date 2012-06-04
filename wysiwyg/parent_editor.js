@@ -734,7 +734,8 @@ function callback_img(html) {
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-
+	alert("urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
+	alert(url_plugin + "/direct/resize_img.php");
 	jQuery.ajax({
 		data: "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
 		type: "GET",
@@ -764,9 +765,9 @@ function callback_img(html) {
 				clearTimeout(to_shitty_ie8);
 			}
 			to_shitty_ie8='x';
-			//alert(request.responseText);
-			//alert("Error, returned: " + request);
-			//alert("Error, returned: " + status);
+			alert(request.responseText);
+			alert("Error, returned: " + request);
+			alert("Error, returned: " + status);
 			tb_dialog('Knews', error_resize + ": (" + error + ")", button_continue_editing, '', '');
 		}
 		
