@@ -1810,3 +1810,9 @@ msgstr "Desfer els canvis d'imatge"
 msgid "Properties image"
 msgstr "Propietats de la imatge"
 
+msgid "Select one or more lists"
+msgstr "Selecciona una o més llistes"
+
+msgid "No active users in the selected list, nothing programmed to send."
+msgstr "No hi ha usuaris actius a la llista seleccionada, no s'ha programat cap enviament."
+

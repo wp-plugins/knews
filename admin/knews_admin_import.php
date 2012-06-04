@@ -501,7 +501,8 @@ function print_state($step, $where) {
 												$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . 
 															$email . "','" . $lang . "', $state, '" . $date . "','" . $confkey . "');";
 												$results = $wpdb->query( $query );
-												$id_new_user=mysql_insert_id();
+												$id_new_user=$wpdb->insert_id; $id_new_user2=mysql_insert_id(); if ($id_new_user==0) $id_new_user=$id_new_user2;
+
 
 												if ($results) {
 
@@ -804,14 +805,14 @@ function add_confirm($id_user) {
 	
 	if ($submit_confirmation_id == 0) {
 		$mysqldate = $Knews_plugin->get_mysql_date();
-		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special) VALUES (0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\')';
+		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\', \'0000-00-00 00:00:00\')';
 		$results = $wpdb->query( $query );
-		$submit_confirmation_id = mysql_insert_id();
-		echo $query;
+		$submit_confirmation_id=$wpdb->insert_id; $submit_confirmation_id2=mysql_insert_id(); if ($submit_confirmation_id==0) $submit_confirmation_id=$submit_confirmation_id2;
+		//echo $query;
 	}
 	
 	$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . ' (submit, user, status) VALUES (' . $submit_confirmation_id . ', ' . $id_user . ', 0)';
-		echo $query;
+		//echo $query;
 	$results = $wpdb->query( $query );
 	$confirmation_sql_count++;
 }

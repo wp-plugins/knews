@@ -1810,3 +1810,9 @@ msgstr "Deshacer los cambios de imagen"
 msgid "Properties image"
 msgstr "Propiedades de la imagen"
 
+msgid "Select one or more lists"
+msgstr "Selecciona una o más listas"
+
+msgid "No active users in the selected list, nothing programmed to send."
+msgstr "No hay usuarios activos en la lista seleccionada, no se ha programado ningún envío."
+

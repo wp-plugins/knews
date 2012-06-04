@@ -20,7 +20,10 @@ if ($Knews_plugin) {
 	$width= intval($Knews_plugin->get_safe('width'));
 	$height= intval($Knews_plugin->get_safe('height'));
 
-	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+	$absolute_dir = $_SERVER['DOCUMENT_ROOT'];
+
+	$url_start = substr($url_img, 0, strpos($url_img, $_SERVER['SERVER_NAME']) + strlen($_SERVER['SERVER_NAME']));
 
 	$pos = strrpos($url_img, "-");
 	if ($pos !== false) { 
@@ -28,7 +31,7 @@ if ($Knews_plugin) {
 		
 		if ($pos2 !== false) { 
 			$try_original = substr($url_img, 0, $pos) . substr($url_img, $pos2);
-			$try_original2 = substr($try_original, strpos($try_original, 'wp-content'));
+			$try_original2 = substr($try_original, strlen($url_start));
 
 			if (is_file($absolute_dir . $try_original2)) $url_img = $try_original;
 		}
@@ -39,13 +42,15 @@ if ($Knews_plugin) {
 
 function knews_get_url_img($img_url, $width, $height, $cut = true) {
 	
-	global $absolute_dir;
+	global $absolute_dir, $url_start;
 	
     if ($img_url != '') {
 		
 
 		// cut the url
-		$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
+		//$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
+
+		$url_imatge = substr($img_url, strpos($img_url, $_SERVER['SERVER_NAME']) + strlen($_SERVER['SERVER_NAME']));
 		$url=$url_imatge;
 
 		$url_imatge = str_replace('.jpg', '-' . $width . 'x' . $height .'.jpg', $url_imatge);
@@ -59,7 +64,7 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 		$url_imatge = str_replace('.PNG', '-' . $width . 'x' . $height .'.PNG', $url_imatge);
 				
 		if (is_file($absolute_dir . $url_imatge)) {
-			return get_bloginfo('wpurl') . '/' . $url_imatge;
+			return $url_start . $url_imatge;
 	
 		} else {
 	
@@ -67,12 +72,14 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 			$thumb = image_resize($absolute_dir . $url, $width, $height, $cut, $width.'x'.$height);
 			if (is_string($thumb)) {
 
-				$thumb = substr($thumb, strpos($thumb, 'wp-content'));
-				return get_bloginfo('wpurl') . '/' .  $thumb;
+				//$thumb = substr($thumb, strpos($thumb, 'wp-content'));
+				$thumb = substr($thumb, strlen($absolute_dir));
+				
+				return $url_start . $thumb;
 	
 			} else {
 				if (is_file($absolute_dir . $url)) {
-					return get_bloginfo('wpurl') . '/' . $url;
+					return $url_start . $url;
 				} else {
 					return 'error';
 				}

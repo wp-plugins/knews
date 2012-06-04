@@ -26,7 +26,8 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	id_news='<?php echo $Knews_plugin->get_safe('idnews');?>';
 	<?php
 	$one_post = get_posts(array('numberposts' => 1) );
-	echo 'one_post_id=' . $one_post[0]->ID . ';';
+	if (count($one_post)!=1) $one_post = get_pages();
+	echo 'one_post_id=' . intval($one_post[0]->ID) . ';';
 	?>
 	submit_news='<?php bloginfo('url');?>/wp-admin/admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
 	

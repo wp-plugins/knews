@@ -90,10 +90,11 @@
 					$headTemplate = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($headTemplate));
 					$codeModule = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($codeModule));
 
-					$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "')";
+					$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','')";
 
 					if ($wpdb->query($sql)) {
-						$id_edit=mysql_insert_id();
+						$id_edit=$wpdb->insert_id; $id_edit2=mysql_insert_id(); if ($id_edit==0) $id_edit=$id_edit2;
+						
 						$section='add_news';
 						echo '<div class="updated"><p>' . __('The newsletter has been created successfully','knews') . '</p></div>';
 					} else {

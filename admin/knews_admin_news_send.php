@@ -70,10 +70,10 @@
 					
 					$mysqldate = $Knews_plugin->get_mysql_date($start_time);
 					
-					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special) VALUES (' . $id_newsletter . ', 0, ' . $Knews_plugin->post_safe('paused') . ', \'' . $mysqldate . '\', ' . count($targets) . ', 0, 0, ' . $Knews_plugin->post_safe('priority') . ', \'' . $Knews_plugin->post_safe('strict_control') . '\', ' . $Knews_plugin->post_safe('emails_at_once') . ', \'\')';
+					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . $id_newsletter . ', 0, ' . $Knews_plugin->post_safe('paused') . ', \'' . $mysqldate . '\', ' . count($targets) . ', 0, 0, ' . $Knews_plugin->post_safe('priority') . ', \'' . $Knews_plugin->post_safe('strict_control') . '\', ' . $Knews_plugin->post_safe('emails_at_once') . ', \'\', \'0000-00-00 00:00:00\')';
 					$results = $wpdb->query( $query );
 					
-					$submit_id = mysql_insert_id();
+					$submit_id=$wpdb->insert_id; $submit_id2=mysql_insert_id(); if ($submit_id==0) $submit_id=$submit_id2;
 	
 					foreach ($targets as $target) {
 						
