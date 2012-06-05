@@ -57,6 +57,11 @@ parent.jQuery(document).ready( function () {
 	});
 	parent.jQuery('img.editable', document).live('click', function(e) {
 		
+		if (parent.referer_image_size != this && parent.referer_image_size != '') {
+			alert(parent.must_apply_undo);
+			return false;
+		}
+		
 		if (parent.referer_image_size != this) {
 		
 			clean_resize_handlers();
@@ -175,6 +180,12 @@ function test_browser() {
 function listen_module (module) {
 		
 	parent.jQuery('span.handler span.move', module).mousedown( function(e) {
+
+			if (parent.referer_image_size != this && parent.referer_image_size != '') {
+				alert(parent.must_apply_undo);
+				e.preventDefault();
+				return false;
+			}
 			parent.not_saved();
 			parent.move_item=parent.jQuery(this).closest('.draggable');
 
@@ -198,6 +209,11 @@ function listen_module (module) {
 		});
 	
 	parent.jQuery('span.handler span.delete', module).click( function(e) {
+			if (parent.referer_image_size != this && parent.referer_image_size != '') {
+				alert(parent.must_apply_undo);
+				return false;
+			}
+
 			parent.referer_delete = this;
 			parent.tb_dialog('Knews', parent.confirm_delete, parent.button_yes, parent.button_no, 'deleteModule');
 		});

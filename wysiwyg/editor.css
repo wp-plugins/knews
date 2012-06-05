@@ -127,6 +127,10 @@ body.doing_drag tr.droppable_empty {
 	background:#C4FFFC;
 	display:table-row;
 }
+tr.droppable_empty td {
+	display:block;
+	min-height:8px;
+}
 body.doing_drag tr.droppable_empty_hidden {
 	display:none !important;
 }

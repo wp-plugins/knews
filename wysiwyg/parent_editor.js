@@ -734,7 +734,8 @@ function callback_img(html) {
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-
+	//alert("urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
+	//alert(url_plugin + "/direct/resize_img.php");
 	jQuery.ajax({
 		data: "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
 		type: "GET",
@@ -764,9 +765,9 @@ function callback_img(html) {
 				clearTimeout(to_shitty_ie8);
 			}
 			to_shitty_ie8='x';
-			//alert(request.responseText);
-			//alert("Error, returned: " + request);
-			//alert("Error, returned: " + status);
+			alert(request.responseText);
+			alert("Error, returned: " + request);
+			alert("Error, returned: " + status);
 			tb_dialog('Knews', error_resize + ": (" + error + ")", button_continue_editing, '', '');
 		}
 		
@@ -859,12 +860,20 @@ function CallBackFont(ff, fs, ss, lh) {
 }
 
 function insert_post(obj, n) {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 	referer_module=obj;
 	post_number_module=n;
 	tb_show('', url_plugin + '/direct/select_post.php?TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 }
 
 function free_text(obj, n) {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 	module = jQuery(obj).closest('.droppable');
 	//jQuery(obj).parent().remove();
 
@@ -888,6 +897,10 @@ function free_text(obj, n) {
 
 save_news_sem=false;
 function save_news () {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 
 	if (!save_news_sem) {
 		save_news_sem=true;

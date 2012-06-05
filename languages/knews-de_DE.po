@@ -1810,3 +1810,9 @@ msgstr "Rückgängig Bild ändert"
 msgid "Properties image"
 msgstr "Bild-Eigenschaften"
 
+msgid "Select one or more lists"
+msgstr "Wählen Sie eine oder mehrere Listen"
+
+msgid "No active users in the selected list, nothing programmed to send."
+msgstr "Keine aktive Benutzer in der ausgewählten Liste, programmiert nichts zu senden."
+
