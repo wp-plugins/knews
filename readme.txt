@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 1.0.3
+Tested up to: 3.3.2
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,7 +67,7 @@ A WYSIWYG Editor Demo:
 
 6. b) **CRON**: By default Knews works with wp_cron, but it can be changed (highly recommendable for websites with low traffic).
 
-7. c) **SMTP** sending: by default Knews sends by wp_mail (). You will have more features and fewer newsletters ending up as spam if you configure data sending using SMTP.
+7. c) **SMTP** sending: by default Knews sends by wp_mail (). You will have more features and fewer newsletters ending up as spam if you configure data sending using SMTP. [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/)
 
 8. **As an option, you can create different mailing lists: open to all registered wordpress users and/or segmented by language.**
 
@@ -137,9 +137,14 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.0.4 =
+
+* URGENT: Preview and can't read newsletters bug fixed (thanks to Esa Rantanen)
+* Image resize bugs fixed (thanks to Esa Rantanen)
+
 = 1.0.3 =
 
-* MAJOR BUGS in Windows webservers (thanks to Hans-Heinz Bieling)
+* MAJOR BUGS Fixed in Windows webservers (thanks to Hans-Heinz Bieling)
 * Resolved WYSIWYG editor issues in Macintosh Chrome (thanks to Max Schanfarber)
 * Minor bug in modal window after subscription on twenty elevens theme (thanks to Esa Rantanen)
 * Fixed customised messages bug (thanks to Hans-Heinz Bieling)
@@ -161,9 +166,14 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Upgrade Notice ==
 
+= 1.0.4 =
+
+* URGENT: Preview and can't read newsletters bug fixed (thanks to Esa Rantanen)
+* Image resize bugs fixed (thanks to Esa Rantanen)
+
 = 1.0.3 =
 
-* MAJOR BUGS in Windows webservers (thanks to Hans-Heinz Bieling)
+* MAJOR BUGS Fixed in Windows webservers (thanks to Hans-Heinz Bieling)
 * Resolved WYSIWYG editor issues in Macintosh Chrome (thanks to Max Schanfarber)
 * Minor bug in modal window after subscription on twenty elevens theme (thanks to Esa Rantanen)
 * Fixed customised messages bug (thanks to Hans-Heinz Bieling)
