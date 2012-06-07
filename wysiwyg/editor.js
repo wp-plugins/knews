@@ -34,6 +34,7 @@ parent.jQuery(document).ready( function () {
 		parent.jQuery(this).stop().show();
 	});
 	parent.jQuery('span.img_handler a.change_image', document).live('click', function(e) {
+		parent.setCatcher();
 		parent.referer_image=parent.jQuery(this).parent().next();
 		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
 		return false;

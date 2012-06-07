@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.0.3
+Version: 1.0.5
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -888,7 +888,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.0.3');
+		define('KNEWS_VERSION', '1.0.5');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -911,8 +911,9 @@ if (!function_exists("Knews_plugin_ap")) {
 		//WP Cron :: http://blog.slaven.net.au/2007/02/01/timing-is-everything-scheduling-in-wordpress/
 		function knews_wpcron_function() {require('direct/knews_cron_do.php'); }
 
-		function knews_more_reccurences() {
-			return array( 'knewstime' => array('interval' => 600, 'display' => 'Knews 10 minutes wpcron submit') );
+		function knews_more_reccurences($schedules) {
+			$schedules['knewstime'] = array('interval' => 600, 'display' => 'Knews 10 minutes wpcron submit');
+			return $schedules;
 		}
 		add_filter('cron_schedules', 'knews_more_reccurences');
 		add_action( 'knews_wpcron_function_hook', 'knews_wpcron_function' );
