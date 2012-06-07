@@ -3,6 +3,7 @@
 	//require_once( KNEWS_DIR . '/includes/knews_util.php');
 
 	if ($Knews_plugin->get_safe('da')=='rename') {
+		// magic quotes $query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . mysql_real_escape_string(urldecode($Knews_plugin->get_safe('nn'))) . "' WHERE id=" . intval($Knews_plugin->get_safe('nid'));
 		$query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . urldecode($Knews_plugin->get_safe('nn')) . "' WHERE id=" . intval($Knews_plugin->get_safe('nid'));
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('Newsletter name updated','knews') . '</p></div>';
@@ -20,8 +21,9 @@
 		
 		if ($results) {
 		
+			//magic quotes $sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container) VALUES ('(copy)" . mysql_real_escape_string($results[0]->name) . "', '" . mysql_real_escape_string($results[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "')";
 			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container) VALUES ('(copy)" . $results[0]->name . "', '" . $results[0]->subject . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "')";
-			
+
 			$results = $wpdb->query($sql);
 echo $wpdb->last_error;
 			echo '<div class="updated"><p>' . __('Newsletter duplicated','knews') . '</p></div>';

@@ -117,6 +117,8 @@ jQuery(window).load(function() {
 		
 		jQuery('div.insertable img')
 			.mousedown( function(e) {
+				jQuery('.droppable_empty', io).children().html('&nbsp;');
+				
 				copy_item=jQuery('div.html_content', jQuery(this).parent() );
 				jQuery(this).clone().appendTo(jQuery('div.drag_preview'));
 		
@@ -195,6 +197,7 @@ jQuery(window).load(function() {
 	
 		jQuery('div.wysiwyg_toolbar a.move')
 			.mousedown(function() {
+				jQuery('.droppable_empty', io).children().html('&nbsp;');
 				if (!drag_toolbox) {
 					drag_toolbox = true;
 					
@@ -317,6 +320,8 @@ function update_preview() {
 }
 
 function editor_mouseup() {
+	jQuery('.droppable_empty', io).children().html('');
+
 	mouseBtn=false; resize_toolbox=false;
 	jQuery('body', io).removeClass('doing_drag');
 	jQuery('body').removeClass('doing_drag');
@@ -325,7 +330,7 @@ function editor_mouseup() {
 	if (droppable_over && move_item) {
 		not_saved();
 		//Copiem el contingut
-
+		
 		move_item.clone().appendTo(jQuery(droppable_over).children());
 		
 		document.getElementById('knews_editor').contentWindow.listen_module(droppable_over);
@@ -712,10 +717,10 @@ function CallBackPost(n, lang) {
 	});
 }
 
-
-
-window.send_to_editor = function(html) {
-	callback_img(html);
+function setCatcher() {
+	window.send_to_editor = function(html) {
+		callback_img(html);
+	}
 }
 
 function callback_img(html) {
@@ -734,7 +739,8 @@ function callback_img(html) {
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-
+	//alert("urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
+	//alert(url_plugin + "/direct/resize_img.php");
 	jQuery.ajax({
 		data: "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
 		type: "GET",
@@ -859,12 +865,20 @@ function CallBackFont(ff, fs, ss, lh) {
 }
 
 function insert_post(obj, n) {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 	referer_module=obj;
 	post_number_module=n;
 	tb_show('', url_plugin + '/direct/select_post.php?TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 }
 
 function free_text(obj, n) {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 	module = jQuery(obj).closest('.droppable');
 	//jQuery(obj).parent().remove();
 
@@ -888,6 +902,10 @@ function free_text(obj, n) {
 
 save_news_sem=false;
 function save_news () {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
 
 	if (!save_news_sem) {
 		save_news_sem=true;
@@ -914,15 +932,15 @@ function save_news () {
 			url: url_plugin + "/direct/save_news.php",
 			success: function(data) { 
 
-				if (data=='error') {
-					tb_dialog('Knews', error_save, button_continue_editing, '', '');
-					//alert(error_save);
-					save_news_sem=false;
-				} else {
-
+				if (data=='ok') {
 					saved();
 					//alert(ok_save);
 					tb_dialog('Knews', ok_save, button_submit_newsletter, button_continue_editing, 'saveok');
+				} else {
+					tb_dialog('Knews', error_save + ": (" + data + ")", button_continue_editing, '', '');
+					//alert(error_save);
+					save_news_sem=false;
+
 				}
 			},
 

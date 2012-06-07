@@ -34,6 +34,7 @@ parent.jQuery(document).ready( function () {
 		parent.jQuery(this).stop().show();
 	});
 	parent.jQuery('span.img_handler a.change_image', document).live('click', function(e) {
+		parent.setCatcher();
 		parent.referer_image=parent.jQuery(this).parent().next();
 		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
 		return false;
@@ -56,6 +57,11 @@ parent.jQuery(document).ready( function () {
 		return false;
 	});
 	parent.jQuery('img.editable', document).live('click', function(e) {
+		
+		if (parent.referer_image_size != this && parent.referer_image_size != '') {
+			alert(parent.must_apply_undo);
+			return false;
+		}
 		
 		if (parent.referer_image_size != this) {
 		
@@ -175,6 +181,12 @@ function test_browser() {
 function listen_module (module) {
 		
 	parent.jQuery('span.handler span.move', module).mousedown( function(e) {
+
+			if (parent.referer_image_size != this && parent.referer_image_size != '') {
+				alert(parent.must_apply_undo);
+				e.preventDefault();
+				return false;
+			}
 			parent.not_saved();
 			parent.move_item=parent.jQuery(this).closest('.draggable');
 
@@ -198,6 +210,11 @@ function listen_module (module) {
 		});
 	
 	parent.jQuery('span.handler span.delete', module).click( function(e) {
+			if (parent.referer_image_size != this && parent.referer_image_size != '') {
+				alert(parent.must_apply_undo);
+				return false;
+			}
+
 			parent.referer_delete = this;
 			parent.tb_dialog('Knews', parent.confirm_delete, parent.button_yes, parent.button_no, 'deleteModule');
 		});

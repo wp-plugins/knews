@@ -37,11 +37,11 @@
 			$results = $wpdb->get_results( $query );
 			
 			if (count($results)==0) {
-				$sql = "INSERT INTO " . KNEWS_LISTS . "(name) VALUES ('" . $name . "')";
+				$sql = "INSERT INTO " . KNEWS_LISTS . "(name, open, open_registered, langs) VALUES ('" . $name . "', 0, 0, '')";
 				if ($wpdb->query($sql)) {
 					echo '<div class="updated"><p>' . __('Mailing list created','knews') . '</p></div>';
 				} else {
-					echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __("can't create the mailing list",'knews') . '</p></div>';
+					echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __("can't create the mailing list",'knews') . ' : ' . $wpdb->last_error . '</p></div>';
 				}
 			} else {
 				echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __('there is already a list with this name!','knews') . '</p></div>';

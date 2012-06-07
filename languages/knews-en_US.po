@@ -1810,3 +1810,9 @@ msgstr "Undo image changes"
 msgid "Properties image"
 msgstr "Properties image"
 
+msgid "Select one or more lists"
+msgstr "Select one or more lists"
+
+msgid "No active users in the selected list, nothing programmed to send."
+msgstr "No active users in the selected list, nothing programmed to send."
+

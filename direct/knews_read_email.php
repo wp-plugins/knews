@@ -35,8 +35,8 @@ if ($Knews_plugin) {
 	
 
 	require( KNEWS_DIR . "/includes/knews_compose_email.php");
-	//$theHtml=str_replace('%unsubscribe_href%', '#', $theHtml);
-
+	$theHtml = str_replace('%unsubscribe_href%', '#', $theHtml);
+	$theHtml = str_replace('%cant_read_href%', '#' , $theHtml);
 ?>
 <?php echo $theHtml; ?>
 <?php

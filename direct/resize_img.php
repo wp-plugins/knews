@@ -1,4 +1,5 @@
 <?php
+
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -20,7 +21,13 @@ if ($Knews_plugin) {
 	$width= intval($Knews_plugin->get_safe('width'));
 	$height= intval($Knews_plugin->get_safe('height'));
 
+	$wp_dirs = wp_upload_dir();
 	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+
+	$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
+
+
+	//$url_start = substr($url_img, 0, strpos($url_img, $_SERVER['SERVER_NAME']) + strlen($_SERVER['SERVER_NAME']));
 
 	$pos = strrpos($url_img, "-");
 	if ($pos !== false) { 
@@ -28,24 +35,25 @@ if ($Knews_plugin) {
 		
 		if ($pos2 !== false) { 
 			$try_original = substr($url_img, 0, $pos) . substr($url_img, $pos2);
-			$try_original2 = substr($try_original, strpos($try_original, 'wp-content'));
+			$try_original2 = substr($try_original, strlen($wp_dirs['baseurl']));
 
-			if (is_file($absolute_dir . $try_original2)) $url_img = $try_original;
+			if (is_file($wp_dirs['basedir'] . $try_original2)) $url_img = $try_original;
 		}
 	}
-	
 	echo knews_get_url_img($url_img, $width, $height);
 }
 
 function knews_get_url_img($img_url, $width, $height, $cut = true) {
 	
-	global $absolute_dir;
+	global $wp_dirs;
 	
     if ($img_url != '') {
 		
 
 		// cut the url
-		$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
+		//$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
+
+		$url_imatge = substr($img_url, strlen($wp_dirs['baseurl']));
 		$url=$url_imatge;
 
 		$url_imatge = str_replace('.jpg', '-' . $width . 'x' . $height .'.jpg', $url_imatge);
@@ -57,22 +65,24 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 		$url_imatge = str_replace('.JPEG', '-' . $width . 'x' . $height .'.JPEG', $url_imatge);
 		$url_imatge = str_replace('.GIF', '-' . $width . 'x' . $height .'.GIF', $url_imatge);
 		$url_imatge = str_replace('.PNG', '-' . $width . 'x' . $height .'.PNG', $url_imatge);
-				
-		if (is_file($absolute_dir . $url_imatge)) {
-			return get_bloginfo('wpurl') . '/' . $url_imatge;
+
+		if (is_file($wp_dirs['basedir'] . $url_imatge)) {
+			return $wp_dirs['baseurl'] . $url_imatge;
 	
 		} else {
 	
 			// resize the image
-			$thumb = image_resize($absolute_dir . $url, $width, $height, $cut, $width.'x'.$height);
+			$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, $cut, $width.'x'.$height);
 			if (is_string($thumb)) {
 
-				$thumb = substr($thumb, strpos($thumb, 'wp-content'));
-				return get_bloginfo('wpurl') . '/' .  $thumb;
+				//$thumb = substr($thumb, strpos($thumb, 'wp-content'));
+				$thumb = substr($thumb, strlen($wp_dirs['basedir']));
+				
+				return $wp_dirs['baseurl'] . $thumb;
 	
 			} else {
 				if (is_file($absolute_dir . $url)) {
-					return get_bloginfo('wpurl') . '/' . $url;
+					return $wp_dirs['baseurl'] . $url;
 				} else {
 					return 'error';
 				}
