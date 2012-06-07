@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,13 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.0.5 =
+
+* WYSIWYG Editor fixes: now works fine with Chrome and Safari PC & Mac (thanks to Esa Rantanen)
+* Support for image selection in Multisite WordPress sites (thanks to Esa Rantanen)
+* WP-CRON interactions with other plugins fixed (thanks to Thorsten Wollenhöfer)
+* Selection image blank dialog fixed (thanks to Javier)
+
 = 1.0.4 =
 
 * URGENT: Preview and can't read newsletters bug fixed (thanks to Esa Rantanen)
@@ -165,6 +172,13 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+
+* WYSIWYG Editor fixes: now works fine with Chrome and Safari PC & Mac (thanks to Esa Rantanen)
+* Support for image selection in Multisite WordPress sites (thanks to Esa Rantanen)
+* WP-CRON interactions with other plugins fixed (thanks to Thorsten Wollenhöfer)
+* Selection image blank dialog fixed (thanks to Javier)
 
 = 1.0.4 =
 
