@@ -949,8 +949,8 @@ msgstr "El plugin WPML no ha estat detectat, les opcions multilingüe no son fun
 
 #. Text in function
 #: admin/knews_admin_import.php:203
-msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 777)"
-msgstr "El directori /wp-content/plugins/knews/tmp deu ser escribible (chmod 777)"
+msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)"
+msgstr "El directori /wp-content/plugins/knews/tmp deu ser escribible (chmod 700)"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1729,7 +1729,7 @@ msgstr "Atenció! Opera no pot editar newsletters! Hauràs d'usar un Firefox, Ch
 msgid "Warning! You should activate JavaScript to edit newsletters!"
 msgstr "Atenció! Has d'activar JavaScript per a editar newsletters!"
 
-msgid "No submits yet. First go to newsletters, create one, and then submit it."
+msgid "No submits yet. First go to Newsletters, create one, and then submit it."
 msgstr "No hi ha enviaments encara. Primer vés a newsletters, crea'n una, i llavors envia-la."
 
 msgid "Error: I can't write the .CSV file."
@@ -1801,13 +1801,13 @@ msgstr "Duplicar"
 msgid "Duplicate this newsletter"
 msgstr "Duplicar aquesta newsletter"
 
-msgid "Apply change and refresh image"
+msgid "Apply changes and refresh image"
 msgstr "Aplicar canvis i refrescar la imatge"
 
 msgid "Undo image changes"
 msgstr "Desfer els canvis d'imatge"
 
-msgid "Properties image"
+msgid "Properties of image"
 msgstr "Propietats de la imatge"
 
 msgid "Select one or more lists"
@@ -1815,4 +1815,238 @@ msgstr "Selecciona una o més llistes"
 
 msgid "No active users in the selected list, nothing programmed to send."
 msgstr "No hi ha usuaris actius a la llista seleccionada, no s'ha programat cap enviament."
+
+msgid "Configure CRON tutorial"
+msgstr "Tutorial per a configurar CRON"
+
+msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
+msgstr "Multisite detectat. Només una instancia de knews_cron.php ha de ser cridat per tots els sites web."
+
+msgid "You must add this line in your webserver CRONTAB:"
+msgstr "Has d'afegir aquesta línia al CRONTAB del teu servidor web:"
+
+msgid "The file location is: %s"
+msgstr "La ruta del fitxer és: %s"
+
+msgid "Configure SMTP tutorial"
+msgstr "Tutorial per a configurar l'SMTP"
+
+msgid "The language can't be localized"
+msgstr "L'idioma no pot ser localitzat"
+
+msgid "You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything."
+msgstr "Ets al mode d'edició d'imatge. Has d'apretar Aplicar o Desfer els canvis de imatge (o apretar la tecla ESC) abans de fer cap altre cosa."
+
+msgid "Image alt:"
+msgstr "Texte alternatiu:"
+
+msgid "The alternate text is very important, because most mail clients block initial image load and show the alternate image text."
+msgstr "El text alternatiu es molt important, perquè molts clients de correu bloquegen la càrrega inicial i ensenyen el text alternatiu a la imatge."
+
+msgid "Image link:"
+msgstr "Enllaç de la imatge:"
+
+msgid "Put a url if you want to put link around the image, for example: http://www.mysite.com/mypage.html."
+msgstr "Posa una url si tu vols posar un link al voltant de la imatge, per exemple: http://www.elmeulloc.com/lamevaplana.html."
+
+msgid "Multilanguage"
+msgstr "Multiidioma"
+
+msgid "Make your own templates how-to"
+msgstr "Tutorial per fer els teus propis templates"
+
+msgid "From date:"
+msgstr "Desde la data:"
+
+msgid "to date:"
+msgstr "fins a la data:"
+
+msgid "last 7 days"
+msgstr "últims 7 dies"
+
+msgid "last 30 days"
+msgstr "últims 30 dies"
+
+msgid "last week"
+msgstr "última setmana"
+
+msgid "last month"
+msgstr "últim mes"
+
+msgid "The date range you have selected is not available."
+msgstr "El rang de dates que has seleccionat no és disponible."
+
+msgid "Current status of subscriptions"
+msgstr "Estat actual de les subscripcions"
+
+msgid "Active users:"
+msgstr "Usuaris actius:"
+
+msgid "Not confirmed:"
+msgstr "No confirmats:"
+
+msgid "Unsubscribed users:"
+msgstr "Usuaris dats de baixa:"
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Currently have no subscribers."
+msgstr "Actualment no hi ha subscriptors."
+
+msgid "Accumulated sign ups and unsubscribes from date:"
+msgstr "Subscripcions i baixes acumulades desde la data:"
+
+msgid "You must select a right date range"
+msgstr "Has de seleccionar un rang de dates correcte"
+
+msgid "Sign ups"
+msgstr "Subscripcions"
+
+msgid "Unsubscriptions"
+msgstr "Baixes"
+
+msgid "Sendings"
+msgstr "Enviaments"
+
+msgid "Sendings OK"
+msgstr "Enviaments correctes"
+
+msgid "Sendings Error"
+msgstr "Enviaments erronis"
+
+msgid "Cant read"
+msgstr "No s'han pogut llegir"
+
+msgid "Total clicks"
+msgstr "Clics totals"
+
+msgid "Newsletters & clicks from date:"
+msgstr "Newsletters i clics desde la data:"
+
+msgid "Link clicks"
+msgstr "Clics als links"
+
+msgid "Total submits"
+msgstr "Enviaments totals"
+
+msgid "Error: make sure the directory %s exists and has write permissions (chmod 700)."
+msgstr "Error: assegura't que el directori %s existeix i té permís d'escriptura (chmod 700)."
+
+msgid "Error: there is no image selected"
+msgstr "Error: no hi ha cap imatge seleccionada"
+
+msgid "Knews updated the database successfully. Welcome to %s version."
+msgstr "Knews ha actualitzat la base de dades correctament. Benvingut a la versió %s."
+
+msgid "Customize widget messages"
+msgstr "Personalitza els missatges del widget"
+
+msgid "Sign up date user cant be understood"
+msgstr "La data d'alta de l'usuari no es pot interpretar"
+
+msgid "SQL Error while inserting user"
+msgstr "Error SQL al insertar usuari"
+
+msgid "SQL Error while updating user"
+msgstr "Error SQL al actualitzar usuari"
+
+msgid "Warning: the email has no subject! %s Edit it again before submit!"
+msgstr "Atenció: l'email no té assumpte! %s Edita'l altre cop abans d'enviar!"
+
+msgid "Warning: %sConfigure sender name before submit!"
+msgstr "Atenció: %sConfigura el nom del remitent abans d'enviar!"
+
+msgid "text_direction"
+msgstr "ltr"
+
+msgid "cant_read_text_1"
+msgstr "Si no pots llegir aquest correu, fes clic"
+
+msgid "cant_read_text_link"
+msgstr "aquí"
+
+msgid "cant_read_text_2"
+msgstr ""
+
+msgid "unsubscribe_text_1"
+msgstr "Si no vols seguir llegint els nostres correus, fes clic"
+
+msgid "unsubscribe_text_link"
+msgstr "aquí"
+
+msgid "unsubscribe_text_2"
+msgstr ""
+
+msgid "Sign Ups & Blocks"
+msgstr "Subscripcions i baixes"
+
+msgid "Use the CRON server (recommended)"
+msgstr "Usar CRON del servidor web (recomanat)"
+
+msgid "Text direction, Left To Right or Right To Left: put <span style=\"color:#e00\">ltr</span> or <span style=\"color:#e00\">rtl</span>"
+msgstr "Direcció del text, Left To Right o Right To Left: posa <span style=\"color:#e00\">ltr</span> o <span style=\"color:#e00\">rtl</span>"
+
+msgid "Default alignment (<span style=\"color:#e00\">left</span> for left to right languages and <span style=\"color:#e00\">right</span> for right to left languages)"
+msgstr "Aliniació per defecte (<span style=\"color:#e00\">left</span> per a idiomes left to right i <span style=\"color:#e00\">right</span> per a idiomes right to left)"
+
+msgid "Inverse alignment (<span style=\"color:#e00\">right</span> for left to right languages and <span style=\"color:#e00\">left</span> for right to left languages)"
+msgstr "Aliniació inversa (<span style=\"color:#e00\">right</span> per a idiomes left to right i <span style=\"color:#e00\">left</span> per a idiomes right to left)"
+
+msgid "Cant read text 1"
+msgstr "Si no pots llegir (text 1)"
+
+msgid "Cant read text link"
+msgstr "Si no pots llegir (enllaç)"
+
+msgid "Cant read text 2"
+msgstr "Si no pots llegir (text 2)"
+
+msgid "Unsubscribe text 1"
+msgstr "Dar-me de baixa (text 1)"
+
+msgid "Unsubscribe text link"
+msgstr "Dar-me de baixa (enllaç)"
+
+msgid "Unsubscribe text 2"
+msgstr "Dar-me de baixa (text 2)"
+
+msgid "default_alignment"
+msgstr "left"
+
+msgid "inverse_alignment"
+msgstr "right"
+
+msgid "The read more text link"
+msgstr "Text de l'enllaç seguir llegint"
+
+msgid "read_more_link"
+msgstr "seguir llegint"
+
+msgid "Image URL:"
+msgstr "URL de la imatge:"
+
+msgid "Image align:"
+msgstr "Aliniació de la imatge:"
+
+msgid "Apply changes"
+msgstr "Aplicar canvis"
+
+msgid "Undo"
+msgstr "Desfer"
+
+msgid "Fast selection:"
+msgstr "Selecció ràpida:"
+
+msgid "You are downgraded the version of Knews, you can lose data, please update quickly"
+msgstr "La versió actual de Knews es inferior a la instal·lada anteriorment, pots perdre informació: si us plau, actualitza inmediatament"
+
+msgid "tutorial_template_url"
+msgstr "http://www.knewsplugin.com/ca/tutorial/"
+
+msgid "tutorial_smtp_url"
+msgstr "http://www.knewsplugin.com/ca/configurar-els-enviaments-per-smtp/"
+
+msgid "tutorial_cron_url"
+msgstr "http://www.knewsplugin.com/ca/configurar-cron-al-servidor/"
 

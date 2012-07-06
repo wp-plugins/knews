@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.0.5
+Version: 1.1.0
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -33,6 +33,10 @@ if (!class_exists("KnewsPlugin")) {
 		var $knewsLangs = array();
 		var $initialized = false;
 		var $initialized_textdomain = false;
+		var $advice='';
+		var $KNEWS_MAIN_BLOG_ID = 1;
+		var $knews_admin_messages = '';
+
 				
 		/******************************************************************************************
 		/*                                   INICIALITZAR
@@ -74,10 +78,12 @@ if (!class_exists("KnewsPlugin")) {
 	
 		function creaSiNoExisteixDB () {
 			if (!$this->tableExists(KNEWS_USERS)) require( KNEWS_DIR . "/includes/knews_installDB.php");
+			if (version_compare(get_option('knews_version','0.0.0'), KNEWS_VERSION, '<')) require( KNEWS_DIR . "/includes/knews_updateDB.php");
 		}
 		
 		function get_default_messages() {
 			$KnewsDefaultMessages = array (
+				array ( 'label'=>__('Text direction, Left To Right or Right To Left: put <span style="color:#e00">ltr</span> or <span style="color:#e00">rtl</span>','knews'), 'name'=>'text_direction'),
 				array ( 'label'=>__('Widget title','knews'), 'name'=>'widget_title'),
 				array ( 'label'=>__('Widget e-mail label form','knews'), 'name'=>'widget_label'),
 				array ( 'label'=>__('Widget submit button','knews'), 'name'=>'widget_button'),
@@ -99,6 +105,15 @@ if (!class_exists("KnewsPlugin")) {
 				array ( 'label'=>__('UnSubscribe OK Dialog (Title)','knews'), 'name'=>'subscription_stop_ok_title'),
 				array ( 'label'=>__('UnSubscribe OK Dialog (Message)','knews'), 'name'=>'subscription_stop_ok_message'),
 				array ( 'label'=>__('Close Button Caption','knews'), 'name'=>'dialogs_close_button'),
+				array ( 'label'=>__('Default alignment (<span style="color:#e00">left</span> for left to right languages and <span style="color:#e00">right</span> for right to left languages)','knews'), 'name'=>'default_alignment'),
+				array ( 'label'=>__('Inverse alignment (<span style="color:#e00">right</span> for left to right languages and <span style="color:#e00">left</span> for right to left languages)','knews'), 'name'=>'inverse_alignment'),
+				array ( 'label'=>__('Cant read text 1','knews'), 'name'=>'cant_read_text_1'),
+				array ( 'label'=>__('Cant read text link','knews'), 'name'=>'cant_read_text_link'),
+				array ( 'label'=>__('Cant read text 2','knews'), 'name'=>'cant_read_text_2'),
+				array ( 'label'=>__('Unsubscribe text 1','knews'), 'name'=>'unsubscribe_text_1'),
+				array ( 'label'=>__('Unsubscribe text link','knews'), 'name'=>'unsubscribe_text_link'),
+				array ( 'label'=>__('Unsubscribe text 2','knews'), 'name'=>'unsubscribe_text_2'),
+				array ( 'label'=>__('The read more text link','knews'), 'name'=>'read_more_link'),
 			);
 			return $KnewsDefaultMessages;
 		}
@@ -123,8 +138,10 @@ if (!class_exists("KnewsPlugin")) {
 			return $custom;
 		}
 		
-		function init() {
+		function init($blog_id=0) {
 			global $knewsOptions, $wpdb;
+			
+			if ($blog_id != 0) switch_to_blog($blog_id);
 			
 			define('KNEWS_USERS', $wpdb->prefix . 'knewsusers');	
 			define('KNEWS_USERS_EXTRA', $wpdb->prefix . 'knewsusersextra');	
@@ -132,13 +149,17 @@ if (!class_exists("KnewsPlugin")) {
 			define('KNEWS_LISTS', $wpdb->prefix . 'knewslists');	
 			define('KNEWS_USERS_PER_LISTS', $wpdb->prefix . 'knewsuserslists');	
 			define('KNEWS_NEWSLETTERS', $wpdb->prefix . 'knewsletters');	
-			define('KNEWS_NEWSLETTERS_SUBMITS', $wpdb->prefix . 'knewsubmits');
 			define('KNEWS_NEWSLETTERS_SUBMITS_DETAILS', $wpdb->prefix . 'knewsubmitsdetails');
 			define('KNEWS_STATS', $wpdb->prefix . 'knewstats');
 			define('KNEWS_KEYS', $wpdb->prefix . 'knewskeys');
 
+			define('KNEWS_NEWSLETTERS_SUBMITS', $wpdb->base_prefix . 'knewsubmits');
+
 			define('KNEWS_DIR', dirname(__FILE__));
-			define('KNEWS_URL', plugins_url() . '/knews');
+			
+			$url = plugins_url();
+			if ($blog_id != 0) $url = $this->get_right_blog_path($blog_id) . 'wp-content/plugins';
+			define('KNEWS_URL', $url . '/knews');
 
 			$this->knews_load_plugin_textdomain();
 
@@ -149,6 +170,33 @@ if (!class_exists("KnewsPlugin")) {
 			$this->initialized = true;
 		}
 		
+		function get_right_blog_path($blog_id) {
+			global $wpdb;
+
+			$blog_found=array();
+			
+			if( is_multisite() ) {
+				$query = "SELECT * FROM " . $wpdb->base_prefix . 'blogs' . " WHERE blog_id=" . $blog_id;
+				$blog_found = $wpdb->get_results( $query );
+			}
+			
+			if (count($blog_found)==0) return get_bloginfo('wpurl') . '/';
+			$protocol = 'http://';
+			if (substr(get_bloginfo('wpurl'),0,8)=='https://') $protocol = 'https://';
+			return $protocol . $blog_found[0]->domain . $blog_found[0]->path;
+		}
+		
+		function get_main_plugin_url() {
+			
+			$url = plugins_url();
+
+			if( is_multisite() ) {
+				$url = $this->get_right_blog_path($this->KNEWS_MAIN_BLOG_ID) . 'wp-content/plugins';
+			}
+			
+			return $url;
+		}
+
 		function knews_load_plugin_textdomain() {
 			global $initialized_textdomain;
 
@@ -177,9 +225,25 @@ if (!class_exists("KnewsPlugin")) {
 		}
 	
 		/******************************************************************************************
-		/*                                  FUNCIONS COMUMES
+		/*                                  COMMON FUNCTIONS 
 		******************************************************************************************/
-
+		function get_last_cron_time () {
+			
+			$last_cron_time=0;
+			
+			if( is_multisite() ) {
+				if ( get_current_blog_id() != $this->KNEWS_MAIN_BLOG_ID ) {
+					switch_to_blog($this->KNEWS_MAIN_BLOG_ID);
+					$last_cron_time = get_option('knews_cron_time',-1);
+					restore_current_blog();
+				}
+			}
+			
+			if ($last_cron_time == 0) $last_cron_time = get_option('knews_cron_time',0);
+			if ($last_cron_time == -1) $last_cron_time = 0;
+			
+			return $last_cron_time;
+		}
 		function get_mysql_date($when='now') {
 			if ($when=='now') return current_time('mysql');
 			return date("Y-m-d H:i:s", $when);
@@ -600,7 +664,7 @@ if (!class_exists("KnewsPlugin")) {
 			global $knewsOptions;
 
 			if (! $this->initialized) $this->init();
-
+			
 			$knews_lists = $this->tellMeLists();
 
 			if (count($knews_lists) > 0) {
@@ -629,11 +693,11 @@ if (!class_exists("KnewsPlugin")) {
 
 		function register_widget(){
 			wp_register_sidebar_widget('knews_sidebar_widget', 'K-news Widget', array($this, 'printWidget'));
-			wp_register_widget_control('knews_widget_control', 'K-news Widget ', array($this, 'control_widget'));
+			wp_register_widget_control('knews_sidebar_widget', 'K-news Widget ', array($this, 'control_widget'));
 		}
 
 		function control_widget(){
-			echo 'I am a control panel';
+			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';
 		}
 		
 		function htmlentities_corrected($str_in) {
@@ -842,6 +906,48 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function im_pro() { return false; }
+		
+		function read_advice() {
+			global $advice;
+			if ($advice !='') return $advice;
+			
+			$last_advice_time = get_option('knews_advice_time',0);
+			$now_time = time();
+			if ($now_time - $last_advice_time > 86400) {
+
+				$response = wp_remote_get( 'http://www.knewsplugin.com/read_advice.php?v=' . KNEWS_VERSION . '&l=' . WPLANG );
+
+			} else {
+				$response = get_option('knews_advice_response', '0');
+				return $response;
+			}
+
+			if( is_wp_error( $response ) ) {
+				$advice='0';
+
+			} else {
+				if (isset($response['body'])) {
+					$advice=$response['body'];
+					if (substr($advice, 0, 7) == 'advice*') {
+						if (substr($advice, 7, 1)=='0') {
+							$advice='0';
+						} else {
+							$advice = substr($advice, 7);
+						}
+					} else {
+						$advice = '0';
+					}
+				} else {
+					$advice='0';
+				}
+			}
+			//Save cache
+			$advice_time = time();
+			update_option('knews_advice_time', $advice_time);
+			update_option('knews_advice_response', $advice);
+			
+			return $advice;
+		}
 
 		/******************************************************************************************
 		/*                                   PANELS ADMIN
@@ -875,11 +981,41 @@ if (!class_exists("KnewsPlugin")) {
 			if (! $this->initialized) $this->init();
 			require( KNEWS_DIR . "/admin/knews_admin_stats.php");
 		}
+		function KnewsAdminAuto() {
+			if (! $this->initialized) $this->init();
+			require( KNEWS_DIR . "/admin/knews_admin_auto.php");
+		}
 		function KnewsAdminConfig() {
 			if (! $this->initialized) $this->init();
 			require( KNEWS_DIR . "/admin/knews_admin_config.php");
 		}
 		
+		function knews_dashboard_widget(){
+			include_once KNEWS_DIR . '/includes/dashboard-widget.php';
+		}
+		function dashboard_widget_setup(){
+			if ($this->read_advice() != '0') {
+				if (current_user_can('manage_options')) {
+					$dashboard_widgets_order = (array)get_user_option( "meta-box-order_dashboard" );
+					$all_widgets = array();
+					foreach($dashboard_widgets_order as $k=>$v){
+						$all_widgets = array_merge($all_widgets, explode(',', $v));
+					}
+					if(!in_array('knews_dash_advice', $all_widgets)){
+						$install = true;
+					} else {
+						$install = false;
+					}
+					wp_add_dashboard_widget('knews_dash_advice', 'Knews Plugin Message', array($this, 'knews_dashboard_widget'), null);	
+					if($install){
+						$dashboard_widgets_order['side'] = 'knews_dash_advice' . ',' . @strval($dashboard_widgets_order['side']);
+						$user = wp_get_current_user();
+						update_user_option($user->ID, 'meta-box-order_dashboard', $dashboard_widgets_order, false);
+						$dashboard_widgets_order = (array)get_user_option( "meta-box-order_dashboard" );
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -888,7 +1024,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.0.5');
+		define('KNEWS_VERSION', '1.1.0');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -903,9 +1039,11 @@ if (!function_exists("Knews_plugin_ap")) {
 			add_submenu_page( 'knews_news', __('Submits','knews'), __('Submits','knews'), 'edit_posts', 'knews_submit', array(&$Knews_plugin, 'KnewsAdminSubmit'), '');
 			add_submenu_page( 'knews_news', __('Import CSV','knews'), __('Import CSV','knews'), 'edit_posts', 'knews_import', array(&$Knews_plugin, 'KnewsAdminImport'), '');
 			add_submenu_page( 'knews_news', __('Export CSV','knews'), __('Export CSV','knews'), 'edit_posts', 'knews_export', array(&$Knews_plugin, 'KnewsAdminExport'), '');
-			//add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), 'edit_posts', 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
+			add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), 'edit_posts', 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
 			add_submenu_page( 'knews_news', __('Configuration','knews'), __('Configuration','knews'), 'edit_posts', 'knews_config', array(&$Knews_plugin, 'KnewsAdminConfig'), '');
-	
+
+	        add_action('wp_dashboard_setup', array(&$Knews_plugin, 'dashboard_widget_setup'));
+
 		}
 
 		//WP Cron :: http://blog.slaven.net.au/2007/02/01/timing-is-everything-scheduling-in-wordpress/
@@ -972,46 +1110,50 @@ if (!function_exists("Knews_plugin_ap")) {
 		
 		global $Knews_plugin, $knewsOptions;
 		if (! $Knews_plugin->initialized) $Knews_plugin->init();
-	
-		if (version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0 || get_option('knews_pro') == 'yes') {
-			if ($knewsOptions['update_knews'] == 'no' && version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0) {
-				echo $div . __('You are downgraded the version of Knews, you can lose data, please update quickly','knews');
-				echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-			} else {
-				if (get_option('knews_pro') == 'yes') {
-					if ($knewsOptions['update_pro'] == 'no') {
-						echo $div;
-						printf( __('You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here','knews'), '<a href="http://www.knewsplugin.com" target="_blank">');
-						echo '</a>';
-						echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_pro&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+
+		if ($Knews_plugin->knews_admin_messages != '') {
+			echo $div . $Knews_plugin->knews_admin_messages . '</div>';
+		} else {
+			if (version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0 || get_option('knews_pro') == 'yes') {
+				if ($knewsOptions['update_knews'] == 'no' && version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0) {
+					echo $div . __('You are downgraded the version of Knews, you can lose data, please update quickly','knews');
+					echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+				} else {
+					if (get_option('knews_pro') == 'yes') {
+						if ($knewsOptions['update_pro'] == 'no') {
+							echo $div;
+							printf( __('You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here','knews'), '<a href="http://www.knewsplugin.com" target="_blank">');
+							echo '</a>';
+							echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_pro&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+						}
 					}
 				}
 			}
-		}
-	
-		if (strpos($_SERVER['REQUEST_URI'],'knews_config') === false) {
-			if ($knewsOptions['config_knews'] == 'no') {
-				
-				printf($div . __('Welcome to Knews.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-					'<a href="' . get_bloginfo('url') . '/wp-admin/admin.php?page=knews_config">');
-				echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=config_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
 		
-			} else {
-	
-				if (!$Knews_plugin->check_multilanguage_plugin() && $knewsOptions['multilanguage_knews'] != 'off' && $knewsOptions['no_warn_ml_knews'] == 'no') {
-	
-					printf($div_error . __('The multilanguage plugin has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-						'<a href="' . get_bloginfo('url') . '/wp-admin/admin.php?page=knews_config">');
-					echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=no_warn_ml_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-	
-				} elseif ($knewsOptions['knews_cron']=='cronjob') {
-					$last_cron_time = get_option('knews_cron_time',0);
-					$now_time = time();
-					if ($now_time - $last_cron_time > 1000 && $last_cron_time != 0 && $knewsOptions['no_warn_cron_knews'] == 'no') {
-	
-						printf($div_error . __('CRON has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-							'<a href="' . get_bloginfo('url') . '/wp-admin/admin.php?page=knews_config">');
-						echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=no_warn_cron_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+			if (strpos($_SERVER['REQUEST_URI'],'knews_config') === false) {
+				if ($knewsOptions['config_knews'] == 'no') {
+					
+					printf($div . __('Welcome to Knews.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
+						'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
+					echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=config_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+			
+				} else {
+		
+					if (!$Knews_plugin->check_multilanguage_plugin() && $knewsOptions['multilanguage_knews'] != 'off' && $knewsOptions['no_warn_ml_knews'] == 'no') {
+		
+						printf($div_error . __('The multilanguage plugin has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
+							'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
+						echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=no_warn_ml_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+		
+					} elseif ($knewsOptions['knews_cron']=='cronjob') {
+						$last_cron_time = $Knews_plugin->get_last_cron_time();
+						$now_time = time();
+						if ($now_time - $last_cron_time > 1000 && $last_cron_time != 0 && $knewsOptions['no_warn_cron_knews'] == 'no') {
+		
+							printf($div_error . __('CRON has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
+								'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
+							echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=no_warn_cron_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+						}
 					}
 				}
 			}

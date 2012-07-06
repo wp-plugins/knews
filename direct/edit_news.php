@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -9,6 +10,7 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -29,8 +31,8 @@ if ($Knews_plugin) {
 	$head_code=$results_news[0]->html_head;
 	echo substr($head_code, 0, strlen($head_code)-7);
 	?>	
-	<script type="text/javascript" src="../wysiwyg/editor.js?ft=<?php echo filemtime(KNEWS_DIR . '/wysiwyg/editor.js'); ?>"></script>
-	<link href="../wysiwyg/editor.css?ft=<?php echo filemtime(KNEWS_DIR . '/wysiwyg/editor.css'); ?>" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../wysiwyg/editor.js?ver=<?php echo KNEWS_VERSION; ?>"></script>
+	<link href="../wysiwyg/editor.css?ver=<?php echo KNEWS_VERSION; ?>" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<noscript>

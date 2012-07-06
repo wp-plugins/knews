@@ -45,12 +45,12 @@
 		if ( move_uploaded_file($_FILES['file_csv']['tmp_name'], $filename) ) {
 			echo '<p>' . __('File uploaded correctly','knews'). '</p>';
 		} else {
-			echo '<p>' . __("Error: can't move uploaded file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 777)', 'knews') . '</p>';
+			echo '<p>' . __("Error: can't move uploaded file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';
 		}
 	} else {
 		if ($step > 1) {
 			if (!is_file($filename)) {
-				echo '<p>' . __('You must upload a file.','knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 777)', 'knews') . '</p>';
+				echo '<p>' . __('You must upload a file.','knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';
 				$step = 1;
 			}
 		}
@@ -475,7 +475,7 @@ function print_state($step, $where) {
 						} else {
 							if ($step=='4') {
 								$date=data_process($user_csv[intval($_POST['joined_col_val'])-1], true);
-								if ($date=='#error#') addError ('Error al interpretar la data d\'alta del usuari', false);
+								if ($date=='#error#') addError (__('Sign up date user cant be understood','knews'), false); 
 							} else {
 								$date=data_process($user_csv[intval($_POST['joined_col_val'])-1]);
 							}
@@ -526,7 +526,7 @@ function print_state($step, $where) {
 												} else {
 													$import_users_ok--;
 													$import_users_new--;
-													addError ('Error SQL al insertar usuari');
+													addError (__('SQL Error while inserting user','knews'));
 												}
 											}
 										} else {
@@ -563,7 +563,7 @@ function print_state($step, $where) {
 													} else {
 														$import_users_ok--;
 														$import_users_overwrite--;
-														addError ('Error SQL al actualitzar usuari');
+														addError (__('SQL Error while updating user','knews'));
 													}
 												}
 											}
@@ -805,7 +805,7 @@ function add_confirm($id_user) {
 	
 	if ($submit_confirmation_id == 0) {
 		$mysqldate = $Knews_plugin->get_mysql_date();
-		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\', \'0000-00-00 00:00:00\')';
+		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . get_current_blog_id() . ', 0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\', \'0000-00-00 00:00:00\')';
 		$results = $wpdb->query( $query );
 		$submit_confirmation_id=$wpdb->insert_id; $submit_confirmation_id2=mysql_insert_id(); if ($submit_confirmation_id==0) $submit_confirmation_id=$submit_confirmation_id2;
 		//echo $query;

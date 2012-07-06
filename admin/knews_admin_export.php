@@ -141,7 +141,7 @@
 					printf(__('To download the .CSV, click %s here','knews'), '<a href="' . KNEWS_URL . '/direct/download.php?file=' . $file_name . '">');
 					echo '</a></p>';
 				} else {
-					echo '<p>' . __("Error: I can't write the .CSV file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 777)', 'knews') . '</p>';
+					echo '<p>' . __("Error: I can't write the .CSV file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';
 				}
 		?>
 				<textarea style="width:75%; height:400px;"><?php echo $csv_code; ?></textarea>

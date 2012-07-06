@@ -252,7 +252,7 @@
 								}
 							?>
 							</select>&nbsp;&nbsp;&nbsp;
-							<? _e('Filter by state','knews'); ?>: <select name="filter_state" id="filter_state">
+							<?php _e('Filter by state','knews'); ?>: <select name="filter_state" id="filter_state">
 								<option value="0"<?php if ($filter_state==0) echo ' selected="selected"'; ?>><?php _e('All','knews'); ?></option>
 								<option value="1"<?php if ($filter_state==1) echo ' selected="selected"'; ?>><?php _e('Not confirmed','knews'); ?></option>
 								<option value="2"<?php if ($filter_state==2) echo ' selected="selected"'; ?>><?php _e('Confirmed','knews'); ?></option>
@@ -348,19 +348,19 @@
 						<div class="tablenav-pages">
 							<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>
 							<?php if ($paged > 1) { ?>
-							<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">«</a>
-							<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">‹</a>
+							<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+							<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
 							<?php } else { ?>
-							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">«</a>
-							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">‹</a>
+							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
 							<?php } ?>
 							<span class="paging-input"><?php echo $paged; ?> de <span class="total-pages"><?php echo $maxPage; ?></span></span>
 							<?php if ($maxPage > $paged) { ?>
-							<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">›</a>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">»</a>
+							<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
 							<?php } else { ?>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">›</a>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">»</a>					
+							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
 							<?php } ?>
 						</div>
 					<br class="clear">

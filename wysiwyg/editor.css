@@ -78,6 +78,10 @@ div.wysiwyg_editor span.img_resizer_sw,
 div.wysiwyg_editor span.img_resizer_ne {
 	cursor:ne-resize;
 }
+div.wysiwyg_editor span.prohibited {
+	cursor:default;
+	cursor:not-allowed !important;
+}
 /* editor */
 div.wysiwyg_editor span.img_handler {
 	z-index:1;
@@ -147,4 +151,9 @@ tr.droppable:hover {
 body.doing_drag tr.droppable:hover {
 	outline:none;
 }
-*/
+img.editable:hover {
+	outline:1px dashed #000000;
+}
+body {
+	margin-bottom:100px;
+}

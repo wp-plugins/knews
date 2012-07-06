@@ -72,29 +72,35 @@ $sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS . " (
 		html_modules mediumtext NOT NULL,
 		html_container mediumtext NOT NULL,
 		html_head mediumtext NOT NULL,
+		lang varchar(3) NOT NULL DEFAULT '', 
+		automated varchar(1) NOT NULL DEFAULT 0,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 
 dbDelta($sql);
 
-$sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS_SUBMITS . " (
-		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-		newsletter int(11) NOT NULL,
-		finished tinyint(1) NOT NULL,
-		paused tinyint(1) NOT NULL,
-		start_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-		end_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-		users_total int(11) NOT NULL,
-		users_ok int(11) NOT NULL,
-		users_error int(11) NOT NULL,
-		priority tinyint(4) NOT NULL,
-		strict_control varchar(100) NOT NULL,
-		emails_at_once int(11) NOT NULL,
-		special varchar(32) NOT NULL,
-		UNIQUE KEY id (id)
-	   )$charset_collate;";
+if (!$this->tableExists(KNEWS_NEWSLETTERS_SUBMITS)) {
 
-dbDelta($sql);
+	$sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS_SUBMITS . " (
+			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			blog_id bigint(20) UNSIGNED NOT NULL DEFAULT " . $this->KNEWS_MAIN_BLOG_ID . ",
+			newsletter int(11) NOT NULL,
+			finished tinyint(1) NOT NULL,
+			paused tinyint(1) NOT NULL,
+			start_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			end_time timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+			users_total int(11) NOT NULL,
+			users_ok int(11) NOT NULL,
+			users_error int(11) NOT NULL,
+			priority tinyint(4) NOT NULL,
+			strict_control varchar(100) NOT NULL,
+			emails_at_once int(11) NOT NULL,
+			special varchar(32) NOT NULL,
+			UNIQUE KEY id (id)
+		   )$charset_collate;";
+	
+	dbDelta($sql);
+}
 
 $sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " (
 		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,

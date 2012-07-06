@@ -25,7 +25,7 @@ var font_picker_referer;
 var font_picker_ambit;
 var font_picker_number;
 
-var referer_image;
+//1.1.0 var referer_image;
 var referer_delete;
 var saved_range='';
 
@@ -42,6 +42,10 @@ var resizing_image_t;
 var resizing_image_l;
 var resizing_image_w_undo;
 var resizing_image_h_undo;
+var img_max_width=0;
+var img_min_width=0;
+var img_max_height=0;
+var img_min_height=0;
 
 var to_shitty_ie8='';
 
@@ -50,6 +54,10 @@ var resize_toolbox=false;
 var ratoliX_tb=0;
 var ratoliY_tb=0;
 var ratoli_offset_left=0;
+
+var save_var_module_callback='';
+var save_var_values=new Array();
+
 function confirmExit() { return unsaved_message; }
 function not_saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = confirmExit; }
 function saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = null; }
@@ -57,9 +65,18 @@ function saved() { document.getElementById('knews_editor').contentWindow.window.
 function dontstart () { return false; }
 
 jQuery(window).load(function() {
-
+	
 	if (jQuery.browser.opera) alert(opera_no);
 
+	if (jQuery('#title').val() == "") jQuery('#title-prompt-text').show();
+	jQuery('#title')
+		.focus(function() {
+			jQuery('#title-prompt-text').hide();
+		})
+		.blur(function() {
+			if (jQuery('#title').val() == "") jQuery('#title-prompt-text').show();
+		});
+	
 	io=jQuery('#knews_editor').contents();
 
 	jQuery(io).ready( function () {
@@ -277,6 +294,10 @@ function update_preview() {
 		if (resizing_image=='s' || resizing_image=='se' || resizing_image=='sw') {
 			pos_y_hand = resizing_image_handler_y + (ratoliY - resizing_image_y);
 			height_img = 4 + pos_y_hand - tt;
+
+			if (img_max_height != 0 && height_img > img_max_height) height_img = img_max_height;
+			if (img_min_height != 0 && height_img < img_min_height) height_img = img_min_height;
+
 			if (height_img > 0) {
 				jQuery(referer_image_size).attr('height', height_img);
 				hh=height_img;
@@ -286,6 +307,10 @@ function update_preview() {
 		if (resizing_image=='n' || resizing_image=='ne' || resizing_image=='nw') {
 			//alert(resizing_image_h + ' ' + resizing_image_handler_y + ' ' + (ratoliY-magic_offset));
 			height_img = resizing_image_h + resizing_image_handler_y - (ratoliY + scroll_frame_y - magic_offset);
+
+			if (img_max_height != 0 && height_img > img_max_height) height_img = img_max_height;
+			if (img_min_height != 0 && height_img < img_min_height) height_img = img_min_height;
+
 			if (height_img > 0) {
 				hh=height_img;
 				tt=resizing_image_t - height_img + resizing_image_h;
@@ -298,6 +323,10 @@ function update_preview() {
 		if (resizing_image=='ne' || resizing_image=='e' || resizing_image=='se') {
 			pos_x_hand = resizing_image_handler_x + (ratoliX - resizing_image_x);
 			width_img = 4 + pos_x_hand - ll;
+
+			if (img_max_width != 0 && width_img > img_max_width) width_img = img_max_width;
+			if (img_min_width != 0 && width_img < img_min_width) width_img = img_min_width;
+
 			if (width_img > 0) {
 				jQuery(referer_image_size).attr('width', width_img);
 				ww=width_img;
@@ -306,6 +335,10 @@ function update_preview() {
 
 		if (resizing_image=='nw' || resizing_image=='w' || resizing_image=='sw') {
 			width_img = resizing_image_w + resizing_image_handler_x - ratoliX;
+
+			if (img_max_width != 0 && width_img > img_max_width) width_img = img_max_width;
+			if (img_min_width != 0 && width_img < img_min_width) width_img = img_min_width;
+
 			if (width_img > 0) {
 				ww=width_img;
 				ll=resizing_image_l - width_img + resizing_image_w;
@@ -316,6 +349,10 @@ function update_preview() {
 		}
 
 		document.getElementById('knews_editor').contentWindow.move_resize_handlers(ww, hh, tt, ll);
+
+		//jQuery('div.image_properties input#image_w').val(width_img);
+		//jQuery('div.image_properties input#image_h').val(height_img);
+		
 	}
 }
 
@@ -351,9 +388,102 @@ function editor_mouseup() {
 		redraw_droppables();
 		
 	} else if (droppable_over && copy_item) {
+		
+		//Module options & inputs
+		save_var_module_callback = droppable_over;
+		var input_html='<div class="knews_vars_dialog"><form method="post" action=".">';
+		var input_count=0;
+		var look_code = jQuery(copy_item).html();
+		var split_code=look_code.split("<!--[start option ");
+
+		var tmp_split=split_code[0];
+		var extract_var_tmp=tmp_split.split("%input_");
+		if (extract_var_tmp.length > 1) {
+			for (var xx=1; xx<extract_var_tmp.length; xx++) {
+				extract_var_tmp_cut=extract_var_tmp[xx];
+				var extract_var=extract_var_tmp_cut.split("%");
+				input_count++;
+				
+				value="";
+				if (typeof(save_var_values["%input_" + extract_var[0] + "%"]) !== 'undefined') value=save_var_values["%input_" + extract_var[0] + "%"];
+				
+				input_html = input_html + '<p><label>' + put_spaces(extract_var[0]) + ':</label> <input type="text" name="txt_' + input_count + '" id="txt_' + input_count + '" class="txt" value="' + value + '"><input type="hidden" name="code_' + input_count + '" id="code_' + input_count + '" value="' + extract_var[0] + '"><input type="hidden" name="type_' + input_count + '" id="type_' + input_count + '" value="var"></p><hr />' ;
+			}
+		}
+
+		if (split_code.length > 1) {
+			for (var x=1; x<split_code.length; x++) {
+				var tmp_split=split_code[x];
+				var extract_name=tmp_split.split("]-->");
+
+				value_chk=true;
+				if (typeof(save_var_values['<!--[start option ' + extract_name[0] + "]-->"]) !== 'undefined') value_chk=save_var_values["%input_" + extract_name[0] + "%"];
+
+				input_count++;
+				input_html = input_html + '<div><p><input type="checkbox" name="chk_' + input_count + '" id="chk_' + input_count + '"';
+				if (value_chk) input_html = input_html + ' checked="checked"';
+				input_html = input_html + '> ' + extract_name[0] + '<input type="hidden" name="code_' + input_count + '" id="code_' + input_count + '" value="' + extract_name[0] + '"><input type="hidden" name="type_' + input_count + '" id="type_' + input_count + '" value="check"></p>' ;
+
+				var extract_var_tmp_0=tmp_split.split("<!--[end option ");
+				var extract_var_tmp_1=extract_var_tmp_0[0];
+				var extract_var_tmp=extract_var_tmp_1.split("%input_");
+				if (extract_var_tmp.length > 1) {
+					for (var xx=1; xx<extract_var_tmp.length; xx++) {
+						var extract_var_cut=extract_var_tmp[xx];
+						var extract_var=extract_var_cut.split("%");
+
+						value="";
+						if (typeof(save_var_values["%input_" + extract_var[0] + "%"]) !== 'undefined') value=save_var_values["%input_" + extract_var[0] + "%"];
+
+						input_count++;
+						input_html = input_html + '<p><label';
+						if (!value_chk) input_html = input_html + ' style="display:none"';
+						input_html = input_html + '>' + put_spaces(extract_var[0]) + ':</label> <input type="text" name="txt_' + input_count + '" id="txt_' + input_count + '" class="txt" value="' + value + '"><input type="hidden" name="code_' + input_count + '" id="code_' + input_count + '" value="' + extract_var[0] + '"';
+						if (!value_chk) input_html = input_html + ' style="display:none"';
+						input_html = input_html + '><input type="hidden" name="type_' + input_count + '" id="type_' + input_count + '" value="var"></p>' ;
+					}
+				}
+				input_html = input_html + '</div><hr />';
+			}
+		
+			if (extract_var_tmp_0.length > 1) {
+				extract_var_tmp_1=extract_var_tmp_0[1];
+				var extract_var_tmp=extract_var_tmp_1.split("%input_");
+				for (var xx=1; xx<extract_var_tmp.length; xx++) {
+					extract_var_tmp_cut=extract_var_tmp[xx];
+					var extract_var=extract_var_tmp_cut.split("%");
+
+					value="";
+					if (typeof(save_var_values["%input_" + extract_var[0] + "%"]) !== 'undefined') value=save_var_values["%input_" + extract_var[0] + "%"];
+
+					input_count++;
+					input_html = input_html + '<p><label>' + put_spaces(extract_var[0]) + ':</label> <input type="text" name="txt_' + input_count + '" id="txt_' + input_count + '" class="txt" value="' + value + '"><input type="hidden" name="code_' + input_count + '" id="code_' + input_count + '" value="' + extract_var[0] + '"><input type="hidden" name="type_' + input_count + '" id="type_' + input_count + '" value="var"></p><hr />' ;
+				}
+			}
+		}
+
+		if (input_count != 0) {
+			input_html = input_html + '<input type="hidden" name="nfields" id="nfields" value="' + input_count + '"><input type="button" value="' + button_continue + '" onclick="insert_vars();"></form></div>'
+
+			tb_show('Module options', "#TB_inline?height=400&width=400&inlineId=modalDiv&modal=true");
+		
+			jQuery('#TB_ajaxContent').html(input_html);
+
+			jQuery('#TB_ajaxContent input:checkbox').click( function() {
+				if (jQuery(this).is(':checked')) {
+					jQuery('input:text', jQuery(this).closest('div')).show();
+					jQuery('label', jQuery(this).closest('div')).show();
+				} else {
+					jQuery('input:text', jQuery(this).closest('div')).hide();
+					jQuery('label', jQuery(this).closest('div')).hide();
+				}
+			});
+		}
+		
 		not_saved();
 		//Copiem el contingut
-		copy_item.children().clone().appendTo(jQuery(droppable_over).children());
+		clone_safe(copy_item.children(), jQuery(droppable_over).children());
+		//copy_item.children().clone().appendTo(jQuery(droppable_over).children());
 		
 		//Traiem el class del TR
 		jQuery(droppable_over).removeClass('droppable_empty_hover').removeClass('droppable_empty').addClass('droppable');
@@ -394,8 +524,51 @@ function editor_mouseup() {
 	copy_item=null;
 	
 	parent.resizing_image='';
+	
+	jQuery('.droppable_empty', io).hide();
+	
 	return false;
 }
+
+function put_spaces(text) {
+	return absoluteReplace(text, '_', ' ');
+}
+
+function insert_vars() {
+	code = jQuery(save_var_module_callback).html();
+	
+	for (var x=1; x<=parseInt(jQuery('#TB_ajaxContent #nfields').val(), 10); x++) {
+		if (jQuery('#TB_ajaxContent #type_' + x).val() == 'var') {
+			value = jQuery('#TB_ajaxContent #txt_' + x).val();
+			name = '%input_' + jQuery('#TB_ajaxContent #code_' + x).val() + '%';
+			code = absoluteReplace(code, name, value);
+			save_var_values[name]=value;
+		}
+	}
+	
+	for (var x=1; x<=parseInt(jQuery('#TB_ajaxContent #nfields').val(), 10); x++) {
+		if (jQuery('#TB_ajaxContent #type_' + x).val() == 'check') {
+			if (!jQuery('#TB_ajaxContent #chk_' + x).is(':checked')) {
+				name = jQuery('#TB_ajaxContent #code_' + x).val();
+				name_1 = '<!--[start option ' + name + ']-->';
+				name_2 = '<!--[end option ' + name + ']-->';
+				
+				code_1 = code.split(name_1);
+				code_2 = code_1[1];
+				code_2 = code_2.split(name_2);
+				
+				code = code_1[0] + code_2[1];
+
+				save_var_values[name_1]=jQuery('#TB_ajaxContent #chk_' + x).is(':checked');
+			}
+		}
+	}
+	
+	jQuery(save_var_module_callback).html(code);
+	document.getElementById('knews_editor').contentWindow.listen_module(save_var_module_callback);
+	tb_remove();
+}
+
 function sel_col(ambit, ncolour, obj) {
 	col_picker_ambit = ambit;
 	col_picker_number = ncolour;
@@ -495,7 +668,7 @@ function redraw_droppables() {
 
 function look_images(obj) {
 	jQuery('img.editable', obj).each(function(index) {
-    	jQuery(this).before('<span class="img_handler"><a href="#" class="change_image" title="' + edit_image + '"></a></span>');
+    	//1.1.0 jQuery(this).before('<span class="img_handler"><a href="#" class="change_image" title="' + edit_image + '"></a></span>');
 		//<a href="#" class="properties_image" title="' + properties_image + '"></a>
 	});
 }
@@ -722,41 +895,96 @@ function setCatcher() {
 		callback_img(html);
 	}
 }
+function setCatcherInsertion() {
+	window.send_to_editor = function(html) {
+		callback_img_insertion(html);
+	}
+}
 
-function callback_img(html) {
+function callback_img_insertion(html) {
+	align='';
+	if (html.indexOf('alignleft') != -1) align="left";
+	if (html.indexOf('aligncenter') != -1) align="center";
+	if (html.indexOf('alignright') != -1) align="right";
+	not_saved();
+	tb_remove();
+
+	img_url=html.split('src="');
+	img_url=img_url[1].split('"');
+	img_url=img_url[0];
+
+	document.getElementById('knews_editor').contentWindow.b_insert_image(img_url, align);
+}
+function callback_img(html, a, b, hs, vs, align) {
+
+	a = a || ''; b = b || ''; hs = hs || ''; vs = vs || ''; align = align || '';
+
+	//alert('1* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
 	not_saved();
 	tb_remove();
 	
-	img_x = jQuery(referer_image).attr('width');
-	img_y = jQuery(referer_image).attr('height');
+	img_x = jQuery(referer_image_size).attr('width');//1.1.0
+	img_y = jQuery(referer_image_size).attr('height');//1.1.0
 	
 	img_url=html.split('src="');
 	img_url=img_url[1].split('"');
 	img_url=img_url[0];
+	
+	jQuery('div.image_properties input#image_url').val(img_url);
 
 	if (jQuery.browser.msie  && parseInt(jQuery.browser.version, 10) === 8 && to_shitty_ie8=='') {
 		//alert("callback_img('" + html + "')");
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-	//alert("urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
-	//alert(url_plugin + "/direct/resize_img.php");
+	//alert(url_plugin + "/direct/resize_img.php" + "?" + "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
+	referer_image_size_ajax=referer_image_size;
+
+	if (jQuery(referer_image_size_ajax).hasClass('alignable')) put_remove_attr('align',align);
+	put_remove_attr('alt',a);
+	put_remove_attr('border',b);
+	put_remove_attr('hspace',hs);
+	put_remove_attr('vspace',vs);
+
 	jQuery.ajax({
 		data: "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
 		type: "GET",
-		dataType: "html",
+		dataType: "json",
 		url: url_plugin + "/direct/resize_img.php",
 		cache: false,
 		success: function(data) {
+
+			//alert('2* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
+
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
 			}
 			to_shitty_ie8='x';
 			//alert('success');
-			if (data=='error') {
-				tb_dialog('Knews', error_resize, button_continue_editing, '', '');
-			} else {
-				jQuery(referer_image).attr('src', data);
+			//alert(data.result);
+			//alert(data.url);
+			//alert(referer_image_size);
+			if (referer_image_size_ajax != '') {
+				if (data.result=='error') {
+					tb_dialog('Knews', data.message, button_continue_editing, '', '');
+				} else {
+					//1.1.0
+
+					//alert('3* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
+
+					jQuery(referer_image_size_ajax)
+						.attr('src', data.url)
+						.load(function() {
+
+							//alert('4* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
+
+							if (jQuery(referer_image_size_ajax).hasClass('alignable')) put_remove_attr('align',align);
+							put_remove_attr('alt',a);
+							put_remove_attr('border',b);
+							put_remove_attr('hspace',hs);
+							put_remove_attr('vspace',vs);
+						});
+				}
 			}
 		},
 		beforeSend: function(request, settings) {
@@ -773,12 +1001,19 @@ function callback_img(html) {
 			//alert(request.responseText);
 			//alert("Error, returned: " + request);
 			//alert("Error, returned: " + status);
-			tb_dialog('Knews', error_resize + ": (" + error + ")", button_continue_editing, '', '');
+			if (referer_image_size_ajax != '') tb_dialog('Knews', error, button_continue_editing, '', '');
 		}
 		
 	});
 }
-
+function put_remove_attr(attr, val) {
+	//alert( jQuery(referer_image_size_ajax).parent().html() );
+	if (val=='') {
+		jQuery(referer_image_size_ajax).removeAttr(attr);
+	} else {
+		jQuery(referer_image_size_ajax).attr(attr, val);
+	}
+}
 function look_for_css_property(chain, property) {
 
 	if (chain===undefined || chain==null) return false;
@@ -924,7 +1159,8 @@ function save_news () {
 		jQuery.ajax({
 			data: { code: savecode,
 					title: jQuery('input#title').val(),
-					idnews: id_news },
+					idnews: id_news,
+					testslash: "aa'aa" },
 	
 			type: "POST",
 			cache: false,
@@ -978,6 +1214,11 @@ function b_justify(j) {
 	not_saved();
 	document.getElementById('knews_editor').contentWindow.b_justify(j);
 }
+function b_insert_image() {
+	saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();
+	setCatcherInsertion();
+	tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(window).height(), 10)-100));
+}
 function b_color() {
 	saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();
 	not_saved();
@@ -990,4 +1231,18 @@ function CallBackColourEditor(hex) {
 	not_saved();
 	parent.tb_remove();
 	document.getElementById('knews_editor').contentWindow.b_color(hex);	
+}
+
+function clone_safe(origen, destino) {
+	var copy_styles=new Array();
+	
+	origen.clone().appendTo(destino);
+
+	jQuery('*', origen).each(function (index) {
+		copy_styles[index] = jQuery(this).attr('style');
+	});
+
+	jQuery('*', destino.children(":last")).each(function (index) {
+		jQuery(this).attr('style', copy_styles[index]);
+	});
 }

@@ -4,9 +4,9 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 </script>
 <![endif]-->
 
-<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/wysiwyg/parent_editor.js?ft=<?php echo filemtime(KNEWS_DIR . '/wysiwyg/parent_editor.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/wysiwyg/parent_editor.js?ver=<?php echo KNEWS_VERSION; ?>"></script>
 
-<link rel="stylesheet" href="<?php echo KNEWS_URL; ?>/wysiwyg/parent_editor.css" type="text/css" media="all" />
+<link rel="stylesheet" href="<?php echo KNEWS_URL; ?>/wysiwyg/parent_editor.css?ver=<?php echo KNEWS_VERSION; ?>" type="text/css" media="all" />
 <?php
 	$query = "SELECT * FROM ".KNEWS_NEWSLETTERS." WHERE id=" . $id_edit;
 	$results_news = $wpdb->get_results( $query );
@@ -29,13 +29,13 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	if (count($one_post)!=1) $one_post = get_pages();
 	echo 'one_post_id=' . intval($one_post[0]->ID) . ';';
 	?>
-	submit_news='<?php bloginfo('url');?>/wp-admin/admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
+	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
 	
-	must_apply_undo = "You are in image edition mode. You must press Apply or Undo image changes before.";
+	must_apply_undo = "<?php _e('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews'); ?>";
 	edit_image= "<?php echo __('Edit image','knews'); ?>";
-	sharp_image= "<?php echo __('Apply change and refresh image','knews'); ?>";
+	sharp_image= "<?php echo __('Apply changes and refresh image','knews'); ?>";
 	undo_image= "<?php echo __('Undo image changes','knews'); ?>";
-	properties_image= "<?php echo __('Properties image','knews'); ?>";
+	properties_image= "<?php echo __('Properties of image','knews'); ?>";
 	post_handler= "<?php echo __('Insert post/page content','knews'); ?>";
 	free_handler= "<?php echo __('Free text content','knews'); ?>";
 	move_handler= "<?php echo __('Move module','knews'); ?>";
@@ -51,6 +51,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	confirm_delete = "<?php echo __('Do you really want to delete this module?','knews'); ?>";
 	button_yes = "<?php echo __('Yes','knews'); ?>";
 	button_no = "<?php echo __('No','knews'); ?>";
+	button_continue = "<?php echo __('Continue','knews'); ?>";
 	
 	opera_no = "<?php echo __("Warning! Opera can't edit newsletters. You must use a modern Firefox, Chrome, Safari or at least Internet Explorer 8.",'knews'); ?>";
 </script>
@@ -58,8 +59,6 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Editing newsletter','knews'); ?>: <?php echo $results_news[0]->name; ?></h2>
 		<div id="poststuff">
 			<div id="titlediv">
-				<?php _e('Subject','knews'); ?>:
-				<input type="text" id="title" name="title" value="<?php echo $results_news[0]->subject; ?>" style="width:600px;" />
 				<?php
 				$lang_attr='';
 				if ($Knews_plugin->get_safe('lang') != '') {
@@ -71,6 +70,33 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 					<a href="#" class="move" title="move"></a>
 					<a href="#" class="minimize" title="minimize"></a>
 					<span class="clear"></span>*/?>
+					<div class="image_properties">
+						<span class="img_handler">
+							<?php /*<input type="button" value="Edit image" class="change_image button" />
+							<a title="Edit image" class="change_image" href="#"></a>
+							<a title="Apply changes and refresh image" class="rredraw_image" href="#"></a>
+							<a title="Undo image changes" class="uundo_image" href="#"></a>*/?>
+						</span>
+						<p><label><?php _e('Image URL:','knews'); ?></label><a href="#" class="change_image"></a><input type="text" name="image_url" id="image_url" readonly="readonly" /></p>
+						<p><label><?php _e('Image link:','knews'); ?> <a href="#" title="<?php _e('Put a url if you want to put link around the image, for example: http://www.mysite.com/mypage.html.','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/help2.gif" width="16" height="16" alt="" /></a></label><input type="text" name="image_link" id="image_link" /></p>
+						<p><label><?php _e('Image alt:','knews'); ?> <a href="#" title="<?php _e('The alternate text is very important, because most mail clients block initial image load and show the alternate image text.','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/help2.gif" width="16" height="16" alt="" /></a></label><textarea name="image_alt" id="image_alt"></textarea></p>
+						<div class="alignable"><p><?php _e('Image align:','knews'); ?> <select name="image_align" id="image_align"><option value="">none</option>
+						<option value="left">left</option>
+						<option value="right">right</option>
+						<option value="top">top</option>
+						<option value="texttop">texttop</option>
+						<option value="middle">middle</option>
+						<option value="absmiddle">absmiddle</option>
+						<option value="baseline">baseline</option>
+						<option value="bottom">bottom</option>
+						<option value="absbottom">absbottom</option>
+						</select></p></div>
+						<?php /*<p class="line size"><label>Width:</label><input type="text" name="image_w" id="image_w" /> x <label>Height:</label><input type="text" name="image_h" id="image_h" /></p>*/ ?>
+						<p class="line extra" dir="ltr"><label>Border:</label><input type="text" name="image_b" id="image_b" /> <label>Hspace:</label><input type="text" name="image_hs" id="image_hs" /> <label>Vspace:</label><input type="text" name="image_vs" id="image_vs" /></p>
+						<span class="clear"></span>
+						<p class="buttons">
+						<input type="button" value="<?php _e('Apply changes','knews'); ?>" class="rredraw_image button-primary" /><input type="button" value="<?php _e('Undo','knews');?>" class="uundo_image button" /></p>
+					</div>
 					<div class="tools">
 						<?php /*<a href="#" class="toggle_handlers toggle_handlers_off" title="<?php _e('Show/hide handlers','knews'); ?>"></a>*/?>
 						<span class="clear"></span>
@@ -83,20 +109,33 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 					$query = "SELECT * FROM ".KNEWS_NEWSLETTERS." WHERE id=" . $id_edit;
 					$results_news = $wpdb->get_results( $query );
 
-					if (count($results_news) != 0)
-						echo $results_news[0]->html_modules; 
+					//if (count($results_news) != 0) {
+						$code = $results_news[0]->html_modules;
+						/*for ($a=1; $a<20; $a++) {
+							$code = str_replace('modules/module_' . $a . '.jpg','modules/module_' . $a . '.jpg?r=' . uniqid(),$code);
+						}*/
+						echo $code;
+					//}
 					?>
 					</div>
 					<div class="resize">
 						<a href="#" title="<?php _e('Resize toolbox','knews');?>">&nbsp;</a>
 					</div>
 				</div>
+				<div id="titlewrap">
+					<label for="title" id="title-prompt-text" style="" class="hide-if-no-js"><?php _e('Subject','knews'); ?></label>
+					<input type="text" autocomplete="off" id="title" value="<?php echo $results_news[0]->subject; ?>" tabindex="1" size="30" name="post_title">
+				</div>
 				<div class="editor_iframe">
 					<div id="botonera">
+						<div class="zoom_tool">
+							<select name="zoom" id="zoom" autocomplete="off"><option value="0.5">50%</option><option value="0.75">75%</option><option value="1" selected="selected">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="4">400%</option></select>
+						</div>
 						<div class="standard_buttons desactivada">
 							<a href="#" title="bold" class="bold" onclick="b_simple('Bold'); return false;">B</a>
 							<a href="#" title="italic" class="italic" onclick="b_simple('Italic'); return false;">I</a>
 							<a href="#" title="strike-through" class="strike" onclick="b_simple('StrikeThrough'); return false;">St</a>
+							<a href="#" title="insert image" class="image" onclick="b_insert_image(); return false;">i</a>
 							<a href="#" title="link" class="link" onclick="b_link(); return false;">A</a>
 							<a href="#" title="UN-link" class="no_link" onclick="b_del_link(); return false;">(A)</a>
 						</div>
@@ -118,7 +157,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 
 						<span class="clear"></span>
 					</div>
-					<iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo KNEWS_URL . '/direct/edit_news.php?idnews=' . $id_edit . $lang_attr; ?>"></iframe>
+					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo KNEWS_URL . '/direct/edit_news.php?idnews=' . $id_edit . $lang_attr; ?>"></iframe></div>
 					<div id="tagsnav"></div>
 				</div>
 				<div class="drag_preview"></div>

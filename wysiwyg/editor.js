@@ -9,11 +9,27 @@ var link_node='';
 var moz_dirty=false;
 var bold_type='';
 var cursive_type='';
+var flash_wysiwyg_first=true;
 
 //function start() {
 parent.jQuery(document).ready( function () {
 //parent.jQuery(window).load(function() {
 
+	parent.jQuery('select#zoom').change(function () {
+		parent.jQuery('body', document).attr('style','zoom: ' + parent.jQuery(this).val() + '; -moz-transform: scale(' + parent.jQuery(this).val() + '); -moz-transform-origin: 0 0;');
+	});
+
+	parent.jQuery(document).keyup(function(e) {
+		if (e.keyCode == 27 && parent.referer_image_size != '') {
+			parent.jQuery(parent.referer_image_size).attr('height', parent.resizing_image_h_undo);
+			parent.jQuery(parent.referer_image_size).attr('width', parent.resizing_image_w_undo);
+			
+			clean_resize_handlers();
+			parent.referer_image_size='';
+			parent.referer_image_size_ajax='';
+			return false;
+		}
+	});
 	parent.jQuery('.droppable_empty', document)
 		.live('mouseover', function() {
 			//alert("ooo");
@@ -24,7 +40,7 @@ parent.jQuery(document).ready( function () {
 			parent.droppable_over=null;
 			parent.jQuery(this).removeClass('droppable_empty_hover');
 		});
-	parent.jQuery('img.editable', document).live('mouseover', function(e) {
+	/*1.1.0 parent.jQuery('img.editable', document).live('mouseover', function(e) {
 		parent.jQuery(this).prev().css('display','block');
 	});
 	parent.jQuery('img.editable', document).live('mouseout', function(e) {
@@ -32,43 +48,136 @@ parent.jQuery(document).ready( function () {
 	});
 	parent.jQuery('span.img_handler', document).live('mouseover', function() {
 		parent.jQuery(this).stop().show();
-	});
-	parent.jQuery('span.img_handler a.change_image', document).live('click', function(e) {
+	});*/
+	//1.1.0 parent.jQuery('span.img_handler a.change_image', document).live('click', function(e) {
+	parent.jQuery('div.wysiwyg_toolbar a.change_image').click(function(e) {
 		parent.setCatcher();
-		parent.referer_image=parent.jQuery(this).parent().next();
+		//1.1.0 parent.referer_image=parent.jQuery(this).parent().next();
 		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
 		return false;
 	});
-	parent.jQuery('span.img_handler a.rredraw_image', document).live('click', function(e) {
+	//1.1.0 parent.jQuery('span.img_handler a.rredraw_image', document).live('click', function(e) {
+	parent.jQuery('input.rredraw_image').click(function(e) {
+	
+		//1.1.0 parent.referer_image = parent.jQuery(this).parent().next();
+		//1.1.0 parent.callback_img('<img src="' + parent.jQuery(parent.referer_image).attr('src')+ '" />');
 
-		parent.referer_image = parent.jQuery(this).parent().next();
+		align='';
+		if (parent.jQuery(parent.referer_image_size).hasClass('alignable')) {
+			align=parent.jQuery('#image_align option:selected').val();
+		}
+
+		a = parent.jQuery('textarea#image_alt').val();
+		b = parent.jQuery('input#image_b').val();
+		hs = parent.jQuery('input#image_hs').val();
+		vs = parent.jQuery('input#image_vs').val();
+
+		if (parent.jQuery(parent.referer_image_size).closest('a').length==0) {
+			if (parent.jQuery('div.image_properties input#image_link').val() != '') {
+				parent.jQuery('a.doing_link_temp', document).removeClass('doing_link_temp');
+				parent.jQuery(parent.referer_image_size).before('<a class="doing_link_temp" href="' + parent.jQuery('div.image_properties input#image_link').val() + '"></a>');
+				parent.jQuery(parent.referer_image_size).clone().appendTo(parent.jQuery('a.doing_link_temp', document));
+				parent.jQuery(parent.referer_image_size).remove();
+				parent.referer_image_size = parent.jQuery('a.doing_link_temp img', document)[0];
+				//alert(parent.jQuery(parent.referer_image_size).parent().html());
+				parent.jQuery('a.doing_link_temp', document).removeClass('doing_link_temp');
+			}
+		} else {
+			if (parent.jQuery('div.image_properties input#image_link').val() == '') {
+				parent.jQuery('img.removing_link_temp', document).removeClass('removing_link_temp');
+				parent.jQuery(parent.referer_image_size).addClass('removing_link_temp');
+				save_content=parent.jQuery(parent.referer_image_size).closest('a').html();
+				parent.jQuery(parent.referer_image_size).closest('a').replaceWith(save_content);
+				parent.referer_image_size = parent.jQuery('img.removing_link_temp', document)[0];
+				//alert(parent.jQuery(parent.referer_image_size).parent().html());
+				parent.jQuery('img.removing_link_temp', document).removeClass('removing_link_temp');
+			} else {
+				parent.jQuery(parent.referer_image_size).closest('a').attr('href', parent.jQuery('div.image_properties input#image_link').val());
+			}
+		}
+
+		parent.callback_img('<img src="' + parent.jQuery('div.image_properties input#image_url').val() + '" class="align' + align + '" />', a, b, hs, vs, align);
 
 		clean_resize_handlers();
-
-		parent.callback_img('<img src="' + parent.jQuery(parent.referer_image).attr('src')+ '" />');		
+		
+		parent.referer_image_size='';
 		return false;
 	});
-	parent.jQuery('span.img_handler a.uundo_image', document).live('click', function(e) {
+	//1.1.0 parent.jQuery('span.img_handler a.uundo_image', document).live('click', function(e) {
+	parent.jQuery('input.uundo_image').click(function(e) {
 
 		parent.jQuery(parent.referer_image_size).attr('height', parent.resizing_image_h_undo);
 		parent.jQuery(parent.referer_image_size).attr('width', parent.resizing_image_w_undo);
 
 		clean_resize_handlers();
+		parent.referer_image_size='';
+		parent.referer_image_size_ajax='';
 		return false;
 	});
-	parent.jQuery('img.editable', document).live('click', function(e) {
+	parent.jQuery('a', document).live('click', function(e) {
+		return false;
+	});
+	parent.jQuery('img', document).live('mousedown', function(e) {
+		
+		if (!parent.jQuery(this).hasClass('editable')) return false;
 		
 		if (parent.referer_image_size != this && parent.referer_image_size != '') {
 			alert(parent.must_apply_undo);
 			return false;
 		}
-		
 		if (parent.referer_image_size != this) {
-		
+			flash_wysiwyg(0);
+			parent.img_max_width=0; parent.img_min_width=0; parent.img_max_height=0; parent.img_min_height=0;
+			var classes = parent.jQuery(this).attr('class');
+			classes_array = classes.split(' ');
+			for(i=0; i<classes_array.length; i++) {
+				cla=classes_array[i];
+				if (cla.substr(0,6)=='width_') {
+					cla_s=cla.split('_');
+					parent.img_min_width=parseInt(cla_s[1],10);
+					parent.img_max_width=parseInt(cla_s[2],10); 
+				}
+				if (cla.substr(0,7)=='height_') {
+					cla_s=cla.split('_');
+					parent.img_min_height=parseInt(cla_s[1],10);
+					parent.img_max_height=parseInt(cla_s[2],10); 
+				}
+			}
+			
 			clean_resize_handlers();
+			parent.referer_image_size='';
+			
+			parent.jQuery('div.image_properties').show();
+			parent.jQuery('div.tools').hide();
+			parent.jQuery('div.save_button').hide();
+			parent.jQuery('div.plegable').hide();
+
+			if (parent.jQuery(this).hasClass('alignable')) {
+				parent.jQuery('div.alignable').show();
+				align=parent.jQuery(this).attr('align');
+				if (typeof align === "undefined") align='';
+				parent.jQuery("#image_align").val(align);
+			} else {
+				parent.jQuery('div.alignable').hide();
+			}
+			
+			parent.jQuery('div.image_properties input#image_url').val(look_attr(this, 'src'));
+			//parent.jQuery('div.image_properties input#image_w').val(look_attr(this, 'width'));
+			//parent.jQuery('div.image_properties input#image_h').val(look_attr(this, 'height'));
+			parent.jQuery('div.image_properties textarea#image_alt').val(look_attr(this, 'alt'));
+			
+			parent.jQuery('div.image_properties input#image_b').val(look_attr(this, 'border'));
+			parent.jQuery('div.image_properties input#image_hs').val(look_attr(this, 'hspace'));
+			parent.jQuery('div.image_properties input#image_vs').val(look_attr(this, 'vspace'));
+
+			if (parent.jQuery(this).closest('a').length==0) {
+				parent.jQuery('div.image_properties input#image_link').val('');
+			} else {
+				parent.jQuery('div.image_properties input#image_link').val(parent.jQuery(this).closest('a').attr('href'));
+			}
 	
-			parent.jQuery(this).prev().append('<a href="#" class="rredraw_image" title="' + parent.sharp_image + '"></a>');
-			parent.jQuery(this).prev().append('<a href="#" class="uundo_image" title="' + parent.undo_image + '"></a>');
+			//1.1.0 parent.jQuery(this).prev().append('<a href="#" class="rredraw_image" title="' + parent.sharp_image + '"></a>');
+			//1.1.0 parent.jQuery(this).prev().append('<a href="#" class="uundo_image" title="' + parent.undo_image + '"></a>');
 	
 			ww = parseInt(parent.jQuery(this).attr('width'), 10);
 			hh = parseInt(parent.jQuery(this).attr('height'), 10);
@@ -79,9 +188,13 @@ parent.jQuery(document).ready( function () {
 			parent.resizing_image_h_undo=hh;
 
 			parent.referer_image_size = this;
-			
-			parent.resizing_image_style=parent.jQuery(this).attr('style');
-			
+
+			if (typeof parent.jQuery(this).attr('style') === "undefined") {
+				parent.resizing_image_style='';
+			} else {
+				parent.resizing_image_style=parent.jQuery(this).attr('style');
+			}
+
 			parent.jQuery(this)
 				.css('outline', 'dashed #000 1px')
 				.css('position','absolute')
@@ -89,14 +202,18 @@ parent.jQuery(document).ready( function () {
 				.css('top',tt)
 				.after('<div style="width:' + ww + 'px; height:' + hh + 'px;" class="image_spacer">&nbsp;</div>');
 	
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_s" handlertype="s">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_se" handlertype="se">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_e" handlertype="e">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_ne" handlertype="ne">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_n" handlertype="n">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_nw" handlertype="nw">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_w" handlertype="w">');
-			parent.jQuery(this).after('<span class="img_resizer img_resizer_sw" handlertype="sw">');
+			prohibited_x=''; prohibited_y='';
+			if (parent.img_max_width==parent.img_min_width && parent.img_min_width!=0) prohibited_x=' prohibited';
+			if (parent.img_max_height==parent.img_min_height && parent.img_min_height!=0) prohibited_y=' prohibited';
+
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_s' + prohibited_y + '" handlertype="s">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_se' + prohibited_y + prohibited_x + '" handlertype="se">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_e' + prohibited_x + '" handlertype="e">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_ne' + prohibited_y + prohibited_x + '" handlertype="ne">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_n' + prohibited_y + '" handlertype="n">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_nw' + prohibited_y + prohibited_x + '" handlertype="nw">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_w' + prohibited_x + '" handlertype="w">');
+			parent.jQuery(this).after('<span class="img_resizer img_resizer_sw' + prohibited_y + prohibited_x + '" handlertype="sw">');
 			
 			move_resize_handlers(ww, hh, tt, ll);
 		}
@@ -146,6 +263,25 @@ parent.jQuery(document).ready( function () {
 //}
 });
 
+function look_attr(obj, nameattr) {
+	if (typeof parent.jQuery(obj).attr(nameattr) == 'undefined') return '';
+	return parent.jQuery(obj).attr(nameattr);
+}
+function flash_wysiwyg(n) {
+	n=parseInt(n)+1;
+	if (n==1 || n==3 || n==5) {
+		parent.jQuery('div.image_properties').css('background','#ff0');
+	} else {
+		parent.jQuery('div.image_properties').css('background','none');
+	}
+	if (flash_wysiwyg_first || n<2) {
+		if (n<6) {
+			setTimeout('flash_wysiwyg('+n+')', 50);
+		} else {
+			flash_wysiwyg_first=false;
+		}
+	}
+}
 function test_browser() {
 	//alert("tb");
 	parent.jQuery('div.wysiwyg_editor', document)
@@ -198,6 +334,9 @@ function listen_module (module) {
 			parent.move_preview=true; parent.update_preview();
 
 			parent.zone=parent.look_zone(parent.move_item);
+			
+			parent.jQuery('.droppable_empty', document).children().html('&nbsp;');
+			
 			if (parent.zone != 0) {
 				parent.jQuery('body', document).addClass('doing_drag');
 				parent.jQuery('.droppable_empty', document).hide();
@@ -219,9 +358,11 @@ function listen_module (module) {
 			parent.tb_dialog('Knews', parent.confirm_delete, parent.button_yes, parent.button_no, 'deleteModule');
 		});
 	parent.jQuery(module).mouseover( function(e) {
+			yy=parseInt(parent.jQuery(this).offset().top, 10)-30;
+			if (yy<3) yy=3;
 			parent.jQuery('span.handler', this)
 				.css('left', parseInt(parent.jQuery(this).offset().left, 10))
-				.css('top', parseInt(parent.jQuery(this).offset().top, 10)-30);
+				.css('top', yy);
 			//;
 		});
 
@@ -403,6 +544,7 @@ function update_editor() {
 	} else if (window.getSelection) {
 		
 		var selection = window.getSelection(); //what the user has selected
+		if (selection.rangeCount == 0) return;
 		current_range = selection.getRangeAt(0); //the first range of the selection
 
 		if (current_range.startContainer == current_range.endContainer) {
@@ -542,6 +684,30 @@ function b_link() {
 		update_editor();
 	}
 }
+function b_insert_image(img_url, align) {
+	if (inside_editor) {
+		parent.jQuery('img', document).addClass('no_target');
+		restoreSelection(parent.saved_range);
+		if (document.execCommand('InsertImage', false, img_url)) {
+			restoreSelection(parent.saved_range);
+			parent.jQuery('img', document).not('.no_target').each(function() {
+				parent.jQuery(this)
+					.load(function() {
+						parent.jQuery(this)
+							.addClass('editable alignable')
+							.attr('height',parent.jQuery(this).height())
+							.attr('width',parent.jQuery(this).width());
+							if (align != '') parent.jQuery(this).attr('align', align);
+					});
+					
+			});
+		}
+
+		parent.jQuery('img', document).removeClass('no_target');
+		restore_focus();
+		update_editor();	
+	}
+}
 function b_del_link() {
 	if (inside_editor) {
 
@@ -576,7 +742,7 @@ function move_resize_handlers(ww, hh, tt, ll) {
 
 function clean_resize_handlers() {
 
-	parent.jQuery('a.rredraw_image, a.uundo_image', document).remove();
+	//1.1.0 parent.jQuery('a.rredraw_image, a.uundo_image', document).remove();
 
 	parent.jQuery('span.img_resizer',document).remove();
 	parent.jQuery('div.image_spacer', document).remove();
@@ -586,9 +752,12 @@ function clean_resize_handlers() {
 
 		tt = parseInt(parent.jQuery(parent.referer_image_size).offset().top, 10);
 		ll = parseInt(parent.jQuery(parent.referer_image_size).offset().left, 10);
-		parent.jQuery(parent.referer_image_size).prev().css('left', ll).css('top', tt);
+		//1.1.0 parent.jQuery(parent.referer_image_size).prev().css('left', ll).css('top', tt);
 	}
 
-	parent.referer_image_size='';
+	parent.jQuery('div.image_properties').hide();
+	parent.jQuery('div.tools').show();
+	parent.jQuery('div.save_button').show();
+	parent.jQuery('div.plegable').show();
 }
 

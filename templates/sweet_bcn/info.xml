@@ -2,11 +2,12 @@
 <template>
 <shortname>Sweet Barcelona</shortname>
 <fullname>Old and beautiful city</fullname>
+<version>2.0</version>
 <url>http://www.knewsplugin.com/template-sweet-barcelona</url>
-<date>29/02/2012</date>
+<date>29/06/2012</date>
 <author>Carles Reverter</author>
 <urlauthor>http://www.knewsplugin.com</urlauthor>
-<minver>1.0.0</minver>
+<minver>1.1.0</minver>
 <onlypro>no</onlypro>
-<description>An elegant, classic, double column newsletter, 100% color and font configurable.</description> 
+<description>An elegant, classic, double column newsletter, 100% color and font configurable and social icons.</description> 
 </template>

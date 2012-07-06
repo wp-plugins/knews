@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -9,6 +10,7 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -20,7 +22,7 @@ if ($Knews_plugin) {
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<script type='text/javascript' src='<?php bloginfo('url'); ?>/wp-admin/load-scripts.php?c=1&amp;load=jquery'></script>
+	<script type='text/javascript' src='<?php echo get_admin_url(); ?>load-scripts.php?c=1&amp;load=jquery'></script>
 	<link rel="Stylesheet" type="text/css" href="../wysiwyg/jpicker/css/jPicker-1.1.6.min.css" />
 	<link rel="Stylesheet" type="text/css" href="../wysiwyg/jpicker/jPicker.css" />
 	<script src="../wysiwyg/jpicker/jpicker-1.1.6.min.js" type="text/javascript"></script>

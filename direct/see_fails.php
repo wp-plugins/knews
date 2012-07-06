@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -9,6 +11,7 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -16,7 +19,7 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-	$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE id=" . $Knews_plugin->get_safe('id');
+	$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('id');
 	$results = $wpdb->get_results( $query );
 	
 	$submit=$results[0];
@@ -55,7 +58,7 @@ foreach ($results as $user) {
 	$query = "SELECT * FROM " . KNEWS_USERS . " WHERE id=" . $user->user;
 	$user_data = $wpdb->get_results( $query );
 	if (count($user_data) > 0) {
-		echo '<p>#' . $user_count . ' <a href="' . get_bloginfo('url') . '/wp-admin/admin.php?page=knews_users&edit_user=' . $user_data[0]->id . '" target="_blank">';
+		echo '<p>#' . $user_count . ' <a href="' . get_admin_url() . 'admin.php?page=knews_users&edit_user=' . $user_data[0]->id . '" target="_blank">';
 		echo $user_data[0]->email . '</a></p>';
 	} else {
 		echo 'info deleted</br>';

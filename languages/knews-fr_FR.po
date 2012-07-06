@@ -949,8 +949,8 @@ msgstr "Le WPML n'a pas été détecté, les options multilingues ne sont pas fo
 
 #. Text in function
 #: admin/knews_admin_import.php:203
-msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 777)"
-msgstr "Le répertoire /wp-content/plugins/knews/tmp doit être inscriptible (chmod 777)"
+msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)"
+msgstr "Le répertoire /wp-content/plugins/knews/tmp doit être inscriptible (chmod 700)"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1729,7 +1729,7 @@ msgstr "Attention ! Opera ne peut pas éditer de newsletters ! Veuillez utiliser
 msgid "Warning! You should activate JavaScript to edit newsletters!"
 msgstr "Attention ! Vous devez activer JavaScript pour éditer des newsletters !"
 
-msgid "No submits yet. First go to newsletters, create one, and then submit it."
+msgid "No submits yet. First go to Newsletters, create one, and then submit it."
 msgstr "Il n'existe pas encore d'envois. Allez tout d'abord à newsletters, créez-en une puis envoyez-la."
 
 msgid "Error: I can't write the .CSV file."
@@ -1790,29 +1790,263 @@ msgid "This option requires you to keep a window open during submission and does
 msgstr "Cette option exige de maintenir une fenêtre ouverte pendant que l'envoi est en cours et ne permet pas la programmation d'envois différés"
 
 msgid "Check all mailing lists"
-msgstr "Marquez tous les listes d'abonnés"
+msgstr "Sélectionner toutes les listes d'abonnés"
 
 msgid "Uncheck all mailing lists"
-msgstr "Éteignez tous les listes d'abonnés"
+msgstr "Désactiver toutes les listes d'abonnés"
 
 msgid "Duplicate"
-msgstr "Dupliquer"
+msgstr "Copier"
 
 msgid "Duplicate this newsletter"
-msgstr "Dupliquer ce bulletin"
+msgstr "Copier cette newsletter"
 
-msgid "Apply change and refresh image"
-msgstr "Appliquer les modifications et rafraîchissement de l'image"
+msgid "Apply changes and refresh image"
+msgstr "Appliquer les modifications et rafraîchir l'image"
 
 msgid "Undo image changes"
-msgstr "Annuler les changements d'image"
+msgstr "Annuler les modifications d'image"
 
-msgid "Properties image"
+msgid "Properties of image"
 msgstr "Propriétés de l'image"
 
 msgid "Select one or more lists"
-msgstr "Sélectionnez une ou plusieurs listes"
+msgstr "Sélectionner une ou plusieurs listes"
 
 msgid "No active users in the selected list, nothing programmed to send."
-msgstr "Il n'y a pas d'utilisateurs actifs dans la liste sélectionnée, non programmées tous les envois."
+msgstr "Il n'existe pas d'utilisateurs sur la liste sélectionnée, aucun envoi n'a été programmé."
+
+msgid "Configure CRON tutorial"
+msgstr "Modèle pour configurer CRON"
+
+msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
+msgstr "Multi site détecté. Une seule copie de knews_cron.php doit être appelée pour tous les sites web."
+
+msgid "You must add this line in your webserver CRONTAB:"
+msgstr "Vous devez ajouter cette ligne sur le CRONTAB de votre serveur web :"
+
+msgid "The file location is: %s"
+msgstr "La localisation du fichier est la suivante : %s"
+
+msgid "Configure SMTP tutorial"
+msgstr "Modèle pour configurer SMTP"
+
+msgid "The language can't be localized"
+msgstr "La langue n'a pas pu être localisée"
+
+msgid "You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything."
+msgstr "Vous êtes en mode édition d'image. Cliquez sur Appliquer ou Annuler modifications d'image (ou sur la touche ESC) avant toute autre action."
+
+msgid "Image alt:"
+msgstr "Texte alternatif :"
+
+msgid "The alternate text is very important, because most mail clients block initial image load and show the alternate image text."
+msgstr "Le texte alternatif est très important, parce que de nombreux clients de courrier bloquent le chargement initial d'images et montrent le texte alternatif."
+
+msgid "Image link:"
+msgstr "Lien de l'image :"
+
+msgid "Put a url if you want to put link around the image, for example: http://www.mysite.com/mypage.html."
+msgstr "Indiquez une url si vous souhaitez placer un lien autour de l'image, par exemple : http://www.monsite.com/mapage.html."
+
+msgid "Multilanguage"
+msgstr "Multilingue"
+
+msgid "Make your own templates how-to"
+msgstr "Modèle pour réaliser vos propres modèles"
+
+msgid "From date:"
+msgstr "Depuis le :"
+
+msgid "to date:"
+msgstr "jusqu'au :"
+
+msgid "last 7 days"
+msgstr "7 derniers jours"
+
+msgid "last 30 days"
+msgstr "30 derniers jours"
+
+msgid "last week"
+msgstr "dernière semaine"
+
+msgid "last month"
+msgstr "dernier mois"
+
+msgid "The date range you have selected is not available."
+msgstr "La période sélectionnée n'est pas disponible."
+
+msgid "Current status of subscriptions"
+msgstr "État actuel des abonnements"
+
+msgid "Active users:"
+msgstr "Utilisateurs actifs :"
+
+msgid "Not confirmed:"
+msgstr "Non confirmés :"
+
+msgid "Unsubscribed users:"
+msgstr "Utilisateurs désabonnés :"
+
+msgid "Total:"
+msgstr "Total :"
+
+msgid "Currently have no subscribers."
+msgstr "Il n'existe actuellement aucun abonné."
+
+msgid "Accumulated sign ups and unsubscribes from date:"
+msgstr "Abonnements et désabonnements accumulés depuis le :"
+
+msgid "You must select a right date range"
+msgstr "Vous devez sélectionner une période correcte"
+
+msgid "Sign ups"
+msgstr "Abonnements"
+
+msgid "Unsubscriptions"
+msgstr "Désabonnements"
+
+msgid "Sendings"
+msgstr "Envois"
+
+msgid "Sendings OK"
+msgstr "Envois corrects"
+
+msgid "Sendings Error"
+msgstr "Envois erronés"
+
+msgid "Cant read"
+msgstr "Lecture a été impossible"
+
+msgid "Total clicks"
+msgstr "Nombre total de clics"
+
+msgid "Newsletters & clicks from date:"
+msgstr "Newsletters et clics depuis le :"
+
+msgid "Link clicks"
+msgstr "Clics sur les liens"
+
+msgid "Total submits"
+msgstr "Envois totaux"
+
+msgid "Error: make sure the directory %s exists and has write permissions (chmod 700)."
+msgstr "Erreur : vérifiez que le répertoire %s existe et dispose des autorisations d'écriture (chmod 700)."
+
+msgid "Error: there is no image selected"
+msgstr "Erreur : aucune image n'a été sélectionnée"
+
+msgid "Knews updated the database successfully. Welcome to %s version."
+msgstr "Knews a correctement actualisé la base de données. Bienvenu à la version %s."
+
+msgid "Customize widget messages"
+msgstr "Personnaliser les messages du widget"
+
+msgid "Sign up date user cant be understood"
+msgstr "La date d'abonnement de l'utilisateur n'est pas correcte"
+
+msgid "SQL Error while inserting user"
+msgstr "Erreur SQL en insérant l'utilisateur"
+
+msgid "SQL Error while updating user"
+msgstr "Erreur SQL en actualisant l'utilisateur"
+
+msgid "Warning: the email has no subject! %s Edit it again before submit!"
+msgstr "Attention : l'e-mail n'a pas d'objet ! %s Editez-le à nouveau avant l'envoi !"
+
+msgid "Warning: %sConfigure sender name before submit!"
+msgstr "Attention : %sConfigure le nom de l'expéditeur avant l'envoi!"
+
+msgid "text_direction"
+msgstr "ltr"
+
+msgid "cant_read_text_1"
+msgstr "Si vous ne pouvez pas lire cet e-mail, cliquez"
+
+msgid "cant_read_text_link"
+msgstr "ici"
+
+msgid "cant_read_text_2"
+msgstr ""
+
+msgid "unsubscribe_text_1"
+msgstr "Si vous ne souhaitez pas recevoir nos e-mails, cliquez"
+
+msgid "unsubscribe_text_link"
+msgstr "ici"
+
+msgid "unsubscribe_text_2"
+msgstr ""
+
+msgid "Sign Ups & Blocks"
+msgstr "Abonnements et Désabonnements"
+
+msgid "Use the CRON server (recommended)"
+msgstr "Utiliser le CRON du serveur web (recommandé)"
+
+msgid "Text direction, Left To Right or Right To Left: put <span style=\"color:#e00\">ltr</span> or <span style=\"color:#e00\">rtl</span>"
+msgstr "Direction du texte, Left to Right o Right to Left: indiquez <span style=\"color:#e00\">ltr</span> ou <span style=\"color:#e00\">rtl</span>"
+
+msgid "Default alignment (<span style=\"color:#e00\">left</span> for left to right languages and <span style=\"color:#e00\">right</span> for right to left languages)"
+msgstr "Alignement par défaut (<span style=\"color:#e00\">left</span> pour les langues left to right et <span style=\"color:#e00\">right</span>pour les langues right to left)"
+
+msgid "Inverse alignment (<span style=\"color:#e00\">right</span> for left to right languages and <span style=\"color:#e00\">left</span> for right to left languages)"
+msgstr "Alignement inverse (<span style=\"color:#e00\">right</span> pour les langues left to right et <span style=\"color:#e00\">left</span> pour les langues right to left)"
+
+msgid "Cant read text 1"
+msgstr "Impossible de lire (texte 1)"
+
+msgid "Cant read text link"
+msgstr "Impossible de lire (Lien)"
+
+msgid "Cant read text 2"
+msgstr "Impossible de lire (texte 2)"
+
+msgid "Unsubscribe text 1"
+msgstr "Me désabonner (texte 1)"
+
+msgid "Unsubscribe text link"
+msgstr "Me désabonner (lien)"
+
+msgid "Unsubscribe text 2"
+msgstr "Me désabonner (texte 2)"
+
+msgid "default_alignment"
+msgstr "left"
+
+msgid "inverse_alignment"
+msgstr "right"
+
+msgid "The read more text link"
+msgstr "Text Link En savoir plus"
+
+msgid "read_more_link"
+msgstr "lire la suite"
+
+msgid "Image URL:"
+msgstr "URL de l'image"
+
+msgid "Image align:"
+msgstr "Image aligner:"
+
+msgid "Apply changes"
+msgstr "Enregistrer les modifications"
+
+msgid "Undo"
+msgstr "Défaire"
+
+msgid "Fast selection:"
+msgstr "Sélection rapide"
+
+msgid "You are downgraded the version of Knews, you can lose data, please update quickly"
+msgstr "Vous êtes rétrogradé la version de knews, vous pouvez perdre des données, s'il vous plaît mettre à jour rapidement"
+
+msgid "tutorial_template_url"
+msgstr "http://www.knewsplugin.com/tutorial/"
+
+msgid "tutorial_smtp_url"
+msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
+
+msgid "tutorial_cron_url"
+msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 

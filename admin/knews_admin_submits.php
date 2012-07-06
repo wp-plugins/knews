@@ -2,7 +2,7 @@
 global $Knews_plugin, $wpdb, $knewsOptions;
 
 if ($Knews_plugin->get_safe('da')=='priority') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . urldecode($Knews_plugin->get_safe('np')) . "' WHERE id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . urldecode($Knews_plugin->get_safe('np')) . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 
 	//echo $query;
 
@@ -11,17 +11,17 @@ if ($Knews_plugin->get_safe('da')=='priority') {
 }
 
 if ($Knews_plugin->get_safe('da')=='startnow') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET start_time='" . $Knews_plugin->get_mysql_date() . "' WHERE id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET start_time='" . $Knews_plugin->get_mysql_date() . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='retry') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE status=2 AND submit=" . intval($Knews_plugin->get_safe('rid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE blog_id=" . get_current_blog_id() . " AND status=2 AND submit=" . intval($Knews_plugin->get_safe('rid'));
 	$result=$wpdb->query( $query );
 	
 	if ($result > 0) {
-		$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET finished=0, paused=0, end_time='0000-00-00 00:00:00', users_error=0 WHERE id=" . intval($Knews_plugin->get_safe('rid'));
+		$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET finished=0, paused=0, end_time='0000-00-00 00:00:00', users_error=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('rid'));
 		$result=$wpdb->query( $query );
 
 		if ($knewsOptions['write_logs']=='yes') {
@@ -36,19 +36,19 @@ if ($Knews_plugin->get_safe('da')=='retry') {
 }
 
 if ($Knews_plugin->get_safe('da')=='continue') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=0 WHERE id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='pause') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=1 WHERE id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=1 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='delete') {
-	$query="DELETE FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE id=" . intval($Knews_plugin->get_safe('sid'));
+	$query="DELETE FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 	$results = $wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit deleted','knews') . '</p></div>';
 }
@@ -56,7 +56,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 ?>
 	<script type="text/javascript">
 	function reload_page() {
-		location.href = '<?php bloginfo('url')?>/wp-admin/admin.php?page=knews_submit';
+		location.href = '<?php echo get_admin_url(); ?>admin.php?page=knews_submit';
 	}
 	setTimeout ('reload_page()',60000 * 15); // 15 minutes
 
@@ -117,7 +117,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 				</thead>
 				<tbody>
 				<?php
-				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " ORDER BY finished, paused, start_time DESC";
+				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC";
 				$results = $wpdb->get_results( $query );
 
 				if (count($results) == 0) echo '<tr><td colspan="7"><p>' . __('No submits yet. First go to Newsletters, create one, and then submit it.','knews') . '</p></td></tr>';

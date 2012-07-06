@@ -9,21 +9,24 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+
+if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) die("You must call the main blog knews_cron.php file");
+
 global $knewsOptions, $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 	
 	$js=intval($Knews_plugin->get_safe('js'));
 
-	if (! $Knews_plugin->initialized) $Knews_plugin->init();
-
-	//$cron_time = time();
 	$mysqldate = $Knews_plugin->get_mysql_date();
-
-	$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE finished=0 AND paused=0 AND start_time <= '" . $mysqldate . "' ORDER BY priority DESC LIMIT 1";
+	
+	$query = "SELECT * FROM " . $wpdb->base_prefix . "knewsubmits WHERE finished=0 AND paused=0 AND start_time <= '" . $mysqldate . "' ORDER BY priority DESC LIMIT 1";
 	$submit_pend = $wpdb->get_results( $query );
 
 	if (count($submit_pend) == 1) {
+
+		if ($Knews_plugin->initialized) die("Knews internal error: can't be initialized before!");
+		$Knews_plugin->init($submit_pend[0]->blog_id);
 
 		$id_newsletter = $submit_pend[0]->newsletter;
 		
@@ -72,6 +75,7 @@ if ($Knews_plugin) {
 
 		$users = array();
 		$users_index = 0;
+
 		foreach ($submits as $unique_submit) {
 			$users[$users_index]=array();
 			$users[$users_index]=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE id=" . $unique_submit->user);
@@ -177,8 +181,9 @@ if ($js != 0) {
 	function jump() {
 	<?php 
 		if ($pend) {
+			switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 	?>
-			location.href="<?php echo KNEWS_URL; ?>/direct/knews_cron_do.php?js=<?php echo intval($js)+1; ?>";
+			location.href="<?php echo $Knews_plugin->get_main_plugin_url (); ?>/knews/direct/knews_cron_do.php?js=<?php echo intval($js)+1; ?>";
 	<?php
 		}
 	?>

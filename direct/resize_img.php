@@ -1,4 +1,5 @@
-<?php
+<?php 
+ob_start();
 
 if (!function_exists('add_action')) {
 	$path='./';
@@ -10,6 +11,7 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -26,6 +28,15 @@ if ($Knews_plugin) {
 
 	$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
 
+	//echo '*' . $wp_dirs['baseurl'] . '*<br>';
+	//echo '*' . substr($url_img, 0, strlen($wp_dirs['baseurl'])) . '*<br>';
+	if (substr($url_img, 0, strlen($wp_dirs['baseurl'])) != $wp_dirs['baseurl']) {
+		//echo 'no comencen igual<br>';
+		$wp_dirs['baseurl']=substr($url_img, 0, strpos($url_img, 'wp-content'));
+		$wp_dirs['basedir']=substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+	}
+	//echo '*' . $wp_dirs['baseurl'] . '*<br>';
+	//echo '*' . $wp_dirs['basedir'] . '*<br>';
 
 	//$url_start = substr($url_img, 0, strpos($url_img, $_SERVER['SERVER_NAME']) + strlen($_SERVER['SERVER_NAME']));
 
@@ -40,15 +51,14 @@ if ($Knews_plugin) {
 			if (is_file($wp_dirs['basedir'] . $try_original2)) $url_img = $try_original;
 		}
 	}
-	echo knews_get_url_img($url_img, $width, $height);
+	knews_get_url_img($url_img, $width, $height);
 }
 
 function knews_get_url_img($img_url, $width, $height, $cut = true) {
 	
-	global $wp_dirs;
+	global $wp_dirs, $absolute_dir;
 	
-    if ($img_url != '') {
-		
+    if ($img_url != '' && $img_url != 'undefined') {
 
 		// cut the url
 		//$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
@@ -67,7 +77,12 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 		$url_imatge = str_replace('.PNG', '-' . $width . 'x' . $height .'.PNG', $url_imatge);
 
 		if (is_file($wp_dirs['basedir'] . $url_imatge)) {
-			return $wp_dirs['baseurl'] . $url_imatge;
+
+			$jsondata['result'] = 'ok';
+			$jsondata['url'] = $wp_dirs['baseurl'] . $url_imatge;
+ 			echo json_encode($jsondata);
+
+			return;
 	
 		} else {
 	
@@ -78,19 +93,39 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 				//$thumb = substr($thumb, strpos($thumb, 'wp-content'));
 				$thumb = substr($thumb, strlen($wp_dirs['basedir']));
 				
-				return $wp_dirs['baseurl'] . $thumb;
+				$jsondata['result'] = 'ok';
+				$jsondata['url'] = $wp_dirs['baseurl'] . $thumb;
+				echo json_encode($jsondata);
+				
+				return;
 	
 			} else {
 				if (is_file($absolute_dir . $url)) {
-					return $wp_dirs['baseurl'] . $url;
+
+					$jsondata['result'] = 'ok';
+					$jsondata['url'] = $wp_dirs['baseurl'] . $url;
+					echo json_encode($jsondata);
+	
+					return;
+					
 				} else {
-					return 'error';
+
+					$jsondata['result'] = 'error';
+					$jsondata['url'] = '';
+					$jsondata['message'] = __('Error','knews') . ': ' . __('Check the directory permissions for','knews') . ' ' . $wp_dirs['basedir'] . dirname($url);
+					echo json_encode($jsondata);
+	
+					return;
 				}
 			}
 		}
 
 	} else {
-		return 'error';
+
+		$jsondata['result'] = 'error';
+		$jsondata['url'] = '';
+		$jsondata['message'] = __('Error: there is no image selected','knews');
+		echo json_encode($jsondata);
 	}
 }
 

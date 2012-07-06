@@ -70,7 +70,7 @@
 					
 					$mysqldate = $Knews_plugin->get_mysql_date($start_time);
 					
-					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . $id_newsletter . ', 0, ' . $Knews_plugin->post_safe('paused') . ', \'' . $mysqldate . '\', ' . count($targets) . ', 0, 0, ' . $Knews_plugin->post_safe('priority') . ', \'' . $Knews_plugin->post_safe('strict_control') . '\', ' . $Knews_plugin->post_safe('emails_at_once') . ', \'\', \'0000-00-00 00:00:00\')';
+					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . get_current_blog_id() . ', ' . $id_newsletter . ', 0, ' . $Knews_plugin->post_safe('paused') . ', \'' . $mysqldate . '\', ' . count($targets) . ', 0, 0, ' . $Knews_plugin->post_safe('priority') . ', \'' . $Knews_plugin->post_safe('strict_control') . '\', ' . $Knews_plugin->post_safe('emails_at_once') . ', \'\', \'0000-00-00 00:00:00\')';
 					$results = $wpdb->query( $query );
 					
 					$submit_id=$wpdb->insert_id; $submit_id2=mysql_insert_id(); if ($submit_id==0) $submit_id=$submit_id2;
@@ -129,6 +129,19 @@
 	} else {
 ?>		
 	<div class=wrap>
+		<?php
+		if ($results_news[0]->subject=='') {
+			echo '<div class="error"><p>'; 
+			printf(__('Warning: the email has no subject! %s Edit it again before submit!','knews'),'<a href="admin.php?page=knews_news&section=edit&idnews=' . $id_newsletter . '">'); 
+			echo '</a></p></div>';
+		}
+		
+		if ($knewsOptions['from_name_knews']=='Knews robot') {
+			echo '<div class="error"><p>'; 
+			printf(__('Warning: %sConfigure sender name before submit!','knews'),'<a href="admin.php?page=knews_config">'); 
+			echo '</a></p></div>';
+		}
+		?>
 		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Sending newsletter','knews'); ?>: <?php echo $results_news[0]->name; ?></h2>
 		<p><?php _e('Send the newsletter to the following lists','knews'); ?>:</p>
 		<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
@@ -163,14 +176,14 @@
 		
 		$cron=true;
 		if ($knewsOptions['knews_cron']=='cronjob') {
-			$last_cron_time = get_option('knews_cron_time',0);
+			$last_cron_time = $Knews_plugin->get_last_cron_time();
 			$now_time = time();
 			if ($now_time - $last_cron_time > 800) $cron=false;
 		}
 		if ($knewsOptions['knews_cron']=='cronjs') $cron=false;
 
 		if ($submit_enqueued && !$cron) {
-			echo '<h2><a href="' . KNEWS_URL . '/direct/knews_cron.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
+			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/direct/knews_cron.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
 		}
 		/*if (ini_get('safe_mode') && !$cron) {
 	?>

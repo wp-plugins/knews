@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -9,6 +10,7 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -43,6 +45,6 @@ if ($Knews_plugin) {
 		echo '<p>Not found</p>';
 	}
 } else {
-	echo '<p>Ksnews is not active</p>';
+	echo '<p>Knews is not active</p>';
 }
 ?>
