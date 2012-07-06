@@ -1,4 +1,5 @@
 <?php
+
 global $Knews_plugin, $knewsOptions;
 
 if ($Knews_plugin->get_safe('tab')=='custom') {
@@ -38,59 +39,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 	}
 	
 	?>
-	<style type="text/css">
-	
-		div.pregunta {
-			background:#f9f9f9;
-			padding:2px;
-			border:#dfdfdf 1px solid;
-			border-radius:3px;
-			display:block;
-			background-image:-moz-linear-gradient(center top , #F9F9F9, #ECECEC);
-		}
-		div.pestanyes {
-			background:#fff;
-			padding-left:15px;
-			display:block;
-			height:25px;
-		}
-		div.pestanyes a {
-			border-top-left-radius:3px;
-			border-top-right-radius:3px;
-			color:#aaa;
-			display:inline-block;
-			height:20px;
-			padding:4px 14px 0 14px;
-			border:#dfdfdf 1px solid;
-			text-decoration:none;
-			margin-left:5px;
-			font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-			font-size:14px;
-		}
-		div.pestanyes a:hover {
-			color:#d54e21;
-		}
-		div.pestanyes a.on {
-			color:#000;
-			background:#f9f9f9;
-			cursor:default;
-			border-bottom:#f9f9f9 1px solid;
-		}
-		div.pregunta textarea {
-			display:none;
-			background:none;
-			margin:0;
-			padding:0;
-		}
-		div.pregunta textarea.on {
-			display:block;
-			border:0;
-		}
-		div.pregunta textarea:focus {
-			background:#fffecd;
-		}
-	
-	</style>
+	<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">
 	function view_lang(n_custom, n_lang) {
 		jQuery('div.pestanyes_'+n_custom+' a').removeClass('on');
@@ -105,7 +54,8 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 		jQuery('textarea.custom_lang_'+n_custom+'_'+n_lang).css({display:'block', height:save_height, width:save_width}).addClass('on');
 	}
 	</script>
-		<div class=wrap>
+	
+<div class=wrap>
 			<form method="post" action="admin.php?page=knews_config&tab=custom">
 				<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
 					<a class="nav-tab" href="admin.php?page=knews_config"><?php _e('Main options','knews'); ?></a>
@@ -129,7 +79,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					$n_lang=0;
 					foreach($languages as $l){
 						$n_lang++;
-						echo '<textarea class="custom_lang_' . $n_custom . '_' . $n_lang . (($n_lang==1)? ' on' : '') . '" name="custom_lang_' . $CustomMessage['name'] . '_' . $l['localized_code'] . '" style="width:100%">';
+						echo '<textarea class="custom_lang_' . $n_custom . '_' . $n_lang . (($n_lang==1)? ' on' : '') . '" name="custom_lang_' . $CustomMessage['name'] . '_' . $l['localized_code'] . '" style="width:100%;';
+						if ($Knews_plugin->get_custom_text('text_direction',$l['localized_code'])=='rtl' &&
+							($CustomMessage['name'] != 'text_direction' && $CustomMessage['name'] != 'default_alignment' && $CustomMessage['name'] != 'inverse_alignment')) echo ' unicode-bidi:bidi-override; direction:rtl;';
+						echo '">';
 						echo $Knews_plugin->get_custom_text($CustomMessage['name'],$l['localized_code']);
 						echo '</textarea>';
 					}
@@ -231,9 +184,9 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 
 			<hr />
 			<h3><?php _e('CRON','knews'); ?></h3>
-			<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)'); ?></h3>
-			<?php 
-				$last_cron_time = get_option('knews_cron_time',0);
+			<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('tutorial_cron_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
+			<?php
+				$last_cron_time=$Knews_plugin->get_last_cron_time();
 				$now_time = time();
 				if ($now_time - $last_cron_time < 800) {
 			?>
@@ -255,13 +208,24 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					//if (ini_get('safe_mode')) echo '<p><strong>' . __('Please note: PHP Safe Mode enabled. Without cron, this directive will fail the bulk of mails.','knews') . '</strong></p>';
 					?>
 					<p><?php _e('Instructions for setting up CRON','knews');?>:</p>
-					<p>1. <?php echo KNEWS_DIR . '/direct/knews_cron.php' ?></p>
-					<p>2. <?php echo KNEWS_URL . '/direct/knews_cron.php' ?></p>
+					<?php
+					if( is_multisite() ) {
+						echo '<p><strong>' . __('Multisite detected. Only one instance of knews_cron.php must be called for all websites.','knews') . '</strong></p>';
+						//switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
+						$cron_main_url = $Knews_plugin->get_main_plugin_url() . '/knews/direct/knews_cron.php';
+						//restore_current_blog();
+					} else {
+						$cron_main_url = KNEWS_URL . '/direct/knews_cron.php';
+					}
+					?>
+					<p><?php _e('You must add this line in your webserver CRONTAB:','knews'); ?></p>
+					<p><strong>*/10 * * * * wget -q -O /dev/null <?php echo $cron_main_url; ?></strong></p>
+					<p><?php printf( __('The file location is: %s','knews'),  KNEWS_DIR . '/direct/knews_cron.php'); ?></p>
 				</div>
 			<?php
 				}
 			?>
-			<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronwp"<?php if ($knewsOptions['knews_cron']=='cronwp') echo ' checked="checked"'; ?> /> <?php echo __("Use Wordpress's built-in CRON framework.",'knews') . '</h3><p style="margin-top:0;">' .  __('This option no requires configuration, but in less traffic sites can be slow to submit','knews'); ?></p>
+			<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronwp"<?php if ($knewsOptions['knews_cron']=='cronwp') echo ' checked="checked"'; ?> /> <?php echo __("Use WordPress's built-in CRON framework.",'knews') . '</h3><p style="margin-top:0;">' .  __('This option no requires configuration, but in less traffic sites can be slow to submit','knews'); ?></h3>
 			<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronjs"<?php if ($knewsOptions['knews_cron']=='cronjs') echo ' checked="checked"'; ?> /> <?php echo __('Use the JavaScript CRON emulation.','knews') . '</h3><p style="margin-top:0;">' .   __("This option requires you to keep a window open during submission and does not allow deferred submits",'knews'); ?></p>
 			<hr />
 			<h3><?php _e('Sender','knews');?></h3>
@@ -297,14 +261,14 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			</script>
 			<h3><?php _e('Submit method','knews');?></h3>
 			<p><input type="radio" name="smtp_knews" value="0"<?php if ($knewsOptions['smtp_knews']!='1') echo ' checked="checked"'; ?> /> <?php _e('E-mails sent internally using WordPress (wp_mail() function)','knews');?></p>
-			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?></p>
+			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('tutorial_smtp_url','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
 			<div style="width:420px; float:left; padding-left:30px;">
-				<table cellpadding="0" cellspacing="0" border="0">
-				<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" value="<?php echo $knewsOptions['smtp_host_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('Port SMTP','knews');?>:</td><td><input type="text" name="smtp_port_knews" id="smtp_port_knews" style="width:100px" value="<?php echo $knewsOptions['smtp_port_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP User','knews');?>: *</td><td><input type="text" name="smtp_user_knews" id="smtp_user_knews" class="regular-text" value="<?php echo $knewsOptions['smtp_user_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP Password','knews');?>: *</td><td><input type="password" name="smtp_pass_knews" id="smtp_pass_knews" class="regular-text" value="<?php echo $knewsOptions['smtp_pass_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP Secure','knews');?>: </td><td><select name="smtp_secure_knews" id="smtp_secure_knews">
+				<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
+				<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_host_knews']; ?>" /></td></tr>
+				<tr><td><?php _e('Port SMTP','knews');?>:</td><td><input type="text" name="smtp_port_knews" id="smtp_port_knews" style="width:100px" autocomplete="off" value="<?php echo $knewsOptions['smtp_port_knews']; ?>" /></td></tr>
+				<tr><td><?php _e('SMTP User','knews');?>: *</td><td><input type="text" name="smtp_user_knews" id="smtp_user_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_user_knews']; ?>" /></td></tr>
+				<tr><td><?php _e('SMTP Password','knews');?>: *</td><td><input type="password" name="smtp_pass_knews" id="smtp_pass_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_pass_knews']; ?>" /></td></tr>
+				<tr><td><?php _e('SMTP Secure','knews');?>: </td><td><select name="smtp_secure_knews" id="smtp_secure_knews" autocomplete="off" >
 					<option value=""<?php if ($knewsOptions['smtp_secure_knews']=='') echo ' selected="selected"'; ?>>none</option>
 					<option value="tls"<?php if ($knewsOptions['smtp_secure_knews']=='tls') echo ' selected="selected"'; ?>>tls</option>
 					<option value="ssl"<?php if ($knewsOptions['smtp_secure_knews']=='ssl') echo ' selected="selected"'; ?>>ssl</option></select></td></tr></table>
