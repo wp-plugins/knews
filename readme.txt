@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
-Tested up to: 3.3.2
-Stable tag: 1.0.5
+Tested up to: 3.4.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,9 +21,9 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
 * **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
-* Support for **SMTP** sending.
+* Support for **SMTP** sending [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
-* Support for **CRON** and Cron emulation by JavaScript.
+* Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
 * **Multilingual back office**: English, German, French, Italian, Spanish and Catalan.
 * **Widget** for subscriber and surfing language capture.
@@ -38,6 +38,8 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
+* NEW: Arabic added - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Finnish added - fi (thanks to: Eccola http://eccola.fi )
 * English - en_US (Knews Team)
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
@@ -47,10 +49,9 @@ A WYSIWYG Editor Demo:
 
 = Future release =
 
-* Support for Multisite (comming soon).
 * Continued improvement of the WYSIWYG editor.
-* Statistics.
 * More templates.
+* Automated emailing submits.
 
 
 == Installation ==
@@ -65,7 +66,7 @@ A WYSIWYG Editor Demo:
 
 5. a) **Multilingual**: Knews works as monolingual by default, but it can recognise the languages defined in WPML or qTranslate if you choose. 
 
-6. b) **CRON**: By default Knews works with wp_cron, but it can be changed (highly recommendable for websites with low traffic).
+6. b) **CRON**: By default Knews works with wp_cron, but it can be changed (highly recommendable for websites with low traffic). [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/).
 
 7. c) **SMTP** sending: by default Knews sends by wp_mail (). You will have more features and fewer newsletters ending up as spam if you configure data sending using SMTP. [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/)
 
@@ -103,11 +104,11 @@ You don't have to. If you have configured Knews to work with WPML or qTranslate,
 
 **Why do you recommend configuring CRON, when wp_cron already works in wordpress without doing anything?**
 
-Knews works initially with wp_cron that is based on running the tasks assigned from time to time. Now, if a blog or website doesn't receive many visits, it won't be reliable, because wp_cron has not been run if there are no website visits, so, start sends and the rate at which they are sent depends on the visits to the website. 
+Knews works initially with wp_cron that is based on running the tasks assigned from time to time. Now, if a blog or website doesn't receive many visits, it won't be reliable, because wp_cron has not been run if there are no website visits, so, start sends and the rate at which they are sent depends on the visits to the website. [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/).
 
-**Doesn't Knews have statistics?**
+**Knews have statistics?**
 
-We are in the process of developing them now. Knews already saves all the activities of the newsletter readers, and in the next version you will be able to graphically consult all this information. 
+Since version 1.1.0, Knews has statistics. This include: sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc. 
 
 **I am a designer and I need to give my clients a customised template**
 
@@ -115,7 +116,7 @@ We are in the process of developing them now. Knews already saves all the activi
 
 **Why do you recommend configuring an SMTP account?**
 
-If sending is done by SMTP, the amount of e-mails reported as SPAM will drop. Knews sends the e-mails one by one by SMTP as you would, therefore guaranteeing a high rate of assured sending. 
+If sending is done by SMTP, the amount of e-mails reported as SPAM will drop. Knews sends the e-mails one by one by SMTP as you would, therefore guaranteeing a high rate of assured sending. [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 
 **My newsletter must go out today, CRON doesn't work and I don't have enough entries in the website.**
 
@@ -137,12 +138,38 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.1.0 =
+
+* WORDPRESS 3.4 COMPATIBLE
+* NEW: MULTISITE SUPPORT
+* NEW: STATISTICS
+* TEMPLATES ARE MULTILANGUAGE
+* ALL THE TEMPLATES HAS SOCIAL BUTTONS
+* RIGHT TO LEFT LANGUAGES SUPPORT
+* WYSIWYG IMPROVEMENTS:
+* wizard dialog for social buttons, to easily insert the URLs and hide undesired icons.
+* Image oversize limitation (non breaking layout)
+* Image attributes edition (alternate text, links, border, vspace and hspace properties)
+* The horizontal insertion spaces between modules are hidden in edition time, only appears during dragging module
+* There are a zoom view in the editor
+* The editor has now an insert image button at the cursor position
+* SMTP / CRON TUTORIALS ADDED
+* -- languages --
+* NEW: Arabic added - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Finnish added - fi (thanks to: Eccola http://eccola.fi )
+* -- fixes --
+* Save newsletter error re-fixed (thanks to Javier)
+* User and password SMTP fields autocomplete issue solved (thanks to Esa Rantanen and Thorsten Wollenhöfer)
+* WP_DEBUG alerts breaking ajax actions and WYSIWYG editor (from current theme or another plugins error messages) fixed
+* Wordpress core files inside directory broken URLs fixed (different WP address and Site address) (thanks to Manuel Burak and André Hilhorst)
+
+
 = 1.0.5 =
 
-* WYSIWYG Editor fixes: now works fine with Chrome and Safari PC & Mac (thanks to Esa Rantanen)
 * Support for image selection in Multisite WordPress sites (thanks to Esa Rantanen)
 * WP-CRON interactions with other plugins fixed (thanks to Thorsten Wollenhöfer)
-* Selection image blank dialog fixed (thanks to Javier)
+* Save newsletter error fixed (thanks to Javier)
+* Image selection blank dialog fixed (thanks to Javier)
 
 = 1.0.4 =
 
@@ -173,32 +200,27 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Upgrade Notice ==
 
-= 1.0.5 =
+= 1.1.0 =
 
-* WYSIWYG Editor fixes: now works fine with Chrome and Safari PC & Mac (thanks to Esa Rantanen)
-* Support for image selection in Multisite WordPress sites (thanks to Esa Rantanen)
-* WP-CRON interactions with other plugins fixed (thanks to Thorsten Wollenhöfer)
-* Selection image blank dialog fixed (thanks to Javier)
-
-= 1.0.4 =
-
-* URGENT: Preview and can't read newsletters bug fixed (thanks to Esa Rantanen)
-* Image resize bugs fixed (thanks to Esa Rantanen)
-
-= 1.0.3 =
-
-* MAJOR BUGS Fixed in Windows webservers (thanks to Hans-Heinz Bieling)
-* Resolved WYSIWYG editor issues in Macintosh Chrome (thanks to Max Schanfarber)
-* Minor bug in modal window after subscription on twenty elevens theme (thanks to Esa Rantanen)
-* Fixed customised messages bug (thanks to Hans-Heinz Bieling)
-
-= 1.0.2 =
-
-* WYSIWYG improvements:
-* Solved change image bug when no link is provided (thanks to Alfredo Pradanos)
-* Now you can resize template images in situ, with re-sharp and undo buttons (click on images)
-
-= 1.0.1 =
-
-* Template Casablanca improvements: background and layout issues with Gmail solved
-* Duplication of newsletters option added (not necessary start from scratch every newsletter)
+* WORDPRESS 3.4 COMPATIBLE
+* NEW: MULTISITE SUPPORT
+* NEW: STATISTICS
+* TEMPLATES ARE MULTILANGUAGE
+* ALL THE TEMPLATES HAS SOCIAL BUTTONS
+* RIGHT TO LEFT LANGUAGES SUPPORT
+* WYSIWYG IMPROVEMENTS:
+* wizard dialog for social buttons, to easily insert the URLs and hide undesired icons.
+* Image oversize limitation (non breaking layout)
+* Image attributes edition (alternate text, links, border, vspace and hspace properties)
+* The horizontal insertion spaces between modules are hidden in edition time, only appears during dragging module
+* There are a zoom view in the editor
+* The editor has now an insert image button at the cursor position
+* SMTP / CRON TUTORIALS ADDED
+* -- languages --
+* NEW: Arabic added - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Finnish added - fi (thanks to: Eccola http://eccola.fi )
+* -- fixes --
+* Save newsletter error re-fixed (thanks to Javier)
+* User and password SMTP fields autocomplete issue solved (thanks to Esa Rantanen and Thorsten Wollenhöfer)
+* WP_DEBUG alerts breaking ajax actions and WYSIWYG editor (from current theme or another plugins error messages) fixed
+* Wordpress core files inside directory broken URLs fixed (different WP address and Site address) (thanks to Manuel Burak and André Hilhorst)
