@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,15 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.1.1 =
+
+* VERY IMPORTANT: A SECURITY UPDATE *
+
+Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fontpicker/index.php
+(Technical info here http://www.securelist.com/en/advisories/49825)
+
+* Anti-spam bots hidden inputs was added to registration widget / form (thanks to Hans-Heinz Bieling)
+
 = 1.1.0 =
 
 * WORDPRESS 3.4 COMPATIBLE
@@ -200,27 +209,11 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Upgrade Notice ==
 
-= 1.1.0 =
+= 1.1.1 =
 
-* WORDPRESS 3.4 COMPATIBLE
-* NEW: MULTISITE SUPPORT
-* NEW: STATISTICS
-* TEMPLATES ARE MULTILANGUAGE
-* ALL THE TEMPLATES HAS SOCIAL BUTTONS
-* RIGHT TO LEFT LANGUAGES SUPPORT
-* WYSIWYG IMPROVEMENTS:
-* wizard dialog for social buttons, to easily insert the URLs and hide undesired icons.
-* Image oversize limitation (non breaking layout)
-* Image attributes edition (alternate text, links, border, vspace and hspace properties)
-* The horizontal insertion spaces between modules are hidden in edition time, only appears during dragging module
-* There are a zoom view in the editor
-* The editor has now an insert image button at the cursor position
-* SMTP / CRON TUTORIALS ADDED
-* -- languages --
-* NEW: Arabic added - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* NEW: Finnish added - fi (thanks to: Eccola http://eccola.fi )
-* -- fixes --
-* Save newsletter error re-fixed (thanks to Javier)
-* User and password SMTP fields autocomplete issue solved (thanks to Esa Rantanen and Thorsten Wollenhöfer)
-* WP_DEBUG alerts breaking ajax actions and WYSIWYG editor (from current theme or another plugins error messages) fixed
-* Wordpress core files inside directory broken URLs fixed (different WP address and Site address) (thanks to Manuel Burak and André Hilhorst)
+* VERY IMPORTANT: A SECURITY UPDATE *
+
+Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fontpicker/index.php
+(Technical info here http://www.securelist.com/en/advisories/49825)
+
+* Anti-spam bots hidden inputs was added to registration widget / form (thanks to Hans-Heinz Bieling)
