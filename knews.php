@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.1.0
+Version: 1.1.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -334,14 +334,24 @@ if (!class_exists("KnewsPlugin")) {
 			
 			global $wpdb;
 			//$name = mysql_real_escape_string($_POST['name']);
-			$lang = mysql_real_escape_string($_POST['lang_user']);
-			$lang_locale = mysql_real_escape_string($_POST['lang_locale_user']);
-			$email = mysql_real_escape_string($_POST['email']);
+			$lang = mysql_real_escape_string($this->post_safe('lang_user'));
+			$lang_locale = mysql_real_escape_string($this->post_safe('lang_locale_user'));
+			$email = mysql_real_escape_string($this->post_safe('email'));
 			$date = $this->get_mysql_date();
 			$confkey = $this->get_unique_id();
 			$id_list_news = intval($_POST['user_knews_list']);
-
-			if (!$this->validEmail($email)) {
+			
+			$stupid_bot = false;
+			$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
+			if ($this->post_safe('knewskey') != $key) $stupid_bot = true;
+			if (date('G') == 0 && $stupid_bot) {
+				$key = md5(date('dmY', strtotime("-1 day")) . KNEWS_VERSION . get_bloginfo('version'));
+				if ($this->post_safe('knewskey') == $key) $stupid_bot = false;
+			}
+			
+			if ($this->post_safe('knewscomment') != '') $stupid_bot = true;
+			
+			if (!$this->validEmail($email) || $stupid_bot) {
 				echo '<div class="response"><p>' . $this->get_custom_text('ajax_wrong_email', $lang_locale) . ' <a href="#" onclick="window.location.reload()">' . $this->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p></div>';
 				return false;
 			}
@@ -678,11 +688,19 @@ if (!class_exists("KnewsPlugin")) {
 				if (is_array($args)) echo $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
 			?>
 				<div class="knews_add_user">
+					<style type="text/css">
+					#knewscomment {position:absolute; top:-300px; left:0;}
+					</style>
 					<form action="<?php echo $this->printAddUserUrl(); ?>" method="post">
 						<label for="email"><?php echo $this->get_custom_text('widget_label', $lang['localized_code']); ?></label>
 						<input type="text" id="email" name="email" value="" />
-						<?php $this->printListsSelector($knews_lists); ?>
-						<?php $this->printLangHidden(); ?>
+						<?php 
+							$this->printListsSelector($knews_lists);
+							$this->printLangHidden();
+							$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
+						?>
+						<input type="hidden" name="knewskey" id="knewskey" value="<?php echo $key; ?>" />
+						<textarea name="knewscomment" id="knewscomment" style="width:150px; height:80px"></textarea>
 						<input type="submit" value="<?php echo $this->get_custom_text('widget_button', $lang['localized_code']); ?>" />
 					</form>
 				</div>
@@ -1024,7 +1042,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.1.0');
+		define('KNEWS_VERSION', '1.1.1');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
