@@ -70,6 +70,6 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 	}
 	
 }
-
+update_option('knews_advice_time', 0);
 update_option('knews_version', KNEWS_VERSION);
 ?>

@@ -26,7 +26,12 @@ if ($Knews_plugin) {
 	if (count($submit_pend) == 1) {
 
 		if ($Knews_plugin->initialized) die("Knews internal error: can't be initialized before!");
-		$Knews_plugin->init($submit_pend[0]->blog_id);
+
+		if( is_multisite() ) {
+			$Knews_plugin->init($submit_pend[0]->blog_id);
+		} else {
+			$Knews_plugin->init();
+		}
 
 		$id_newsletter = $submit_pend[0]->newsletter;
 		
@@ -181,7 +186,7 @@ if ($js != 0) {
 	function jump() {
 	<?php 
 		if ($pend) {
-			switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
+			if (is_multisite()) switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 	?>
 			location.href="<?php echo $Knews_plugin->get_main_plugin_url (); ?>/knews/direct/knews_cron_do.php?js=<?php echo intval($js)+1; ?>";
 	<?php

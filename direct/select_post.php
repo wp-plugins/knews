@@ -45,6 +45,7 @@ if ($Knews_plugin) {
  		echo json_encode($jsondata);
 		
 	} else {
+		
 		$languages=$Knews_plugin->getLangs();
 		$lang = $Knews_plugin->get_safe('lang');
 		$s = $Knews_plugin->get_safe('s');
@@ -54,6 +55,11 @@ if ($Knews_plugin) {
 		$order = $Knews_plugin->get_safe('order', 'asc');
 		
 		$url_base =  KNEWS_URL . '/direct/select_post.php';
+
+		if (KNEWS_MULTILANGUAGE && $lang != '') {
+			global $sitepress;
+			$sitepress->switch_lang($lang);
+		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

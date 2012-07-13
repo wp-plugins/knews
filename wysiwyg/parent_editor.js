@@ -42,6 +42,7 @@ var resizing_image_t;
 var resizing_image_l;
 var resizing_image_w_undo;
 var resizing_image_h_undo;
+var resizing_image_url_undo;
 var img_max_width=0;
 var img_min_width=0;
 var img_max_height=0;

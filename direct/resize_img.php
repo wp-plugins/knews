@@ -88,11 +88,20 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 	
 			// resize the image
 			$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, $cut, $width.'x'.$height);
+			
+			if ( is_wp_error( $thumb ) ) {
+				$jsondata['result'] = 'error';
+				$jsondata['url'] = '';
+				$jsondata['message'] = __('Error','knews') . ': ' . $thumb->get_error_message();;
+				echo json_encode($jsondata);
+				return;
+			}
+
 			if (is_string($thumb)) {
 
 				//$thumb = substr($thumb, strpos($thumb, 'wp-content'));
 				$thumb = substr($thumb, strlen($wp_dirs['basedir']));
-				
+
 				$jsondata['result'] = 'ok';
 				$jsondata['url'] = $wp_dirs['baseurl'] . $thumb;
 				echo json_encode($jsondata);

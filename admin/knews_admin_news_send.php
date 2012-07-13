@@ -183,7 +183,7 @@
 		if ($knewsOptions['knews_cron']=='cronjs') $cron=false;
 
 		if ($submit_enqueued && !$cron) {
-			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/direct/knews_cron.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
+			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/knews/direct/knews_cron.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
 		}
 		/*if (ini_get('safe_mode') && !$cron) {
 	?>

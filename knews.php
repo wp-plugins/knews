@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.1.1
+Version: 1.1.2
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -61,7 +61,8 @@ if (!class_exists("KnewsPlugin")) {
 				'update_knews' => 'no',
 				'write_logs' => 'no',
 				'knews_cron' => 'cronwp',
-				'update_pro' => 'no');
+				'update_pro' => 'no',
+				'videotutorial' => 'no');
 
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)) {
@@ -141,7 +142,7 @@ if (!class_exists("KnewsPlugin")) {
 		function init($blog_id=0) {
 			global $knewsOptions, $wpdb;
 			
-			if ($blog_id != 0) switch_to_blog($blog_id);
+			if ($blog_id != 0 && is_multisite()) switch_to_blog($blog_id);
 			
 			define('KNEWS_USERS', $wpdb->prefix . 'knewsusers');	
 			define('KNEWS_USERS_EXTRA', $wpdb->prefix . 'knewsusersextra');	
@@ -1042,7 +1043,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.1.1');
+		define('KNEWS_VERSION', '1.1.2');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1132,22 +1133,29 @@ if (!function_exists("Knews_plugin_ap")) {
 		if ($Knews_plugin->knews_admin_messages != '') {
 			echo $div . $Knews_plugin->knews_admin_messages . '</div>';
 		} else {
-			if (version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0 || get_option('knews_pro') == 'yes') {
-				if ($knewsOptions['update_knews'] == 'no' && version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0) {
-					echo $div . __('You are downgraded the version of Knews, you can lose data, please update quickly','knews');
-					echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-				} else {
-					if (get_option('knews_pro') == 'yes') {
-						if ($knewsOptions['update_pro'] == 'no') {
-							echo $div;
-							printf( __('You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here','knews'), '<a href="http://www.knewsplugin.com" target="_blank">');
-							echo '</a>';
-							echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_pro&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+
+			if (strpos($_SERVER['REQUEST_URI'],'knews_news&section=edit') !== false && $knewsOptions['videotutorial'] == 'no') {
+				echo $div . __('There is a videotutorial about Knews WYSIWYG Editor, <a href="http://www.youtube.com/watch?v=axDO5ZIW-9s" target="_blank">view it in Youtube</a>','knews');
+				echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=videotutorial&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+			} else {
+
+				if (version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0 || get_option('knews_pro') == 'yes') {
+					if ($knewsOptions['update_knews'] == 'no' && version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0) {
+						echo $div_error . __('You are downgraded the version of Knews, you can lose data, please update quickly','knews');
+						echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+					} else {
+						if (get_option('knews_pro') == 'yes') {
+							if ($knewsOptions['update_pro'] == 'no') {
+								echo $div;
+								printf( __('You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here','knews'), '<a href="http://www.knewsplugin.com" target="_blank">');
+								echo '</a>';
+								echo ' <a href="' . KNEWS_URL . '/direct/off_warn.php?w=update_pro&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+							}
 						}
 					}
 				}
 			}
-		
+			
 			if (strpos($_SERVER['REQUEST_URI'],'knews_config') === false) {
 				if ($knewsOptions['config_knews'] == 'no') {
 					

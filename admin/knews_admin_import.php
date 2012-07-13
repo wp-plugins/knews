@@ -390,7 +390,8 @@ function print_state($step, $where) {
 			?>
 			<p><strong><?php _e('If a user already exists (matches e-mail)','knews'); ?></strong>: <select name="overwrite" id="overwrite">
 			<option value="no"<?php if ($Knews_plugin->post_safe('overwrite') == 'no') echo ' selected="selected"'; ?>><?php _e('Maintain current data','knews'); ?></option>
-			<option value="yes"<?php if ($Knews_plugin->post_safe('overwrite') == 'yes') echo ' selected="selected"'; ?>><?php _e('Overwrite','knews'); ?></option></select>
+			<option value="yes"<?php if ($Knews_plugin->post_safe('overwrite') == 'yes') echo ' selected="selected"'; ?>><?php _e('Overwrite','knews'); ?></option>
+			<option value="add"<?php if ($Knews_plugin->post_safe('overwrite') == 'add') echo ' selected="selected"'; ?>><?php _e('Mantain current data and add new mailing lists','knews'); ?></option></select>
 			<div class="submit">
 				<input type="button" value="<?php _e('Go back','knews'); ?>" id="back_import" />
 				<input type="submit" value="<?php _e('Make preview','knews'); ?>" class="button-primary" />
@@ -490,7 +491,7 @@ function print_state($step, $where) {
 									$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
 									$user_found = $wpdb->get_results( $query );
 									
-									if (count($user_found)==0 || $_POST['overwrite']=='yes') {
+									if (count($user_found)==0 || $_POST['overwrite']=='yes' || $_POST['overwrite']=='add') {
 
 										$import_users_ok++;
 
@@ -545,13 +546,10 @@ function print_state($step, $where) {
 	
 														//The lists
 														foreach ($lists_name as $ln) {
-															if (isset($_POST['list_'.$ln->id])) {
-																if ($_POST['list_'.$ln->id]=='1') {
+															if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
 											
-																	$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_updated_user . ", " . $ln->id . ")";
-																	$results = $wpdb->query( $query );
-																	
-																}
+																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_updated_user . ", " . $ln->id . ")";
+																$results = $wpdb->query( $query );
 															}
 														}
 		
@@ -564,6 +562,33 @@ function print_state($step, $where) {
 														$import_users_ok--;
 														$import_users_overwrite--;
 														addError (__('SQL Error while updating user','knews'));
+													}
+												}
+											} elseif ($Knews_plugin->post_safe('overwrite') == 'add') {
+
+												$import_users_overwrite++;
+												if ($step=='5') {
+													$id_updated_user=$user_found[0]->id;
+	
+													//The lists
+													foreach ($lists_name as $ln) {
+														if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
+										
+															$query="SELECT * FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $id_updated_user . " AND id_list=" . $ln->id;
+															$results = $wpdb->get_results( $query );
+
+															if ( count($results) == 0 ) {
+
+																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_updated_user . ", " . $ln->id . ")";
+																$results = $wpdb->query( $query );
+															}
+														}
+													}
+	
+													
+													//Confirm
+													if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
+														add_confirm($id_updated_user);
 													}
 												}
 											}

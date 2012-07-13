@@ -23,7 +23,8 @@ parent.jQuery(document).ready( function () {
 		if (e.keyCode == 27 && parent.referer_image_size != '') {
 			parent.jQuery(parent.referer_image_size).attr('height', parent.resizing_image_h_undo);
 			parent.jQuery(parent.referer_image_size).attr('width', parent.resizing_image_w_undo);
-			
+			parent.jQuery(parent.referer_image_size).attr('src', parent.resizing_image_url_undo);
+
 			clean_resize_handlers();
 			parent.referer_image_size='';
 			parent.referer_image_size_ajax='';
@@ -108,6 +109,7 @@ parent.jQuery(document).ready( function () {
 
 		parent.jQuery(parent.referer_image_size).attr('height', parent.resizing_image_h_undo);
 		parent.jQuery(parent.referer_image_size).attr('width', parent.resizing_image_w_undo);
+		parent.jQuery(parent.referer_image_size).attr('src', parent.resizing_image_url_undo);
 
 		clean_resize_handlers();
 		parent.referer_image_size='';
@@ -186,6 +188,7 @@ parent.jQuery(document).ready( function () {
 
 			parent.resizing_image_w_undo=ww;
 			parent.resizing_image_h_undo=hh;
+			parent.resizing_image_url_undo=parent.jQuery(this).attr('src');
 
 			parent.referer_image_size = this;
 

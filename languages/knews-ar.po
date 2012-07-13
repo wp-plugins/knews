@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2012-06-10\n"
-"PO-Revision-Date: 2012-07-05 12:16+0100\n"
+"PO-Revision-Date: 2012-07-10 14:02+0100\n"
 "Last-Translator: hasan yusef <hassanfazary@gmail.com>\n"
 "Language-Team: Native Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1994,22 +1994,22 @@ msgid "Inverse alignment (<span style=\"color:#e00\">right</span> for left to ri
 msgstr "عكس المحاذاة (<span style=\"color:#e00\">  right </ span> للغات اليسار إلى اليمين <span style=\"color:#e00\"> left </ SPAN> للغات اليمين إلى اليسار ) "
 
 msgid "Cant read text 1"
-msgstr "إذا كنت لا تستطيع قراءة هذه الرسالة، الرجاء الضغط"
+msgstr " غير قادر على قراءته (نص ١)"
 
 msgid "Cant read text link"
-msgstr "هنا"
+msgstr "غير قادر على قراءة نص الرابط"
 
 msgid "Cant read text 2"
-msgstr "..."
+msgstr " غير قادر على قراءته (نص 2)"
 
 msgid "Unsubscribe text 1"
-msgstr "إذا كنت لا تستطيع قراءة هذه الرسالة، الرجاء الضغط"
+msgstr " إلغاء الاشترك (نص ١)"
 
 msgid "Unsubscribe text link"
-msgstr "هنا"
+msgstr "إلغاء الاشترك نص الرابط"
 
 msgid "Unsubscribe text 2"
-msgstr "..."
+msgstr " إلغاء الاشترك (نص 2)"
 
 msgid "default_alignment"
 msgstr "right"

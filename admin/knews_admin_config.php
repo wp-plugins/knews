@@ -124,6 +124,9 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			$knewsOptions['no_warn_cron_knews'] = 'no';
 			$knewsOptions['no_warn_ml_knews'] = 'no';
 			$knewsOptions['config_knews'] = 'no';
+			$knewsOptions['update_knews'] = 'no';
+			$knewsOptions['update_pro'] = 'no';
+			$knewsOptions['videotutorial'] = 'no';
 		}
 
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
