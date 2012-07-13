@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Widget** for subscriber and surfing language capture.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
+* **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
 * **Free and without limitations**.
 
 More info here: [http://www.knewsplugin.com](http://www.knewsplugin.com/).
@@ -51,7 +52,7 @@ A WYSIWYG Editor Demo:
 
 * Continued improvement of the WYSIWYG editor.
 * More templates.
-* Automated emailing submits.
+* Automated emailing creation & submit.
 
 
 == Installation ==
@@ -108,7 +109,7 @@ Knews works initially with wp_cron that is based on running the tasks assigned f
 
 **Knews have statistics?**
 
-Since version 1.1.0, Knews has statistics. This include: sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc. 
+Since version 1.1.0, Knews has statistics. This include: sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
 
 **I am a designer and I need to give my clients a customised template**
 
@@ -132,11 +133,24 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 2. Segmentation of subscribers by language in different mailing lists.
 3. The WYSIWYG Editor doing module insertion (doing drag).
 4. The submit process.
-5. The Clean Blue Template and a sample customisation (Sports Car Magazine).
-6. The Sweet Barcelona Template and a sample customization (Wine).
-7. The Casablanca Template and a sample customisation (Christmas).
+5. Statistics: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
+6. The Clean Blue Template and a sample customisation (Sports Car Magazine).
+7. The Sweet Barcelona Template and a sample customization (Wine).
+8. The Casablanca Template and a sample customisation (Christmas).
 
 == Changelog ==
+
+= 1.1.2 =
+
+* Fixed automated submit bug (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to webken.
+* Added import option that allow add mailing lists to old subscriptors trough new CSV. Thanks to: Luis Briso de Montiano Aldecoa.
+* Fixed minor translation bug in Arabic language. Thanks to: Hasan Yousef.
+* Updated dashboard advices system.
+* Fixed a path bug link to the JavaScript CRON Emulation file.
+* Fixed the selection post issue in the WYSIWYG Knews Editor (some WPML configurations can't switch between languages). thanks to: Hasan Yousef.
+* Fixed an undo image URL change issue in Editor.
+* Fixed the too small image message bug in Editor: Before, show an incorrect permissions error message.
+* Link to videotutorial in the editor added.
 
 = 1.1.1 =
 
@@ -145,6 +159,7 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fontpicker/index.php
 (Technical info here http://www.securelist.com/en/advisories/49825)
 
+* Anti-spam bots hidden inputs was added to registration widget / form (thanks to Hans-Heinz Bieling)
 * Anti-spam bots hidden inputs was added to registration widget / form (thanks to Hans-Heinz Bieling)
 
 = 1.1.0 =
@@ -208,6 +223,18 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.1.2 =
+
+* Fixed automated submit bug (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to webken.
+* Added import option that allow add mailing lists to old subscriptors trough new CSV. Thanks to: Luis Briso de Montiano Aldecoa.
+* Fixed minor translation bug in Arabic language. Thanks to: Hasan Yousef.
+* Updated dashboard advices system.
+* Fixed a path bug link to the JavaScript CRON Emulation file.
+* Fixed the selection post issue in the WYSIWYG Knews Editor (some WPML configurations can't switch between languages). thanks to: Hasan Yousef.
+* Fixed an undo image URL change issue in Editor.
+* Fixed the too small image message bug in Editor: Before, show an incorrect permissions error message.
+* Link to videotutorial in the editor added.
 
 = 1.1.1 =
 
