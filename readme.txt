@@ -152,6 +152,7 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 * NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Custom templates folder. Upload your custom templates to /wp-content/uploads/knewstemplates and plugin uploads don't erase it.
 * FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
 * Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
 * Fixed exact size upload error in the WYSIWYG editor (when no resize is needed). Thanks to: Hans-Heinz Bieling
@@ -251,6 +252,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 * NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Custom templates folder. Upload your custom templates to /wp-content/uploads/knewstemplates and plugin uploads don't erase it.
 * FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
 * Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
 * Fixed exact size upload error in the WYSIWYG editor (when no resize is needed). Thanks to: Hans-Heinz Bieling
