@@ -1,6 +1,5 @@
 <?php 
-ob_start();
-
+if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -11,7 +10,6 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
-ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -76,6 +74,18 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 		$url_imatge = str_replace('.GIF', '-' . $width . 'x' . $height .'.GIF', $url_imatge);
 		$url_imatge = str_replace('.PNG', '-' . $width . 'x' . $height .'.PNG', $url_imatge);
 
+		if (is_file($wp_dirs['basedir'] . $url)) {
+			$size = getimagesize($wp_dirs['basedir'] . $url);
+			if ($size[0]==$width && $size[1]==$height) {
+
+				$jsondata['result'] = 'ok';
+				$jsondata['url'] = $wp_dirs['baseurl'] . $url;
+				echo json_encode($jsondata);
+	
+				return;
+			}
+		}
+		
 		if (is_file($wp_dirs['basedir'] . $url_imatge)) {
 
 			$jsondata['result'] = 'ok';

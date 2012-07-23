@@ -346,6 +346,7 @@ function listen_module (module) {
 				parent.jQuery('.container_zone_' + parent.zone + ' .droppable_empty', document).show();
 			} else {
 				parent.jQuery('body', document).addClass('doing_drag');
+				parent.jQuery('.droppable_empty', document).show();
 			}
 
 			e.preventDefault();
@@ -609,7 +610,6 @@ function update_editor() {
 		}
 		in_node = in_node.parentNode;
 	}
-	
 	if (inside_editor) {
 
 		parent.jQuery('#tagsnav').html(tags);
@@ -714,7 +714,13 @@ function b_insert_image(img_url, align) {
 function b_del_link() {
 	if (inside_editor) {
 
-		if (im_on_link) document.execCommand('unlink',false,url);
+		if (im_on_link) {
+			deleting_node = parent.jQuery(current_node).parent();
+
+			if (parent.jQuery(deleting_node).is('a')) {
+				parent.jQuery(deleting_node).replaceWith(parent.jQuery(deleting_node).html());
+			}
+		}
 
 		restore_focus();
 		update_editor();

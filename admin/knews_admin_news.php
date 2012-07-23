@@ -24,8 +24,9 @@
 	if ($section=='' && $Knews_plugin->post_safe('action')=='add_news') {
 
 		$name = mysql_real_escape_string($Knews_plugin->post_safe('new_news'));
-		
 		$lang = mysql_real_escape_string($Knews_plugin->post_safe('lang'));
+		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
+		$path_template = $Knews_plugin->post_safe('path_' . $Knews_plugin->post_safe('template'));
 
 		$lang_localized='';
 		if(!empty($languages)){
@@ -49,7 +50,7 @@
 	
 					if ($template != '') {
 	
-						$fileTemplate = KNEWS_DIR . '/templates/' . $_POST['template'] . '/template.html';
+						$fileTemplate = $path_template . $_POST['template'] . '/template.html';
 						$fh = fopen($fileTemplate, 'r');
 						$codeTemplate = fread($fh, filesize($fileTemplate));
 						fclose($fh);
@@ -96,8 +97,8 @@
 	
 						$bodyTemplate = cut_code('<body>', '</body>', $codeTemplate, true);
 	
-						$bodyTemplate = str_replace('"images/', '"' . KNEWS_URL . '/templates/' . $_POST['template'] . '/images/', $bodyTemplate);
-						$bodyTemplate = str_replace('url(images', 'url(' . KNEWS_URL . '/templates/' . $_POST['template'] . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('"images/', '"' . $url_template . $_POST['template'] . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $_POST['template'] . '/images/', $bodyTemplate);
 		
 						$count_modules=0; $found_module=true; $codeModule='';
 						while ($found_module) {
@@ -106,7 +107,7 @@
 							if (strpos($bodyTemplate, '[start module ' . ($count_modules + 1) . ']') !== false) {
 								$found_module=true;
 	
-								$codeModule .= '<div class="insertable"><img src="' . KNEWS_URL . '/templates/' . $_POST['template'] . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
+								$codeModule .= '<div class="insertable"><img src="' . $url_template . $_POST['template'] . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
 								$codeModule .= cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								$codeModule .= '</div></div>';
 	

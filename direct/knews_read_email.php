@@ -1,5 +1,5 @@
 <?php 
-ob_start();
+if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -10,7 +10,6 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
-ob_end_clean();
 
 if ($Knews_plugin) {
 

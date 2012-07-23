@@ -1,5 +1,5 @@
 <?php
-ob_start();
+if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -10,7 +10,6 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
-ob_end_clean();
 
 if ($Knews_plugin) {
 
@@ -114,7 +113,7 @@ if ($Knews_plugin) {
 		<?php
 		if ($input_lh !=0) {
 		?>
-		<p><label>Line height:</label><input type="text" name="lineheight" id="lineheight" value="<?php echo $input_lh; ?>"> px (0 for auto)</p>
+		<p><label>Line height:</label><input type="text" name="lineheight" id="lineheight" value="<?php echo $input_lh; ?>" style="border:#000 1px solid;"> px (0 for auto)</p>
 		<?php 
 		} else {
 		?>

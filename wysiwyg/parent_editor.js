@@ -114,6 +114,7 @@ jQuery(window).load(function() {
 			})
 			.mouseup(function(){
 				editor_mouseup();
+				document.getElementById('knews_editor').contentWindow.update_editor();
 			});
 			
 		jQuery(document)
@@ -152,8 +153,8 @@ jQuery(window).load(function() {
 				} else {
 					jQuery('body', io).addClass('doing_drag');
 					jQuery('body').addClass('doing_drag');
+					jQuery('.droppable_empty', io).show();
 				}
-		
 				//e.returnValue = false;
 				//e.cancelBubble=true; 
 				//window.event.returnValue = false;

@@ -10,11 +10,13 @@ if (!function_exists('add_action')) {
 	}
 }
 
-if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) die("You must call the main blog knews_cron.php file");
-
 global $knewsOptions, $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
+
+	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) {
+		die("You must call the main blog knews_cron.php file");
+	}
 	
 	$js=intval($Knews_plugin->get_safe('js'));
 

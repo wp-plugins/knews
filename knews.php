@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.1.2
+Version: 1.1.3
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -36,6 +36,7 @@ if (!class_exists("KnewsPlugin")) {
 		var $advice='';
 		var $KNEWS_MAIN_BLOG_ID = 1;
 		var $knews_admin_messages = '';
+		var $knews_form_n = 1;
 
 				
 		/******************************************************************************************
@@ -590,7 +591,7 @@ if (!class_exists("KnewsPlugin")) {
 			return '';
 		}
 		
-		function tellMeLists() {
+		function tellMeLists($filter=true) {
 		
 			if (! $this->initialized) $this->init();
 		
@@ -618,96 +619,122 @@ if (!class_exists("KnewsPlugin")) {
 						if (!in_array($active_lang['language_code'], $lang_sniffer) ) $valid=false;
 					}
 				}
-				if ($valid) $lists[$list->id]=$list->name;
+				if ($valid || !$filter) $lists[$list->id]=$list->name;
 								
 			}
 			return $lists;
 			
 		}
 		
-		function printListsSelector($lists) {
+		/* WARNIG: This functions will be deprecated in the future, please, use the get functions instead of print functions */
+		function printListsSelector($lists, $mandatory_id=0) {
+			echo $this->getListsSelector($lists, $mandatory_id);
+		}
+		function printAddUserUrl() {
+			//This function has wrong name, and is keept for compatibility customisations with old knews versions
+			return $this->getAddUserUrl();
+		}
+		function printLangHidden() {
+			echo $this->getLangHidden();
+		}
+		function printAjaxScript($container, $custom=false) {
+			echo $this->getAjaxScript($container, $custom=false);
+		}
+		/* end print deprecated functions */
+
+		function getListsSelector($lists, $mandatory_id=0) {
+			if ($mandatory_id != 0) {
+				if (isset($lists[$mandatory_id])) {
+					$lists = array();
+					$lists[$mandatory_id] = 'mandatory';
+				}
+			}
 			if (count($lists) > 1) {
-				echo '<select name="user_knews_list" id="user_knews_list">';
+				$response = '<select name="user_knews_list" id="user_knews_list">';
 				while ($list = current($lists)) {
-					echo '<option value="' . key($lists) . '">' . $list . '</option>';
+					$response .= '<option value="' . key($lists) . '">' . $list . '</option>';
 					next($lists);
 				}
-				echo '</select>';
+				$response .= '</select>';
 			} else if (count($lists) == 1) {
-				echo '<input type="hidden" name="user_knews_list" id="user_knews_list" value="' . key($lists) . '" />';
+				$response = '<input type="hidden" name="user_knews_list" id="user_knews_list" value="' . key($lists) . '" />';
 			} else {
-				echo '<input type="hidden" name="user_knews_list" id="user_knews_list" value="-" />';			
+				$response = '<input type="hidden" name="user_knews_list" id="user_knews_list" value="-" />';			
 			}
+			return $response;
 		}
 
-		function printAddUserUrl() {
+		function getAddUserUrl() {
 			return KNEWS_URL . '/direct/knews_adduser.php';
 		}
 		
-		function printLangHidden() {
+		function getLangHidden() {
 			global $knewsOptions;
 			
 			$lang = $this->pageLang();
 			
 			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
 
-			echo '<input type="hidden" name="lang_user" id="lang_user" value="' . $lang['language_code'] . '" />';
-			echo '<input type="hidden" name="lang_locale_user" id="lang_locale_user" value="' . $lang['localized_code'] . '" />';
-		}
-		
-		function printAjaxScript($container) {
-			?>
-			<script type="text/javascript">
-				jQuery(document).ready(function() {
-					jQuery('<?php echo $container; ?> form').submit( function() {
-						jQuery.post(jQuery(this).attr('action'), jQuery(this).serialize(), function (data) { 
-							jQuery('<?php echo $container; ?>').html(data);
-						});
-						return false;
-					});
-				})
-			</script>
-			<?php
-		}
-		
-		function printWidget($args) {
-
-			global $knewsOptions;
-
-			if (! $this->initialized) $this->init();
+			$response = '<input type="hidden" name="lang_user" id="lang_user" value="' . $lang['language_code'] . '" />';
+			$response .= '<input type="hidden" name="lang_locale_user" id="lang_locale_user" value="' . $lang['localized_code'] . '" />';
 			
-			$knews_lists = $this->tellMeLists();
+			return $response;
+		}
+		
+		function getAjaxScript($container, $custom=false) {
+			$response='';
+			if ($this->knews_form_n==1 || $custom) {
+				$response = '<script type="text/javascript">
+					jQuery(document).ready(function() {
+						jQuery(\'' . $container . ' form\').submit( function() {
+							thisform = this;
+							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
+								jQuery(thisform).closest(\'' . $container . '\').html(data);
+							});
+							return false;
+						});
+					})
+				</script>';
+			}
+			if (!$custom) $this->knews_form_n++;
+			return $response;
+		}
+		
+		function getForm($mandatory_id=0, $args='', $container='knews_add_user') {
+			global $knewsOptions;
+			$response='';
+			if (! $this->initialized) $this->init();
+			$knews_lists = $this->tellMeLists( (($mandatory_id==0) ? true : false) );
 
 			if (count($knews_lists) > 0) {
-
-				$this->printAjaxScript('div.knews_add_user');
-
+				$response .= $this->getAjaxScript('div.' . $container);
 				$lang = $this->pageLang();
 
 				if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
 
-				if (is_array($args)) echo $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
-			?>
-				<div class="knews_add_user">
+				if (is_array($args)) $response .= $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
+
+				$response .= '<div class="' . $container . '">
 					<style type="text/css">
-					#knewscomment {position:absolute; top:-300px; left:0;}
+					div.' . $container . ' textarea#knewscomment {position:absolute; top:-3000px; left:-3000px;}
 					</style>
-					<form action="<?php echo $this->printAddUserUrl(); ?>" method="post">
-						<label for="email"><?php echo $this->get_custom_text('widget_label', $lang['localized_code']); ?></label>
-						<input type="text" id="email" name="email" value="" />
-						<?php 
-							$this->printListsSelector($knews_lists);
-							$this->printLangHidden();
-							$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
-						?>
-						<input type="hidden" name="knewskey" id="knewskey" value="<?php echo $key; ?>" />
+					<form action="' . $this->getAddUserUrl() . '" method="post">
+						<label for="email">' . $this->get_custom_text('widget_label', $lang['localized_code']) . '</label>
+						<input type="text" id="email" name="email" value="" />' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
+				$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
+				$response .= '<input type="hidden" name="knewskey" id="knewskey" value="' . $key . '" />
 						<textarea name="knewscomment" id="knewscomment" style="width:150px; height:80px"></textarea>
-						<input type="submit" value="<?php echo $this->get_custom_text('widget_button', $lang['localized_code']); ?>" />
+						<input type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '" />
 					</form>
-				</div>
-			<?php
-				if (is_array($args)) echo $args['after_widget'];
+				</div>';
+
+				if (is_array($args)) $response .=  $args['after_widget'];
 			}
+			return $response;
+		}
+
+		function printWidget($args) {
+			echo getForm(0, $args);
 		}
 
 		function register_widget(){
@@ -1043,7 +1070,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.1.2');
+		define('KNEWS_VERSION', '1.1.3');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1066,7 +1093,9 @@ if (!function_exists("Knews_plugin_ap")) {
 		}
 
 		//WP Cron :: http://blog.slaven.net.au/2007/02/01/timing-is-everything-scheduling-in-wordpress/
-		function knews_wpcron_function() {require('direct/knews_cron_do.php'); }
+		function knews_wpcron_function() {
+			require(dirname(__FILE__) . '/direct/knews_cron_do.php');
+		}
 
 		function knews_more_reccurences($schedules) {
 			$schedules['knewstime'] = array('interval' => 600, 'display' => 'Knews 10 minutes wpcron submit');
@@ -1187,15 +1216,11 @@ if (!function_exists("Knews_plugin_ap")) {
 	}
 	add_action( 'admin_notices', 'knews_admin_notice' );
 	
-	function knews_plugin_form() {
+	function knews_plugin_form($atts) {
 		global $Knews_plugin; if (!isset($Knews_plugin)) return '';
-
-		ob_start();
-			$Knews_plugin->printWidget('');
-			$result=ob_get_contents();
-		ob_end_clean();
-
-		return $result;
+		
+		$id_list = ((isset($atts[id])) ? intval($atts[id]) : 0);
+		return $Knews_plugin->getForm($id_list);
 	}
 	add_shortcode("knews_form", "knews_plugin_form");
 }

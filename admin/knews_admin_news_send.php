@@ -130,13 +130,13 @@
 ?>		
 	<div class=wrap>
 		<?php
-		if ($results_news[0]->subject=='') {
+		if ($results_news[0]->subject=='' && !isset($_POST['action'])) {
 			echo '<div class="error"><p>'; 
 			printf(__('Warning: the email has no subject! %s Edit it again before submit!','knews'),'<a href="admin.php?page=knews_news&section=edit&idnews=' . $id_newsletter . '">'); 
 			echo '</a></p></div>';
 		}
 		
-		if ($knewsOptions['from_name_knews']=='Knews robot') {
+		if ($knewsOptions['from_name_knews']=='Knews robot' && !isset($_POST['action'])) {
 			echo '<div class="error"><p>'; 
 			printf(__('Warning: %sConfigure sender name before submit!','knews'),'<a href="admin.php?page=knews_config">'); 
 			echo '</a></p></div>';
@@ -183,7 +183,7 @@
 		if ($knewsOptions['knews_cron']=='cronjs') $cron=false;
 
 		if ($submit_enqueued && !$cron) {
-			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/knews/direct/knews_cron.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
+			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/knews/direct/knews_cron_do.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
 		}
 		/*if (ini_get('safe_mode') && !$cron) {
 	?>
