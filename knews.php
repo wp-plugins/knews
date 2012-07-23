@@ -734,7 +734,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function printWidget($args) {
-			echo getForm(0, $args);
+			echo $this->getForm(0, $args);
 		}
 
 		function register_widget(){
