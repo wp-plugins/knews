@@ -39,7 +39,7 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* NEW: Arabic added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * Arabic - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * Finnish - fi (thanks to: Eccola http://eccola.fi )
@@ -150,7 +150,7 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 = 1.1.3 =
 
-* NEW: Arabic added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
 * Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
@@ -249,7 +249,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 = 1.1.3 =
 
-* NEW: Arabic added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
 * Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
