@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,10 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.1.4 =
+
+* Fixed an Stupid bug in the widget that breaks the sidebar... we apologize this!!!
+
 = 1.1.3 =
 
 * NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
@@ -247,6 +251,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.1.4 =
+
+* Fixed an Stupid bug in the widget that breaks the sidebar... we apologize this!!!
 
 = 1.1.3 =
 
