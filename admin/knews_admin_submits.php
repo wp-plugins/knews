@@ -117,13 +117,14 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 				</thead>
 				<tbody>
 				<?php
+				$alt=false;
 				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC";
 				$results = $wpdb->get_results( $query );
 
 				if (count($results) == 0) echo '<tr><td colspan="7"><p>' . __('No submits yet. First go to Newsletters, create one, and then submit it.','knews') . '</p></td></tr>';
 				
 				foreach ($results as $submit) {
-					echo '<tr><td>';
+					echo '<tr' . (($alt) ? ' class="alt"' : '') . '><td>';
 					if ($submit->special != '') {
 						
 						echo '<strong>' . __('Special','knews') . ':</strong> [' . $submit->special . ']';
@@ -196,6 +197,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 						}
 					}
 					echo '</td></tr>';
+					$alt=!$alt;
 				}
 				?>
 				</tbody>

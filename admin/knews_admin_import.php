@@ -826,7 +826,7 @@ function data_process($txt, $human=false) {
 
 function add_confirm($id_user) {
 	
-	global $submit_confirmation_id, $confirmation_sql_count, $wpdb;
+	global $submit_confirmation_id, $confirmation_sql_count, $wpdb, $Knews_plugin;
 	
 	if ($submit_confirmation_id == 0) {
 		$mysqldate = $Knews_plugin->get_mysql_date();

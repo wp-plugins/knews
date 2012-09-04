@@ -25,6 +25,8 @@ if ($Knews_plugin) {
 	
 	$date=	$Knews_plugin->get_mysql_date();
 	
+	$code=str_replace('#@!', '<', $code);
+	
 	//WYSIWYG editor issues
 	$code=rgb2hex($code);
 	if (!is_utf8($code)) $codeModule=utf8_encode($code);

@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.1.4
+Version: 1.1.5
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -169,6 +169,24 @@ if (!class_exists("KnewsPlugin")) {
 			$this->creaSiNoExisteixDB();
 			
 			$this->knewsLangs = $this->getLangs();
+
+			//LOCALIZED URLS (WPML different domains for language option)
+			$knews_localized_url = KNEWS_URL;
+			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') {
+				if (function_exists('icl_get_languages')) {
+					
+					global $sitepress_settings;
+					if (isset($sitepress_settings['language_negotiation_type']) && $sitepress_settings['language_negotiation_type']==2) {
+					
+						$l = $this->pageLang();
+						$knews_localized_url = $l['url'];
+						if (substr($knews_localized_url, -1) != '/') $knews_localized_url .= '/';
+						$knews_localized_url .= 'wp-content/plugins/knews';
+					}
+				}
+			}
+			define('KNEWS_LOCALIZED_URL', $knews_localized_url);
+
 			$this->initialized = true;
 		}
 		
@@ -327,22 +345,18 @@ if (!class_exists("KnewsPlugin")) {
 			}
 			return true;
 		}
+		
 		function get_unique_id() {
 			return substr(md5(uniqid()),-8);
 		}
+		
 		function add_user_self(){
-
-			if (! $this->initialized) $this->init();
-			
-			global $wpdb;
 			//$name = mysql_real_escape_string($_POST['name']);
 			$lang = mysql_real_escape_string($this->post_safe('lang_user'));
 			$lang_locale = mysql_real_escape_string($this->post_safe('lang_locale_user'));
 			$email = mysql_real_escape_string($this->post_safe('email'));
-			$date = $this->get_mysql_date();
-			$confkey = $this->get_unique_id();
 			$id_list_news = intval($_POST['user_knews_list']);
-			
+
 			$stupid_bot = false;
 			$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
 			if ($this->post_safe('knewskey') != $key) $stupid_bot = true;
@@ -350,18 +364,38 @@ if (!class_exists("KnewsPlugin")) {
 				$key = md5(date('dmY', strtotime("-1 day")) . KNEWS_VERSION . get_bloginfo('version'));
 				if ($this->post_safe('knewskey') == $key) $stupid_bot = false;
 			}
-			
 			if ($this->post_safe('knewscomment') != '') $stupid_bot = true;
-			
+
+			echo '<div class="response"><p>';
+
 			if (!$this->validEmail($email) || $stupid_bot) {
-				echo '<div class="response"><p>' . $this->get_custom_text('ajax_wrong_email', $lang_locale) . ' <a href="#" onclick="window.location.reload()">' . $this->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p></div>';
-				return false;
+				echo	$this->get_custom_text('ajax_wrong_email', $lang_locale) . ' <a href="#" onclick="window.location.reload()">' 
+						. $this->get_custom_text('dialogs_close_button', $lang_locale) . '</a>';
+
+			} else {
+				$response = $this->add_user($email, $id_list_news, $lang, $lang_locale);
+				
+				if ($response==1) echo $this->get_custom_text('ajax_subscription', $lang_locale);
+				if ($response==2) echo $this->get_custom_text('ajax_subscription_error', $lang_locale);
+				if ($response==3) echo $this->get_custom_text('ajax_subscription_direct', $lang_locale);
+				if ($response==4) echo $this->get_custom_text('ajax_subscription_oops', $lang_locale);
 			}
-			$submit_mail=true;
+
+			echo '</p></div>';
+		}
+		
+		function add_user($email, $id_list_news, $lang='en', $lang_locale='en_US'){
 			
+			if (! $this->initialized) $this->init();
+			
+			global $wpdb;
+			$date = $this->get_mysql_date();
+			$confkey = $this->get_unique_id();
+
 			$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
 			$user_found = $wpdb->get_results( $query );
 
+			$submit_mail=true;
 
 			if (count($user_found)==0) {
 				$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . $email . "','" . $lang . "', '1', '" . $date . "','" . $confkey . "');";
@@ -391,28 +425,26 @@ if (!class_exists("KnewsPlugin")) {
 					}
 				}
 				$results = $wpdb->query( $query );
-				
-				echo '<div class="response"><p>';
-				
+								
 				if ($submit_mail) {
 										
 					if ($this->submit_confirmation ($email, $confkey, $lang_locale)) {
-						echo $this->get_custom_text('ajax_subscription', $lang_locale);
+						return 1; //Confirmation sent
 					} else {
-						echo $this->get_custom_text('ajax_subscription_error', $lang_locale);
+						return 2; //Submit confirmation error
 					}
 				} else {
 					if (count($subscription_found)==0) {
-						echo $this->get_custom_text('ajax_subscription_direct', $lang_locale);
+						return 3; //Subscription OK to second mailing list 
 					} else {
-						echo $this->get_custom_text('ajax_subscription_oops', $lang_locale);
+						return 4; //Error, cant subscribe
 					}
 				}
 				
-				echo '</p></div>';
+			} else {
+				return 4; //Error, cant subscribe				
 			}
 			
-			return $results;
 		}
 		
 		function submit_confirmation ($email, $confkey, $lang_locale) {
@@ -421,7 +453,7 @@ if (!class_exists("KnewsPlugin")) {
 
 			$mailHtml = $this->get_custom_text('email_subscription_body', $lang_locale);
 			
-			$url_confirm = KNEWS_URL . '/direct/knews_confirmuser.php?k=' . $confkey . '&e=' . $email;
+			$url_confirm = KNEWS_LOCALIZED_URL . '/direct/knews_confirmuser.php?k=' . $confkey . '&e=' . $email;
 			$mailHtml = str_replace('#url_confirm#', $url_confirm, $mailHtml);
 
 			$mailText = str_replace('</p>', '</p>\r\n\r\n', $mailHtml);
@@ -665,7 +697,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function getAddUserUrl() {
-			return KNEWS_URL . '/direct/knews_adduser.php';
+			return KNEWS_LOCALIZED_URL . '/direct/knews_adduser.php';
 		}
 		
 		function getLangHidden() {
@@ -1070,7 +1102,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.1.4');
+		define('KNEWS_VERSION', '1.1.5');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;

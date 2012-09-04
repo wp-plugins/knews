@@ -22,6 +22,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 ?>
 <script type="text/javascript">
 	url_plugin = '<?php echo KNEWS_URL; ?>';
+	news_lang='<?php echo $results_news[0]->lang; ?>';
 	droppable_code='<?php echo $results_news[0]->html_container; ?>';
 	id_news='<?php echo $Knews_plugin->get_safe('idnews');?>';
 	<?php
@@ -30,6 +31,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	echo 'one_post_id=' . intval($one_post[0]->ID) . ';';
 	?>
 	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
+	reload_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $Knews_plugin->get_safe('idnews');?>';
 	
 	must_apply_undo = "<?php _e('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews'); ?>";
 	edit_image= "<?php echo __('Edit image','knews'); ?>";
@@ -128,7 +130,9 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 				</div>
 				<div class="editor_iframe">
 					<div id="botonera">
-						<div class="zoom_tool">
+						<div class="right_icons">
+							<a href="#" title="hidden CSS preview" class="previewCSS" onclick="b_preview('css'); return false;">-</a>
+							<a href="#" title="hidden images preview" class="previewIMG" onclick="b_preview('img'); return false;">-</a>
 							<select name="zoom" id="zoom" autocomplete="off"><option value="0.5">50%</option><option value="0.75">75%</option><option value="1" selected="selected">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="4">400%</option></select>
 						</div>
 						<div class="standard_buttons desactivada">
@@ -148,7 +152,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 						<div class="standard_buttons desactivada">
 							<a href="#" class="sup" title="superscript" onclick="b_simple('Superscript'); return false;">sp</a>
 							<a href="#" class="sub" title="subscript" onclick="b_simple('Subscript'); return false;">sb</a>
-							<a href="#" class="color" title="redo" onclick="b_color(); return false;">C</a>
+							<a href="#" class="color" title="change color" onclick="b_color(); return false;">C</a>
 						</div>
 						<div class="do_undo_buttons">
 							<a href="#" class="undo" title="undo" onclick="b_simple('undo'); return false;">U</a>
@@ -157,7 +161,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 
 						<span class="clear"></span>
 					</div>
-					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo KNEWS_URL . '/direct/edit_news.php?idnews=' . $id_edit . $lang_attr; ?>"></iframe></div>
+					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo KNEWS_URL . '/direct/edit_news.php?idnews=' . $id_edit . '&r=' . uniqid() . $lang_attr; ?>"></iframe></div>
 					<div id="tagsnav"></div>
 				</div>
 				<div class="drag_preview"></div>

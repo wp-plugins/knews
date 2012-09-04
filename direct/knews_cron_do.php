@@ -95,7 +95,7 @@ if ($Knews_plugin) {
 				$theSubject = $Knews_plugin->get_custom_text('email_importation_subject', $localized_lang);
 				$theHtml = '<head><title>' . $theSubject . '</title></head><body>'.$Knews_plugin->get_custom_text('email_importation_body', $localized_lang).'</body>';
 
-				$users[$users_index]->confirm = KNEWS_URL . '/direct/knews_confirmuser.php?k=' . $users[$users_index]->confkey . '&e=' . $users[$users_index]->email;
+				$users[$users_index]->confirm = KNEWS_LOCALIZED_URL . '/direct/knews_confirmuser.php?k=' . $users[$users_index]->confkey . '&e=' . $users[$users_index]->email;
 				//$theHtml = str_replace('#url_confirm#', $url_confirm, $theHtml);
 
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
@@ -108,8 +108,8 @@ if ($Knews_plugin) {
 
 
 				$users[$users_index]->tokens = $aux_array;
-				$users[$users_index]->unsubscribe = KNEWS_URL . '/direct/knews_unsubscribe.php?e=' . $users[$users_index]->email . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter;
-				$users[$users_index]->cant_read = KNEWS_URL . '/direct/knews_read_email.php?id=' . $id_newsletter . '&e=' . $users[$users_index]->email;
+				$users[$users_index]->unsubscribe = KNEWS_LOCALIZED_URL . '/direct/knews_unsubscribe.php?e=' . $users[$users_index]->email . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter;
+				$users[$users_index]->cant_read = KNEWS_LOCALIZED_URL . '/direct/knews_read_email.php?id=' . $id_newsletter . '&e=' . $users[$users_index]->email;
 				
 				//$result=$Knews_plugin->sendMail( array( array('email' => $user->email, 'unsubscribe'=>get_bloginfo('url') ) ), $theSubject, $theHtml );
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );

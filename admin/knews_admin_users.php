@@ -287,7 +287,7 @@
 							$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
 							$lists = $wpdb->get_results( $query );
 							
-							echo '<tr class="' . $alt . '"><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
+							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
 							'<td><strong><a href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . $user->email . '</a></strong>';
 							
 							echo '<div class="row-actions"><span><a title="' . __('Edit this user', 'knews') . '" href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . __('Edit', 'knews') . '</a> | </span>';

@@ -39,7 +39,7 @@ if ($Knews_plugin) {
 		$jsondata['permalink'] = get_permalink($ajaxid);
  	    $jsondata['title'] = get_the_title();
  	    $jsondata['excerpt'] = $text;
- 	    $jsondata['content'] = get_the_content();
+ 	    $jsondata['content'] = apply_filters( 'the_content', get_the_content() );
 
  		echo json_encode($jsondata);
 		
@@ -244,7 +244,12 @@ function select_post(n, lang) {
 		foreach($myposts as $post) {
 			setup_postdata($post);
 			echo '<p><a href="#" onclick="select_post(' . $post->ID . ',\'' . $lang . '\')"><strong>';
-			the_title();
+			$t=get_the_title();
+			if ($t=='') {
+				echo '{no title}';
+			} else {
+				echo $t;
+			}
 			echo '</strong></a><br>';
 			echo get_the_excerpt();
 			echo '</p>';

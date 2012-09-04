@@ -157,3 +157,12 @@ img.editable:hover {
 body {
 	margin-bottom:100px;
 }
+
+/* preview without css*/
+p {
+	margin:0;
+	padding:0;
+}
+img {
+	display:inline-block;
+}

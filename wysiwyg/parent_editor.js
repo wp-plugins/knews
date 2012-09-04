@@ -625,7 +625,7 @@ function tb_dialog_click (what, where) {
 		document.location=submit_news;
 	}
 	if (where == 'saveok' && !what) {
-		window.location.reload();
+		window.location=reload_news + '&r=' + Math.floor(Math.random()*100000);
 	}
 	
 	if (where == 'deleteModule' && what) {
@@ -1108,7 +1108,7 @@ function insert_post(obj, n) {
 	}
 	referer_module=obj;
 	post_number_module=n;
-	tb_show('', url_plugin + '/direct/select_post.php?TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+	tb_show('', url_plugin + '/direct/select_post.php?lang=' + news_lang + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 }
 
 function free_text(obj, n) {
@@ -1147,6 +1147,8 @@ function save_news () {
 	if (!save_news_sem) {
 		save_news_sem=true;
 
+		b_preview('save');
+
 		document.getElementById('knews_editor').contentWindow.normalize_html();
 
 		jQuery('span.img_handler', io).remove();
@@ -1156,7 +1158,15 @@ function save_news () {
 		jQuery('span.content_editable', io)
 			.removeAttr('contenteditable');
 
+		jQuery('.droppable', io).children().each( function() {
+			str_mod = jQuery(this).html();
+			if (str_mod.indexOf("<!--[start module]-->") == -1 && str_mod != '') {
+				jQuery(this).html("<!--[start module]-->" + str_mod + "<!--[end module]-->");
+			}
+		});
+
 		savecode=jQuery('div.wysiwyg_editor', io).html();
+		savecode=savecode.replace(/</g,"#@!");
 
 		jQuery.ajax({
 			data: { code: savecode,
@@ -1233,6 +1243,10 @@ function CallBackColourEditor(hex) {
 	not_saved();
 	parent.tb_remove();
 	document.getElementById('knews_editor').contentWindow.b_color(hex);	
+}
+function b_preview(what) {
+	not_saved();
+	document.getElementById('knews_editor').contentWindow.b_preview(what);
 }
 
 function clone_safe(origen, destino) {

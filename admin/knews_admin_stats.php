@@ -32,7 +32,7 @@ function drawPie($values, $captions, $filename, $palette="softtones.txt", $backg
 	$Test->Render(KNEWS_DIR . "/tmp/" . $filename);
 }
 
-function drawLine($values, $captions, $filename, $palette="softtones.txt", $legend=true) {
+function knews_drawLine($values, $captions, $filename, $palette="softtones.txt", $legend=true) {
 
 	// Dataset definition      
 	$DataSet = new pData;
@@ -337,13 +337,13 @@ if ($fp) {
 
 		}
 		if ($Knews_plugin->get_custom_text('text_direction', get_bloginfo('language')) == 'ltr') {
-			drawLine ( array($serie1, $serie2, $date_caption), array (__('Users','knews'), __('Sign ups','knews'), __('Unsubscriptions','knews'), ''), 'chart2.png');
-			drawLine ( array($serie1, $date_caption), array (__('Sign ups','knews'), '', ''), 'chart3.png', 'softtones.txt', false);
-			drawLine ( array($serie2, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart4.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($serie1, $serie2, $date_caption), array (__('Users','knews'), __('Sign ups','knews'), __('Unsubscriptions','knews'), ''), 'chart2.png');
+			knews_drawLine ( array($serie1, $date_caption), array (__('Sign ups','knews'), '', ''), 'chart3.png', 'softtones.txt', false);
+			knews_drawLine ( array($serie2, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart4.png', 'softtones_2.txt', false);
 		} else {
-			drawLine ( array($serie1, $serie2, $date_caption), array ('Users', 'Sign ups', 'Unsubscriptions', ''), 'chart2.png');
-			drawLine ( array($serie1, $date_caption), array ('Sign ups', '', ''), 'chart3.png', 'softtones.txt', false);
-			drawLine ( array($serie2, $date_caption), array ('Unsubscriptions', '', ''), 'chart4.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($serie1, $serie2, $date_caption), array ('Users', 'Sign ups', 'Unsubscriptions', ''), 'chart2.png');
+			knews_drawLine ( array($serie1, $date_caption), array ('Sign ups', '', ''), 'chart3.png', 'softtones.txt', false);
+			knews_drawLine ( array($serie2, $date_caption), array ('Unsubscriptions', '', ''), 'chart4.png', 'softtones_2.txt', false);
 		}
  ?>
 <script type="text/javascript">
@@ -415,19 +415,19 @@ if ($fp) {
 		}
 
 		if ($Knews_plugin->get_custom_text('text_direction', get_bloginfo('language')) == 'ltr') {
-			drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array (__('Sendings','knews'), __('Sendings OK','knews'), __('Sendings Error','knews'), __('Cant read','knews'), __('Unsubscriptions','knews'), __('Total clicks','knews'), ''), 'chart5.png');
-			drawLine ( array($e_serie1, $date_caption), array (__('Sendings OK','knews'), '', ''), 'chart6.png', 'softtones.txt', false);
-			drawLine ( array($e_serie2, $date_caption), array (__('Sendings Error','knews'), '', ''), 'chart7.png', 'softtones_2.txt', false);
-			drawLine ( array($e_serie3, $date_caption), array (__('Cant read','knews'), '', ''), 'chart8.png', 'softtones_3.txt', false);
-			drawLine ( array($e_serie4, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart9.png', 'softtones_4.txt', false);
-			drawLine ( array($e_serie5, $date_caption), array (__('Total clicks','knews'), '', ''), 'chart10.png', 'softtones_5.txt', false);
+			knews_drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array (__('Sendings','knews'), __('Sendings OK','knews'), __('Sendings Error','knews'), __('Cant read','knews'), __('Unsubscriptions','knews'), __('Total clicks','knews'), ''), 'chart5.png');
+			knews_drawLine ( array($e_serie1, $date_caption), array (__('Sendings OK','knews'), '', ''), 'chart6.png', 'softtones.txt', false);
+			knews_drawLine ( array($e_serie2, $date_caption), array (__('Sendings Error','knews'), '', ''), 'chart7.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($e_serie3, $date_caption), array (__('Cant read','knews'), '', ''), 'chart8.png', 'softtones_3.txt', false);
+			knews_drawLine ( array($e_serie4, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart9.png', 'softtones_4.txt', false);
+			knews_drawLine ( array($e_serie5, $date_caption), array (__('Total clicks','knews'), '', ''), 'chart10.png', 'softtones_5.txt', false);
 		} else {
-			drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array ('Sendings', 'Sendings OK', 'Sendings Error', 'Cant read', 'Unsubscriptions', 'Total clicks', ''), 'chart5.png');
-			drawLine ( array($e_serie1, $date_caption), array ('Sendings OK', '', ''), 'chart6.png', 'softtones.txt', false);
-			drawLine ( array($e_serie2, $date_caption), array ('Sendings Error', '', ''), 'chart7.png', 'softtones_2.txt', false);
-			drawLine ( array($e_serie3, $date_caption), array ('Cant read', '', ''), 'chart8.png', 'softtones_3.txt', false);
-			drawLine ( array($e_serie4, $date_caption), array ('Unsubscriptions', '', ''), 'chart9.png', 'softtones_4.txt', false);
-			drawLine ( array($e_serie5, $date_caption), array ('Total clicks', '', ''), 'chart10.png', 'softtones_5.txt', false);			
+			knews_drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array ('Sendings', 'Sendings OK', 'Sendings Error', 'Cant read', 'Unsubscriptions', 'Total clicks', ''), 'chart5.png');
+			knews_drawLine ( array($e_serie1, $date_caption), array ('Sendings OK', '', ''), 'chart6.png', 'softtones.txt', false);
+			knews_drawLine ( array($e_serie2, $date_caption), array ('Sendings Error', '', ''), 'chart7.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($e_serie3, $date_caption), array ('Cant read', '', ''), 'chart8.png', 'softtones_3.txt', false);
+			knews_drawLine ( array($e_serie4, $date_caption), array ('Unsubscriptions', '', ''), 'chart9.png', 'softtones_4.txt', false);
+			knews_drawLine ( array($e_serie5, $date_caption), array ('Total clicks', '', ''), 'chart10.png', 'softtones_5.txt', false);			
 		}
 	?>
 		<p>&nbsp;</p>
