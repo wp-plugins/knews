@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,16 +39,17 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* Arabic - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* Finnish - fi (thanks to: Eccola http://eccola.fi )
+* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * English - en_US (Knews Team)
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
 * Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com )
 * Spanish - es_ES (Knews Team)
 * Catalan - ca (Knews Team)
+* Arabic - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Finnish - fi (thanks to: Eccola http://eccola.fi )
+* Croatian - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 
 = Future release =
 
@@ -147,6 +148,27 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 8. The Casablanca Template and a sample customisation (Christmas).
 
 == Changelog ==
+
+
+= 1.1.5 =
+
+
+* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* WOW: CSS and images on/off preview in the WYSIWYG editor.
+* Post selection for insertion in the newsletter editor enharcements:
+* - in the right language by default.
+* - with the_content filters from theme/plugins in %the_content% replacement
+* - posts without title can be selected. Thanks to Hasan Yousef
+* Add subscriptor function added: $Knews_plugin->add_user(email, id_list_news, lang, lang_locale) e.g. $Knews_plugin->add_user('mail@domain.com', 1, 'en', 'en_US'). Thanks to @drskullster.
+* Cross-domain bug solved in ajax subscription when WPML differents domains per language option activated. Thanks to Matthieu Huguet
+* Import bug solved when submit confirmation is activated. Thanks to @berardini.
+* Cache bug in the WYSIWYG editor after saving for some users solved by adding random param. Thanks to Miran Peterman
+
+* Stats bug solved (function name incompatibility with other themes/plugins). Thanks to @ashishsehgal.
+* The extrange forbidden error while saving the newsletter solved. Thanks to Hasan Yousef
+
+* A casablanca template background
+ image bug solved.
 
 = 1.1.4 =
 
@@ -252,43 +274,28 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.1.5 =
+
+
+* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* WOW: CSS and images on/off preview in the WYSIWYG editor.
+* Post selection for insertion in the newsletter editor enharcements:
+* - in the right language by default.
+* - with the_content filters from theme/plugins in %the_content% replacement
+* - posts without title can be selected. Thanks to Hasan Yousef
+* Add subscriptor function added: $Knews_plugin->add_user(email, id_list_news, lang, lang_locale) e.g. $Knews_plugin->add_user('mail@domain.com', 1, 'en', 'en_US'). Thanks to @drskullster.
+* WPML differents domains per language option cross-domain bug in ajax subscription solved. Thanks to Matthieu Huguet
+* Import bug solved when submit confirmation is activated. Thanks to @berardini.
+* Cache bug in the WYSIWYG editor for some users solved by adding random param. Thanks to Miran Peterman
+
+* Stats bug solved (function name incompatibility with other themes/plugins). Thanks to @ashishsehgal.
+* The extrange forbidden error while saving the newsletter solved. Thanks to Hasan Yousef
+
+* A casablanca template background
+ image bug solved.
+
 = 1.1.4 =
 
 * Fixed an Stupid bug in the widget that breaks the sidebar... we apologize this!!!
 
-= 1.1.3 =
 
-* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* Custom templates folder. Upload your custom templates to /wp-content/uploads/knewstemplates and plugin uploads don't erase it.
-* FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
-* Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
-* Fixed exact size upload error in the WYSIWYG editor (when no resize is needed). Thanks to: Hans-Heinz Bieling
-* Fixed the selection post issue in the WYSIWYG Knews Editor (some qTranslate configurations can't switch between languages). Thanks to: Acorderob
-* Added mailing list ID as optional param in the knews shortcode. Thanks to: Luis Briso de Montiano Aldecoa
-* Fixed javascript bug when 2 or more knews subscription form cohexists in one page (sidebar + shortcode or more than one shortcode). Thanks to: Luis Briso
-* Fixed the drag and drop modules issue in older created newsletters (from knews versions 1.0.0 to 1.0.5). Thanks to: Xavier Goula
-* Easy color change and delete of links in the newsletter editor. Thanks to Hans-Heinz Bieling
-* Fixed the position of the false comments textarea in the subscription form (to avoid spam bots). Thanks to: Hasan Yousef
-* DOING_AJAX constant added in ajax pages for WP_DEBUG activated configs. (See http://wordpress.stackexchange.com/questions/13509/how-to-override-wp-debug-for-ajax-responses)
-
-= 1.1.2 =
-
-* Fixed automated submit bug (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to webken.
-* Added import option that allow add mailing lists to old subscriptors trough new CSV. Thanks to: Luis Briso de Montiano Aldecoa.
-* Fixed minor translation bug in Arabic language. Thanks to: Hasan Yousef.
-* Updated dashboard advices system.
-* Fixed a path bug link to the JavaScript CRON Emulation file.
-* Fixed the selection post issue in the WYSIWYG Knews Editor (some WPML configurations can't switch between languages). thanks to: Hasan Yousef.
-* Fixed an undo image URL change issue in Editor.
-* Fixed the too small image message bug in Editor: Before, show an incorrect permissions error message.
-* Link to videotutorial in the editor added.
-
-= 1.1.1 =
-
-* VERY IMPORTANT: A SECURITY UPDATE *
-
-Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fontpicker/index.php
-(Technical info here http://www.securelist.com/en/advisories/49825)
-
-* Anti-spam bots hidden inputs was added to registration widget / form (thanks to Hans-Heinz Bieling)
