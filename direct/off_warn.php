@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $knewsOptions, $Knews_plugin;
 
 if ($Knews_plugin) {
 

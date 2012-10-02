@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin;
 
 if ($Knews_plugin) {
 
@@ -31,7 +21,7 @@ if ($Knews_plugin) {
 				}
 
 				echo $file;
-				exit;
+				die();
 			}
 		}
 	}
@@ -40,4 +30,6 @@ header('HTTP/1.0 404 Not Found');
 echo '<html><head><title>404 Not Found</title></head>';
 echo "<body><h1>404 Not Found</h1>";
 echo "The page that you have requested could not be found.</body>";
+
+die();
 ?>

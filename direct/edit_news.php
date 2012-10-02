@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
@@ -30,8 +20,8 @@ if ($Knews_plugin) {
 	$head_code=$results_news[0]->html_head;
 	echo substr($head_code, 0, strlen($head_code)-7);
 	?>	
-	<script type="text/javascript" src="../wysiwyg/editor.js?ver=<?php echo KNEWS_VERSION; ?>"></script>
-	<link href="../wysiwyg/editor.css?ver=<?php echo KNEWS_VERSION; ?>" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/wysiwyg/editor.js?ver=<?php echo KNEWS_VERSION; ?>"></script>
+	<link href="<?php echo KNEWS_URL; ?>/wysiwyg/editor.css?ver=<?php echo KNEWS_VERSION; ?>" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<noscript>
@@ -46,4 +36,5 @@ if ($Knews_plugin) {
 <?php
 	}
 }
+die();
 ?>

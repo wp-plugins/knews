@@ -1220,7 +1220,7 @@ msgstr "Subscribe me"
 msgid "Widget e-mail label form"
 msgstr "Widget e-mail label form"
 
-msgid "widget_label"
+msgid "widget_label_email"
 msgstr "Email:"
 
 msgid "Widget submit button"
@@ -1522,8 +1522,8 @@ msgstr "Activate this user"
 msgid "Activate"
 msgstr "Activate"
 
-msgid "Delete definitely this user"
-msgstr "Delete definitely this user"
+msgid "Delete definitively this user"
+msgstr "Delete definitively this user"
 
 msgid "Block this user"
 msgstr "Block this user"
@@ -1564,8 +1564,8 @@ msgstr "Rename this list"
 msgid "See this list users"
 msgstr "See this list users"
 
-msgid "Delete definitely this newsletter"
-msgstr "Delete definitely this newsletter"
+msgid "Delete definitively this newsletter"
+msgstr "Delete definitively this newsletter"
 
 msgid "Edit this newsletter"
 msgstr "Edit this newsletter"
@@ -1819,9 +1819,6 @@ msgstr "No active users in the selected list, nothing programmed to send."
 msgid "Configure CRON tutorial"
 msgstr "Configure CRON tutorial"
 
-msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-msgstr "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "You must add this line in your webserver CRONTAB:"
 
@@ -2049,4 +2046,190 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 
 msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
+
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+
+msgid "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "Multisite detected. Only one instance of %s must be called for all websites."
+
+msgid "Cant create the automated submit"
+msgstr "Can't create the automated submit"
+
+msgid "Widget \"%s\" label form"
+msgstr "Widget \"%s\" label form"
+
+msgid "Auto-create"
+msgstr "Auto-create"
+
+msgid "Knews Post Options"
+msgstr "Knews Post Options"
+
+msgid "Add a subscription form into the sidebar"
+msgstr "Add a subscription form into the sidebar"
+
+msgid "Dont ask"
+msgstr "Don't ask"
+
+msgid "Not required"
+msgstr "Not required"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Automated process deleted"
+msgstr "Automated process deleted"
+
+msgid "Automated process activated"
+msgstr "Automated process activated"
+
+msgid "Automated process deactivated"
+msgstr "Automated process deactivated"
+
+msgid "Automated submit activated"
+msgstr "Automated submit activated"
+
+msgid "Manual submit activated"
+msgstr "Manual submit activated"
+
+msgid "Automated submit created"
+msgstr "Automated submit created"
+
+msgid "Error: the name cant be empty"
+msgstr "Error: the name can't be empty"
+
+msgid "Error: there is already an automated submit with this name"
+msgstr "Error: there is already an automated submit with this name"
+
+msgid "Auto-create Newsletters"
+msgstr "Auto-create Newsletters"
+
+msgid "Automated process name"
+msgstr "Automated process name"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Activated"
+msgstr "Activated"
+
+msgid "Automatic submit"
+msgstr "Automatic submit"
+
+msgid "Method"
+msgstr "Method"
+
+msgid "Last run"
+msgstr "Last run"
+
+msgid "Activate/deactivate the automated task"
+msgstr "Activate/deactivate the automated task"
+
+msgid "Deactivate"
+msgstr "Deactivate"
+
+msgid "Automatic/Manual submits of auto-created newsletters"
+msgstr "Automatic/Manual submits of auto-created newsletters"
+
+msgid "Delete definitively this automated task"
+msgstr "Delete definitively this automated task"
+
+msgid "Off"
+msgstr "Off"
+
+msgid "On"
+msgstr "On"
+
+msgid "Automated submit"
+msgstr "Automated submit"
+
+msgid "Manual submit"
+msgstr "Manual submit"
+
+msgid "Automated submits"
+msgstr "Automated submits"
+
+msgid "At the moment there is no automated task, you can create new ones"
+msgstr "At the moment there is no automated task, you can create new ones"
+
+msgid "New Auto-creation Process"
+msgstr "New Auto-creation Process"
+
+msgid "Auto-create Newsletters Tutorial"
+msgstr "Auto-create Newsletters Tutorial"
+
+msgid "Get posts from language:"
+msgstr "Get posts from language:"
+
+msgid "Use as template:"
+msgstr "Use as template:"
+
+msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+
+msgid "Create a newsletter every %s posts"
+msgstr "Create a newsletter every %s posts"
+
+msgid "Error: there are no mailing lists"
+msgstr "Error: there are no mailing lists"
+
+msgid "Advanced options"
+msgstr "Advanced options"
+
+msgid "Automated options"
+msgstr "Automated options"
+
+msgid "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "Include the posts in the automated newsletters (default value for the new created posts)"
+
+msgid "Manual Newsletters"
+msgstr "Manual Newsletters"
+
+msgid "Auto-created Newsletters"
+msgstr "Auto-created Newsletters"
+
+msgid "There is no auto-created newsletter."
+msgstr "There is no auto-created newsletter."
+
+msgid "tutorial_automated_url"
+msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
+
+msgid "widget_label_name"
+msgstr "Name:"
+
+msgid "widget_label_surname"
+msgstr "surname:"
+
+msgid "General options"
+msgstr "General options"
+
+msgid "Include this post in the automated newsletters?"
+msgstr "Include this post in the automated newsletters?"
+
+msgid "This post has been included into:"
+msgstr "This post has been included into:"
+
+msgid "This post still not included into any automated newsletter."
+msgstr "This post still not included into any automated newsletter."
+
+msgid "Active process:"
+msgstr "Active process:"
+
+msgid "Newsletter creation options"
+msgstr "Newsletter creation options"
+
+msgid "Create a newsletter every x amount of time"
+msgstr "Create a newsletter every x amount of time"
+
+msgid "Newsletter submit options"
+msgstr "Newsletter submit options"
+
+msgid "Target for newsletter:"
+msgstr "Target for newsletter:"
+
+msgid "Submit method:"
+msgstr "Submit method:"
+
+msgid "Messages reset to defaults."
+msgstr "Messages reset to defaults."
 

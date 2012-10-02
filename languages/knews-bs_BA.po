@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Knews\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: hasan yusef <hassanfazary@gmail.com>\n"
+"Last-Translator: Carles <mail@carlesrever.com>\n"
 "Language-Team: Hasan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -222,7 +222,7 @@ msgstr "Kreiraj novi newsletter"
 #. Text in echo
 #: admin/knews_admin_users.php:457
 msgid "Create a user"
-msgstr "Kreairaj korisnika"
+msgstr "Kreiraj korisnika"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:153
@@ -1222,7 +1222,7 @@ msgstr "Prijavite se"
 msgid "Widget e-mail label form"
 msgstr "Widget e-mail label form"
 
-msgid "widget_label"
+msgid "widget_label_email"
 msgstr "Email:"
 
 msgid "Widget submit button"
@@ -1524,7 +1524,7 @@ msgstr "Aktiviranje ovog korisnika"
 msgid "Activate"
 msgstr "Aktiviraj"
 
-msgid "Delete definitely this user"
+msgid "Delete definitively this user"
 msgstr "Izbriši definitivno ovog korisnika"
 
 msgid "Block this user"
@@ -1566,7 +1566,7 @@ msgstr "Preimenuj ovu listu"
 msgid "See this list users"
 msgstr "Pogledajte ovaj popis korisnika"
 
-msgid "Delete definitely this newsletter"
+msgid "Delete definitively this newsletter"
 msgstr "Brisanje definitivno newslettera"
 
 msgid "Edit this newsletter"
@@ -1821,9 +1821,6 @@ msgstr "No active users in the selected list, nothing programmed to send."
 msgid "Configure CRON tutorial"
 msgstr "Configure CRON tutorial"
 
-msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-msgstr "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "You must add this line in your webserver CRONTAB:"
 
@@ -1936,7 +1933,7 @@ msgid "Error: make sure the directory %s exists and has write permissions (chmod
 msgstr "Error: make sure the directory %s exists and has write permissions (chmod 700)."
 
 msgid "Error: there is no image selected"
-msgstr "Error: there is no image selected"
+msgstr "Pogreška: nema slike odabrana"
 
 msgid "Knews updated the database successfully. Welcome to %s version."
 msgstr "Knews updated the database successfully. Welcome to %s version."
@@ -1954,10 +1951,10 @@ msgid "SQL Error while updating user"
 msgstr "SQL Error while updating user"
 
 msgid "Warning: the email has no subject! %s Edit it again before submit!"
-msgstr "Warning: the email has no subject! %s Edit it again before submit!"
+msgstr "Upozorenje: e nema naslov! %s Uredi ga opet prije podnijeti!"
 
 msgid "Warning: %sConfigure sender name before submit!"
-msgstr "Warning: %sConfigure sender name before submit!"
+msgstr "Warning: %s Configure sender name before submit!"
 
 msgid "text_direction"
 msgstr "ltr"
@@ -2032,13 +2029,13 @@ msgid "Image align:"
 msgstr "Image align:"
 
 msgid "Apply changes"
-msgstr "Apply changes"
+msgstr "Primijeni promjene"
 
 msgid "Undo"
 msgstr "Undo"
 
 msgid "Fast selection:"
-msgstr "Fast selection:"
+msgstr "Brzi odabir:"
 
 msgid "You are downgraded the version of Knews, you can lose data, please update quickly"
 msgstr "You are downgraded the version of Knews, you can lose data, please update quickly"
@@ -2051,4 +2048,190 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 
 msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
+
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "Morate koristiti glavni blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+
+msgid "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "Multisite otkriven. Samo jedan primjer od %s mora biti korišten za sve web stranice"
+
+msgid "Cant create the automated submit"
+msgstr "Automatsko slanje ne može biti kreirano"
+
+msgid "Widget \"%s\" label form"
+msgstr "Widget \"%s\" label form"
+
+msgid "Auto-create"
+msgstr "Autokreiranje"
+
+msgid "Knews Post Options"
+msgstr "Knwews post opcije"
+
+msgid "Add a subscription form into the sidebar"
+msgstr "Dodaj subscription form u sidebar"
+
+msgid "Dont ask"
+msgstr "Ne traži"
+
+msgid "Not required"
+msgstr "Nije obavezno"
+
+msgid "Required"
+msgstr "obavezno"
+
+msgid "Automated process deleted"
+msgstr "Automatski proces izbrisan"
+
+msgid "Automated process activated"
+msgstr "automatski proces aktiviran"
+
+msgid "Automated process deactivated"
+msgstr "Automatski proces deaktiviran"
+
+msgid "Automated submit activated"
+msgstr "Automatsko slanje aktivirano"
+
+msgid "Manual submit activated"
+msgstr "Manuelno slanje aktivirano"
+
+msgid "Automated submit created"
+msgstr "Automatsko slanje kreirano"
+
+msgid "Error: the name cant be empty"
+msgstr "Greška: ime ne može biti prazno"
+
+msgid "Error: there is already an automated submit with this name"
+msgstr "Greška: već postoji automatsko slanje sa ovim imenom"
+
+msgid "Auto-create Newsletters"
+msgstr "Auto kreirani Newsletters"
+
+msgid "Automated process name"
+msgstr "Ime automatskog procesa"
+
+msgid "Target"
+msgstr "Cilj"
+
+msgid "Activated"
+msgstr "Aktiviran"
+
+msgid "Automatic submit"
+msgstr "Automatsko slanje"
+
+msgid "Method"
+msgstr "Metod"
+
+msgid "Last run"
+msgstr "Posljednja radnja"
+
+msgid "Activate/deactivate the automated task"
+msgstr "Aktiviraj/deaktiviraj automatsku radnju"
+
+msgid "Deactivate"
+msgstr "Deaktiviraj"
+
+msgid "Automatic/Manual submits of auto-created newsletters"
+msgstr "Automatsko/manuelno slanje auto-kreiranih newletter-a"
+
+msgid "Delete definitively this automated task"
+msgstr "Definitivno izbriši ovu automatsku radnju"
+
+msgid "Off"
+msgstr "isključeno"
+
+msgid "On"
+msgstr "uključeno"
+
+msgid "Automated submit"
+msgstr "Automatsko slanje"
+
+msgid "Manual submit"
+msgstr "manelno slanje"
+
+msgid "Automated submits"
+msgstr "automatska slanja"
+
+msgid "At the moment there is no automated task, you can create new ones"
+msgstr "Trenutno nema automatskih radnji, možete kreirati nove"
+
+msgid "New Auto-creation Process"
+msgstr "Novi auto-kreiran proces"
+
+msgid "Auto-create Newsletters Tutorial"
+msgstr "Auto-create Newsletters Tutorial"
+
+msgid "Get posts from language:"
+msgstr "Primaj postove na jeziku"
+
+msgid "Use as template:"
+msgstr "koristi kao template"
+
+msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr "prvo morate kreirati newletter sa umetnutim sadržajem (ostavi %the_content%, %the_title% etc.)"
+
+msgid "Create a newsletter every %s posts"
+msgstr "Kreiraj newsletter nakon svakih %s postova"
+
+msgid "Error: there are no mailing lists"
+msgstr "Greška: ne postoji mailing lista"
+
+msgid "Advanced options"
+msgstr "Napredne opcije"
+
+msgid "Automated options"
+msgstr "Automatske opcije"
+
+msgid "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "Uključite postove u automatski newsletter (defoltna vrijednost za novo kreirane postove)"
+
+msgid "Manual Newsletters"
+msgstr "Manuelni newsletter"
+
+msgid "Auto-created Newsletters"
+msgstr "Auto kreirani newsletter"
+
+msgid "There is no auto-created newsletter."
+msgstr "Ne postoji ni jedan auto kreiran newsletter"
+
+msgid "tutorial_automated_url"
+msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
+
+msgid "widget_label_name"
+msgstr "Ime:"
+
+msgid "widget_label_surname"
+msgstr "Prezime:"
+
+msgid "General options"
+msgstr "Opće opcije"
+
+msgid "Include this post in the automated newsletters?"
+msgstr "Uključi ovaj post u automatski newsletter?"
+
+msgid "This post has been included into:"
+msgstr "Ovaj post je uključen u:"
+
+msgid "This post still not included into any automated newsletter."
+msgstr "Ovaj post još uvijek nije uključen ni u jedan automatski nwesletter"
+
+msgid "Active process:"
+msgstr "Aktivni proces:"
+
+msgid "Newsletter creation options"
+msgstr "Opcije kreiranja newsletter-a"
+
+msgid "Create a newsletter every x amount of time"
+msgstr "Kreiraj newletter svaki određeni period vremena"
+
+msgid "Newsletter submit options"
+msgstr "Opcije slanja newlettera"
+
+msgid "Target for newsletter:"
+msgstr "Cilj za newsletter:"
+
+msgid "Submit method:"
+msgstr "Metod slanja:"
+
+msgid "Messages reset to defaults."
+msgstr "Poruke resetovane na default."
 

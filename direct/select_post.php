@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin, $knewsOptions;
 
 if ($Knews_plugin) {
 	$Knews_plugin->security_for_direct_pages();
@@ -53,11 +43,17 @@ if ($Knews_plugin) {
 		$orderbt = $Knews_plugin->get_safe('orderby');
 		$order = $Knews_plugin->get_safe('order', 'asc');
 		
-		$url_base =  KNEWS_URL . '/direct/select_post.php';
+		//$url_base =  KNEWS_URL . '/direct/select_post.php';
+		$url_base =  get_admin_url() . 'admin-ajax.php';
 
 		if (KNEWS_MULTILANGUAGE && $lang != '' && $knewsOptions['multilanguage_knews']=='wpml') {
 			global $sitepress;
-			$sitepress->switch_lang($lang);
+			$class_methods = get_class_methods($sitepress);
+			if (in_array('switch_lang', $class_methods)) {
+				$sitepress->switch_lang($lang);
+			} else {
+				echo "<p><strong>Please, upgrade WPML</strong></p>";
+			}
 		}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -184,7 +180,7 @@ function select_post(n, lang) {
 				if (!$first) echo ' | ';
 				$first=false;
 				if ($lang==$l['language_code']) echo '<strong>';
-				echo '<a href="' . $url_base . '?lang=' . $l['language_code'] . '&type=' . $type  . '">' . $l['native_name'] . '</a>';
+				echo '<a href="' . $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '">' . $l['native_name'] . '</a>';
 				if ($lang==$l['language_code']) echo '</strong>';
 			}
 			echo '</p>';
@@ -193,8 +189,8 @@ function select_post(n, lang) {
 		
 		//Posts / Pages
 		echo '<div class="pestanyes">';
-		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&type=post' . '">' . __('Posts','knews') . '</a>' . (($type=='post') ? '</strong>' : '');
-		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&type=page' . '">' . __('Pages','knews') . '</a>' . (($type=='page') ? '</strong>' : '') . '</div>';
+		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=post' . '">' . __('Posts','knews') . '</a>' . (($type=='post') ? '</strong>' : '');
+		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=page' . '">' . __('Pages','knews') . '</a>' . (($type=='page') ? '</strong>' : '') . '</div>';
 		
 		echo '<div class="filters">';
 		//Filters
@@ -205,6 +201,7 @@ function select_post(n, lang) {
 				echo '<form action="' . $url_base . '" method="get">';
 				echo '<input type="hidden" name="lang" value="' . $lang . '">';
 				echo '<input type="hidden" name="type" value="' . $type . '">';
+				echo '<input type="hidden" name="action" value="knewsSelPost">';
 				echo '<select name="cat" id="cat">';
 				echo '<option value="0">' . __('All categories','knews') . '</option>';
 				foreach ($cats as $c) {
@@ -221,6 +218,7 @@ function select_post(n, lang) {
 		echo '<form action="' . $url_base . '" method="get">';
 		echo '<input type="hidden" name="lang" value="' . $lang . '">';
 		echo '<input type="hidden" name="type" value="' . $type . '">';
+		echo '<input type="hidden" name="action" value="knewsSelPost">';
 		echo '<input type="text" name="s" value="" class="texte">';
 		echo '<input type="submit" value="' . __('Search','knews') . '" class="button">';
 		echo '</form>';
@@ -241,6 +239,7 @@ function select_post(n, lang) {
 		
 		//print_r($myposts);
 		
+		global $post;
 		foreach($myposts as $post) {
 			setup_postdata($post);
 			echo '<p><a href="#" onclick="select_post(' . $post->ID . ',\'' . $lang . '\')"><strong>';
@@ -261,4 +260,5 @@ function select_post(n, lang) {
 <?php 
 	}
 }
+die();
 ?>

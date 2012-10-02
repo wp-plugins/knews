@@ -138,7 +138,7 @@
 				
 				if ($fp) {
 					echo '<p>';
-					printf(__('To download the .CSV, click %s here','knews'), '<a href="' . KNEWS_URL . '/direct/download.php?file=' . $file_name . '">');
+					printf(__('To download the .CSV, click %s here','knews'), '<a href="' . get_admin_url() . 'admin-ajax.php?action=knewsSafeDownload&file=' . $file_name . '">');
 					echo '</a></p>';
 				} else {
 					echo '<p>' . __("Error: I can't write the .CSV file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';

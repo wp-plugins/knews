@@ -43,7 +43,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	move_handler= "<?php echo __('Move module','knews'); ?>";
 	delete_handler= "<?php echo __('Delete module','knews'); ?>";
 	unsaved_message= "<?php echo __('If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the \"Save\" button (blue coloured).','knews'); ?>";
-
+	url_admin = "<?php echo get_admin_url(); ?>";
 	error_resize = "<?php echo __('Error','knews') . ': ' . __('Check the directory permissions for','knews'); ?> '/wp-content/uploads'";
 	error_save = "<?php  echo __('Error saving','knews'); ?>";
 	ok_save = "<?php  echo __('Newsletter saved','knews'); ?>";
@@ -161,7 +161,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 
 						<span class="clear"></span>
 					</div>
-					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo KNEWS_URL . '/direct/edit_news.php?idnews=' . $id_edit . '&r=' . uniqid() . $lang_attr; ?>"></iframe></div>
+					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo get_admin_url() . 'admin-ajax.php?action=knewsEditNewsletter&idnews=' . $id_edit . '&r=' . uniqid() . $lang_attr; ?>"></iframe></div>
 					<div id="tagsnav"></div>
 				</div>
 				<div class="drag_preview"></div>

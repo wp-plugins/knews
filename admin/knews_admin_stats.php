@@ -275,7 +275,7 @@ if ($fp) {
 				</table>
 			</div>
 			<div class="pie_float">
-				<img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart1.png" />
+				<img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart1.png" />
 			</div>
 			<div class="clear"></div>
 		<?php
@@ -362,9 +362,9 @@ if ($fp) {
 			<a onclick="view_graph(1,3); return false;" class="link_1_3" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_2.gif" width="13" height="13" alt="2" /> <?php _e('Unsubscriptions','knews'); ?></a>
 		</div>
 		<div class="pregunta pregunta_1">
-			<div class="custom_lang_1_1 on"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart2.png" /></div>
-			<div class="custom_lang_1_2"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart3.png" /></div>
-			<div class="custom_lang_1_3"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart4.png" /></div>
+			<div class="custom_lang_1_1 on"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart2.png" /></div>
+			<div class="custom_lang_1_2"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart3.png" /></div>
+			<div class="custom_lang_1_3"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart4.png" /></div>
 		</div>
 <?php
 
@@ -441,12 +441,12 @@ if ($fp) {
 			<a onclick="view_graph(2,6); return false;" class="link_2_6" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_5.gif" width="13" height="13" alt="5" /> <?php _e('Link clicks','knews'); ?></a>
 		</div>
 		<div class="pregunta pregunta_2">
-			<div class="custom_lang_2_1 on"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart5.png" /></div>
-			<div class="custom_lang_2_2"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart6.png" /></div>
-			<div class="custom_lang_2_3"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart7.png" /></div>
-			<div class="custom_lang_2_4"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart8.png" /></div>
-			<div class="custom_lang_2_5"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart9.png" /></div>
-			<div class="custom_lang_2_6"><img src="<?php echo KNEWS_URL; ?>/direct/download.php?file=chart10.png" /></div>
+			<div class="custom_lang_2_1 on"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart5.png" /></div>
+			<div class="custom_lang_2_2"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart6.png" /></div>
+			<div class="custom_lang_2_3"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart7.png" /></div>
+			<div class="custom_lang_2_4"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart8.png" /></div>
+			<div class="custom_lang_2_5"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart9.png" /></div>
+			<div class="custom_lang_2_6"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart10.png" /></div>
 		</div>
 		<div style="background:#fff; padding:20px 0 20px 100px;">
 			<table border="0" cellpadding="0" cellspacing="0" width="650">

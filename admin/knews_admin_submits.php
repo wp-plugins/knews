@@ -93,11 +93,11 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 	}
 	
 	function see_log(id) {
-		tb_show('<?php  _e('See the complete submit log', 'knews'); ?>', '<?php echo KNEWS_URL; ?>/direct/download.php?file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php  _e('See the complete submit log', 'knews'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	function see_errors(id) {
-		tb_show('<?php   _e('See report fails by SMTP server'); ?>', '<?php echo KNEWS_URL; ?>/direct/see_fails.php?id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php   _e('See report fails by SMTP server'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSeeFails&amp;id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	</script>
@@ -181,7 +181,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 						if ($submit->users_ok != 0 && $submit->users_error != 0) echo ' / ';
 						if ($submit->users_error != 0 ) {
 							echo '<span style="color:#b30000">' . $submit->users_error . ' ERROR</span>';
-							//echo ' <a href="' . KNEWS_URL . '/direct/see_fails.php?id=' . $submit->id . '" target="_blank">[' . __('See fails','knews') . ']</a>';
+							//echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsSeeFails&id=' . $submit->id . '" target="_blank">[' . __('See fails','knews') . ']</a>';
 						}
 					}
 					echo '</td>';

@@ -20,5 +20,19 @@ if ($Knews_plugin) {
 	$theHtml = preg_replace('/(?:(?:\r\n|\r|\n)\s*){2}/s', "\n\n", $theHtml);
 	
 	$used_tokens = array();
+	
+	$all_tokens = $Knews_plugin->get_extra_fields();
+	
+	foreach ($all_tokens as $token) {
+		if ($token->token != '') {
+			
+			preg_match("#\{" . $token->token . "\[([^\]]*)\]\}#", $theHtml, $tokenfound);
+			
+			if( count($tokenfound) != 0) {
+				$used_tokens[] = array('token'=>$token->token, 'id'=>$token->id, 'defaultval'=>$tokenfound[1]);
+				$theHtml = str_replace($tokenfound[0], $token->token, $theHtml);
+			}
+		}
+	}
 }
 ?>

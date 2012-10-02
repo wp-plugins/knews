@@ -3,11 +3,12 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Eccola <eccola.www@gmail.com>\n"
+"Last-Translator: Carles <mail@carlesrever.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.3\n"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -1220,7 +1221,7 @@ msgstr "Tilaa uutiskirje"
 msgid "Widget e-mail label form"
 msgstr "E-mail"
 
-msgid "widget_label"
+msgid "widget_label_email"
 msgstr "E-mail:"
 
 msgid "Widget submit button"
@@ -1522,7 +1523,7 @@ msgstr "Aktivoi t&auml;m&auml; tilaaja"
 msgid "Activate"
 msgstr "Aktivoi"
 
-msgid "Delete definitely this user"
+msgid "Delete definitively this user"
 msgstr "Poista t&auml;m&auml; tilaaja lopullisesti"
 
 msgid "Block this user"
@@ -1564,7 +1565,7 @@ msgstr "Nime&auml; t&auml;m&auml; lista uudelleen"
 msgid "See this list users"
 msgstr "Katso t&auml;m&auml;n listan tilaajat"
 
-msgid "Delete definitely this newsletter"
+msgid "Delete definitively this newsletter"
 msgstr "Poista t&auml;m&auml; uutiskirje lopullisesti"
 
 msgid "Edit this newsletter"
@@ -1819,9 +1820,6 @@ msgstr "Valitulla listalla ei ole aktiivisia tilaajia, mit&auml;&auml;n ei posti
 msgid "Configure CRON tutorial"
 msgstr "CRON:in asetukset -ohjeet"
 
-msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-msgstr "Multisite havaittu. Vain yht&auml; knews_cron.php -tiedostoa k&auml;ytet&auml;&auml;n kaikilla alisaiteilla."
-
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "Lisää seuraava rivi palvelimesi crontab -tiedostoon:"
 
@@ -2049,4 +2047,190 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 
 msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
+
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "Aseta p&auml;&auml;saitin  www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+
+msgid "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "Multisite havaittu.  Aktivoi vain yksi %s kaikille saiteille Verkon asetuksista."
+
+msgid "Cant create the automated submit"
+msgstr "Ei voitu luoda automaattista postitusta"
+
+msgid "Widget %s label form"
+msgstr "Vimpaimen %s nimi"
+
+msgid "Auto-create"
+msgstr "Luo automaattisesti"
+
+msgid "Knews Post Options"
+msgstr "Knews postituksen asetukset"
+
+msgid "Add a subscription form into the sidebar"
+msgstr "Lis&auml;&auml; liittymislomake sivupalkkiin"
+
+msgid "Dont ask"
+msgstr "&Auml;l&auml; kysy"
+
+msgid "Not required"
+msgstr "Ei pakollinen"
+
+msgid "Required"
+msgstr "Pakollinen"
+
+msgid "Automated process deleted"
+msgstr "Automatisoitu prosessi poistettu"
+
+msgid "Automated process activated"
+msgstr "Automatisoitu prosessi aktivoitu"
+
+msgid "Automated process deactivated"
+msgstr "Automatisoitu prosessi deaktivoitu"
+
+msgid "Automated submit activated"
+msgstr "Automatisoitu postitus aktivoitu"
+
+msgid "Manual submit activated"
+msgstr "Manuaalinen postitus aktivoitu"
+
+msgid "Automated submit created"
+msgstr "Automatisoitu postitus luotu"
+
+msgid "Error: the name cant be empty"
+msgstr "Virhe: Nimi ei voi olla tyhj&auml;"
+
+msgid "Error: there is already an automated submit with this name"
+msgstr "Virhe: samanniminen automatisoitu postitus on jo olemassa"
+
+msgid "Auto-create Newsletters"
+msgstr "Luo Uutiskirjeitä automaattisesti"
+
+msgid "Automated process name"
+msgstr "Automatisoidun prosessin nimi"
+
+msgid "Target"
+msgstr "Kohde"
+
+msgid "Activated"
+msgstr "Aktivoitu"
+
+msgid "Automatic submit"
+msgstr "Automaattinen postitus"
+
+msgid "Method"
+msgstr "Metodi"
+
+msgid "Last run"
+msgstr "Viimeksi toiminnassa"
+
+msgid "Activate/deactivate the automated task"
+msgstr "Aktivoi/deaktivoi automatisoitu prosessi"
+
+msgid "Deactivate"
+msgstr "Deaktivoi"
+
+msgid "Automatic/Manual submits of auto-created newsletters"
+msgstr "Automaattisesti luotujen uutiskirjeiden Automaattiset/Manuaaliset postitukset"
+
+msgid "Delete definitively this automated task"
+msgstr "Poista t&auml;m&auml; automatisoitu prosessi lopullisesti"
+
+msgid "Off"
+msgstr "Pois"
+
+msgid "On"
+msgstr "P&auml;&auml;ll&auml;"
+
+msgid "Automated submit"
+msgstr "Automatisoitu postitus"
+
+msgid "Manual submit"
+msgstr "Manuaalinen postitus"
+
+msgid "Automated submits"
+msgstr "Automatisoidut postitukset"
+
+msgid "At the moment there is no automated task, you can create new ones"
+msgstr "T&auml;ll&auml; hetkell&auml; ei ole automatisoituja postituksia, voit luoda uusia"
+
+msgid "New Auto-creation Process"
+msgstr "Uusi automaattinen luontiprosessi"
+
+msgid "Auto-create Newsletters Tutorial"
+msgstr "Opas uutiskirjeiden automaattiseen luomiseen "
+
+msgid "Get posts from language:"
+msgstr "Hae artikkelit kielest&auml;:"
+
+msgid "Use as template:"
+msgstr "K&auml;yt&auml; pohjana:"
+
+msgid "You must create first a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr "SInun t&auml;ytyy ensin luoda uutiskirje jossa insertoitava info (j&auml;t&auml; %the_content%, %the_title% yms.)"
+
+msgid "Create a newsletter every %s posts"
+msgstr "Luo uutiskirje joka %s:lle artikkelille"
+
+msgid "Error: there are no mailing lists"
+msgstr "Virhe: Ei postituslistoja"
+
+msgid "Advanced options"
+msgstr "Edistyneet asetukset"
+
+msgid "Automated options"
+msgstr "Automatisoinnin asetukset"
+
+msgid "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "Sis&auml;llyt&auml; artikkelit automatisoituihin uutiskirjeisiin (uusien artikkelien oletus)"
+
+msgid "Manual Newsletters"
+msgstr "Manuaaliset uutiskirjeet"
+
+msgid "Auto-created Newsletters"
+msgstr "Automaattisesti luodut uutiskirjeet"
+
+msgid "There is no auto-created newsletter."
+msgstr "Ei automaattisesti luotuja uutiskirjeit&auml;"
+
+msgid "tutorial_automated_url"
+msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
+
+msgid "widget_label_name"
+msgstr "Name:"
+
+msgid "widget_label_sourname"
+msgstr "Surname:"
+
+msgid "General options"
+msgstr "Yleiset asetukset"
+
+msgid "Include this post in the automated newsletters?"
+msgstr "Liit&auml; t&auml;m&auml; artikkeli automatisoituihin uutiskirjeisiin?"
+
+msgid "This post has been included into:"
+msgstr "T&auml;m&auml; artikkeli on liitetty:"
+
+msgid "This post still not included into any automated newsletter."
+msgstr "T&auml;m&auml; artikkeli ei ole liitetty automatisoituihin uutiskirjeisiin."
+
+msgid "Active process:"
+msgstr "Aktiivinen prosessi:"
+
+msgid "Newsletter creation options"
+msgstr "Uutiskirjeen luomisen asetukset"
+
+msgid "Create a newsletter every x amount of time"
+msgstr "Luo uutiskirje s&auml;&auml;nn&ouml;llisin v&auml;liajoin"
+
+msgid "Newsletter submit options"
+msgstr "Uutiskirjeiden postituksen asetukset"
+
+msgid "Target for newsletter:"
+msgstr "Uutiskirjeen kohde:"
+
+msgid "Submit method:"
+msgstr "Postitustapa:"
+
+msgid "Messages reset to defaults."
+msgstr "Viestit resetoitu oletuksiin."
 

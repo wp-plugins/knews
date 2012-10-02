@@ -1220,7 +1220,7 @@ msgstr "Subscriure'm"
 msgid "Widget e-mail label form"
 msgstr "Etiqueta e-mail del formulari del widget"
 
-msgid "widget_label"
+msgid "widget_label_email"
 msgstr "E-mail:"
 
 msgid "Widget submit button"
@@ -1522,7 +1522,7 @@ msgstr "Activar aquest usuari"
 msgid "Activate"
 msgstr "Activar"
 
-msgid "Delete definitely this user"
+msgid "Delete definitively this user"
 msgstr "Eliminar definitivament aquest usuari"
 
 msgid "Block this user"
@@ -1564,7 +1564,7 @@ msgstr "Renombrar aquesta llista"
 msgid "See this list users"
 msgstr "Veure els usuaris d'aquesta llista"
 
-msgid "Delete definitely this newsletter"
+msgid "Delete definitively this newsletter"
 msgstr "Eliminar definitivament aquesta newsletter"
 
 msgid "Edit this newsletter"
@@ -1819,9 +1819,6 @@ msgstr "No hi ha usuaris actius a la llista seleccionada, no s'ha programat cap 
 msgid "Configure CRON tutorial"
 msgstr "Tutorial per a configurar CRON"
 
-msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-msgstr "Multisite detectat. Només una instancia de knews_cron.php ha de ser cridat per tots els sites web."
-
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "Has d'afegir aquesta línia al CRONTAB del teu servidor web:"
 
@@ -2049,4 +2046,190 @@ msgstr "http://www.knewsplugin.com/ca/configurar-els-enviaments-per-smtp/"
 
 msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/ca/configurar-cron-al-servidor/"
+
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "Has de cridar la URL del bloc principal www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron"
+
+msgid "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "Detectat multisite. Només una instancia de %s ha de ser cridada per a tots els webs."
+
+msgid "Cant create the automated submit"
+msgstr "No puc crear l'enviament automatitzat"
+
+msgid "Widget \"%s\" label form"
+msgstr "Etiqueta \"%s\" per al formulari del widget"
+
+msgid "Auto-create"
+msgstr "Creació automatitzada"
+
+msgid "Knews Post Options"
+msgstr "Opcions Post de Knews"
+
+msgid "Add a subscription form into the sidebar"
+msgstr "Afegeix un formulari de subscripció al sidebar"
+
+msgid "Dont ask"
+msgstr "No ho demanis"
+
+msgid "Not required"
+msgstr "No és obligatori"
+
+msgid "Required"
+msgstr "Obligatori"
+
+msgid "Automated process deleted"
+msgstr "Procés automàtic eliminat"
+
+msgid "Automated process activated"
+msgstr "Procés automàtic activat"
+
+msgid "Automated process deactivated"
+msgstr "Procés automàtic desactivat"
+
+msgid "Automated submit activated"
+msgstr "Procés automàtic activat"
+
+msgid "Manual submit activated"
+msgstr "Enviament automàtic activat"
+
+msgid "Automated submit created"
+msgstr "Enviament automàtic creat"
+
+msgid "Error: the name cant be empty"
+msgstr "Error: el nom no pot estar buit"
+
+msgid "Error: there is already an automated submit with this name"
+msgstr "Error: ja hi ha un enviament automatitzat amb aquest nom"
+
+msgid "Auto-create Newsletters"
+msgstr "Creació automàtica de Newsletters"
+
+msgid "Automated process name"
+msgstr "Nom del procés automatitzat"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Activated"
+msgstr "Activat"
+
+msgid "Automatic submit"
+msgstr "Enviament automàtic"
+
+msgid "Method"
+msgstr "Mètode"
+
+msgid "Last run"
+msgstr "Última execució"
+
+msgid "Activate/deactivate the automated task"
+msgstr "Activar/desactivar la tasca automatitzada"
+
+msgid "Deactivate"
+msgstr "Desactivar"
+
+msgid "Automatic/Manual submits of auto-created newsletters"
+msgstr "Enviaments automàtics/manuals de les newsletters creades automàticament"
+
+msgid "Delete definitively this automated task"
+msgstr "Eliminar definitivament aquesta tasca automatitzada"
+
+msgid "Off"
+msgstr "Parat"
+
+msgid "On"
+msgstr "En marxa"
+
+msgid "Automated submit"
+msgstr "Enviament automatitzat"
+
+msgid "Manual submit"
+msgstr "Enviament manual"
+
+msgid "Automated submits"
+msgstr "Enviaments automatitzats"
+
+msgid "At the moment there is no automated task, you can create new ones"
+msgstr "En aquest moment no hi ha tasques automatitzades, tu en pots crear de noves"
+
+msgid "New Auto-creation Process"
+msgstr "Nou procés de creació automàtica"
+
+msgid "Auto-create Newsletters Tutorial"
+msgstr "Tutorial de creació automatitzada de newsletters"
+
+msgid "Get posts from language:"
+msgstr "Agafar els posts del idioma:"
+
+msgid "Use as template:"
+msgstr "Usa com a template:"
+
+msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr "Has de crear primer una newsletter amb informació insertable (deixa els %the_content%, %the_title% etc.)"
+
+msgid "Create a newsletter every %s posts"
+msgstr "Crear una newsletter cada % posts"
+
+msgid "Error: there are no mailing lists"
+msgstr "Error: no hi ha llistes de correu"
+
+msgid "Advanced options"
+msgstr "Opcions avançades"
+
+msgid "Automated options"
+msgstr "Opcions d'automatització"
+
+msgid "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "Incloure els posts a les newsletters automatitzades (valor per defecte per als posts nous)"
+
+msgid "Manual Newsletters"
+msgstr "Newsletters manuals"
+
+msgid "Auto-created Newsletters"
+msgstr "Newsletters creades automàticament"
+
+msgid "There is no auto-created newsletter."
+msgstr "Encara no hi ha cap newsletter creada automàticament."
+
+msgid "tutorial_automated_url"
+msgstr "http://www.knewsplugin.com/ca/creacio-automatica-de-newsletters/"
+
+msgid "widget_label_name"
+msgstr "Nom:"
+
+msgid "widget_label_surname"
+msgstr "Cognom:"
+
+msgid "General options"
+msgstr "Opcions generals"
+
+msgid "Include this post in the automated newsletters?"
+msgstr "Incloure aquest post als newsletters generats automàticament?"
+
+msgid "This post has been included into:"
+msgstr "Aquest post ha estat inclòs a:"
+
+msgid "This post still not included into any automated newsletter."
+msgstr "Aquest post encara no ha estat inclòs a cap newsletter creada automàticament."
+
+msgid "Active process:"
+msgstr "Procès actiu:"
+
+msgid "Newsletter creation options"
+msgstr "Opcions de creació de newsletters"
+
+msgid "Create a newsletter every x amount of time"
+msgstr "Crear una newsletter cada cert període de temps"
+
+msgid "Newsletter submit options"
+msgstr "Opcions d'enviament de newsletters"
+
+msgid "Target for newsletter:"
+msgstr "Target per a la newsletter:"
+
+msgid "Submit method:"
+msgstr "Mètode d'enviament:"
+
+msgid "Messages reset to defaults."
+msgstr "Reestablir els missatges per defecte."
 

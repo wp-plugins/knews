@@ -53,16 +53,15 @@ function enfocar() {
 </script>
 	<div class=wrap>
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
-			<?php /*<h2 class="nav-tab-wrapper"><a class="nav-tab<?php if ($tab=='') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news"><?php _e('**Manual Newsletters','knews');?></a><a class="nav-tab<?php if ($tab=='auto') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=auto"><?php _e('**Auto Newsletters','knews'); ?></a></h2>*/?>
-			<h2><?php echo __('Newsletters','knews') . '<a class="add-new-h2" href="#newnews" onclick="enfocar()">' . __('Create new newsletter','knews') . '</a>'; ?></h2>
+			<h2 class="nav-tab-wrapper"><a class="nav-tab<?php if ($tab=='') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news"><?php _e('Manual Newsletters','knews');?></a><a class="nav-tab<?php if ($tab=='auto') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=auto"><?php _e('Auto-created Newsletters','knews'); ?></a></h2>
 			<?php 
 					$paged = intval($Knews_plugin->get_safe('paged', 1));
 									
 					if ($tab=='') {
-						//echo '<p><a class="add-new-h2" href="#newnews" onclick="enfocar()">' . __('Create new newsletter','knews') . '</a></p>';
+						echo '<p><a class="add-new-h2" href="#newnews" onclick="enfocar()">' . __('Create new newsletter','knews') . '</a></p>';
 						$results_per_page=10;
 					} else {
-						//echo '<p>&nbsp;</p>';
+						echo '<p>&nbsp;</p>';
 						$results_per_page=20;
 					}
 
@@ -128,10 +127,10 @@ function enfocar() {
 								echo '<div class="row-actions" style="position:absolute;"><span><a title="' . __('Edit this newsletter', 'knews') . '" href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . __('Edit', 'knews') . '</a> | </span>';
 								
 								echo '<span><a href="#" title="' . __('Rename this newsletter', 'knews') . '" onclick="rename(' . $list->id . '); return false;">' . __('Rename', 'knews') . '</a> | </span>';
-								echo '<span><a href="' . KNEWS_URL . '/direct/knews_read_email.php?id=' . $list->id . '&preview=1" target="_blank" title="' . __('Open a preview in a new window', 'knews') . '">' . __('Preview', 'knews') . '</a> | </span>';
+								echo '<span><a href="' . get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $list->id . '&preview=1" target="_blank" title="' . __('Open a preview in a new window', 'knews') . '">' . __('Preview', 'knews') . '</a> | </span>';
 								echo '<span><a href="admin.php?page=knews_news&section=send&id=' . $list->id . '" title="' . __('Submit this newsletter', 'knews') . '">' . __('Submit', 'knews') . '</a> | </span>';
 								echo '<span><a href="admin.php?page=knews_news&da=duplicate&did=' . $list->id . '" title="' . __('Duplicate this newsletter', 'knews') . '">' . __('Duplicate', 'knews') . '</a> | </span>';
-								echo '<span class="trash"><a href="admin.php?page=knews_news&da=delete&nid=' . $list->id . '" title="' . __('Delete definitely this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
+								echo '<span class="trash"><a href="admin.php?page=knews_news&da=delete&nid=' . $list->id . '" title="' . __('Delete definitively this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 	
 								echo '<td>' . $Knews_plugin->humanize_dates($list->created, 'mysql') . '</td>';
 								echo '<td>' . $Knews_plugin->humanize_dates($list->modified, 'mysql') . '</td>';
@@ -197,9 +196,11 @@ function enfocar() {
 			<?php
 						}
 					} else {
-						?>
-							<p><?php _e('At the moment there is no newsletter, you can create new ones','knews'); ?></p>
-						<?php
+						if ($tab=='') {
+							echo '<p>' . __('At the moment there is no newsletter, you can create new ones','knews') . '</p>';
+						} else {
+							echo '<p>' . __('There is no auto-created newsletter.','knews') . '</p>';							
+						}
 					}
 					
 					if ($tab=='') {
@@ -207,7 +208,7 @@ function enfocar() {
 					<hr />
 					<a id="newnews"></a>
 					<h2><?php _e('Create new newsletter','knews');?> <a href="<?php _e('tutorial_template_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Make your own templates how-to','knews'); ?></a></h2>
-					<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+					<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" class="new_newsletter">
 						<input type="hidden" name="action" id="action" value="add_news" />
 						<p><label for="new_list"><?php _e('Name','knews');?>: </label><input type="text" name="new_news" id="new_news" class="regular-text" />
 						<?php
@@ -262,13 +263,27 @@ function enfocar() {
 						<div class="submit">
 							<input type="submit" value="<?php _e('Add newsletter','knews');?>" class="button-primary" />
 						</div>
-						<div id="knewsshop"></div>
+						<div id="knewsshop">
+							<?php 
+							$look = wp_remote_get( 'http://www.knewsplugin.com/shop/look.php' );
+							if (isset($look['body'])) echo $look['body'];
+							?>
+						</div>
 						<script type="text/javascript">
 							jQuery(document).ready(function() {
-								jQuery('#knewsshop').load('http://www.knewsplugin.com/shop/look.php');
+								jQuery('form.new_newsletter div.template').each(function() {
+									folder = jQuery('input:radio', this).val();
+									version = jQuery('input#ver_' + folder, this).val();
+									version = version.replace(".","_"); 
+									jQuery ('#knewsshop div.' + folder + '_' + version).hide();
+								});
 							});
 						</script>
 					</form>
+				<?php
+					} else {
+				?>
+				<p><a href="<?php _e('tutorial_automated_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></p>
 				<?php
 					}
 				?>
@@ -285,7 +300,9 @@ function examine_template($folder, $templates_path, $templates_url) {
 			'urlauthor' => '',
 			'minver' => '1.0.0',
 			'onlypro' => 'no',
-			'description' => 'Not defined'
+			'description' => 'Not defined',
+			'mobile' => 'no',
+			'responsive' => 'no'
 		);
 
 		$xml = simplexml_load_file($templates_path . $folder . '/info.xml');
@@ -295,7 +312,7 @@ function examine_template($folder, $templates_path, $templates_url) {
 		}
 		
 ?>
-	<div style="padding:10px 10px 0 10px; float:left; width:250px; height:350px;">
+	<div style="padding:10px 10px 0 10px; float:left; width:250px; height:350px;" class="template">
 <?php
 		$selectable=false;
 		if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) >= 0) {
@@ -341,6 +358,7 @@ function examine_template($folder, $templates_path, $templates_url) {
 			<input type="hidden" name="vp_<?php echo $folder; ?>" id="vp_<?php echo $folder; ?>" value="<?php echo $v; ?>" />
 			<input type="hidden" name="path_<?php echo $folder; ?>" id="path_<?php echo $folder; ?>" value="<?php echo $templates_path; ?>" />
 			<input type="hidden" name="url_<?php echo $folder; ?>" id="url_<?php echo $folder; ?>" value="<?php echo $templates_url; ?>" />
+			<input type="hidden" name="ver_<?php echo $folder; ?>" id="ver_<?php echo $folder; ?>" value="<?php echo $xml_info['version']; ?>" />
 			<p style="margin:0; padding:0; font-size:11px; color:#333"><?php echo $xml_info['description']; ?></p>
 		</div>
 	</div>

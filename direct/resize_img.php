@@ -1,15 +1,9 @@
 <?php 
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+
+//if (is_file('/home/carlesrever/www/knews/wp-content/uploads/2012/07/lamborghini-sports-car-wallpaper.jpg')) echo '111 ';
+//if (is_file('/usr/home/carlesrever/www/knews/wp-content/uploads/2012/07/lamborghini-sports-car-wallpaper.jpg')) echo '444 ';
+
+global $Knews_plugin;
 
 if ($Knews_plugin) {
 
@@ -22,7 +16,8 @@ if ($Knews_plugin) {
 	$height= intval($Knews_plugin->get_safe('height'));
 
 	$wp_dirs = wp_upload_dir();
-	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+		
+	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
 
 	$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
 
@@ -31,7 +26,7 @@ if ($Knews_plugin) {
 	if (substr($url_img, 0, strlen($wp_dirs['baseurl'])) != $wp_dirs['baseurl']) {
 		//echo 'no comencen igual<br>';
 		$wp_dirs['baseurl']=substr($url_img, 0, strpos($url_img, 'wp-content'));
-		$wp_dirs['basedir']=substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+		$wp_dirs['basedir']=substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
 	}
 	//echo '*' . $wp_dirs['baseurl'] . '*<br>';
 	//echo '*' . $wp_dirs['basedir'] . '*<br>';
@@ -49,12 +44,10 @@ if ($Knews_plugin) {
 			if (is_file($wp_dirs['basedir'] . $try_original2)) $url_img = $try_original;
 		}
 	}
-	knews_get_url_img($url_img, $width, $height);
+	knews_get_url_img($wp_dirs, $absolute_dir, $url_img, $width, $height);
 }
 
-function knews_get_url_img($img_url, $width, $height, $cut = true) {
-	
-	global $wp_dirs, $absolute_dir;
+function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $cut = true) {
 	
     if ($img_url != '' && $img_url != 'undefined') {
 
@@ -147,5 +140,5 @@ function knews_get_url_img($img_url, $width, $height, $cut = true) {
 		echo json_encode($jsondata);
 	}
 }
-
+die();
 ?>

@@ -54,6 +54,13 @@
 				}
 			}
 			
+			$extra_fields = $Knews_plugin->get_extra_fields();
+			foreach ($extra_fields as $ef) {
+				
+				$Knews_plugin->set_user_field ($id, $ef->id, $_POST['cf_' . $ef->id]);
+
+			}
+
 			echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
 			
 		} else if ($_POST['action']=='delete_users') {
@@ -183,7 +190,10 @@
 							<option value="3"<?php if ($users[0]->state=='3') echo ' selected="selected"'; ?>><?php _e('blocked','knews');?></option>
 						</select></td></tr>
 						<?php
-						?>
+						$extra_fields = $Knews_plugin->get_extra_fields();
+						foreach ($extra_fields as $ef) {
+							echo '<tr><td>' . $ef->name . '</td><td><input type="text" name="cf_' . $ef->id . '" id="cf_' . $ef->id . '" value="' . $Knews_plugin->get_user_field($edit_user, $ef->id) . '" class="regular-text" ></td></tr>';
+						}						?>
 						<tr><td colspan="2"><?php _e('Subscriptions','knews');?>:</td></tr>
 						<?php
 						$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $edit_user;
@@ -277,6 +287,11 @@
 					$alt=false;
 					echo '<table class="widefat"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th><th>E-mail</th>';
 
+					$extra_fields = $Knews_plugin->get_extra_fields();
+					foreach ($extra_fields as $ef) {
+						if ($ef->show_table == 1) echo '<th>' . $ef->name . '</th>';
+					}
+
 					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></thead><tbody>';
 	
 					$results_counter=0;
@@ -295,8 +310,12 @@
 							if ($user->state!=2) echo '<span><a href="' . $link_params . $paged . '&da=activate&uid=' . $user->id . '" title="' . __('Activate this user', 'knews') . '">' . __('Activate', 'knews') . '</a> | </span>';							
 							if ($user->state!=3) echo '<span><a href="' . $link_params . $paged . '&da=block&uid=' . $user->id . '" title="' . __('Block this user', 'knews') . '">' . __('Block', 'knews') . '</a> | </span>';
 							
-							echo '<span class="trash"><a href="' . $link_params . $paged . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitely this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
+							echo '<span class="trash"><a href="' . $link_params . $paged . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitively this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 
+							reset($extra_fields);
+							foreach ($extra_fields as $ef) {
+								if ($ef->show_table == 1) echo '<td>' . $Knews_plugin->get_user_field($user->id, $ef->id, '&nbsp;') . '</td>';
+							}
 							echo '<td>' . (($user->lang!='') ? $user->lang : '/') . '</td><td>';
 							if ($user->state==1) echo '<img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" alt="No confirmat" /></td>';
 							if ($user->state==2) echo '<img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" alt="Confirmat" /></td>';
@@ -326,6 +345,10 @@
 					}
 					echo '</tbody><tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th><th>E-mail</th>';
 
+					reset($extra_fields);
+					foreach ($extra_fields as $ef) {
+						if ($ef->show_table == 1) echo '<th>' . $ef->name . '</th>';
+					}
 					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></tfoot>';
 					echo '</table>';
 				?>
@@ -424,5 +447,3 @@
 			}
 		?>
 	</div>
-<?php
-?>

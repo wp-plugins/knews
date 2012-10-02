@@ -162,7 +162,7 @@ function enfocar() {
 							echo '<td class="name_' . $list->id  . '"><strong>' . $list->name . '</strong>';
 							echo '<div class="row-actions"><span><a href="#" title="' . __('Rename this list', 'knews') . '" onclick="rename(' . $list->id . '); return false;">' . __('Rename', 'knews') . '</a> | </span>';
 							echo '<span><a href="admin.php?page=knews_users&filter_list=' . $list->id . '" title="' . __('See this list users', 'knews') . '" >' . __('See users', 'knews') . '</a> | </span>';
-							echo '<span class="trash"><a href="admin.php?page=knews_lists&da=delete&lid=' . $list->id . '" title="' . __('Delete definitely this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
+							echo '<span class="trash"><a href="admin.php?page=knews_lists&da=delete&lid=' . $list->id . '" title="' . __('Delete definitively this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 
 							echo '<td><input type="checkbox"' . (($list->open == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open" id="' . $list->id . '_open" /></td>';
 							echo '<td><input type="checkbox"' . (($list->open_registered == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open_registered" id="' . $list->id . '_open_registered" /></td>';

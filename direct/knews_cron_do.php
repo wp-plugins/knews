@@ -1,21 +1,10 @@
 <?php
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
-
 global $knewsOptions, $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
 	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) {
-		die("You must call the main blog knews_cron.php file");
+		die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 	}
 	
 	$js=intval($Knews_plugin->get_safe('js'));
@@ -46,7 +35,7 @@ if ($Knews_plugin) {
 		//Estadistiques
 		$query = "SELECT * FROM " . KNEWS_KEYS . " WHERE submit_id=" . $submit_pend[0]->id;
 		$links_submit = $wpdb->get_results( $query );
-		$url_track = KNEWS_URL . '/direct/track.php?t=%confkey%_';
+		$url_track = get_admin_url() . 'admin-ajax.php?action=knewsTrack&t=%confkey%_';
 		
 		foreach ($links_submit as $link_submit) {
 			$theHtml = str_replace('"' . $link_submit->href . '"', '"' . $url_track . $link_submit->keyy . '"', $theHtml);
@@ -95,7 +84,7 @@ if ($Knews_plugin) {
 				$theSubject = $Knews_plugin->get_custom_text('email_importation_subject', $localized_lang);
 				$theHtml = '<head><title>' . $theSubject . '</title></head><body>'.$Knews_plugin->get_custom_text('email_importation_body', $localized_lang).'</body>';
 
-				$users[$users_index]->confirm = KNEWS_LOCALIZED_URL . '/direct/knews_confirmuser.php?k=' . $users[$users_index]->confkey . '&e=' . $users[$users_index]->email;
+				$users[$users_index]->confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $users[$users_index]->confkey . '&e=' . $users[$users_index]->email;
 				//$theHtml = str_replace('#url_confirm#', $url_confirm, $theHtml);
 
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
@@ -103,13 +92,13 @@ if ($Knews_plugin) {
 			} else {
 
 				$aux_array=array();
-				reset($used_tokens);
 
-
-
+				foreach ($used_tokens as $token) {
+					$aux_array[] = array( 'token' => $token->token, 'value' => $Knews_plugin->get_user_field($users[$users_index]->id, $token->id, $token->defaultval) );
+				}
 				$users[$users_index]->tokens = $aux_array;
-				$users[$users_index]->unsubscribe = KNEWS_LOCALIZED_URL . '/direct/knews_unsubscribe.php?e=' . $users[$users_index]->email . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter;
-				$users[$users_index]->cant_read = KNEWS_LOCALIZED_URL . '/direct/knews_read_email.php?id=' . $id_newsletter . '&e=' . $users[$users_index]->email;
+				$users[$users_index]->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . $users[$users_index]->email . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter;
+				$users[$users_index]->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . $users[$users_index]->email;
 				
 				//$result=$Knews_plugin->sendMail( array( array('email' => $user->email, 'unsubscribe'=>get_bloginfo('url') ) ), $theSubject, $theHtml );
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
@@ -190,7 +179,7 @@ if ($js != 0) {
 		if ($pend) {
 			if (is_multisite()) switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 	?>
-			location.href="<?php echo $Knews_plugin->get_main_plugin_url (); ?>/knews/direct/knews_cron_do.php?js=<?php echo intval($js)+1; ?>";
+			location.href="<?php echo $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCronDo&js=' . intval($js)+1; ?>"
 	<?php
 		}
 	?>
@@ -233,4 +222,5 @@ if ($js != 0) {
 	</html>
 <?php
 }
+die();
 ?>

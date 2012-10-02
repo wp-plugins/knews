@@ -377,6 +377,14 @@ function print_state($step, $where) {
 			</span>
 			</p>
 			<?php
+			$extra_fields = $Knews_plugin->get_extra_fields();
+			foreach ($extra_fields as $ef) {
+				echo '<p><strong>' . $ef->name . '</strong>: <select class="custom_field" name="ef_' . $ef->name . '" id="ef_' . $ef->name . '">' . 
+				'<option value="empty"' . (($Knews_plugin->post_safe('ef_' . $ef->name) == 'empty') ? ' selected="selected"' : '') . '>' . __('Leave empty','knews') . '</option>';
+				print_col_options('ef_' . $ef->name);
+				echo '<option value="custom"' . (($Knews_plugin->post_safe('ef_' . $ef->name) == 'custom') ? ' selected="selected"' : '') . '>' . __('introduce value','knews') . '</option></select><input type="text"' . (($Knews_plugin->post_safe('ef_' . $ef->name) != 'custom') ? ' style="display:none"' : '') . ' name="c_ef_' . $ef->name . '" id="c_ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('c_ef_' . $ef->name) . '"><br>
+				 <span class="help">' . __('If you enter a value manually, this will be the same for all users imported','knews') . '</span></p>';
+			}
 			?>
 			<p><strong><?php _e('Subscribe all users to the following mailing lists:','knews'); ?></strong><br />
 			<?php
@@ -417,6 +425,12 @@ function print_state($step, $where) {
 				<input type="hidden" name="date_order" id="date_order" value="<?php echo $Knews_plugin->post_safe('date_order'); ?>" />
 				
 				<?php
+				$extra_fields = $Knews_plugin->get_extra_fields();
+				foreach ($extra_fields as $ef) {
+					echo '<input type="hidden" name="ef_' . $ef->name . '" id="ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('ef_' . $ef->name) . '">';
+					echo '<input type="hidden" name="c_ef_' . $ef->name . '" id="c_ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('c_ef_' . $ef->name) . '">';
+				}
+				
 				$query = "SELECT * FROM " . KNEWS_LISTS;
 				$lists = $wpdb->get_results( $query );
 				foreach ($lists as $ln) {
@@ -444,6 +458,7 @@ function print_state($step, $where) {
 
 				$query = "SELECT id FROM " . KNEWS_LISTS ;
 				$lists_name = $wpdb->get_results( $query );
+				$extra_fields = $Knews_plugin->get_extra_fields();
 
 				while (($csv_data = fgetcsv($handle, 10000, $knews_delimiters[$_POST['knews_delimiters']], $knews_enclosure[$_POST['knews_enclosure']])) !== FALSE) {
 					
@@ -518,7 +533,22 @@ function print_state($step, $where) {
 															}
 														}
 													}
-
+													
+													foreach ($extra_fields as $ef) {
+										
+														//Insert fields
+														$cf=$Knews_plugin->post_safe('ef_' . $ef->name);
+														if ($cf != '') {
+															if ($cf=='custom') {
+																$cf=$Knews_plugin->post_safe('c_ef_' . $ef->name);
+															} elseif ($cf=='empty') {
+																$cf='';
+															} else {
+																$cf=$user_csv[intval($cf)-1];
+															}
+															$Knews_plugin->set_user_field ($id_new_user, $ef->id, $cf);
+														}
+													}
 													
 													//Confirm
 													if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
@@ -553,7 +583,20 @@ function print_state($step, $where) {
 															}
 														}
 		
-														
+														foreach ($extra_fields as $ef) {
+											
+															//Insert fields
+															$cf=$Knews_plugin->post_safe('ef_' . $ef->name);
+															if ($cf=='custom') {
+																$cf=$Knews_plugin->post_safe('c_ef_' . $ef->name);
+															} elseif ($cf=='empty') {
+																$cf='';
+															} else {
+																$cf=$user_csv[intval($cf)-1];
+															}
+															$Knews_plugin->set_user_field ($id_updated_user, $ef->id, $cf);
+														}
+																												
 														//Confirm
 														if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
 															add_confirm($id_updated_user);
