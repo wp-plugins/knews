@@ -1,10 +1,10 @@
 === Knews Multilingual Newsletters ===
 Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
-Tags: newsletter, email, mail, emailing, multi language, multilingual, wysiwyg, smtp, cron, batch sending, mailing list
+Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 1.1.5
+Tested up to: 3.4.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,15 +18,17 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+* **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
+* **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
 * **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
+* Automated newsletters [(tutorial here)] (http://www.knewsplugin.com/automated-newsletter-creation/).
 * Support for **SMTP** sending [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
 * **Multilingual back office**: English, German, French, Italian, Spanish and Catalan.
-* **Widget** for subscriber and surfing language capture.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
@@ -39,23 +41,23 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
 * English - en_US (Knews Team)
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
 * Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com )
 * Spanish - es_ES (Knews Team)
 * Catalan - ca (Knews Team)
-* Arabic - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Arabic - ar (thanks to: Hasan Yousef)
 * Finnish - fi (thanks to: Eccola http://eccola.fi )
-* Croatian - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* Bosnian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
+* Croatian - hr - about 60% translated (thanks to: Hasan Yousef)
+* Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 
 = Future release =
 
+* Support for xili-language, polylang and transposh plugins.
 * Continued improvement of the WYSIWYG editor.
 * More templates.
-* Automated emailing creation & submit.
 
 
 == Installation ==
@@ -88,7 +90,16 @@ A WYSIWYG Editor Demo:
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
+15. You can configure the automated newsletters feature: [(tutorial here)] (http://www.knewsplugin.com/automated-newsletter-creation/).
+
+16. You can customize your email/newsletter with name and surname users values, write: {%name%[Dear user]} {%surname%[]} in any place of newsletter, the tokens %name% and %surname% will be replaced by the user fields in submit time. If there are empty, then will be replaced by the default values (between []).
+
+
 == Frequently Asked Questions ==
+
+** How can I use the tokens to customize the e-mails? **
+
+In the email/newsletter, write: {%name%[Dear user]} {%surname%[]} in any place, the tokens %name% and %surname% will be replaced by the user fields in submit time. If there are empty, then will be replaced by the default values (between []).
 
 **Can someone with no knowledge of HTML create a newsletter and send it to their clients?**
 
@@ -149,11 +160,15 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.2.0 =
+
+* Added Name and Surname fields, in the subscription form and token replacement in the newsletter submit.
+* Automated creation and submit newslettering.
+* Deep change in the Ajax way: from old-school method to standard WordPress method: This will solve some incompatibility issues with other plugins in the WYSIWYG editor and other Ajax Calls.
 
 = 1.1.5 =
 
-
-* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 * WOW: CSS and images on/off preview in the WYSIWYG editor.
 * Post selection for insertion in the newsletter editor enharcements:
 * - in the right language by default.
@@ -176,8 +191,8 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 = 1.1.3 =
 
-* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Croatian added - hr - about 60% translated (thanks to: Hasan Yousef)
+* NEW: Serbian added - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 * Custom templates folder. Upload your custom templates to /wp-content/uploads/knewstemplates and plugin uploads don't erase it.
 * FIXED AUTOMATED SUBMIT BUG IN WP CRON configs (some users can't submit newsletters, the submit process stopped at 0% forever). Thanks to: Tudor
 * Fixed issue with the JavaScript CRON Emulation (previous versions marks JS-Cron as a cronjob server input)
@@ -229,7 +244,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * The editor has now an insert image button at the cursor position
 * SMTP / CRON TUTORIALS ADDED
 * -- languages --
-* NEW: Arabic added - ar (thanks to: Hasan Yousef hasanfazary@yahoo.com )
+* NEW: Arabic added - ar (thanks to: Hasan Yousef)
 * NEW: Finnish added - fi (thanks to: Eccola http://eccola.fi )
 * -- fixes --
 * Save newsletter error re-fixed (thanks to Javier)
@@ -274,28 +289,9 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
-= 1.1.5 =
+= 1.2.0 =
 
-
-* NEW: Bosnian added - sr_RS - about 60% translated (thanks to: Hasan Yousef hasanfazary@yahoo.com )
-* WOW: CSS and images on/off preview in the WYSIWYG editor.
-* Post selection for insertion in the newsletter editor enharcements:
-* - in the right language by default.
-* - with the_content filters from theme/plugins in %the_content% replacement
-* - posts without title can be selected. Thanks to Hasan Yousef
-* Add subscriptor function added: $Knews_plugin->add_user(email, id_list_news, lang, lang_locale) e.g. $Knews_plugin->add_user('mail@domain.com', 1, 'en', 'en_US'). Thanks to @drskullster.
-* WPML differents domains per language option cross-domain bug in ajax subscription solved. Thanks to Matthieu Huguet
-* Import bug solved when submit confirmation is activated. Thanks to @berardini.
-* Cache bug in the WYSIWYG editor for some users solved by adding random param. Thanks to Miran Peterman
-
-* Stats bug solved (function name incompatibility with other themes/plugins). Thanks to @ashishsehgal.
-* The extrange forbidden error while saving the newsletter solved. Thanks to Hasan Yousef
-
-* A casablanca template background
- image bug solved.
-
-= 1.1.4 =
-
-* Fixed an Stupid bug in the widget that breaks the sidebar... we apologize this!!!
-
+* Added Name and Surname fields, in the subscription form and token replacement in the newsletter submit.
+* Automated creation and submit newslettering.
+* Deep change in the Ajax way: from old-school method to standard WordPress method: This will solve some incompatibility issues with other plugins in the WYSIWYG editor and other Ajax Calls.
 
