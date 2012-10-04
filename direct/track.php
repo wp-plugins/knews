@@ -1,5 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
+//This method is maintained for old Knews submitted newsletters (1.0.x and 1.1.x Knews versions)
 if (!function_exists('add_action')) {
 	$path='./';
 	for ($x=1; $x<6; $x++) {
@@ -10,6 +10,8 @@ if (!function_exists('add_action')) {
 		}
 	}
 }
+
+global $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
@@ -46,4 +48,5 @@ if ($Knews_plugin) {
 } else {
 	echo '<p>Knews is not active</p>';
 }
+die();
 ?>

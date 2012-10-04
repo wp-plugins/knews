@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2012-06-10\n"
-"PO-Revision-Date: 2012-07-10 14:02+0100\n"
-"Last-Translator: hasan yusef <hassanfazary@gmail.com>\n"
+"PO-Revision-Date: 2012-10-02 10:24+0100\n"
+"Last-Translator: Carles <mail@carlesrever.com>\n"
 "Language-Team: Native Arabic\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -945,7 +945,7 @@ msgstr " اختبار اعدادات SMTP"
 #. Text in echo
 #: admin/knews_admin_config.php:148
 msgid "The WPML plugin was not detected, multilingual options are not functional"
-msgstr "لم يتم الكشف عن البرنامج المساعد WPML، امكانيه تعدد اللغات لن تعمل"
+msgstr "لم يتم الكشف عن البرنامج المساعد WPMLخيارات تعدد اللغات لن تعمل"
 
 #. Text in function
 #: admin/knews_admin_import.php:203
@@ -1220,7 +1220,7 @@ msgstr " اضف عضويتى"
 msgid "Widget e-mail label form"
 msgstr "خانه البريد الالكتروني فى نموذج الويدجت"
 
-msgid "widget_label"
+msgid "widget_label_email"
 msgstr "البريد الالكتروني:"
 
 msgid "Widget submit button"
@@ -1522,7 +1522,7 @@ msgstr "تفعيل المستخدم"
 msgid "Activate"
 msgstr "تفعيل"
 
-msgid "Delete definitely this user"
+msgid "Delete definitively this user"
 msgstr "حذف المستخدم بشكل نهائى"
 
 msgid "Block this user"
@@ -1564,7 +1564,7 @@ msgstr "إعادة تسمية القائمة"
 msgid "See this list users"
 msgstr "تصفح المستخدمين فى هذه القائمه"
 
-msgid "Delete definitely this newsletter"
+msgid "Delete definitively this newsletter"
 msgstr "حذف هذه النشرة للأبد"
 
 msgid "Edit this newsletter"
@@ -1681,7 +1681,7 @@ msgstr "إدراج مقدمه الصفحه في الصف الأول"
 #. Text in function
 #: knews_admin_export.php:143
 msgid "No users match criteria"
-msgstr "لا يوجد مستخدمون يطابقون هذه المعايير"
+msgstr "لا يوجد مستخدمون يطابقون معايير البحث"
 
 #. Text in function
 #: knews_admin_export.php:143
@@ -1819,9 +1819,6 @@ msgstr "لا يوجد اى مستخدمين في هذه القائمه , لا ش
 msgid "Configure CRON tutorial"
 msgstr "ارشادات عن كيفيه اعدادات CRON  كرون"
 
-msgid "Multisite detected. Only one instance of knews_cron.php must be called for all websites."
-msgstr "تم ملاحظة  نظام تعدد المواقع لديكم . يجب استعمال عينه واحد فقط من knews_cron.php لجميع المواقع"
-
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "يجب إضافة هذا السطر في خادم الويب الخاص بك CRONTAB:"
 
@@ -1916,7 +1913,7 @@ msgid "Sendings Error"
 msgstr "المرسلات الخاطئه"
 
 msgid "Cant read"
-msgstr "لم يمكن قراءته"
+msgstr "لم يمكن قرائته"
 
 msgid "Total clicks"
 msgstr "إجمالي عدد النقرات"
@@ -1970,7 +1967,7 @@ msgid "cant_read_text_2"
 msgstr "..."
 
 msgid "unsubscribe_text_1"
-msgstr "إذا كنت لا تستطيع قراءة هذه الرسالة، الرجاء الضغط"
+msgstr "إذا كنت ترغب في إلغاء اشتراكك فى القائمة البريدية لموقعنا، الرجاء الضغط"
 
 msgid "unsubscribe_text_link"
 msgstr "هنا"
@@ -1994,19 +1991,19 @@ msgid "Inverse alignment (<span style=\"color:#e00\">right</span> for left to ri
 msgstr "عكس المحاذاة (<span style=\"color:#e00\">  right </ span> للغات اليسار إلى اليمين <span style=\"color:#e00\"> left </ SPAN> للغات اليمين إلى اليسار ) "
 
 msgid "Cant read text 1"
-msgstr " غير قادر على قراءته (نص ١)"
+msgstr " غير قادر على قرائته (نص ١)"
 
 msgid "Cant read text link"
-msgstr "غير قادر على قراءة نص الرابط"
+msgstr "غير قادر على القراءه, نص الرابط"
 
 msgid "Cant read text 2"
-msgstr " غير قادر على قراءته (نص 2)"
+msgstr " غير قادر على قرائته (نص 2)"
 
 msgid "Unsubscribe text 1"
 msgstr " إلغاء الاشترك (نص ١)"
 
 msgid "Unsubscribe text link"
-msgstr "إلغاء الاشترك نص الرابط"
+msgstr "إلغاء الاشترك, نص الرابط"
 
 msgid "Unsubscribe text 2"
 msgstr " إلغاء الاشترك (نص 2)"
@@ -2018,10 +2015,10 @@ msgid "inverse_alignment"
 msgstr "left"
 
 msgid "The read more text link"
-msgstr "نص رابط إقراء المزيد"
+msgstr "نص رابط إقرأ المزيد"
 
 msgid "read_more_link"
-msgstr "إقراء المزيد"
+msgstr "إقرأ المزيد"
 
 msgid "Image URL:"
 msgstr "رابط  الصوره:"
@@ -2049,4 +2046,190 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 
 msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
+
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "يجب عليك استخدام عنوان الموقع الرئيسي  www.tudominio.com/wp-admin/admin-ajax?action=knewsCron"
+
+msgid "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "تم استشعار تطبيق تعدد المواقع, يجب استخدام عينه واحده من %s لكل المواقع ."
+
+msgid "Cant create the automated submit"
+msgstr "لم يمكن إنشاء الارسال الآلي."
+
+msgid "Widget \"%s\" label form"
+msgstr "عنوان ال \"%s\" لنموذج الويدجت"
+
+msgid "Auto-create"
+msgstr "انشاء بصوره آليه"
+
+msgid "Knews Post Options"
+msgstr "خيارات ك ـ نيوز لل بوست"
+
+msgid "Add a subscription form into the sidebar"
+msgstr "إضافة نموذج الاشتراك في الشريط الجانبي"
+
+msgid "Dont ask"
+msgstr "لا تسأل"
+
+msgid "Not required"
+msgstr "غير مطلوب"
+
+msgid "Required"
+msgstr "مطلوب"
+
+msgid "Automated process deleted"
+msgstr "تم حذف عملية الارسال الآلي"
+
+msgid "Automated process activated"
+msgstr "تم تفعيل عملية الارسال الآلي"
+
+msgid "Automated process deactivated"
+msgstr "تم ايقاف عملية الارسال الآلي"
+
+msgid "Automated submit activated"
+msgstr "تم تفعيل الارسال الآلي"
+
+msgid "Manual submit activated"
+msgstr "تم تفعيل الارسال اليدوي"
+
+msgid "Automated submit created"
+msgstr "تم إنشاء الارسال الآلي"
+
+msgid "Error: the name cant be empty"
+msgstr "خطأ: الاسم لا يمكن أن يكون خاليا"
+
+msgid "Error: there is already an automated submit with this name"
+msgstr "خطأ: يوجد عملية الارسال بهذا الاسم"
+
+msgid "Auto-create Newsletters"
+msgstr "انشاء النشره بصوره آليه"
+
+msgid "Automated process name"
+msgstr "اسم عملية الارسال الآليه "
+
+msgid "Target"
+msgstr "الهدف"
+
+msgid "Activated"
+msgstr "تم التفعيل"
+
+msgid "Automatic submit"
+msgstr "الارسال الآلي"
+
+msgid "Method"
+msgstr "الاسلوب"
+
+msgid "Last run"
+msgstr "آخر تنفيذ"
+
+msgid "Activate/deactivate the automated task"
+msgstr "تفعيل / ايقاف عمليه الارسال"
+
+msgid "Deactivate"
+msgstr "ايقاف"
+
+msgid "Automatic/Manual submits of auto-created newsletters"
+msgstr "ارسال آلى / يدوي للنشرات الإخبارية المبنيه بطريقه آليه"
+
+msgid "Delete definitively this automated task"
+msgstr " حذف هذه العمليه الآليه نهائيا"
+
+msgid "Off"
+msgstr "مغلق"
+
+msgid "On"
+msgstr "مفتوح"
+
+msgid "Automated submit"
+msgstr "ارسال آلي"
+
+msgid "Manual submit"
+msgstr "ارسال يدوي"
+
+msgid "Automated submits"
+msgstr "الرسائل المرسله آليا"
+
+msgid "At the moment there is no automated task, you can create new ones"
+msgstr "حتى هذه اللحظه لا توجد اية عمليات ارسال آليه, يمكنك انشاء المزيد."
+
+msgid "New Auto-creation Process"
+msgstr "انشاء عمليه بناء آلى جديده"
+
+msgid "Auto-create Newsletters Tutorial"
+msgstr "ملخص ارشادى عن عمليه البناء الآلى للنشرات"
+
+msgid "Get posts from language:"
+msgstr "الحصول على البوستس من احدى اللغات:"
+
+msgid "Use as template:"
+msgstr "استخدام كنموذج:"
+
+msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr " أولا يجب إنشاء رسالة إخبارية مع معلومات قابله للإدخال ( مع ترك %the_content%, %the_title% إلخ.."
+
+msgid "Create a newsletter every %s posts"
+msgstr "إنشاء رسالة إخبارية كل %s بوستس "
+
+msgid "Error: there are no mailing lists"
+msgstr "خطأ : لا يوجد قوائم بريدية"
+
+msgid "Advanced options"
+msgstr "خيارات متقدمة"
+
+msgid "Automated options"
+msgstr "خيارات الارسال الآلى"
+
+msgid "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "اضف البوست في النشرات المبنيه آليا (القيمة الافتراضية لأى بوست جديد يتم إنشاؤه)"
+
+msgid "Manual Newsletters"
+msgstr "النشرات المبنيه يدويا"
+
+msgid "Auto-created Newsletters"
+msgstr "النشرات المبنيه آليا"
+
+msgid "There is no auto-created newsletter."
+msgstr "لا يوجد اي نشرات مبنيه آليا"
+
+msgid "tutorial_automated_url"
+msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
+
+msgid "widget_label_name"
+msgstr "الاسم:"
+
+msgid "widget_label_surname"
+msgstr "اللقب:"
+
+msgid "General options"
+msgstr "خيارات عامة"
+
+msgid "Include this post in the automated newsletters?"
+msgstr "اضف هذا البوست في النشرات المبنيه آليا؟"
+
+msgid "This post has been included into:"
+msgstr "تم اضافة هذا البوست في :"
+
+msgid "This post still not included into any automated newsletter."
+msgstr "لم يتم اضافة هذا البوست في اى نشره مبنيه آليا"
+
+msgid "Active process:"
+msgstr "تفعيل العمليه :"
+
+msgid "Newsletter creation options"
+msgstr "خيارات انشاء النشرات"
+
+msgid "Create a newsletter every x amount of time"
+msgstr "انشاء النشرات على مدار فتره زمنيه"
+
+msgid "Newsletter submit options"
+msgstr "خيارات ارسال النشرات"
+
+msgid "Target for newsletter:"
+msgstr "الهدف في النشرة ـ Target"
+
+msgid "Submit method:"
+msgstr "اسلوب الارسال :"
+
+msgid "Messages reset to defaults."
+msgstr "تم اعادة كل الرسائل الى محتواها الاساسى"
 

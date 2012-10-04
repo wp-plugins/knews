@@ -108,10 +108,13 @@
 								$found_module=true;
 	
 								$codeModule .= '<div class="insertable"><img src="' . $url_template . $_POST['template'] . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
-								$codeModule .= cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
-								$codeModule .= '</div></div>';
-	
-								$bodyTemplate = extract_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
+								
+								$extracted_module = cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
+								$codeModule .= $extracted_module . '</div></div>';
+								
+								if (strpos($extracted_module, 'dont_cut_module') === false) {
+									$bodyTemplate = extract_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
+								}
 								$count_modules++;
 							}
 						}

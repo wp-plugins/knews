@@ -2,10 +2,10 @@
 
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
+global $wpdb;
+
 if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 	//The 1.1.0 added fields & tables
-
-	global $wpdb;
 	
 	$sql =	"ALTER TABLE " .KNEWS_NEWSLETTERS . " ADD COLUMN lang varchar(3) NOT NULL DEFAULT ''";
 	$wpdb->query($sql);
@@ -46,8 +46,6 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 		}
 	}
 	
-	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
-
 	if ($wpdb->prefix != $wpdb->base_prefix) {
 		if ($this->tableExists($wpdb->prefix . 'knewsubmits')) {
 	
@@ -64,12 +62,53 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 					$query  = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET submit=" . $submit_confirmation_id . " WHERE submit=" . $sp->id;
 					$results = $wpdb->query( $query );
 				}
-
 			}
 		}
-	}
-	
+	}	
 }
-update_option('knews_advice_time', 0);
+
+if (version_compare(get_option('knews_version','0.0.0'), '1.2.0') < 0) {
+	//The 1.2.0 added fields & tables
+
+	$sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
+			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			name varchar(100) NOT NULL,
+			selection_method varchar(1) NOT NULL,
+			target_id bigint(20) UNSIGNED NOT NULL,
+			newsletter_id bigint(20) UNSIGNED NOT NULL,
+			lang varchar(3) NOT NULL,
+			paused varchar(1) NOT NULL,
+			auto varchar(1) NOT NULL,
+			every_mode int(11) NOT NULL,
+			every_time int(11) NOT NULL,
+			what_dayweek int(11) NOT NULL,
+			every_posts int(11) NOT NULL,
+			last_run datetime NOT NULL,
+			UNIQUE KEY id (id)
+		   )$charset_collate;";
+		   
+	dbDelta($sql);
+
+	$sql =	"CREATE TABLE " .KNEWS_AUTOMATED_POSTS . " (
+			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			id_automated bigint(20) UNSIGNED NOT NULL,
+			id_post bigint(20) UNSIGNED NOT NULL,
+			id_news bigint(20) UNSIGNED NOT NULL,
+			when_scheduled datetime NOT NULL,
+			UNIQUE KEY id (id)
+		   )$charset_collate;";
+		   
+	dbDelta($sql);
+
+	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
+}
 update_option('knews_version', KNEWS_VERSION);
+update_option('knews_advice_time', 0);
+
+function knews_update_hooks() {
+	if (!wp_next_scheduled('knews_wpcron_function_hook')) wp_schedule_event( time(), 'twicedaily', 'knews_wpcron_function_hook');
+	if (!wp_next_scheduled('knews_wpcron_automate_hook')) wp_schedule_event( time(), 'knewstime', 'knews_wpcron_automate_hook');
+}
+add_action('wp', 'knews_update_hooks');
+
 ?>

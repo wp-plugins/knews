@@ -10,6 +10,8 @@ var moz_dirty=false;
 var bold_type='';
 var cursive_type='';
 var flash_wysiwyg_first=true;
+var preview_img=false;
+var preview_css=false;
 
 //function start() {
 parent.jQuery(document).ready( function () {
@@ -733,6 +735,96 @@ function b_justify(justify) {
 
 		restore_focus();
 		update_editor();
+	}
+}
+
+function b_preview(what) {
+	if (what=='img') {
+		
+		if (!preview_img) {
+			parent.jQuery('a.previewIMG').removeClass('previewIMG').addClass('previewIMG_on');
+		} else {
+			parent.jQuery('a.previewIMG_on').removeClass('previewIMG_on').addClass('previewIMG');			
+		}
+		
+		parent.jQuery('img', document).each(function() {
+			
+			src_now=parent.jQuery(this).attr('src');
+
+			if (!preview_img) {
+				parent.jQuery(this).attr('src', 'http://www.previewoff.com/'+src_now);
+			} else {
+				parent.jQuery(this).attr('src', src_now.replace('http://www.previewoff.com/',''));
+			}
+		});
+
+		parent.jQuery('*', document).not('.droppable_empty, .droppable, span.chooser, span.chooser *, span.handler, span.handler *').each(function() {
+
+			if (!preview_img) {
+				
+				var attr = parent.jQuery(this).attr('style');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					savestyle=parent.jQuery(this).attr('style');
+					savestyle=parent.absoluteReplace(savestyle, 'url', 'previewoffurl');
+					parent.jQuery(this).attr('style', savestyle);
+				}
+				
+				var attr = parent.jQuery(this).attr('background');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					parent.jQuery(this).attr('savebackground', parent.jQuery(this).attr('background'));
+					parent.jQuery(this).removeAttr('background');
+				}
+			} else {
+				var attr = parent.jQuery(this).attr('style');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					savestyle=parent.jQuery(this).attr('style');
+					savestyle=parent.absoluteReplace(savestyle, 'previewoffurl', 'url');
+					parent.jQuery(this).attr('style', savestyle);
+				}
+				
+				var attr = parent.jQuery(this).attr('savebackground');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					parent.jQuery(this).attr('background', parent.jQuery(this).attr('savebackground'));
+					parent.jQuery(this).removeAttr('savebackground');
+				}
+			}
+		});
+
+		preview_img=!preview_img;
+
+	} else if (what=='css') {
+
+		if (!preview_css) {
+			parent.jQuery('a.previewCSS').removeClass('previewCSS').addClass('previewCSS_on');
+		} else {
+			parent.jQuery('a.previewCSS_on').removeClass('previewCSS_on').addClass('previewCSS');			
+		}
+
+		parent.jQuery('*', document).not('.droppable_empty, .droppable, span.chooser, span.chooser *, span.handler, span.handler *').each(function() {
+
+			if (!preview_css) {
+				
+				var attr = parent.jQuery(this).attr('style');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					savestyle=parent.jQuery(this).attr('style');
+					parent.jQuery(this).attr('savestyle', savestyle);
+					parent.jQuery(this).removeAttr('style');
+				}
+				
+			} else {
+				var attr = parent.jQuery(this).attr('savestyle');
+				if (typeof attr !== 'undefined' && attr !== false) {
+					savestyle=parent.jQuery(this).attr('savestyle');
+					parent.jQuery(this).attr('style', parent.jQuery(this).attr('savestyle'));
+					parent.jQuery(this).removeAttr('savestyle');
+				}
+				
+			}
+		});
+		preview_css=!preview_css;
+	} else if (what == 'save') {
+		if (preview_img) b_preview('img');
+		if (preview_css) b_preview('css');
 	}
 }
 

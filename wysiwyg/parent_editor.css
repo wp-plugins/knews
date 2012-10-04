@@ -54,7 +54,7 @@ div.wysiwyg_toolbar {
 div.wysiwyg_toolbar p {
 	margin:0;
 }
-div.zoom_tool {
+div.right_icons {
 	float:right;
 }
 div#botonera a {
@@ -72,6 +72,9 @@ div#botonera a {
 .rtl div#botonera a {
 	float:right;
 }
+
+div#botonera a.previewCSS { background-position:-550px 0; }	div#botonera a.previewCSS_on { background-position:-550px -25px; }
+div#botonera a.previewIMG { background-position:-575px 0; }	div#botonera a.previewIMG_on { background-position:-575px -25px; }
 
 div#botonera a.bold, div#botonera div.desactivada a.bold:hover { background-position:0 0; }	div#botonera a.bold:hover { background-position:0 -25px; }
 div#botonera a.italic, div#botonera div.desactivada a.italic:hover { background-position:-25px 0; }	div#botonera a.italic:hover { background-position:-25px -25px; }

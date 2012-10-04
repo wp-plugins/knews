@@ -93,11 +93,11 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 	}
 	
 	function see_log(id) {
-		tb_show('<?php  _e('See the complete submit log', 'knews'); ?>', '<?php echo KNEWS_URL; ?>/direct/download.php?file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php  _e('See the complete submit log', 'knews'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	function see_errors(id) {
-		tb_show('<?php   _e('See report fails by SMTP server'); ?>', '<?php echo KNEWS_URL; ?>/direct/see_fails.php?id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php   _e('See report fails by SMTP server'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSeeFails&amp;id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	</script>
@@ -117,13 +117,14 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 				</thead>
 				<tbody>
 				<?php
+				$alt=false;
 				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC";
 				$results = $wpdb->get_results( $query );
 
 				if (count($results) == 0) echo '<tr><td colspan="7"><p>' . __('No submits yet. First go to Newsletters, create one, and then submit it.','knews') . '</p></td></tr>';
 				
 				foreach ($results as $submit) {
-					echo '<tr><td>';
+					echo '<tr' . (($alt) ? ' class="alt"' : '') . '><td>';
 					if ($submit->special != '') {
 						
 						echo '<strong>' . __('Special','knews') . ':</strong> [' . $submit->special . ']';
@@ -180,7 +181,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 						if ($submit->users_ok != 0 && $submit->users_error != 0) echo ' / ';
 						if ($submit->users_error != 0 ) {
 							echo '<span style="color:#b30000">' . $submit->users_error . ' ERROR</span>';
-							//echo ' <a href="' . KNEWS_URL . '/direct/see_fails.php?id=' . $submit->id . '" target="_blank">[' . __('See fails','knews') . ']</a>';
+							//echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsSeeFails&id=' . $submit->id . '" target="_blank">[' . __('See fails','knews') . ']</a>';
 						}
 					}
 					echo '</td>';
@@ -196,6 +197,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 						}
 					}
 					echo '</td></tr>';
+					$alt=!$alt;
 				}
 				?>
 				</tbody>

@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
@@ -24,6 +14,8 @@ if ($Knews_plugin) {
 	$code=	$Knews_plugin->post_safe('code');
 	
 	$date=	$Knews_plugin->get_mysql_date();
+	
+	$code=str_replace('#@!', '<', $code);
 	
 	//WYSIWYG editor issues
 	$code=rgb2hex($code);
@@ -44,4 +36,5 @@ if ($Knews_plugin) {
 		echo $wpdb->last_error;
 	}
 }
+die();
 ?>

@@ -1,4 +1,5 @@
 // JavaScript Document
+var debug_knews=false;
 
 var magic_offset=60;
 
@@ -576,7 +577,8 @@ function sel_col(ambit, ncolour, obj) {
 	col_picker_number = ncolour;
 	col_picker_obj = obj;
 	if (ambit=='local') col_picker_referer = jQuery(obj).closest('.draggable');
-	tb_show('Color Picker', url_plugin + '/direct/color_picker.php?hex=' + rgb2hex(jQuery(col_picker_obj).css('backgroundColor')) + '&amp;TB_iframe=true&amp;width=545&amp;height=330');
+	debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsPickColor&hex=' + rgb2hex(jQuery(col_picker_obj).css('backgroundColor')));
+	tb_show('Color Picker', url_admin + 'admin-ajax.php?action=knewsPickColor&hex=' + rgb2hex(jQuery(col_picker_obj).css('backgroundColor')) + '&amp;TB_iframe=true&amp;width=545&amp;height=330');
 }
 
 function sel_fon(ambit, nfont, obj) {
@@ -596,10 +598,12 @@ function sel_fon(ambit, nfont, obj) {
 		lh = 0; if (look_for_css_property(jQuery(found_obj).attr('style'),'line-height')) 
 			lh = parseInt(jQuery(found_obj).css('lineHeight'), 10);
 		
-		tb_show('Font Picker', url_plugin + '/wysiwyg/fontpicker/index.php?ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
+		debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh);
+		tb_show('Font Picker', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
 	} else {
 		//alert(fonts_globals[nfont-1][3]);
-		tb_show('Font Picker', url_plugin + '/wysiwyg/fontpicker/index.php?ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3] + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
+		debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3]);
+		tb_show('Font Picker', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3] + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
 	}
 }
 
@@ -625,7 +629,7 @@ function tb_dialog_click (what, where) {
 		document.location=submit_news;
 	}
 	if (where == 'saveok' && !what) {
-		window.location.reload();
+		window.location=reload_news + '&r=' + Math.floor(Math.random()*100000);
 	}
 	
 	if (where == 'deleteModule' && what) {
@@ -844,13 +848,16 @@ function CallBackPost(n, lang) {
 	}
 
 	jQuery.ajax({
-		data: "ajaxid=" + n + "&lang=" + lang,
+		data: "action=knewsSelPost&ajaxid=" + n + "&lang=" + lang,
 		type: "GET",
 		dataType: "json",
-		url: url_plugin + "/direct/select_post.php",
+		//url: url_plugin + "/direct/select_post.php",
+		url: url_admin + 'admin-ajax.php',
 		cache: false,
 		success: function(data) {
 			
+			debug_alert('The Ajax reply (success):', data);
+
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
 			}
@@ -878,7 +885,10 @@ function CallBackPost(n, lang) {
 		complete: function(msg){                        
 		},
 
-		error: function(request, status, error) {           
+		error: function(request, status, error) {
+
+			debug_alert('The Ajax reply (error):', request.responseText + ' / ' + request + ' / ' + status + ' / ' + error);
+
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
 			}
@@ -886,7 +896,7 @@ function CallBackPost(n, lang) {
 		   //alert(request.responseText);
 		   //alert("Error, returned: " + request);
 		   //alert("Error, returned: " + status);
-		   alert("Error in CallBackPost(), returned: " + error);
+		   alert("Error in CallBackPost(), returned: " + error + '(' + request.responseText + ')');
 		}
 
 	});
@@ -939,7 +949,8 @@ function callback_img(html, a, b, hs, vs, align) {
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-	//alert(url_plugin + "/direct/resize_img.php" + "?" + "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y);
+	debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsResizeImg&urlimg=' + img_url + "&width=" + img_x + "&height=" + img_y);
+
 	referer_image_size_ajax=referer_image_size;
 
 	if (jQuery(referer_image_size_ajax).hasClass('alignable')) put_remove_attr('align',align);
@@ -949,14 +960,14 @@ function callback_img(html, a, b, hs, vs, align) {
 	put_remove_attr('vspace',vs);
 
 	jQuery.ajax({
-		data: "urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
+		data: "action=knewsResizeImg&urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
 		type: "GET",
 		dataType: "json",
-		url: url_plugin + "/direct/resize_img.php",
+		url: url_admin + 'admin-ajax.php',
 		cache: false,
 		success: function(data) {
 
-			//alert('2* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
+			debug_alert('The Ajax reply (success):', data);
 
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
@@ -996,6 +1007,9 @@ function callback_img(html, a, b, hs, vs, align) {
 			//alert('Request complete: ' + status);
 		},
 		error: function(request, status, error) {
+
+			debug_alert('The Ajax reply (error):', request.responseText + ' / ' + request + ' / ' + status + ' / ' + error);
+
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
 			}
@@ -1108,7 +1122,10 @@ function insert_post(obj, n) {
 	}
 	referer_module=obj;
 	post_number_module=n;
-	tb_show('', url_plugin + '/direct/select_post.php?TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+
+	tb_show('', url_admin + 'admin-ajax.php?action=knewsSelPost&lang=' + news_lang + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+
+	//tb_show('', url_plugin + '/direct/select_post.php?lang=' + news_lang + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 }
 
 function free_text(obj, n) {
@@ -1147,6 +1164,8 @@ function save_news () {
 	if (!save_news_sem) {
 		save_news_sem=true;
 
+		b_preview('save');
+
 		document.getElementById('knews_editor').contentWindow.normalize_html();
 
 		jQuery('span.img_handler', io).remove();
@@ -1156,18 +1175,27 @@ function save_news () {
 		jQuery('span.content_editable', io)
 			.removeAttr('contenteditable');
 
+		jQuery('.droppable', io).children().each( function() {
+			str_mod = jQuery(this).html();
+			if (str_mod.indexOf("<!--[start module]-->") == -1 && str_mod != '') {
+				jQuery(this).html("<!--[start module]-->" + str_mod + "<!--[end module]-->");
+			}
+		});
+
 		savecode=jQuery('div.wysiwyg_editor', io).html();
+		savecode=savecode.replace(/</g,"#@!");
 
 		jQuery.ajax({
 			data: { code: savecode,
 					title: jQuery('input#title').val(),
 					idnews: id_news,
-					testslash: "aa'aa" },
+					testslash: "aa'aa",
+					action: 'knewsSaveNews' },
 	
 			type: "POST",
 			cache: false,
 			dataType: "html",
-			url: url_plugin + "/direct/save_news.php",
+			url: url_admin + 'admin-ajax.php',
 			success: function(data) { 
 
 				if (data=='ok') {
@@ -1225,7 +1253,7 @@ function b_color() {
 	saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();
 	not_saved();
 	if (document.getElementById('knews_editor').contentWindow.inside_editor) {
-		tb_show('Color Picker', url_plugin + '/direct/color_picker.php?hex=' + rgb2hex(jQuery('#botonera a.color').css('backgroundColor')) + '&amp;editor=1&amp;TB_iframe=true&amp;width=545&amp;height=330');
+		tb_show('Color Picker', url_admin + 'admin-ajax.php?action=knewsPickColor&hex=' + rgb2hex(jQuery('#botonera a.color').css('backgroundColor')) + '&amp;editor=1&amp;TB_iframe=true&amp;width=545&amp;height=330');
 	}
 }
 function CallBackColourEditor(hex) {
@@ -1233,6 +1261,10 @@ function CallBackColourEditor(hex) {
 	not_saved();
 	parent.tb_remove();
 	document.getElementById('knews_editor').contentWindow.b_color(hex);	
+}
+function b_preview(what) {
+	not_saved();
+	document.getElementById('knews_editor').contentWindow.b_preview(what);
 }
 
 function clone_safe(origen, destino) {
@@ -1247,4 +1279,8 @@ function clone_safe(origen, destino) {
 	jQuery('*', destino.children(":last")).each(function (index) {
 		jQuery(this).attr('style', copy_styles[index]);
 	});
+}
+
+function debug_alert(msg, data) {
+	if (debug_knews) alert('The Knews Debugging mode is turned on.\r' + msg + '\r' + data);
 }

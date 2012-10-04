@@ -16,10 +16,14 @@
 			
 			if (count($user)==1) {
 				$aux_array=array();
-				reset($used_tokens);
+				//array('token'=>$token->token, 'id'=>$token->id, 'default'=>$tokenfound[1])
+
+				foreach ($used_tokens as $token) {
+					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($user->id, $token['id'], $token['defaultval']) );
+				}
 				$user->tokens = $aux_array;
-				$user->unsubscribe = KNEWS_URL . '/direct/knews_unsubscribe.php?e=' . $user->email . '&k=' . $user->confkey;
-				$user->cant_read = KNEWS_URL . '/direct/knews_read_email.php?id=' . $id_newsletter;
+				$user->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey;
+				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email);
 
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			} else {
@@ -61,53 +65,21 @@
 			
 			if ($args_cats_sql != '') {
 				$query .= $args_cats_sql . ')';
-				$targets = $wpdb->get_results( $query );
+
+				$batch_opts = array (
+					'minute' => intval($Knews_plugin->post_safe('minute')),
+					'hour' => intval($Knews_plugin->post_safe('hour')),
+					'day' => intval($Knews_plugin->post_safe('day')),
+					'month' => intval($Knews_plugin->post_safe('month')),
+					'year' => intval($Knews_plugin->post_safe('year')),
+					'paused' => $Knews_plugin->post_safe('paused'),
+					'priority' => $Knews_plugin->post_safe('priority'),
+					'strict_control' => $Knews_plugin->post_safe('strict_control'),
+					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once')
+				);
 				
-				if (count($targets) > 0) {
-										
-					$start_time = mktime(intval($Knews_plugin->post_safe('hour')), intval($Knews_plugin->post_safe('minute')), 0, 
-									intval($Knews_plugin->post_safe('month')), intval($Knews_plugin->post_safe('day')), intval($Knews_plugin->post_safe('year')));
-					
-					$mysqldate = $Knews_plugin->get_mysql_date($start_time);
-					
-					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . get_current_blog_id() . ', ' . $id_newsletter . ', 0, ' . $Knews_plugin->post_safe('paused') . ', \'' . $mysqldate . '\', ' . count($targets) . ', 0, 0, ' . $Knews_plugin->post_safe('priority') . ', \'' . $Knews_plugin->post_safe('strict_control') . '\', ' . $Knews_plugin->post_safe('emails_at_once') . ', \'\', \'0000-00-00 00:00:00\')';
-					$results = $wpdb->query( $query );
-					
-					$submit_id=$wpdb->insert_id; $submit_id2=mysql_insert_id(); if ($submit_id==0) $submit_id=$submit_id2;
-	
-					foreach ($targets as $target) {
-						
-						//$target->id;
-						$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . ' (submit, user, status) VALUES (' . $submit_id . ', ' . $target->id . ', 0)';
-						$results = $wpdb->query( $query );
-						
-					}
-					
-					// Extraiem links per estadistiques
-					require( KNEWS_DIR . "/includes/knews_compose_email.php");
-					// Thanks to http://www.web-max.ca/PHP/misc_23.php
-					/*preg_match_all ("/a[\s]+[^>]*?href[\s]?=[\s\"\']+".
-						"(.*?)[\"\']+.*?>"."([^<]+|.*?)?<\/a>/", */
+				require( KNEWS_DIR . "/includes/submit_batch.php");
 
-					preg_match_all ("/(a|A)[\s]+[^>]*?href[\s]?=[\s\"\']+".
-						"(.*?)[\"\']+.*?>"."([^<]+|.*?)?<\/(a|A)>/", 
-						$theHtml, $matches);
-
-					$matches = $matches[2];
-
-					foreach($matches as $link) {
-						if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
-							$link_key = substr(md5(uniqid()),-16);
-							$query = 'INSERT INTO ' . KNEWS_KEYS . ' (keyy, type, submit_id, href) VALUES (\'' . $link_key . '\', 1, ' . $submit_id . ', \'' . $link . '\')';
-							$results = $wpdb->query( $query );
-						}
-					}
-					echo '<div class="updated"><p>' . __('Batch submit process has been properly scheduled.','knews') . '</p></div>';				
-					$submit_enqueued=true;
-				} else {
-					echo '<div class="error"><p>' . __('No active users in the selected list, nothing programmed to send.','knews') . '</p></div>';				
-				}
-				
 			} else {
 
 				echo '<div class="error"><p>' . __('Select one or more lists','knews') . '</p></div>';
@@ -183,7 +155,7 @@
 		if ($knewsOptions['knews_cron']=='cronjs') $cron=false;
 
 		if ($submit_enqueued && !$cron) {
-			echo '<h2><a href="' . $Knews_plugin->get_main_plugin_url() . '/knews/direct/knews_cron_do.php?js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
+			echo '<h2><a href="' . $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCronDo&js=1" target="_blank">' . __('Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends.','knews') . '</a></h2>';
 		}
 		/*if (ini_get('safe_mode') && !$cron) {
 	?>

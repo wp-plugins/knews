@@ -24,7 +24,7 @@ $sql =	"CREATE TABLE " .KNEWS_EXTRA_FIELDS . " (
 	   
 		INSERT INTO " .KNEWS_EXTRA_FIELDS . " (id, name, show_table, token) VALUES 
 		(1, 'name', 1, '%name%'),
-		(2, 'sourname', 0, '%sourname%');";
+		(2, 'surname', 0, '%surname%');";
 
 dbDelta($sql);
 
@@ -133,6 +133,36 @@ $sql =	"CREATE TABLE " .KNEWS_KEYS . " (
 	   )$charset_collate;";
 
 dbDelta($sql);
+
+$sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
+		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+		name varchar(100) NOT NULL,
+		selection_method varchar(1) NOT NULL,
+		target_id bigint(20) UNSIGNED NOT NULL,
+		newsletter_id bigint(20) UNSIGNED NOT NULL,
+		lang varchar(3) NOT NULL,
+		paused varchar(1) NOT NULL,
+		auto varchar(1) NOT NULL,
+		every_mode int(11) NOT NULL,
+		every_time int(11) NOT NULL,
+		what_dayweek int(11) NOT NULL,
+		every_posts int(11) NOT NULL,
+		UNIQUE KEY id (id)
+	   )$charset_collate;";
+	   
+dbDelta($sql);
+
+$sql =	"CREATE TABLE " .KNEWS_AUTOMATED_POSTS . " (
+		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+		id_automated bigint(20) UNSIGNED NOT NULL,
+		id_post bigint(20) UNSIGNED NOT NULL,
+		id_news bigint(20) UNSIGNED NOT NULL,
+		when_scheduled datetime NOT NULL,
+		UNIQUE KEY id (id)
+	   )$charset_collate;";
+	   
+dbDelta($sql);
+
 
 update_option('knews_version', KNEWS_VERSION);
 ?>

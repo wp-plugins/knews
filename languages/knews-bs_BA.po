@@ -1,13 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Knews\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Carles <mail@carlesrever.com>\n"
-"Language-Team: \n"
+"Language-Team: Hasan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Bosnian\n"
+"X-Poedit-Country: BOSNIA AND HERZEGOVINA\n"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -37,7 +39,7 @@ msgstr "Batch submit process has been properly scheduled."
 #. Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Activate user directly (don't send e-mail confirmation)"
-msgstr "Activate user directly (don't send e-mail confirmation)"
+msgstr "Aktiviraj korisnika izravno (ne šalju e-mail potvrdu)"
 
 #. Text in echo
 #: admin/knews_admin_users.php:455
@@ -52,7 +54,7 @@ msgstr "No users match the search criteria"
 #. Text in echo
 #: admin/knews_admin_lists.php:142
 msgid "Active users"
-msgstr "Active users"
+msgstr "Aktivni korisnici"
 
 #. Text in echo
 #: admin/knews_admin_users.php:162
@@ -67,7 +69,7 @@ msgstr "Add field"
 #. Text in echo
 #: admin/knews_admin_news_list.php:214
 msgid "Add newsletter"
-msgstr "Add newsletter"
+msgstr "Dodaj newsletter"
 
 #. Text in function
 #: admin/knews_admin_import.php:358
@@ -95,17 +97,17 @@ msgstr "And there have not been imported:"
 #. Text in echo
 #: admin/knews_admin_lists.php:155
 msgid "At the moment there is no list, you can create new ones"
-msgstr "At the moment there is no list, you can create new ones"
+msgstr "U ovom trenutku ne postoji popis, možete stvoriti nove"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:170
 msgid "At the moment there is no newsletter, you can create new ones"
-msgstr "At the moment there is no newsletter, you can create new ones"
+msgstr "U ovom trenutku ne postoji newsletter, možete stvoriti nove"
 
 #. Text in echo
 #: admin/knews_admin_import.php:658
 msgid "Automatically send confirmation e-mails:"
-msgstr "Automatically send confirmation e-mails:"
+msgstr "Automatski pošalji potvrdu na e-mailove:"
 
 #. Text in echo
 #: admin/knews_admin_config.php:219
@@ -155,7 +157,7 @@ msgstr "CSV total:"
 #. Text in function
 #: admin/knews_admin_news_send.php:201
 msgid "I can't submit an e-mail to:"
-msgstr "I can't submit an e-mail to:"
+msgstr "Ne mogu poslati e-mail na:"
 
 #. Text in echo
 #: admin/knews_admin_config.php:216
@@ -200,27 +202,27 @@ msgstr "Continue"
 #. Text in echo
 #: admin/knews_admin_lists.php:164
 msgid "Create a mailing list"
-msgstr "Create a mailing list"
+msgstr "Kreiraj mailing listu"
 
 #. Text in echo
 #: admin/knews_admin_users.php:421
 msgid "Create a subscriber manually"
-msgstr "Create a subscriber manually"
+msgstr "Kreiraj korisnika manuelno"
 
 #. Text in echo
 #: admin/knews_admin_lists.php:159
 msgid "Create new mailing list"
-msgstr "Create new mailing list"
+msgstr "Napravi novi popis primatelja"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:175
 msgid "Create new newsletter"
-msgstr "Create new newsletter"
+msgstr "Kreiraj novi newsletter"
 
 #. Text in echo
 #: admin/knews_admin_users.php:457
 msgid "Create a user"
-msgstr "Create a user"
+msgstr "Kreiraj korisnika"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:153
@@ -588,12 +590,12 @@ msgstr "Newsletter"
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "Failed to create the Newsletter"
-msgstr "Failed to create the Newsletter"
+msgstr "Nisam mogao stvoriti Newsletter"
 
 #. Text in function
 #: admin/knews_admin_news_edit.php:22
 msgid "Newsletter doesn't exists"
-msgstr "Newsletter doesn't exists"
+msgstr "Newsletter ne postoji"
 
 #. Text in function
 #: admin/knews_admin_news_list.php:1
@@ -774,12 +776,12 @@ msgstr "Send e-mails using SMTP (recommended)"
 #. Text in echo
 #: admin/knews_admin_news_send.php:191
 msgid "Send the newsletter manually"
-msgstr "Send the newsletter manually"
+msgstr "Pošalji newsletter manuelno"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:131
 msgid "Send the newsletter to the following lists"
-msgstr "Send the newsletter to the following lists"
+msgstr "Pošalji newsletter sljedećim popisima"
 
 #. Text in echo
 #: admin/knews_admin_config.php:187
@@ -910,7 +912,7 @@ msgstr "Submit method"
 #. Text in function
 #: knews.php:520
 msgid "Subscribe me"
-msgstr "Subscribe me"
+msgstr "Prijavite se"
 
 #. Text in function
 #: knews.php:520
@@ -949,8 +951,8 @@ msgstr "The WPML plugin was not detected, multilingual options are not functiona
 
 #. Text in function
 #: admin/knews_admin_import.php:203
-msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)"
-msgstr "The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)"
+msgid "The directory /plantilla/plugins/knews/tmp must be writable (chmod 700)"
+msgstr "The directory /plantilla/plugins/knews/tmp must be writable (chmod 700)"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -986,12 +988,12 @@ msgstr "The last execution was done"
 #. Text in function
 #: admin/knews_admin_news_send.php:124
 msgid "The newsletter doesn't exists"
-msgstr "The newsletter doesn't exists"
+msgstr "Newsletter ne postoji"
 
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "The newsletter has been created successfully"
-msgstr "The newsletter has been created successfully"
+msgstr "Newsletter je uspješno izrađen"
 
 #. Text in echo
 #: admin/knews_admin_users.php:176
@@ -1001,7 +1003,7 @@ msgstr "A token is used to insert a field in the newsletter. Should be located b
 #. Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added and an e-mail confirmation has been sent"
-msgstr "The user has been added and an e-mail confirmation has been sent"
+msgstr "Korisnik je dodan i e-mail potvrde poslan"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1011,32 +1013,32 @@ msgstr "The user has been added and from now on he will receive the newsletters"
 #. Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added but an error occurred in sending e-mail confirmation"
-msgstr "The user has been added but an error occurred in sending e-mail confirmation"
+msgstr "Korisnik je dodan, ali došlo je do pogreške u slanju e-mail potvrdu"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has not been inserted"
-msgstr "The user has not been inserted"
+msgstr "Korisnik je dodan"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user was already introduced"
-msgstr "The user was already introduced"
+msgstr "Korisnik već je uvedena"
 
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "There is already another newsletter with the same name!"
-msgstr "There is already another newsletter with the same name!"
+msgstr "Već postoji drugi newsletter s istim imenom!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:651
 msgid "There have been created:"
-msgstr "There have been created:"
+msgstr "Tu su stvoreni:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:653
 msgid "There have been updated:"
-msgstr "There have been updated:"
+msgstr "Tu su ažurirani:"
 
 #. Text in echo
 #: admin/knews_admin_import.php:356
@@ -1103,7 +1105,7 @@ msgid "Note: Knews authors have no relationship with qTranslate or WMPL authors.
 msgstr "Note: Knews authors have no relationship with qTranslate or WMPL authors."
 
 msgid "If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the \"Save\" button (blue coloured)."
-msgstr "If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the \"Save\" button (blue coloured)."
+msgstr "Ako sada napustite ovu stranicu, newsletter promjene će biti izgubljene.Molim te, poništiti i pritisnite \"Save\" button (blue coloured)."
 
 msgid "The multilanguage plugin has stopped working."
 msgstr "The multilanguage plugin has stopped working."
@@ -1120,7 +1122,7 @@ msgstr "Don't show this message again [x]"
 #. Text in function
 #: admin/knews_admin_import.php:437
 msgid "The user already exists"
-msgstr "The user already exists"
+msgstr "Korisnik već postoji"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1130,27 +1132,27 @@ msgstr "User data updated"
 #. Text in function
 #: admin/knews_admin_users.php:263
 msgid "User not found"
-msgstr "User not found"
+msgstr "Korisnik nije pronađen"
 
 #. Text in echo
 #: admin/knews_admin_submits.php:70
 msgid "Users"
-msgstr "Users"
+msgstr "Korisnici"
 
 #. Text in function
 #: admin/knews_admin_users.php:460
 msgid "There are not yet users"
-msgstr "There are not yet users"
+msgstr "Nema još uvijek korisnici"
 
 #. Text in echo
 #: admin/knews_admin_import.php:658
 msgid "Users unconfirmed (You should do confirmation manually):"
-msgstr "Users unconfirmed (You should do confirmation manually):"
+msgstr "Korisnici koji su nepotvrđene (Trebalo bi učiniti manuelno potvrdu):"
 
 #. Text in echo
 #: admin/knews_admin_import.php:361
 msgid "Send a confirmation e-mail to the unconfirmed users (not to the locked ones)"
-msgstr "Send a confirmation e-mail to the unconfirmed users (not to the locked ones)"
+msgstr "Pošaljite e-poštu potvrde na nepotvrđenim korisnika (samo)"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1166,13 +1168,13 @@ msgstr "Value"
 #. Text in echo
 #: admin/knews_admin_news_send.php:154
 msgid "WARNING"
-msgstr "WARNING"
+msgstr "UPOZORENJE"
 
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
 msgid "Wrong e-mail"
-msgstr "Wrong e-mail"
+msgstr "Pogrešno e-mail"
 
 #. Text in function
 #: admin/knews_admin_import.php:437
@@ -1182,7 +1184,7 @@ msgstr "Wrong state"
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Yes"
-msgstr "Yes"
+msgstr "Da"
 
 #. Text in function
 #: admin/knews_admin_news_send.php:179
@@ -1192,12 +1194,12 @@ msgstr "You cannot schedule a delayed delivery. You must leave an auxiliary wind
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "You must choose a name for the new newsletter!"
-msgstr "You must choose a name for the new newsletter!"
+msgstr "Morate izabrati ime za novi newsletter!"
 
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "You must choose a template!"
-msgstr "You must choose a template!"
+msgstr "Morate odabrati predložak!"
 
 #. Text in function
 #: admin/knews_admin_import.php:203
@@ -1215,7 +1217,7 @@ msgid "Widget title"
 msgstr "Widget title"
 
 msgid "widget_title"
-msgstr "Subscribe me"
+msgstr "Prijavite se"
 
 msgid "Widget e-mail label form"
 msgstr "Widget e-mail label form"
@@ -1227,90 +1229,90 @@ msgid "Widget submit button"
 msgstr "Widget submit button"
 
 msgid "widget_button"
-msgstr "Send"
+msgstr "Pošalji"
 
 msgid "You were already a subscriber (AJAX message)"
-msgstr "You were already a subscriber (AJAX message)"
+msgstr "Već ste prijavljeni. (AJAX message)"
 
 #. Text in function
 #: knews.php:1
 msgid "ajax_subscription"
-msgstr "We just sent you an e-mail to confirm your subscription"
+msgstr "Upravo smo vam poslali e-mail da potvrdite vašu prijavu."
 
 #. Text in function
 #: knews.php:1
 msgid "ajax_subscription_direct"
-msgstr "You have been successfully subscribed"
+msgstr "Uspješno ste se prijavili"
 
 #. Text in function
 #: knews.php:1
 msgid "ajax_subscription_oops"
-msgstr "You were already subscribed"
+msgstr "Već ste prijavljeni."
 
 #. Text in function
 #: knews.php:1
 msgid "ajax_subscription_error"
-msgstr "An error ocurred while sending e-mail confirmation"
+msgstr "Došlo je do greške prilikom slanja e-mail potvrde."
 
 #. Text in function
 #: knews.php:1
 msgid "ajax_wrong_email"
-msgstr "Your e-mail address seems to be incorrect. Please check it back"
+msgstr "Izgleda da je vaša e-mail adresa pogrešna. Molimo provjerite."
 
 #. Text in function
 #: knews.php:1
 msgid "email_subscription_subject"
-msgstr "Newsletter sign up"
+msgstr "Newsletter prijava"
 
 #. Text in function
 #: knews.php:1
 msgid "email_subscription_body"
-msgstr "<p>You've asked to be subscribed to the newsletter of #blog_name#, you must confirm your registration by clicking <a href=\"#url_confirm#\">here</a>.</p><p>You can paste the address in the browser:<br>#url_confirm#</p>"
+msgstr "<p>Tražili ste da se prijavite na newsletter: #blog_name#, morate potvrditi vašu registraciju klikom na  <a href=\"#url_confirm#\"> ovdje </a>.</p><p>Možete kopirati adresu u browser:<br>#url_confirm#</p>"
 
 #. Text in echo
 #: dialogs.php:28
 msgid "subscription_ok_title"
-msgstr "Your subscription has been confirmed"
+msgstr "Vaša prijava je uspješno potvrđena."
 
 #. Text in echo
 #: dialogs.php:29
 msgid "subscription_ok_message"
-msgstr "From now on, you will receive our newsletters.<br><br><strong>. Thank you.</strong>"
+msgstr "Od sada ćete primati naš newsletter. <br> <br> <strong> Hvala vam.</strong>"
 
 #. Text in echo
 #: dialogs.php:35
 msgid "subscription_error_title"
-msgstr "Error on subscription"
+msgstr "Greška pri prijavi."
 
 #. Text in echo
 #: dialogs.php:50
 msgid "subscription_error_message"
-msgstr "Please, try it again. If necessary, copy the entire link in the browser bar.<br><br><strong>We apologize for the inconvenience</strong>"
+msgstr "Molimo pokušajte ponovo. Ukoliko je potrebno, kopirajte cijeli link u browser bar. "
 
 #. Text in echo
 #: dialogs.php:49
 msgid "subscription_stop_error_title"
-msgstr "Fail to cancel your subscription"
+msgstr "Prijava nije otkazana"
 
 #. Text in echo
 #: dialogs.php:50
 msgid "subscription_stop_error_message"
-msgstr "Please, try it again. If necessary, copy the entire email link in the navigation bar. Sorry for the inconvenience."
+msgstr "Molimo pokušajte ponovo. Ukoliko je potrebno, kopirajte cijeli email link u navigation bar."
 
 #. Text in echo
 #: dialogs.php:42
 msgid "subscription_stop_ok_title"
-msgstr "Your subscription has been cancelled"
+msgstr "Vaša prijava je otkazana."
 
 #. Text in echo
 #: dialogs.php:43
 msgid "subscription_stop_ok_message"
-msgstr "From now on, you will no longer receive our newsletters. Thank you."
+msgstr "Od sada nećete primati naš newsletter. "
 
 #. Text in echo
 #: dialogs.php:52
 msgid "dialogs_close_button"
-msgstr "Close"
+msgstr "Zatvori."
 
 #. Text in echo
 #: admin/knews_admin_import.php:373
@@ -1347,7 +1349,7 @@ msgstr "day-month-year"
 #. Text in echo
 #: admin/knews_admin_config.php:149
 msgid "here"
-msgstr "here"
+msgstr "ovdje"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1373,13 +1375,13 @@ msgstr "minutes ago"
 #. Text in function
 #: admin/knews_admin_news_list.php:167
 msgid "never"
-msgstr "never"
+msgstr "nikada"
 
 #. Text in function
 #: admin/knews_admin_import.php:358
 #: admin/knews_admin_users.php:234
 msgid "not confirmed"
-msgstr "not confirmed"
+msgstr "nije potvrđena"
 
 #. Text in function
 #: admin/knews_admin_users.php:246
@@ -1395,7 +1397,7 @@ msgstr "test mode"
 #. Text in function
 #: admin/knews_admin_lists.php:1
 msgid "there is already a list with this name!"
-msgstr "there is already a list with this name!"
+msgstr "već postoji lista s ovim imenom!"
 
 #. Text in echo
 #: admin/knews_admin_import.php:644
@@ -1407,7 +1409,7 @@ msgstr "there is already a list with this name!"
 #: admin/knews_admin_import.php:668
 #: admin/knews_admin_users.php:394
 msgid "users"
-msgstr "users"
+msgstr "Korisnici"
 
 #. Text in echo
 #: phpscanner.php:17
@@ -1457,12 +1459,12 @@ msgstr "Subscription OK Dialog (Title)"
 #. Text in echo
 #: phpscanner.php:11
 msgid "Subscription done, you were already subscribed (AJAX message)"
-msgstr "Subscription done, you were already subscribed (AJAX message)"
+msgstr "Već ste prijavljeni  (AJAX message)"
 
 #. Text in echo
 #: phpscanner.php:10
 msgid "We have sent you a confirmation e-mail (AJAX message)"
-msgstr "We have sent you a confirmation e-mail (AJAX message)"
+msgstr "Upravo smo vam poslali e-mail da potvrdite Vašu prijavu (AJAX message)"
 
 #. Text in echo
 #: phpscanner.php:13
@@ -1492,17 +1494,17 @@ msgstr "UnSubscribe OK Dialog (Title)"
 #. Text in echo
 #: phpscanner.php:9
 msgid "Wrong e-mail address, please check (AJAX message)"
-msgstr "Wrong e-mail address, please check (AJAX message)"
+msgstr "Izgleda da je vaša e-mail adresa pogrešna. Molimo provjerite (AJAX message)"
 
 #. Text in echo
 #: phpscanner.php:36
 msgid "email_importation_body"
-msgstr "You have been subscribed to the newsletters  of the #blog_name#, you should confirm your subscription by clicking <a href=\"#url_confirm#\">here</a>.</p><p>You can paste the address into a browser:<br>#url_confirm#</p>"
+msgstr "Prijavljeni ste na newsletter: #blog_name#, Trebate potvrditi svoju registraciju klikom na  <a href=\"#url_confirm#\"> ovdje </a>.</p><p>Možete kopirati adresu u browser:  <br>#url_confirm#</p>"
 
 #. Text in echo
 #: phpscanner.php:35
 msgid "email_importation_subject"
-msgstr "Newsletter sign up"
+msgstr "Newsletter prijava"
 
 msgid "deleted list"
 msgstr "deleted list"
@@ -1514,22 +1516,22 @@ msgid "User deleted"
 msgstr "User deleted"
 
 msgid "Edit this user"
-msgstr "Edit this user"
+msgstr "Uredi ovog korisnika"
 
 msgid "Activate this user"
-msgstr "Activate this user"
+msgstr "Aktiviranje ovog korisnika"
 
 msgid "Activate"
-msgstr "Activate"
+msgstr "Aktiviraj"
 
 msgid "Delete definitively this user"
-msgstr "Delete definitively this user"
+msgstr "Izbriši definitivno ovog korisnika"
 
 msgid "Block this user"
-msgstr "Block this user"
+msgstr "Blokirajte ovog korisnika"
 
 msgid "Block"
-msgstr "Block"
+msgstr "Blokirajte"
 
 msgid "Batch actions"
 msgstr "Batch actions"
@@ -1538,16 +1540,16 @@ msgid "Apply"
 msgstr "Apply"
 
 msgid "Rename"
-msgstr "Rename"
+msgstr "Preimenuj"
 
 msgid "Cancel"
-msgstr "Cancel"
+msgstr "otkazati"
 
 msgid "Only update"
-msgstr "Only update"
+msgstr "Samo ažuriraj"
 
 msgid "Only delete"
-msgstr "Only delete"
+msgstr "Samo brisanje"
 
 msgid "See fails"
 msgstr "See fails"
@@ -1559,25 +1561,25 @@ msgid "Progress"
 msgstr "Progress"
 
 msgid "Rename this list"
-msgstr "Rename this list"
+msgstr "Preimenuj ovu listu"
 
 msgid "See this list users"
-msgstr "See this list users"
+msgstr "Pogledajte ovaj popis korisnika"
 
 msgid "Delete definitively this newsletter"
-msgstr "Delete definitively this newsletter"
+msgstr "Brisanje definitivno newslettera"
 
 msgid "Edit this newsletter"
-msgstr "Edit this newsletter"
+msgstr "Uredite ovaj newsletter"
 
 msgid "Rename this newsletter"
-msgstr "Rename this newsletter"
+msgstr "Preimenuj ovaj newsletter"
 
 msgid "Open a preview in a new window"
 msgstr "Open a preview in a new window"
 
 msgid "Submit this newsletter"
-msgstr "Submit this newsletter"
+msgstr "Pošalji ovaj newsletter"
 
 msgid "Change the priority"
 msgstr "Change the priority"
@@ -1592,7 +1594,7 @@ msgid "Remove pause, continue submit"
 msgstr "Remove pause, continue submit"
 
 msgid "Start now"
-msgstr "Start now"
+msgstr "Počnite sada"
 
 msgid "See report fails by SMTP server"
 msgstr "See report fails by SMTP server"
@@ -1601,28 +1603,28 @@ msgid "Stop and delete this submit now"
 msgstr "Stop and delete this submit now"
 
 msgid "Error: This newsletter does not exist"
-msgstr "Error: This newsletter does not exist"
+msgstr "Greška: Ovaj newsletter ne postoji"
 
 msgid "Do you really want to delete this module?"
-msgstr "Do you really want to delete this module?"
+msgstr "Da li stvarno želite izbrisati ovaj modul?"
 
 msgid "Show/hide handlers"
 msgstr "Show/hide handlers"
 
 msgid "Move module"
-msgstr "Move module"
+msgstr "Pomakni modul"
 
 msgid "Delete module"
-msgstr "Delete module"
+msgstr "Izbriši modul"
 
 msgid "Subject"
-msgstr "Subject"
+msgstr "Predmet"
 
 msgid "Posts"
-msgstr "Posts"
+msgstr "Članci"
 
 msgid "Pages"
-msgstr "Pages"
+msgstr "Stranice"
 
 msgid "Alerts"
 msgstr "Alerts"
@@ -1750,14 +1752,14 @@ msgstr "See the complete submit log"
 msgid "Alerts and logs"
 msgstr "Alerts and logs"
 
-msgid "Write logs (in /wp-content/plugins/knews/tmp directory) in submits"
-msgstr "Write logs (in /wp-content/plugins/knews/tmp directory) in submits"
+msgid "Write logs (in /plantilla/plugins/knews/tmp directory) in submits"
+msgstr "Write logs (in /plantilla/plugins/knews/tmp directory) in submits"
 
 msgid "Go to template page"
 msgstr "Go to template page"
 
 msgid "Redirecting to editor..."
-msgstr "Redirecting to editor..."
+msgstr "Preusmjeravanje na urednika ..."
 
 msgid "The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes"
 msgstr "The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes"
@@ -1796,22 +1798,22 @@ msgid "Uncheck all mailing lists"
 msgstr "Uncheck all mailing lists"
 
 msgid "Duplicate"
-msgstr "Duplicate"
+msgstr "Dupliciraj "
 
 msgid "Duplicate this newsletter"
-msgstr "Duplicate this newsletter"
+msgstr "Dupliciraj ovaj newsletter "
 
 msgid "Apply changes and refresh image"
-msgstr "Apply changes and refresh image"
+msgstr "Primjeni izmjene i osvježi sliku"
 
 msgid "Undo image changes"
-msgstr "Undo image changes"
+msgstr "Vrati izmjene slike"
 
 msgid "Properties of image"
 msgstr "Properties of image"
 
 msgid "Select one or more lists"
-msgstr "Select one or more lists"
+msgstr "Izaberi jednu ili više listi"
 
 msgid "No active users in the selected list, nothing programmed to send."
 msgstr "No active users in the selected list, nothing programmed to send."
@@ -1832,7 +1834,7 @@ msgid "The language can't be localized"
 msgstr "The language can't be localized"
 
 msgid "You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything."
-msgstr "You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything."
+msgstr "Vi ste u načinu slike izdanje. Morate pritisnuti Apply ili Poništi slike promjene (ili pritisnite tipku ESC), prije toga ništa."
 
 msgid "Image alt:"
 msgstr "Image alt:"
@@ -1931,7 +1933,7 @@ msgid "Error: make sure the directory %s exists and has write permissions (chmod
 msgstr "Error: make sure the directory %s exists and has write permissions (chmod 700)."
 
 msgid "Error: there is no image selected"
-msgstr "Error: there is no image selected"
+msgstr "Pogreška: nema slike odabrana"
 
 msgid "Knews updated the database successfully. Welcome to %s version."
 msgstr "Knews updated the database successfully. Welcome to %s version."
@@ -1949,28 +1951,28 @@ msgid "SQL Error while updating user"
 msgstr "SQL Error while updating user"
 
 msgid "Warning: the email has no subject! %s Edit it again before submit!"
-msgstr "Warning: the email has no subject! %s Edit it again before submit!"
+msgstr "Upozorenje: e nema naslov! %s Uredi ga opet prije podnijeti!"
 
 msgid "Warning: %sConfigure sender name before submit!"
-msgstr "Warning: %sConfigure sender name before submit!"
+msgstr "Warning: %s Configure sender name before submit!"
 
 msgid "text_direction"
 msgstr "ltr"
 
 msgid "cant_read_text_1"
-msgstr "If you can't read this email click"
+msgstr "Ukoliko ne možete pročitati ovaj e-mail kliknite"
 
 msgid "cant_read_text_link"
-msgstr "here"
+msgstr "ovdje"
 
 msgid "cant_read_text_2"
 msgstr ""
 
 msgid "unsubscribe_text_1"
-msgstr "If you wish to unsubscribe from our mailing list, click"
+msgstr "Ukoliko želite da se odjavite sa naše mailing liste, kliknite "
 
 msgid "unsubscribe_text_link"
-msgstr "here"
+msgstr "ovdje"
 
 msgid "unsubscribe_text_2"
 msgstr ""
@@ -2018,7 +2020,7 @@ msgid "The read more text link"
 msgstr "The read more text link"
 
 msgid "read_more_link"
-msgstr "continue reading"
+msgstr "Nastavite čitati"
 
 msgid "Image URL:"
 msgstr "Image URL:"
@@ -2027,13 +2029,13 @@ msgid "Image align:"
 msgstr "Image align:"
 
 msgid "Apply changes"
-msgstr "Apply changes"
+msgstr "Primijeni promjene"
 
 msgid "Undo"
 msgstr "Undo"
 
 msgid "Fast selection:"
-msgstr "Fast selection:"
+msgstr "Brzi odabir:"
 
 msgid "You are downgraded the version of Knews, you can lose data, please update quickly"
 msgstr "You are downgraded the version of Knews, you can lose data, please update quickly"
@@ -2048,188 +2050,188 @@ msgid "tutorial_cron_url"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 
 msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "Morate koristiti glavni blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
 
 msgid "Multisite detected. Only one instance of %s must be called for all websites."
-msgstr "Multisite detected. Only one instance of %s must be called for all websites."
+msgstr "Multisite otkriven. Samo jedan primjer od %s mora biti korišten za sve web stranice"
 
 msgid "Cant create the automated submit"
-msgstr "Can't create the automated submit"
+msgstr "Automatsko slanje ne može biti kreirano"
 
 msgid "Widget \"%s\" label form"
 msgstr "Widget \"%s\" label form"
 
 msgid "Auto-create"
-msgstr "Auto-create"
+msgstr "Autokreiranje"
 
 msgid "Knews Post Options"
-msgstr "Knews Post Options"
+msgstr "Knwews post opcije"
 
 msgid "Add a subscription form into the sidebar"
-msgstr "Add a subscription form into the sidebar"
+msgstr "Dodaj subscription form u sidebar"
 
 msgid "Dont ask"
-msgstr "Don't ask"
+msgstr "Ne traži"
 
 msgid "Not required"
-msgstr "Not required"
+msgstr "Nije obavezno"
 
 msgid "Required"
-msgstr "Required"
+msgstr "obavezno"
 
 msgid "Automated process deleted"
-msgstr "Automated process deleted"
+msgstr "Automatski proces izbrisan"
 
 msgid "Automated process activated"
-msgstr "Automated process activated"
+msgstr "automatski proces aktiviran"
 
 msgid "Automated process deactivated"
-msgstr "Automated process deactivated"
+msgstr "Automatski proces deaktiviran"
 
 msgid "Automated submit activated"
-msgstr "Automated submit activated"
+msgstr "Automatsko slanje aktivirano"
 
 msgid "Manual submit activated"
-msgstr "Manual submit activated"
+msgstr "Manuelno slanje aktivirano"
 
 msgid "Automated submit created"
-msgstr "Automated submit created"
+msgstr "Automatsko slanje kreirano"
 
 msgid "Error: the name cant be empty"
-msgstr "Error: the name can't be empty"
+msgstr "Greška: ime ne može biti prazno"
 
 msgid "Error: there is already an automated submit with this name"
-msgstr "Error: there is already an automated submit with this name"
+msgstr "Greška: već postoji automatsko slanje sa ovim imenom"
 
 msgid "Auto-create Newsletters"
-msgstr "Auto-create Newsletters"
+msgstr "Auto kreirani Newsletters"
 
 msgid "Automated process name"
-msgstr "Automated process name"
+msgstr "Ime automatskog procesa"
 
 msgid "Target"
-msgstr "Target"
+msgstr "Cilj"
 
 msgid "Activated"
-msgstr "Activated"
+msgstr "Aktiviran"
 
 msgid "Automatic submit"
-msgstr "Automatic submit"
+msgstr "Automatsko slanje"
 
 msgid "Method"
-msgstr "Method"
+msgstr "Metod"
 
 msgid "Last run"
-msgstr "Last run"
+msgstr "Posljednja radnja"
 
 msgid "Activate/deactivate the automated task"
-msgstr "Activate/deactivate the automated task"
+msgstr "Aktiviraj/deaktiviraj automatsku radnju"
 
 msgid "Deactivate"
-msgstr "Deactivate"
+msgstr "Deaktiviraj"
 
 msgid "Automatic/Manual submits of auto-created newsletters"
-msgstr "Automatic/Manual submits of auto-created newsletters"
+msgstr "Automatsko/manuelno slanje auto-kreiranih newletter-a"
 
 msgid "Delete definitively this automated task"
-msgstr "Delete definitively this automated task"
+msgstr "Definitivno izbriši ovu automatsku radnju"
 
 msgid "Off"
-msgstr "Off"
+msgstr "isključeno"
 
 msgid "On"
-msgstr "On"
+msgstr "uključeno"
 
 msgid "Automated submit"
-msgstr "Automated submit"
+msgstr "Automatsko slanje"
 
 msgid "Manual submit"
-msgstr "Manual submit"
+msgstr "manelno slanje"
 
 msgid "Automated submits"
-msgstr "Automated submits"
+msgstr "automatska slanja"
 
 msgid "At the moment there is no automated task, you can create new ones"
-msgstr "At the moment there is no automated task, you can create new ones"
+msgstr "Trenutno nema automatskih radnji, možete kreirati nove"
 
 msgid "New Auto-creation Process"
-msgstr "New Auto-creation Process"
+msgstr "Novi auto-kreiran proces"
 
 msgid "Auto-create Newsletters Tutorial"
 msgstr "Auto-create Newsletters Tutorial"
 
 msgid "Get posts from language:"
-msgstr "Get posts from language:"
+msgstr "Primaj postove na jeziku"
 
 msgid "Use as template:"
-msgstr "Use as template:"
+msgstr "koristi kao template"
 
 msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
-msgstr "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgstr "prvo morate kreirati newletter sa umetnutim sadržajem (ostavi %the_content%, %the_title% etc.)"
 
 msgid "Create a newsletter every %s posts"
-msgstr "Create a newsletter every %s posts"
+msgstr "Kreiraj newsletter nakon svakih %s postova"
 
 msgid "Error: there are no mailing lists"
-msgstr "Error: there are no mailing lists"
+msgstr "Greška: ne postoji mailing lista"
 
 msgid "Advanced options"
-msgstr "Advanced options"
+msgstr "Napredne opcije"
 
 msgid "Automated options"
-msgstr "Automated options"
+msgstr "Automatske opcije"
 
 msgid "Include the posts in the automated newsletters (default value for the new created posts)"
-msgstr "Include the posts in the automated newsletters (default value for the new created posts)"
+msgstr "Uključite postove u automatski newsletter (defoltna vrijednost za novo kreirane postove)"
 
 msgid "Manual Newsletters"
-msgstr "Manual Newsletters"
+msgstr "Manuelni newsletter"
 
 msgid "Auto-created Newsletters"
-msgstr "Auto-created Newsletters"
+msgstr "Auto kreirani newsletter"
 
 msgid "There is no auto-created newsletter."
-msgstr "There is no auto-created newsletter."
+msgstr "Ne postoji ni jedan auto kreiran newsletter"
 
 msgid "tutorial_automated_url"
 msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
 
 msgid "widget_label_name"
-msgstr "Name:"
+msgstr "Ime:"
 
 msgid "widget_label_surname"
-msgstr "surname:"
+msgstr "Prezime:"
 
 msgid "General options"
-msgstr "General options"
+msgstr "Opće opcije"
 
 msgid "Include this post in the automated newsletters?"
-msgstr "Include this post in the automated newsletters?"
+msgstr "Uključi ovaj post u automatski newsletter?"
 
 msgid "This post has been included into:"
-msgstr "This post has been included into:"
+msgstr "Ovaj post je uključen u:"
 
 msgid "This post still not included into any automated newsletter."
-msgstr "This post still not included into any automated newsletter."
+msgstr "Ovaj post još uvijek nije uključen ni u jedan automatski nwesletter"
 
 msgid "Active process:"
-msgstr "Active process:"
+msgstr "Aktivni proces:"
 
 msgid "Newsletter creation options"
-msgstr "Newsletter creation options"
+msgstr "Opcije kreiranja newsletter-a"
 
 msgid "Create a newsletter every x amount of time"
-msgstr "Create a newsletter every x amount of time"
+msgstr "Kreiraj newletter svaki određeni period vremena"
 
 msgid "Newsletter submit options"
-msgstr "Newsletter submit options"
+msgstr "Opcije slanja newlettera"
 
 msgid "Target for newsletter:"
-msgstr "Target for newsletter:"
+msgstr "Cilj za newsletter:"
 
 msgid "Submit method:"
-msgstr "Submit method:"
+msgstr "Metod slanja:"
 
 msgid "Messages reset to defaults."
-msgstr "Messages reset to defaults."
+msgstr "Poruke resetovane na default."
 

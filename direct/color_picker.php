@@ -1,15 +1,5 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin;
 
 if ($Knews_plugin) {
 
@@ -22,9 +12,9 @@ if ($Knews_plugin) {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<script type='text/javascript' src='<?php echo get_admin_url(); ?>load-scripts.php?c=1&amp;load=jquery'></script>
-	<link rel="Stylesheet" type="text/css" href="../wysiwyg/jpicker/css/jPicker-1.1.6.min.css" />
-	<link rel="Stylesheet" type="text/css" href="../wysiwyg/jpicker/jPicker.css" />
-	<script src="../wysiwyg/jpicker/jpicker-1.1.6.min.js" type="text/javascript"></script>
+	<link rel="Stylesheet" type="text/css" href="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/css/jPicker-1.1.6.min.css" />
+	<link rel="Stylesheet" type="text/css" href="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/jPicker.css" />
+	<script src="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/jpicker-1.1.6.min.js" type="text/javascript"></script>
 
 	</head>
 	<body style="background:#fff; margin:0; padding:10px 0 0 15px; overflow:hidden;">
@@ -58,5 +48,5 @@ if ($Knews_plugin) {
 	</html>
 <?php
 }
-
+die();
 ?>

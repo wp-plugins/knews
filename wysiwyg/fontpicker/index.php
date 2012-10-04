@@ -1,19 +1,10 @@
 <?php
-if (!defined('DOING_AJAX')) define ('DOING_AJAX', true);
-if (!function_exists('add_action')) {
-	$path='./';
-	for ($x=1; $x<6; $x++) {
-		$path .= '../';
-		if (@file_exists($path . 'wp-config.php')) {
-		    require_once($path . "wp-config.php");
-			break;
-		}
-	}
-}
+global $Knews_plugin;
 
 if ($Knews_plugin) {
 
 	$Knews_plugin->security_for_direct_pages();
+	if (!$Knews_plugin->initialized) $Knews_plugin->init();
 
 	$font_family = array (	'Times New Roman, Times, serif',
 							'Arial, Helvetica, sans-serif',
@@ -76,8 +67,8 @@ if ($Knews_plugin) {
 	?>
 	];
 	</script>
-	<script type="text/javascript" src="scripts.js"></script>
-	<link href="estils.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/wysiwyg/fontpicker/scripts.js"></script>
+	<link href="<?php echo KNEWS_URL; ?>/wysiwyg/fontpicker/estils.css" rel="stylesheet" type="text/css" />
 	</head>
 	
 	<body>
@@ -148,4 +139,6 @@ if ($Knews_plugin) {
 	</html>
 <?php
 }
+
+die();
 ?>
