@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,12 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 
 == Changelog ==
 
+= 1.2.1 =
+
+* SOLVED IMPORTANT BUG!!! Cron submits never be submitted in 1.2.0 version.
+* Solved two bugs in the can't read page: Now replaces the tokens (Name and Surname) and the unsubscribe link now works. Thanks to IanFox.
+* The e-mail now is url encoded into user confirmation, unsubscribe and can't read email. Emails like abc+def@test.com works now. Thanks to Ernscht.
+
 = 1.2.0 =
 
 * Added Name and Surname fields, in the subscription form and token replacement in the newsletter submit.
@@ -288,6 +294,12 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+
+* SOLVED IMPORTANT BUG!!! Cron submits never be submitted in 1.2.0 version.
+* Solved two bugs in the can't read page: Now replaces the tokens (Name and Surname) and the unsubscribe link now works. Thanks to IanFox.
+* The e-mail now is url encoded into user confirmation, unsubscribe and can't read email. Emails like abc+def@test.com works now. Thanks to Ernscht.
 
 = 1.2.0 =
 
