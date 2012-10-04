@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.0
+Version: 1.2.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -544,7 +544,7 @@ if (!class_exists("KnewsPlugin")) {
 
 			$mailHtml = $this->get_custom_text('email_subscription_body', $lang_locale);
 			
-			$url_confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $confkey . '&e=' . $email;
+			$url_confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $confkey . '&e=' . urlencode($email);
 			$mailHtml = str_replace('#url_confirm#', $url_confirm, $mailHtml);
 
 			$mailText = str_replace('</p>', '</p>\r\n\r\n', $mailHtml);
@@ -594,7 +594,7 @@ if (!class_exists("KnewsPlugin")) {
 			global $wpdb;
 			
 			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string($_GET['e']);
+			$email = mysql_real_escape_string(urldecode($_GET['e']));
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -614,7 +614,7 @@ if (!class_exists("KnewsPlugin")) {
 			
 			$id_newsletter = intval($this->get_safe('n'));
 			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string($_GET['e']);
+			$email = mysql_real_escape_string(urldecode($_GET['e']));
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -1206,7 +1206,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.0');
+		define('KNEWS_VERSION', '1.2.1');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1367,7 +1367,7 @@ if (!function_exists("Knews_plugin_ap")) {
 	function knews_plugin_form($atts) {
 		global $Knews_plugin; if (!isset($Knews_plugin)) return '';
 		
-		$id_list = ((isset($atts['id'])) ? intval($atts['id']) : 0);
+		$id_list = ((isset($atts[id])) ? intval($atts[id]) : 0);
 		return $Knews_plugin->getForm($id_list);
 	}
 	add_shortcode("knews_form", "knews_plugin_form");
@@ -1432,6 +1432,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		require( dirname(__FILE__) . "/direct/knews_confirmuser.php");
 	}
 	function knews_cron() {
+		global $Knews_plugin;
 		if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 		$cron_time = time();
 		update_option('knews_cron_time', $cron_time);

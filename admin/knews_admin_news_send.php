@@ -22,8 +22,8 @@
 					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($user->id, $token['id'], $token['defaultval']) );
 				}
 				$user->tokens = $aux_array;
-				$user->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . $user->email . '&k=' . $user->confkey;
-				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter;
+				$user->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey;
+				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email);
 
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			} else {
