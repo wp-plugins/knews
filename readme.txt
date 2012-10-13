@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,12 +18,15 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+= 1.2.2 =
+
+* New premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
 * **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
-* Automated newsletters [(tutorial here)] (http://www.knewsplugin.com/automated-newsletter-creation/).
+* Automated newsletters [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
 * Support for **SMTP** sending [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
@@ -84,9 +87,9 @@ A WYSIWYG Editor Demo:
 
 11. a) Drag the Knews **widget** to the sidebar.
 
-12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW:** Now you can specify a mailing list id: [knews_form id=1]
+12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW:** Now you can specify a mailing list id, name, surname and/or stylize it: [knews_form id=1 name=ask surname=required stylize=1]
 
-13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`
+13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: <?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
@@ -145,7 +148,8 @@ No problem. Simply choose the option to use Cron emulation in JavaScript and sen
 
 **Does Knews only have 3 templates?**
 
-Yes, at the moment Knews only has 3 templates, but we will be adding more. In any case, the degree of personalisation is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
+At the moment Knews only has 3 free templates. Just we launched our first premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
+In any case, the degree of personalisation of our three free templates is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
 
 == Screenshots ==
 
@@ -159,6 +163,15 @@ Yes, at the moment Knews only has 3 templates, but we will be adding more. In an
 8. The Casablanca Template and a sample customisation (Christmas).
 
 == Changelog ==
+
+= 1.2.2 =
+
+* Solved SQL bug ('last_run' missing field) in knews 1.2.0 /1.2.1 clean installations (in Auto-creation admin page)
+* Solved a token replacement bug about name/surname fields in submitted newsletters.
+* Now you can specify a mailing list id, name, surname and/or stylize it in shortcode and theme  knews_plugin_form() call (see installation for details).
+* Solved statistics bug: now shows the Submits OK/Error graph and calculates right the clicks percentages
+* The custom templates can be uploaded to /wp-content/uploads/knewstemplates/ in order to preserve it when you updating the plugin.
+* New premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 
 = 1.2.1 =
 
@@ -294,6 +307,15 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+
+* Solved SQL bug ('last_run' missing field) in knews 1.2.0 /1.2.1 clean installations (in Auto-creation admin page)
+* Solved a token replacement bug about name/surname fields in submitted newsletters.
+* Now you can specify a mailing list id, name, surname and/or stylize it in shortcode and theme  knews_plugin_form() call (see installation for details).
+* Solved statistics bug: now shows the Submits OK/Error graph and calculates right the clicks percentages
+* The custom templates can be uploaded to /wp-content/uploads/knewstemplates/ in order to preserve it when you updating the plugin.
+* New premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 
 = 1.2.1 =
 
