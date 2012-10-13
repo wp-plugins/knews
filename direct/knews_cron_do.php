@@ -94,7 +94,7 @@ if ($Knews_plugin) {
 				$aux_array=array();
 
 				foreach ($used_tokens as $token) {
-					$aux_array[] = array( 'token' => $token->token, 'value' => $Knews_plugin->get_user_field($users[$users_index]->id, $token->id, $token->defaultval) );
+					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($users[$users_index]->id, $token['id'], $token['defaultval']) );
 				}
 				$users[$users_index]->tokens = $aux_array;
 				$users[$users_index]->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($users[$users_index]->email) . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter;

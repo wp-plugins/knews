@@ -67,6 +67,17 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 	}	
 }
 
+if (version_compare(get_option('knews_version','0.0.0'), '1.2.2') < 0) {
+	//Missing field in the 1.2.0 and 1.2.1 installations bug
+	if ($this->tableExists(KNEWS_AUTOMATED)) {
+		
+		if (strcasecmp($wpdb->get_var("show columns from " . KNEWS_AUTOMATED . " like 'last_run'"), 'last_run') != 0) {
+			$sql =	"ALTER TABLE " .KNEWS_AUTOMATED . " ADD COLUMN last_run datetime NOT NULL";
+			$wpdb->query($sql);
+		}
+	}
+}
+
 if (version_compare(get_option('knews_version','0.0.0'), '1.2.0') < 0) {
 	//The 1.2.0 added fields & tables
 

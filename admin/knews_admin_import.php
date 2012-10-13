@@ -195,7 +195,8 @@ p.knews_progress span.on {
 				});
 	
 				if (!somelist) {
-					if (!confirm('Somelist')) return false;
+					/* Traduction pending */
+					if (!confirm('Warning! You aren\'t selected any mailing list, do you want to continue?')) return false;
 				}
 			}
 		});

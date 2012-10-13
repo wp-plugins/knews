@@ -147,6 +147,7 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 		every_time int(11) NOT NULL,
 		what_dayweek int(11) NOT NULL,
 		every_posts int(11) NOT NULL,
+		last_run datetime NOT NULL,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 	   

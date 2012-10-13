@@ -381,9 +381,8 @@ if ($fp) {
 			$date2 = $Knews_plugin->get_mysql_date($selected_min_date_chart + ($i + 1) * $interval);
 			
 			// Enviaments OK i Error
-			$query='SELECT users_ok, users_error FROM ' . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=' . get_current_blog_id() . ' AND start_time BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
+			$query='SELECT users_ok, users_error FROM ' . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND start_time BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
 			$results=$wpdb->get_results($query);
-			
 			$e_ok=0;
 			$e_err=0;
 			foreach ($results as $r) {
@@ -453,12 +452,12 @@ if ($fp) {
 				<tr class="alt">
 					<td><?php _e('Sendings OK','knews'); ?>:</td><td align="right"><?php echo $enviaments_ok; ?></td><td align="right"><?php echo safe_percent($enviaments_ok, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td width="20">&nbsp;</td>
-					<td><?php _e('Cant read','knews'); ?>:</td><td align="right"><?php echo $cant_read; ?></td><td align="right"><?php echo safe_percent($cant_read, $clicks); ?>%</td>
+					<td><?php _e('Cant read','knews'); ?>:</td><td align="right"><?php echo $cant_read; ?></td><td align="right"><?php echo safe_percent($cant_read, $enviaments_ok + $enviaments_error); ?>%</td>
 				</tr>
 				<tr>
 					<td><?php _e('Sendings Error','knews'); ?>:</td><td align="right"><?php echo $enviaments_error; ?></td><td align="right"><?php echo safe_percent($enviaments_error, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td>&nbsp;</td>
-					<td><?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo safe_percent($blocks, $clicks); ?>%</td>
+					<td><?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo safe_percent($blocks, $enviaments_ok + $enviaments_error); ?>%</td>
 				</tr>
 				<tr class="alt">
 					<td><?php _e('Total submits','knews'); ?>:</td><td align="right"><?php echo ($enviaments_ok + $enviaments_error); ?></td><td align="right">&nbsp;</td>
