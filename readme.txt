@@ -88,7 +88,7 @@ A WYSIWYG Editor Demo:
 
 12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW:** Now you can specify a mailing list id, name, surname and/or stylize it: [knews_form id=1 name=ask surname=required stylize=1]
 
-13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>
+13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>`
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
