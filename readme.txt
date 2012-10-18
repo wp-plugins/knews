@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,8 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* New premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
+* **Automated** newslettering creation and submit.
+* New **premium** template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
@@ -87,7 +88,7 @@ A WYSIWYG Editor Demo:
 
 12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW:** Now you can specify a mailing list id, name, surname and/or stylize it: [knews_form id=1 name=ask surname=required stylize=1]
 
-13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: <?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>
+13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
@@ -161,6 +162,15 @@ In any case, the degree of personalisation of our three free templates is immens
 8. The Casablanca Template and a sample customisation (Christmas).
 
 == Changelog ==
+
+= 1.2.3 =
+
+* Solved htaccess bug in newsletter images (bug in 1.2.2 version for some webservers)
+* Double subscription bug fixed
+* Fixed broken HTML newsletter submit when includes bad URLs (like <a href="">)
+* Added mailing lists order field (for selector order in subscription form)
+* Bad URL tutorials fixed
+* Solved JavaScript post content insertion into newsletter bug (from plugins like add Link to Facebook)
 
 = 1.2.2 =
 
@@ -305,6 +315,15 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+
+* Solved htaccess bug in templates images (bug in 1.2.2 version for some webservers)
+* Double subscription bug fixed
+* Fixed broken HTML newsletter submit when includes bad URLs (like <a href="">)
+* Added mailing lists order field (for selector order in subscription form)
+* Bad URL tutorials fixed
+* Solved JavaScript post content insertion into newsletter bug (from plugins like add Link to Facebook)
 
 = 1.2.2 =
 
