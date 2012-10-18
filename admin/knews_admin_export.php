@@ -46,7 +46,7 @@
 	$step = $Knews_plugin->post_safe('step', 1);
 	$knews_has_header = intval($Knews_plugin->post_safe('knews_has_header', 0));
 	
-	$query = "SELECT * FROM " . KNEWS_LISTS;
+	$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists = $wpdb->get_results( $query );
 	$languages = $Knews_plugin->getLangs();
 	
@@ -84,7 +84,7 @@
 					$csv_code .= $enclosure . __('Lists','knews') . $enclosure . "\r\n";
 			}
 			
-			$query = "SELECT * FROM " . KNEWS_LISTS;
+			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$lists = $wpdb->get_results( $query );
 			$languages = $Knews_plugin->getLangs();
 

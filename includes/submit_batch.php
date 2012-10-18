@@ -33,7 +33,20 @@ if (count($targets) > 0) {
 	$matches = $matches[2];
 
 	foreach($matches as $link) {
-		if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
+		if (
+			strpos($link,'<') === false &&
+			strpos($link,'>') === false &&
+			strpos($link,' ') === false &&
+			strpos($link,'\'') === false &&
+			strpos($link,'"') === false &&
+			strpos($link,'{') === false &&
+			strpos($link,'}') === false &&
+			strpos($link,'[') === false &&
+			strpos($link,']') === false &&
+			strpos($link,'%') === false &&
+			strpos($link,'#') === false 
+		) {
+		//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
 			$link_key = substr(md5(uniqid()),-16);
 			$query = 'INSERT INTO ' . KNEWS_KEYS . ' (keyy, type, submit_id, href) VALUES (\'' . $link_key . '\', 1, ' . $submit_id . ', \'' . $link . '\')';
 			$results = $wpdb->query( $query );

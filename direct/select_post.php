@@ -6,15 +6,19 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
+	require_once( KNEWS_DIR . '/includes/knews_util.php');
+
 	$ajaxid = intval($Knews_plugin->get_safe('ajaxid'));
 	if ($ajaxid != 0) {
 		global $post;
 		$post = get_post($ajaxid);
 		setup_postdata($post);
 
-		$text = get_the_content();
-		$text = strip_shortcodes( $text );
+		$text1 = get_the_content();
+		$text = strip_shortcodes( $text1 );
 		$text = apply_filters('the_content', $text);
+		$text = iterative_extract_code('<script', '</script>', $text, true);
+		$text = iterative_extract_code('<fb:like', '</fb:like>', $text, true);
 		$text = str_replace(']]>', ']]>', $text);
 		$text = strip_tags($text);
 		$excerpt_length = apply_filters('excerpt_length', 55);
@@ -29,7 +33,10 @@ if ($Knews_plugin) {
 		$jsondata['permalink'] = get_permalink($ajaxid);
  	    $jsondata['title'] = get_the_title();
  	    $jsondata['excerpt'] = $text;
- 	    $jsondata['content'] = apply_filters( 'the_content', get_the_content() );
+		$text1 = apply_filters( 'the_content', $text1 );
+		$text1 = iterative_extract_code('<script', '</script>', $text1, true);
+		$text1 = iterative_extract_code('<fb:like', '</fb:like>', $text1, true);
+ 	    $jsondata['content'] = $text1;
 
  		echo json_encode($jsondata);
 		

@@ -4,7 +4,7 @@
 	
 	$languages = $Knews_plugin->getLangs(true);
 
-	$query = "SELECT id, name FROM " . KNEWS_LISTS ;
+	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists_name = $wpdb->get_results( $query );
 	$lists_indexed=array();
 	foreach ($lists_name as $ln) {
@@ -129,8 +129,10 @@
 			} else {
 				echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __('Wrong e-mail','knews') . '.</p></div>';
 			}
+
 		}
 	}
+
 ?>
 	<div class=wrap>
 <?php 
@@ -425,7 +427,7 @@
 				echo "<p>" . __('Error','knews') . ": " . __('Language not detected!','knews') . "</p>";
 			}
 
-			$query = "SELECT * FROM " . KNEWS_LISTS;
+			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$results = $wpdb->get_results( $query );
 
 			if (count($results) > 1) {

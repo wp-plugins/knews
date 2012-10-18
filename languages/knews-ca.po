@@ -2038,13 +2038,13 @@ msgstr "Selecció ràpida:"
 msgid "You are downgraded the version of Knews, you can lose data, please update quickly"
 msgstr "La versió actual de Knews es inferior a la instal·lada anteriorment, pots perdre informació: si us plau, actualitza inmediatament"
 
-msgid "tutorial_template_url"
+msgid "http://www.knewsplugin.com/tutorial/"
 msgstr "http://www.knewsplugin.com/ca/tutorial/"
 
-msgid "tutorial_smtp_url"
+msgid "http://www.knewsplugin.com/configure-smtp-submits/"
 msgstr "http://www.knewsplugin.com/ca/configurar-els-enviaments-per-smtp/"
 
-msgid "tutorial_cron_url"
+msgid "http://www.knewsplugin.com/configure-webserver-cron/"
 msgstr "http://www.knewsplugin.com/ca/configurar-cron-al-servidor/"
 
 msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
@@ -2191,7 +2191,7 @@ msgstr "Newsletters creades automàticament"
 msgid "There is no auto-created newsletter."
 msgstr "Encara no hi ha cap newsletter creada automàticament."
 
-msgid "tutorial_automated_url"
+msgid "http://www.knewsplugin.com/automated-newsletter-creation/"
 msgstr "http://www.knewsplugin.com/ca/creacio-automatica-de-newsletters/"
 
 msgid "widget_label_name"

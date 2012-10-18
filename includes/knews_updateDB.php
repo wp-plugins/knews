@@ -113,6 +113,13 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.0') < 0) {
 
 	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
 }
+
+if (version_compare(get_option('knews_version','0.0.0'), '1.2.3') < 0) {
+	//The 1.2.3 added fields & tables
+	$sql =	"ALTER TABLE " . KNEWS_LISTS . " ADD COLUMN orderlist int(11) NOT NULL DEFAULT 0";
+	$wpdb->query($sql);
+}
+
 update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 

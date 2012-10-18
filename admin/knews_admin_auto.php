@@ -68,7 +68,7 @@
 	$frequency = array ('daily','weekly','every 15 days','monthly','every 2 months','every 3 months');
 	$dayname = array ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
 	
-	$query = "SELECT id, name FROM " . KNEWS_LISTS ;
+	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists_name = $wpdb->get_results( $query );
 ?>
 <script type="text/javascript">
@@ -211,7 +211,7 @@ function enfocar() {
 			?><p>&nbsp;</p>
 			<hr />
 			<a id="newauto"></a>
-			<h2><?php _e('New Auto-creation Process','knews');?> <a href="<?php _e('tutorial_automated_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></h2>
+			<h2><?php _e('New Auto-creation Process','knews');?> <a href="<?php _e('http://www.knewsplugin.com/automated-newsletter-creation/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></h2>
 			<form method="post" action="admin.php?page=knews_auto" id="create_auto">
 				<input type="hidden" name="action" id="action" value="add_auto" />
 				<h3><?php _e('General options','knews'); ?></h3>

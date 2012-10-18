@@ -162,7 +162,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 			</h2>
 			<h3><?php _e('CRON','knews'); ?></h3>
-			<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('tutorial_cron_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
+			<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('http://www.knewsplugin.com/configure-webserver-cron/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
 			<?php
 				$last_cron_time=$Knews_plugin->get_last_cron_time();
 				$now_time = time();
@@ -233,7 +233,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			</script>
 			<h3><?php _e('Submit method','knews');?></h3>
 			<p><input type="radio" name="smtp_knews" value="0"<?php if ($knewsOptions['smtp_knews']!='1') echo ' checked="checked"'; ?> /> <?php _e('E-mails sent internally using WordPress (wp_mail() function)','knews');?></p>
-			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('tutorial_smtp_url','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
+			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('http://www.knewsplugin.com/configure-smtp-submits/','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
 			<div style="width:420px; float:left; padding-left:30px;">
 				<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
 				<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_host_knews']; ?>" /></td></tr>

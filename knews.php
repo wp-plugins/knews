@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.2
+Version: 1.2.3
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -88,6 +88,7 @@ if (!class_exists("KnewsPlugin")) {
 			$KnewsDefaultMessages1 = array (
 				array ( 'label'=>__('Text direction, Left To Right or Right To Left: put <span style="color:#e00">ltr</span> or <span style="color:#e00">rtl</span>','knews'), 'name'=>'text_direction'),
 				array ( 'label'=>__('Widget title','knews'), 'name'=>'widget_title')
+
 			);
 
 			$extra_fields = $this->get_extra_fields();
@@ -730,7 +731,7 @@ if (!class_exists("KnewsPlugin")) {
 			} else {
 				$query .= " WHERE open='1'";
 			}
-
+			$query .= " ORDER BY orderlist";
 			$results = $wpdb->get_results( $query );
 
 			foreach ($results as $list) {
@@ -874,16 +875,6 @@ if (!class_exists("KnewsPlugin")) {
 		function printWidget($args, $instance) {
 			echo $this->getForm(0, $args, $instance);
 		}
-
-		/*function register_widget(){
-			wp_register_sidebar_widget('knews_sidebar_widget', 'K-news Widget', array($this, 'printWidget'));
-			wp_register_widget_control('knews_sidebar_widget', 'K-news Widget ', array($this, 'control_widget'));
-		}
-
-		function control_widget(){
-			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';
-		}
-		*/
 		
 		function htmlentities_corrected($str_in) {
 			$list = get_html_translation_table(HTML_ENTITIES);
@@ -1209,7 +1200,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.2');
+		define('KNEWS_VERSION', '1.2.3');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1525,61 +1516,23 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	class knews_widget extends WP_Widget {
 	
-		/**
-		 * Register widget with WordPress.
-		 */
 		public function __construct() {
 			parent::__construct(
 				'knews_widget', // Base ID
-				'Knews widget', // Name
+				'Knews Subscription Form Widget', // Name
 				array( 'description' => __( 'Add a subscription form into the sidebar', 'knews' ), ) // Args
 			);
 		}
 	
-		/**
-		 * Front-end display of widget.
-		 *
-		 * @see WP_Widget::widget()
-		 *
-		 * @param array $args     Widget arguments.
-		 * @param array $instance Saved values from database.
-		 */
 		public function widget( $args, $instance ) {
 			global $Knews_plugin;
 			$Knews_plugin->printWidget($args, $instance);
-			/*extract( $args );
-			$title = apply_filters( 'widget_title', $instance['title'] );
-	
-			echo $before_widget;
-			if ( ! empty( $title ) )
-				echo $before_title . $title . $after_title;
-			echo __( 'Hello, World!', 'text_domain' );
-			echo $after_widget;*/
 		}
 	
-		/**
-		 * Sanitize widget form values as they are saved.
-		 *
-		 * @see WP_Widget::update()
-		 *
-		 * @param array $new_instance Values just sent to be saved.
-		 * @param array $old_instance Previously saved values from database.
-		 *
-		 * @return array Updated safe values to be saved.
-		 */
 		public function update( $new_instance, $old_instance ) {
-			//$instance = array();
-			//$instance['title'] = strip_tags( $new_instance['title'] );
 			return $new_instance;
 		}
 	
-		/**
-		 * Back-end widget form.
-		 *
-		 * @see WP_Widget::form()
-		 *
-		 * @param array $instance Previously saved values from database.
-		 */
 		public function form( $instance ) {
 			global $Knews_plugin;
 			if (! $Knews_plugin->initialized) $Knews_plugin->init();			
@@ -1590,7 +1543,7 @@ if (!function_exists("Knews_plugin_ap")) {
 				if (isset($instance[ $field->name ])) $val=$instance[ $field->name ];
 				
 				echo '<p><label for="' . $this->get_field_id($field->name) . '">' . $field->name . '</label>';
-				echo '<select id="' . $this->get_field_id($field->name) . '" name="' . $this->get_field_name($field->name) . '">';
+				echo '<select id="' . $this->get_field_id($field->name) . '" name="' . $this->get_field_name($field->name) . '" style="float:right;">';
 				echo '<option value="off"' . (($val=="off") ? ' selected="selected"' : '') . '>' . __('Dont ask','knews') . '</option>';
 				echo '<option value="ask"' . (($val=="ask") ? ' selected="selected"' : '') . '>' . __('Not required','knews') . '</option>';
 				echo '<option value="required"' . (($val=="required") ? ' selected="selected"' : '') . '>' . __('Required','knews') . '</option>';
@@ -1601,7 +1554,9 @@ if (!function_exists("Knews_plugin_ap")) {
 		}
 	
 	} // class Knews_Widget
-	
+
+
+
 	function knews_aj_posts_where( $where ) {
 		global $knews_aj_look_date;
    		return $where . " AND post_modified > '" . $knews_aj_look_date . "' ";

@@ -42,7 +42,7 @@
 		} else if ($_POST['action']=='submit_batch') {
 
 			// Enviament per CRON			
-			$query = "SELECT * FROM " . KNEWS_LISTS;
+			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$lists = $wpdb->get_results( $query );
 
 			$query = "SELECT DISTINCT(" . KNEWS_USERS . ".id) FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS . ".id=" . KNEWS_USERS_PER_LISTS . ".id_user AND " . KNEWS_USERS . ".state='2'";
@@ -120,7 +120,7 @@
 		<input type="hidden" name="action" id="action" value="submit_batch" />
 		<input type="hidden" name="idnews" id="idnews" value="<?php echo $id_newsletter; ?>" />
 		<?php
-		$query = "SELECT id, name FROM " . KNEWS_LISTS ;
+		$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 		$lists_name = $wpdb->get_results( $query );
 
 		$col=count($lists_name)+1; $n=0;

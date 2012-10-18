@@ -44,11 +44,12 @@ $sql =	"CREATE TABLE " .KNEWS_LISTS . " (
 		open varchar(1) NOT NULL,
 		open_registered varchar(1) NOT NULL,
 		langs varchar(100) NOT NULL,
+		orderlist int(11) NOT NULL DEFAULT '0',
 		UNIQUE KEY id (id)
 	   )$charset_collate;
 	   
-		INSERT INTO " .KNEWS_LISTS . " (id, name, open, open_registered, langs) VALUES 
-		(1, 'Default list', 1, 1, '');";
+		INSERT INTO " .KNEWS_LISTS . " (id, name, open, open_registered, langs, orderlist) VALUES 
+		(1, 'Default list', 1, 1, '', 0);";
 
 dbDelta($sql);
 

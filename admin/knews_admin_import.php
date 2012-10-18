@@ -389,7 +389,7 @@ function print_state($step, $where) {
 			?>
 			<p><strong><?php _e('Subscribe all users to the following mailing lists:','knews'); ?></strong><br />
 			<?php
-			$query = "SELECT * FROM " . KNEWS_LISTS;
+			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$lists = $wpdb->get_results( $query );
 			foreach ($lists as $ln) {
 				echo '<input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="check_list"';
@@ -432,7 +432,7 @@ function print_state($step, $where) {
 					echo '<input type="hidden" name="c_ef_' . $ef->name . '" id="c_ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('c_ef_' . $ef->name) . '">';
 				}
 				
-				$query = "SELECT * FROM " . KNEWS_LISTS;
+				$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 				$lists = $wpdb->get_results( $query );
 				foreach ($lists as $ln) {
 					echo '<input type="hidden" name="list_' . $ln->id . '" id="list_' . $ln->id . '" value="' . $Knews_plugin->post_safe('list_' . $ln->id) . '">';
@@ -457,7 +457,7 @@ function print_state($step, $where) {
 			if (($handle = fopen($filename, "r")) !== FALSE) {
 				$what_row = 0;
 
-				$query = "SELECT id FROM " . KNEWS_LISTS ;
+				$query = "SELECT id FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 				$lists_name = $wpdb->get_results( $query );
 				$extra_fields = $Knews_plugin->get_extra_fields();
 

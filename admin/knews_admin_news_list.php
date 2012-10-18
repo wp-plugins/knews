@@ -207,7 +207,7 @@ function enfocar() {
 				?>
 					<hr />
 					<a id="newnews"></a>
-					<h2><?php _e('Create new newsletter','knews');?> <a href="<?php _e('tutorial_template_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Make your own templates how-to','knews'); ?></a></h2>
+					<h2><?php _e('Create new newsletter','knews');?> <a href="<?php _e('http://www.knewsplugin.com/tutorial/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Make your own templates how-to','knews'); ?></a></h2>
 					<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" class="new_newsletter">
 						<input type="hidden" name="action" id="action" value="add_news" />
 						<p><label for="new_list"><?php _e('Name','knews');?>: </label><input type="text" name="new_news" id="new_news" class="regular-text" />
@@ -283,7 +283,7 @@ function enfocar() {
 				<?php
 					} else {
 				?>
-				<p><a href="<?php _e('tutorial_automated_url','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></p>
+				<p><a href="<?php _e('http://www.knewsplugin.com/automated-newsletter-creation/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></p>
 				<?php
 					}
 				?>

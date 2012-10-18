@@ -37,7 +37,7 @@
 			$results = $wpdb->get_results( $query );
 			
 			if (count($results)==0) {
-				$sql = "INSERT INTO " . KNEWS_LISTS . "(name, open, open_registered, langs) VALUES ('" . $name . "', 0, 0, '')";
+				$sql = "INSERT INTO " . KNEWS_LISTS . "(name, open, open_registered, langs, orderlist) VALUES ('" . $name . "', 0, 0, '', 99)";
 				if ($wpdb->query($sql)) {
 					echo '<div class="updated"><p>' . __('Mailing list created','knews') . '</p></div>';
 				} else {
@@ -53,7 +53,6 @@
 				if (isset($_POST['find_' . $list->id])) {
 					if ($_POST['action']=='delete_lists') {
 						//Delete only
-		echo '*' . $Knews_plugin->post_safe('batch_' . $list->id) . '*' . $list->id . '*';
 						if ($Knews_plugin->post_safe('batch_' . $list->id)=='1') {
 							$query="DELETE FROM " . KNEWS_LISTS . " WHERE id=" . $list->id;
 							$results=$wpdb->query($query);
@@ -62,6 +61,7 @@
 						//Update only
 						$open = (($Knews_plugin->post_safe($list->id . '_open')=='1') ? '1' : '');
 						$open_registered = (($Knews_plugin->post_safe($list->id . '_open_registered')=='1') ? '1' : '');
+						$order = intval($Knews_plugin->post_safe($list->id . '_order'));
 						$langs='none';
 
 						if (KNEWS_MULTILANGUAGE) {
@@ -78,7 +78,7 @@
 							}
 						}
 						
-						$query  = "UPDATE ".KNEWS_LISTS." SET open='" . $open . "', open_registered = '" . $open_registered;
+						$query  = "UPDATE ".KNEWS_LISTS." SET open='" . $open . "', open_registered = '" . $open_registered . "', orderlist = '" . $order;
 						if (KNEWS_MULTILANGUAGE) $query .= "', langs='" . $langs;
 						$query .= "' WHERE id=" . $list->id;
 						$results=$wpdb->query($query);
@@ -98,7 +98,7 @@ function enfocar() {
 	<div class=wrap>
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Mailing lists','knews'); ?><a class="add-new-h2" href="#newlist" onclick="enfocar()"><?php _e('Create new mailing list','knews'); ?></a></h2>
 				<?php
-					$query = "SELECT * FROM ".KNEWS_LISTS;
+					$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 					$results = $wpdb->get_results( $query );
 					if (count($results) != 0) {
 				?>
@@ -141,6 +141,7 @@ function enfocar() {
 						<thead>
 							<tr>
 								<th class="manage-column column-cb check-column"><input type="checkbox" /></th>
+								<th>ID</th>
 								<th><?php _e('Name list','knews'); ?></th>
 								<th><?php _e('Open','knews'); ?></th>
 								<th><?php _e('Open for registered users','knews'); ?></th>
@@ -152,6 +153,7 @@ function enfocar() {
 									}
 								?>
 								<th><?php _e('Active users','knews'); ?></th>
+								<th><?php _e('Order','knews'); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -159,6 +161,7 @@ function enfocar() {
 						$alt=false;
 						foreach ($results as $list) {
 							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $list->id . '" value="1"><input type="hidden" name="find_' . $list->id . '" value="1"></th>';
+							echo '<td>' . $list->id . '</td>';
 							echo '<td class="name_' . $list->id  . '"><strong>' . $list->name . '</strong>';
 							echo '<div class="row-actions"><span><a href="#" title="' . __('Rename this list', 'knews') . '" onclick="rename(' . $list->id . '); return false;">' . __('Rename', 'knews') . '</a> | </span>';
 							echo '<span><a href="admin.php?page=knews_users&filter_list=' . $list->id . '" title="' . __('See this list users', 'knews') . '" >' . __('See users', 'knews') . '</a> | </span>';
@@ -179,6 +182,7 @@ function enfocar() {
 							echo '<td>' . $count[0]->HOW_MANY . '</td>';
 							
 							//echo '<td align="center"><input type="checkbox" value="1" name="' . $list->id . '_delete" id="' . $list->id . '_delete" /></td>';
+							echo '<td><input type="text" value="' . $list->orderlist . '" name="' . $list->id . '_order" id="' . $list->id . '_order" style="width:35px;" /></td>';
 							$alt=!$alt;
 						}
 				?>
@@ -186,6 +190,7 @@ function enfocar() {
 						<tfoot>
 							<tr>
 								<th class="manage-column column-cb check-column"><input type="checkbox" /></th>
+								<th>ID</th>
 								<th align="left"><?php _e('List name','knews');?></th>
 								<th align="center"><?php _e('Open','knews');?></th>
 								<th align="center"><?php _e('Open for registered users','knews');?></th>
@@ -197,6 +202,7 @@ function enfocar() {
 									}
 								?>
 								<th align="center"><?php _e('Active users','knews'); ?></th>
+								<th><?php _e('Order','knews'); ?></th>
 							</tr>
 						</tfoot>
 					</table>
