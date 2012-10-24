@@ -2,9 +2,9 @@
 Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
-Requires at least: 3.0
+Requires at least: 3.1
 Tested up to: 3.4.2
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,14 +18,13 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* **Automated** newslettering creation and submit.
+* **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
 * New **premium** template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
 * **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
-* Automated newsletters [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
 * Support for **SMTP** sending [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
@@ -145,10 +144,10 @@ If sending is done by SMTP, the amount of e-mails reported as SPAM will drop. Kn
 
 No problem. Simply choose the option to use Cron emulation in JavaScript and send normally. You will have to keep a window open until the sending ends that's all.
 
-**Does Knews only have 3 templates?**
+**Does Knews only have 4 templates?**
 
 At the moment Knews only has 3 free templates. Just we launched our first premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
-In any case, the degree of personalisation of our three free templates is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
+In any case, the degree of personalisation of our templates is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
 
 == Screenshots ==
 
@@ -160,8 +159,17 @@ In any case, the degree of personalisation of our three free templates is immens
 6. The Clean Blue Template and a sample customisation (Sports Car Magazine).
 7. The Sweet Barcelona Template and a sample customization (Wine).
 8. The Casablanca Template and a sample customisation (Christmas).
+9. The Glossy Black Template and a sample customisation (White Background).
 
 == Changelog ==
+
+= 1.2.4 =
+
+* Solved double subscription bug into windows webservers (definitely, we swear)
+* Solved bug in the scheduling of autocreation task
+* Added JS-CRON force button in submits screen (look at the bottom list)
+* Added support for NextGen Gallery images insertion in the WYSIWYG editor
+* Added apply_filters['the_content'] deactivation to avoid post insertion issues with another plugins like NextGen Gallery and others
 
 = 1.2.3 =
 
@@ -315,6 +323,14 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.4 =
+
+* Solved double subscription bug into windows webservers (definitely, we swear)
+* Solved bug in the scheduling of autocreation task
+* Added JS-CRON force button in submits screen (look at the bottom list)
+* Added support for NextGen Gallery images insertion in the WYSIWYG editor
+* Added apply_filters['the_content'] deactivation to avoid post insertion issues with another plugins like NextGen Gallery and others
 
 = 1.2.3 =
 
