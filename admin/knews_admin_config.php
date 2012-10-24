@@ -25,7 +25,11 @@ function knews_save_prefs() {
 		} else {
 			$knewsOptions['def_autom_post'] = '0';
 		}
-
+		if (isset($_POST['apply_filters_on_knews'])) {
+			$knewsOptions['apply_filters_on'] = $_POST['apply_filters_on_knews'];
+		} else {
+			$knewsOptions['apply_filters_on'] = '0';
+		}
 		$knewsOptions['config_knews'] = 'yes';
 
 		if ($Knews_plugin->post_safe('reset_alerts_knews')=='1') {
@@ -319,6 +323,11 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 
 			<h3><?php _e('Automated options','knews'); ?></h3>
 			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></p>
+
+			<hr />
+
+			<h3><?php _e('Compaibility options','knews'); ?></h3>
+			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?></p>
 
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />

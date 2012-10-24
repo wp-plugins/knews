@@ -896,7 +896,7 @@ function CallBackPost(n, lang) {
 		   //alert(request.responseText);
 		   //alert("Error, returned: " + request);
 		   //alert("Error, returned: " + status);
-		   alert("Error in CallBackPost(), returned: " + error + '(' + request.responseText + ')');
+		   alert("Error in CallBackPost(). Please, try to deactivate the 'apply_filters' option in the Knews Configuration. Returned: " + error + '(' + request.responseText + ')');
 		}
 
 	});
@@ -921,9 +921,15 @@ function callback_img_insertion(html) {
 	not_saved();
 	tb_remove();
 
-	img_url=html.split('src="');
-	img_url=img_url[1].split('"');
-	img_url=img_url[0];
+	if(html.indexOf('src="') == -1) {
+		img_url=html.split("src='");
+		img_url=img_url[1].split("'");
+		img_url=img_url[0];
+	} else {
+		img_url=html.split('src="');
+		img_url=img_url[1].split('"');
+		img_url=img_url[0];
+	}
 
 	document.getElementById('knews_editor').contentWindow.b_insert_image(img_url, align);
 }
@@ -937,10 +943,16 @@ function callback_img(html, a, b, hs, vs, align) {
 	
 	img_x = jQuery(referer_image_size).attr('width');//1.1.0
 	img_y = jQuery(referer_image_size).attr('height');//1.1.0
-	
-	img_url=html.split('src="');
-	img_url=img_url[1].split('"');
-	img_url=img_url[0];
+
+	if(html.indexOf('src="') == -1) {
+		img_url=html.split("src='");
+		img_url=img_url[1].split("'");
+		img_url=img_url[0];
+	} else {
+		img_url=html.split('src="');
+		img_url=img_url[1].split('"');
+		img_url=img_url[0];
+	}
 	
 	jQuery('div.image_properties input#image_url').val(img_url);
 

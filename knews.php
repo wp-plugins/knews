@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.3
+Version: 1.2.4
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -63,7 +63,8 @@ if (!class_exists("KnewsPlugin")) {
 				'knews_cron' => 'cronwp',
 				'update_pro' => 'no',
 				'videotutorial' => 'no',
-				'def_autom_post' => '0');
+				'def_autom_post' => '0',
+				'apply_filters_on' => '1');
 
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)) {
@@ -806,21 +807,21 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function getAjaxScript($container, $custom=false) {
-			$response='';
-			if ($this->knews_form_n==1 || $custom) {
-				$response = '<script type="text/javascript">
-					jQuery(document).ready(function() {
-						jQuery(\'' . $container . ' form\').submit( function() {
-							thisform = this;
+
+			$response = '<script type="text/javascript">
+				jQuery(document).ready(function() {
+					jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').submit( function() {
+						if (jQuery(this).attr(\'submitted\') !== "true") {
+							jQuery(this).attr(\'submitted\', "true");
 							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
-								jQuery(thisform).closest(\'' . $container . '\').html(data);
+								jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(data);
 							});
-							return false;
-						});
-					})
-				</script>';
-			}
-			if (!$custom) $this->knews_form_n++;
+						}
+						return false;
+					});
+				})
+			</script>';
+
 			return $response;
 		}
 		
@@ -842,7 +843,7 @@ if (!class_exists("KnewsPlugin")) {
 
 				if (is_array($args)) $response .= $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
 
-				$response .= '<div class="' . $container . '">
+				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
 					div.' . $container . ' textarea#knewscomment {position:absolute; top:-3000px; left:-3000px;}
 					</style>
@@ -869,6 +870,7 @@ if (!class_exists("KnewsPlugin")) {
 
 				if (is_array($args)) $response .=  $args['after_widget'];
 			}
+			$this->knews_form_n++;
 			return $response;
 		}
 
@@ -1200,7 +1202,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.3');
+		define('KNEWS_VERSION', '1.2.4');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;

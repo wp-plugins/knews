@@ -117,6 +117,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 				</thead>
 				<tbody>
 				<?php
+				$pending=false;
 				$alt=false;
 				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC";
 				$results = $wpdb->get_results( $query );
@@ -192,6 +193,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 						//Resultats
 						if ( $submit->paused==0) {
 							echo __('Ongoing','knews');
+							$pending=true;
 						} else {
 							echo __('Paused','knews');
 						}
@@ -213,3 +215,13 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 					</tr>
 				</tfoot>
 			</table>
+			<?php
+			if ($pending) {
+			?>
+			<div class="updated">
+				<p>Knews submit runs every 10 minutes and sends a portion of the list.</p>
+				<p>You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: <a href="<?php echo $Knews_plugin->get_main_admin_url(); ?>admin-ajax.php?action=knewsCron&js=1" class="button" target="_blank">Run JS-Cron Now</a></p>
+			</div>
+			<?php
+			}
+			?>

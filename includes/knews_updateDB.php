@@ -124,8 +124,12 @@ update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 
 function knews_update_hooks() {
-	if (!wp_next_scheduled('knews_wpcron_function_hook')) wp_schedule_event( time(), 'twicedaily', 'knews_wpcron_function_hook');
-	if (!wp_next_scheduled('knews_wpcron_automate_hook')) wp_schedule_event( time(), 'knewstime', 'knews_wpcron_automate_hook');
+	//Reset hooks (bug in 1.2.0 - 1.2.3 versions)
+	if (wp_next_scheduled('knews_wpcron_function_hook')) wp_clear_scheduled_hook('knews_wpcron_function_hook');
+	if (wp_next_scheduled('knews_wpcron_automate_hook')) wp_clear_scheduled_hook('knews_wpcron_automate_hook');
+
+	if (!wp_next_scheduled('knews_wpcron_function_hook')) wp_schedule_event( time(), 'knewstime', 'knews_wpcron_function_hook');
+	if (!wp_next_scheduled('knews_wpcron_automate_hook')) wp_schedule_event( time(), 'hourly', 'knews_wpcron_automate_hook');
 }
 add_action('wp', 'knews_update_hooks');
 

@@ -35,27 +35,34 @@
 		$time = $Knews_plugin->post_safe('auto_time', 0);
 		$day = $Knews_plugin->post_safe('auto_dayweek', 0);
 		
-		$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE name='" . $name . "'";
-		$results = $wpdb->get_results( $query );
-		
-		if (count($results)==0 && $name!='') {
-
-			$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run) VALUES (";
-			$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "')";
+		if ($name =='' || $news=='' || $target=='') {
 			
-			if ($wpdb->query($sql)) {
-				echo '<div class="updated"><p>' . __('Automated submit created','knews') . '</p></div>';
-			} else {
-				echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __("Cant create the automated submit",'knews') . ' : ' . $wpdb->last_error . '</p></div>';
-			}
-		} else {
 			echo '<div class="error"><p><strong>';
 			if ($name=='') {
 				_e('Error: the name cant be empty','knews');
 			} else {
-				_e('Error: there is already an automated submit with this name','knews');
+				_e('Error: Please, fill all the form','knews');
 			}
 			echo '</strong></p></div>';
+
+		} else {
+			$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE name='" . $name . "'";
+			$results = $wpdb->get_results( $query );
+			
+			if (count($results)==0) {
+				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run) VALUES (";
+				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "')";
+				
+				if ($wpdb->query($sql)) {
+					echo '<div class="updated"><p>' . __('Automated submit created','knews') . '</p></div>';
+				} else {
+					echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __("Cant create the automated submit",'knews') . ' : ' . $wpdb->last_error . '</p></div>';
+				}
+			} else {
+				echo '<div class="error"><p><strong>';
+				_e('Error: there is already an automated submit with this name','knews');
+				echo '</strong></p></div>';
+			}
 		}
 	}
 
