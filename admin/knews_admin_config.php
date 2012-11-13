@@ -25,6 +25,16 @@ function knews_save_prefs() {
 		} else {
 			$knewsOptions['def_autom_post'] = '0';
 		}
+		if (isset($_POST['edited_autom_post_knews'])) {
+			$knewsOptions['edited_autom_post'] = $_POST['edited_autom_post_knews'];
+		} else {
+			$knewsOptions['edited_autom_post'] = '0';
+		}
+		if (isset($_POST['check_bot_knews'])) {
+			$knewsOptions['check_bot'] = $_POST['check_bot_knews'];
+		} else {
+			$knewsOptions['check_bot'] = '0';
+		}
 		if (isset($_POST['apply_filters_on_knews'])) {
 			$knewsOptions['apply_filters_on'] = $_POST['apply_filters_on_knews'];
 		} else {
@@ -324,10 +334,14 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<h3><?php _e('Automated options','knews'); ?></h3>
 			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></p>
 
+			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it)','knews'); ?></p>
+
 			<hr />
 
 			<h3><?php _e('Compaibility options','knews'); ?></h3>
-			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?></p>
+			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><strong>Note</strong>: if you are using <strong>qTranslate</strong> you can't deactivate this option, because it uses this filter to divide the post contents into different languages.</p>
+
+			<p><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> /> <?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></p>
 
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />

@@ -18,7 +18,7 @@ if ($Knews_plugin) {
 							'Lucida Sans Unicode, Lucida Grande, sans-serif'
 						);
 	
-	$input_ff=$font_family[2]; if (isset($_GET['ff'])) $input_ff=htmlspecialchars (urldecode($_GET['ff']));
+	$input_ff=$font_family[2]; if (isset($_GET['ff'])) $input_ff=htmlspecialchars ($_GET['ff']);
 	$input_fs=2; if (isset($_GET['fs'])) $input_fs=intval($_GET['fs']);
 	$input_ss=0; if (isset($_GET['ss'])) $input_ss=intval($_GET['ss']);
 	$input_lh=0; if (isset($_GET['lh'])) $input_lh=intval($_GET['lh']);

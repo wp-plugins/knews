@@ -8,7 +8,7 @@
 	$tab=$Knews_plugin->get_safe('tab');
 
 	if ($Knews_plugin->get_safe('da')=='rename') {
-		$query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . mysql_real_escape_string(urldecode($Knews_plugin->get_safe('nn'))) . "' WHERE id=" . intval($Knews_plugin->get_safe('nid'));
+		$query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . mysql_real_escape_string($Knews_plugin->get_safe('nn')) . "' WHERE id=" . intval($Knews_plugin->get_safe('nid'));
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('Newsletter name updated','knews') . '</p></div>';
 	}
@@ -210,7 +210,7 @@ function enfocar() {
 					<h2><?php _e('Create new newsletter','knews');?> <a href="<?php _e('http://www.knewsplugin.com/tutorial/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Make your own templates how-to','knews'); ?></a></h2>
 					<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" class="new_newsletter">
 						<input type="hidden" name="action" id="action" value="add_news" />
-						<p><label for="new_list"><?php _e('Name','knews');?>: </label><input type="text" name="new_news" id="new_news" class="regular-text" />
+						<p><label for="new_news"><?php _e('Name','knews');?>: </label><input type="text" name="new_news" id="new_news" class="regular-text" />
 						<?php
 						$lang_listed = false;
 						/*foreach ($languages as $l) {
@@ -266,7 +266,21 @@ function enfocar() {
 						<div id="knewsshop">
 							<?php 
 							$look = wp_remote_get( 'http://www.knewsplugin.com/shop/look.php' );
-							if (isset($look['body'])) echo $look['body'];
+							if (!is_wp_error($look)) {
+								if (isset($look['body'])) echo $look['body'];
+							} else {
+							?>
+							<script type="text/javascript">
+								if ('https:' == document.location.protocol) {
+									document.write('<p>Please, go to <a href="http://www.knewsplugin.com/ps" target="_blank">our shop</a> and see our latest premium templates</p>');
+								} else {
+									var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
+									knewsscript.src = 'http://www' + '.knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
+									var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
+								}
+							</script>
+							<?php
+							}
 							?>
 						</div>
 						<script type="text/javascript">

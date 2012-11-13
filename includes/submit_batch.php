@@ -44,7 +44,8 @@ if (count($targets) > 0) {
 			strpos($link,'[') === false &&
 			strpos($link,']') === false &&
 			strpos($link,'%') === false &&
-			strpos($link,'#') === false 
+			strpos($link,'#') === false &&
+			strpos($link,'mailto:') === false 
 		) {
 		//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
 			$link_key = substr(md5(uniqid()),-16);

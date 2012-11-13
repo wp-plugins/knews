@@ -5,7 +5,7 @@
 	$langs_name = array();
 
 	if ($Knews_plugin->get_safe('da')=='rename') {
-		$query = "UPDATE ".KNEWS_LISTS." SET name='" . urldecode($Knews_plugin->get_safe('nn')) . "' WHERE id=" . intval($Knews_plugin->get_safe('lid'));
+		$query = "UPDATE ".KNEWS_LISTS." SET name='" . $Knews_plugin->get_safe('nn') . "' WHERE id=" . intval($Knews_plugin->get_safe('lid'));
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('List name updated','knews') . '</p></div>';
 	}

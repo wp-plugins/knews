@@ -17,7 +17,7 @@ if ($Knews_plugin) {
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
 	$id_newsletter = intval($Knews_plugin->get_safe('id'));
-	$email = urldecode($Knews_plugin->get_safe('e'));
+	$email = $Knews_plugin->get_safe('e');
 	$user_id=0;
 	
 	if ($email != '') {

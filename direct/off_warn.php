@@ -14,7 +14,7 @@ if ($Knews_plugin) {
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	}
 
-	wp_redirect( urldecode($Knews_plugin->get_safe('b')));
+	wp_redirect( $Knews_plugin->get_safe('b'));
 	exit;
 }
 ?>

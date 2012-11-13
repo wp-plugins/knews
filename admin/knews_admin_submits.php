@@ -2,7 +2,7 @@
 global $Knews_plugin, $wpdb, $knewsOptions;
 
 if ($Knews_plugin->get_safe('da')=='priority') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . urldecode($Knews_plugin->get_safe('np')) . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . $Knews_plugin->get_safe('np') . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
 
 	//echo $query;
 

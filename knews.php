@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.4
+Version: 1.2.5
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -64,7 +64,9 @@ if (!class_exists("KnewsPlugin")) {
 				'update_pro' => 'no',
 				'videotutorial' => 'no',
 				'def_autom_post' => '0',
-				'apply_filters_on' => '1');
+				'apply_filters_on' => '1',
+				'edited_autom_post' => '0',
+				'check_bot'=>'1');
 
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)) {
@@ -424,6 +426,9 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function add_user_self(){
+
+			global $knewsOptions;
+
 			//$name = mysql_real_escape_string($_POST['name']);
 			$lang = mysql_real_escape_string($this->post_safe('lang_user'));
 			$lang_locale = mysql_real_escape_string($this->post_safe('lang_locale_user'));
@@ -443,11 +448,13 @@ if (!class_exists("KnewsPlugin")) {
 			}
 
 			$stupid_bot = false;
-			$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
-			if ($this->post_safe('knewskey') != $key) $stupid_bot = true;
-			if (date('G') == 0 && $stupid_bot) {
-				$key = md5(date('dmY', strtotime("-1 day")) . KNEWS_VERSION . get_bloginfo('version'));
-				if ($this->post_safe('knewskey') == $key) $stupid_bot = false;
+			if (intval($knewsOptions['check_bot'])==1) {
+				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
+				if ($this->post_safe('knewskey') != $key) $stupid_bot = true;
+				if (date('G') == 0 && $stupid_bot) {
+					$key = md5(date('dmY', strtotime("-1 day")) . wp_create_nonce( 'knews-subscription' ));
+					if ($this->post_safe('knewskey') == $key) $stupid_bot = false;
+				}
 			}
 			if ($this->post_safe('knewscomment') != '') $stupid_bot = true;
 
@@ -550,8 +557,8 @@ if (!class_exists("KnewsPlugin")) {
 			$mailHtml = str_replace('#url_confirm#', $url_confirm, $mailHtml);
 
 			$mailText = str_replace('</p>', '</p>\r\n\r\n', $mailHtml);
-			$mailText = str_replace('<br>', '<br>\r\n', $mailHtml);
-			$mailText = str_replace('<br />', '<br />\r\n', $mailHtml);
+			$mailText = str_replace('<br>', '<br>\r\n', $mailText);
+			$mailText = str_replace('<br />', '<br />\r\n', $mailText);
 			$mailText = strip_tags($mailText);
 
 			$result=$this->sendMail( $email, $this->get_custom_text('email_subscription_subject', $lang_locale), $mailHtml, $mailText );
@@ -596,7 +603,7 @@ if (!class_exists("KnewsPlugin")) {
 			global $wpdb;
 			
 			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string(urldecode($_GET['e']));
+			$email = mysql_real_escape_string($_GET['e']);
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -616,7 +623,7 @@ if (!class_exists("KnewsPlugin")) {
 			
 			$id_newsletter = intval($this->get_safe('n'));
 			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string(urldecode($_GET['e']));
+			$email = mysql_real_escape_string($_GET['e']);
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -828,7 +835,7 @@ if (!class_exists("KnewsPlugin")) {
 		function getForm($mandatory_id=0, $args='', $instance=array(), $container='knews_add_user') {
 			global $knewsOptions;
 			$stylize = false;
-			if (isset($instance['stylize']) && $instance['stylize']==1) $stylize = true;
+			if ((isset($instance['stylize']) && $instance['stylize']==1) || is_array($args)) $stylize = true;
 
 			$extra_fields = $this->get_extra_fields();
 			$response='';
@@ -836,7 +843,6 @@ if (!class_exists("KnewsPlugin")) {
 			$knews_lists = $this->tellMeLists( (($mandatory_id==0) ? true : false) );
 
 			if (count($knews_lists) > 0) {
-				$response .= $this->getAjaxScript('div.' . $container);
 				$lang = $this->pageLang();
 
 				if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
@@ -860,7 +866,7 @@ if (!class_exists("KnewsPlugin")) {
 
 				$response .= '<label for="email"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>
 						<input type="text" id="email" name="email" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
-				$key = md5(date('dmY') . KNEWS_VERSION . get_bloginfo('version'));
+				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
 				$response .= '<input type="hidden" name="knewskey" id="knewskey" value="' . $key . '" />
 						<textarea name="knewscomment" id="knewscomment" style="width:150px; height:80px"></textarea>
 						<input type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />
@@ -869,6 +875,7 @@ if (!class_exists("KnewsPlugin")) {
 				</div>';
 
 				if (is_array($args)) $response .=  $args['after_widget'];
+				$response .= $this->getAjaxScript('div.' . $container);
 			}
 			$this->knews_form_n++;
 			return $response;
@@ -1202,7 +1209,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.4');
+		define('KNEWS_VERSION', '1.2.5');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1213,7 +1220,11 @@ if (!function_exists("Knews_plugin_ap")) {
 
 			}
 	
-			add_menu_page( 'K-news', 'K-news', 'edit_posts', 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), plugins_url() . '/knews/images/icon16.png');
+			//Can't see the Knews admin menu? Try to define KNEWS_MENU_POS with another random value in your functions.php theme!!!
+			$menu_order=103.2;
+			if (defined('KNEWS_MENU_POS')) $menu_order=KNEWS_MENU_POS;
+
+			add_menu_page( 'K-news', 'K-news', 'edit_posts', 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), plugins_url() . '/knews/images/icon16.png', $menu_order);
 			add_submenu_page( 'knews_news', __('Newsletters','knews'), __('Newsletters','knews'), 'edit_posts', 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), '');
 			add_submenu_page( 'knews_news', __('Mailing lists','knews'), __('Mailing lists','knews'), 'edit_posts', 'knews_lists', array(&$Knews_plugin, 'KnewsAdminLists'), '');
 			add_submenu_page( 'knews_news', __('Subscribers','knews'), __('Subscribers','knews'), 'edit_posts', 'knews_users', array(&$Knews_plugin, 'KnewsAdminUsers'), '');
@@ -1557,11 +1568,9 @@ if (!function_exists("Knews_plugin_ap")) {
 	
 	} // class Knews_Widget
 
-
-
 	function knews_aj_posts_where( $where ) {
-		global $knews_aj_look_date;
-   		return $where . " AND post_modified > '" . $knews_aj_look_date . "' ";
+		global $knews_aj_look_date, $knewsOptions;
+   		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' ";
 	}
 
 }
