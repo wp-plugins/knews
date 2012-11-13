@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.4.2
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,18 @@ In any case, the degree of personalisation of our templates is immense, with tho
 9. The Glossy Black Template and a sample customisation (White Background).
 
 == Changelog ==
+
+= 1.2.5 =
+
+* Added automated config option: older edited posts should be included on automation (on/off)
+* Added subscribe config option: Antispam bot check (on/off) (Subscribe always fails "wrong e-mail adress" message issue in some Cache systems)
+* Fatal error in admin newsletter page fixed
+* Added 250 and 500 users per iteration submit (only for high performance SMTP)
+* Fixed issue in the text email version (Thanks to Ernscht)
+* Fixed issue in special chars email validation (Thanks to Ernscht)
+* Added widget format (label/input position)
+* Hidden Knews in admin menu fixed
+* Fixed mailto in links on newsletters
 
 = 1.2.4 =
 
@@ -323,6 +335,18 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.5 =
+
+* Added automated config option: older edited posts should be included on automation (on/off)
+* Added subscribe config option: Antispam bot check (on/off) (Subscribe always fails "wrong e-mail adress" message issue in some Cache systems)
+* Fatal error in admin newsletter page fixed
+* Added 250 and 500 users per iteration submit (only for high performance SMTP)
+* Fixed issue in the text email version (Thanks to Ernscht)
+* Fixed issue in special chars email validation (Thanks to Ernscht)
+* Added widget format (label/input position)
+* Hidden Knews in admin menu fixed
+* Fixed mailto in links on newsletters
 
 = 1.2.4 =
 
