@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
-Tested up to: 3.4.2
-Stable tag: 1.2.5
+Tested up to: 3.5.0
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,6 +162,22 @@ In any case, the degree of personalisation of our templates is immense, with tho
 9. The Glossy Black Template and a sample customisation (White Background).
 
 == Changelog ==
+
+= 1.2.6 =
+
+* TESTED IN WP 3.5
+* DEEP CHANGES IN SECURITY: XSS & CSRF attaks prevention
+* AUTOMATION IMPROVEMENTS:
+* Added button to force automate script start with debugging info
+* Now the imported posts gets the "include posts for automation by default" preference
+* Autosave posts deactivating automation user preference solved
+* Automate posts by creation/update date preference added
+* FIXES:
+* Pagination added into select post popup (preventing memory overflow for much posts)
+* Long lang code support added (chinese and portuguese)
+* First character ? in newsletters fixed (rare, only a few webservers issue)
+* Import users bug fixed
+* PHP set_time_limit warning solved
 
 = 1.2.5 =
 
@@ -336,6 +352,22 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.2.6 =
+
+* TESTED IN WP 3.5
+* DEEP CHANGES IN SECURITY: XSS & CSRF attaks prevention
+* AUTOMATION IMPROVEMENTS:
+* Added button to force automate script start with debugging info
+* Now the imported posts gets the "include posts for automation by default" preference
+* Autosave posts deactivating automation user preference solved
+* Automate posts by creation/update date preference added
+* FIXES:
+* Pagination added into select post popup (preventing memory overflow for much posts)
+* Long lang code support added (chinese and portuguese)
+* First character ? in newsletters fixed (rare, only a few webservers issue)
+* Import users bug fixed
+* PHP set_time_limit warning solved
+
 = 1.2.5 =
 
 * Added automated config option: older edited posts should be included on automation (on/off)
@@ -347,42 +379,3 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Added widget format (label/input position)
 * Hidden Knews in admin menu fixed
 * Fixed mailto in links on newsletters
-
-= 1.2.4 =
-
-* Solved double subscription bug into windows webservers (definitely, we swear)
-* Solved bug in the scheduling of autocreation task
-* Added JS-CRON force button in submits screen (look at the bottom list)
-* Added support for NextGen Gallery images insertion in the WYSIWYG editor
-* Added apply_filters['the_content'] deactivation to avoid post insertion issues with another plugins like NextGen Gallery and others
-
-= 1.2.3 =
-
-* Solved htaccess bug in templates images (bug in 1.2.2 version for some webservers)
-* Double subscription bug fixed
-* Fixed broken HTML newsletter submit when includes bad URLs (like <a href="">)
-* Added mailing lists order field (for selector order in subscription form)
-* Bad URL tutorials fixed
-* Solved JavaScript post content insertion into newsletter bug (from plugins like add Link to Facebook)
-
-= 1.2.2 =
-
-* Solved SQL bug ('last_run' missing field) in knews 1.2.0 /1.2.1 clean installations (in Auto-creation admin page)
-* Solved a token replacement bug about name/surname fields in submitted newsletters.
-* Now you can specify a mailing list id, name, surname and/or stylize it in shortcode and theme  knews_plugin_form() call (see installation for details).
-* Solved statistics bug: now shows the Submits OK/Error graph and calculates right the clicks percentages
-* The custom templates can be uploaded to /wp-content/uploads/knewstemplates/ in order to preserve it when you updating the plugin.
-* New premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
-
-= 1.2.1 =
-
-* SOLVED IMPORTANT BUG!!! Cron submits never be submitted in 1.2.0 version.
-* Solved two bugs in the can't read page: Now replaces the tokens (Name and Surname) and the unsubscribe link now works. Thanks to IanFox.
-* The e-mail now is url encoded into user confirmation, unsubscribe and can't read email. Emails like abc+def@test.com works now. Thanks to Ernscht.
-
-= 1.2.0 =
-
-* Added Name and Surname fields, in the subscription form and token replacement in the newsletter submit.
-* Automated creation and submit newslettering.
-* Deep change in the Ajax way: from old-school method to standard WordPress method: This will solve some incompatibility issues with other plugins in the WYSIWYG editor and other Ajax Calls.
-
