@@ -1275,7 +1275,7 @@ msgstr "Your subscription has been confirmed"
 #. Text in echo
 #: dialogs.php:29
 msgid "subscription_ok_message"
-msgstr "From now on, you will receive our newsletters.<br><br><strong>. Thank you.</strong>"
+msgstr "From now on, you will receive our newsletters.<br><br><strong>Thank you.</strong>"
 
 #. Text in echo
 #: dialogs.php:35
@@ -2198,7 +2198,7 @@ msgid "widget_label_name"
 msgstr "Name:"
 
 msgid "widget_label_surname"
-msgstr "surname:"
+msgstr "Surname:"
 
 msgid "General options"
 msgstr "General options"

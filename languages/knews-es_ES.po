@@ -1895,7 +1895,7 @@ msgid "Accumulated sign ups and unsubscribes from date:"
 msgstr "Subscripciones y bajas acumuladas desde la fecha:"
 
 msgid "You must select a right date range"
-msgstr "Has de sel·leccionar un rang de dates correcte"
+msgstr "Debes seleccionar un rango de fechas correcto"
 
 msgid "Sign ups"
 msgstr "Altas"
