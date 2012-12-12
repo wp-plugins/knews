@@ -1,6 +1,11 @@
 <?php
-	global $wpdb, $Knews_plugin;
-	global $knews_delimiters, $knews_enclosure, $knews_encode, $knews_line_endings;
+//Security for CSRF attacks
+$knews_nonce_action='kn-adm-export';
+$knews_nonce_name='_admexp';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
+	global $wpdb, $Knews_plugin, $knews_delimiters, $knews_enclosure, $knews_encode, $knews_line_endings;
 //	global $knews_delimiters, $knews_enclosure, $knews_encode, $knews_line_endings, $knews_import_errors, $knews_import_users_error, $col_options, $submit_confirmation_id, $confirmation_sql_count;
 
     // specify allowed field delimiters
@@ -44,7 +49,7 @@
 	}
 
 	$step = $Knews_plugin->post_safe('step', 1);
-	$knews_has_header = intval($Knews_plugin->post_safe('knews_has_header', 0));
+	$knews_has_header = $Knews_plugin->post_safe('knews_has_header', 0, 'int');
 	
 	$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists = $wpdb->get_results( $query );
@@ -166,7 +171,7 @@
 			
 			foreach ($lists as $ln) {
 				echo '<input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="check_list"';
-				if (intval($Knews_plugin->post_safe('list_' . $ln->id)) == 1) echo ' checked="checked"';
+				if ($Knews_plugin->post_safe('list_' . $ln->id, 0, 'int') == 1) echo ' checked="checked"';
 				echo '>' . $ln->name . '<br>';
 			}
 			
@@ -199,6 +204,10 @@
 			<div class="submit">
 				<input type="submit" class="button-primary" value="<?php _e('Export users','knews');?>">
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 			</form>
 			<?php
 		}

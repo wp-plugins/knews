@@ -8,7 +8,7 @@ $sql =	"CREATE TABLE " .KNEWS_USERS . " (
 		state varchar(2) NOT NULL,
 		joined datetime NOT NULL,
 		confkey varchar(32),
-		lang varchar(3) NOT NULL,
+		lang varchar(12) NOT NULL,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 
@@ -73,8 +73,12 @@ $sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS . " (
 		html_modules mediumtext NOT NULL,
 		html_container mediumtext NOT NULL,
 		html_head mediumtext NOT NULL,
-		lang varchar(3) NOT NULL DEFAULT '', 
+		lang varchar(12) NOT NULL DEFAULT '', 
 		automated varchar(1) NOT NULL DEFAULT 0,
+
+		mobile varchar(1) NOT NULL DEFAULT 0,
+		id_mobile bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 
@@ -141,7 +145,7 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 		selection_method varchar(1) NOT NULL,
 		target_id bigint(20) UNSIGNED NOT NULL,
 		newsletter_id bigint(20) UNSIGNED NOT NULL,
-		lang varchar(3) NOT NULL,
+		lang varchar(12) NOT NULL,
 		paused varchar(1) NOT NULL,
 		auto varchar(1) NOT NULL,
 		every_mode int(11) NOT NULL,
@@ -149,6 +153,7 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 		what_dayweek int(11) NOT NULL,
 		every_posts int(11) NOT NULL,
 		last_run datetime NOT NULL,
+		emails_at_once int(11) NOT NULL DEFAULT 25,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 	   
@@ -165,6 +170,15 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED_POSTS . " (
 	   
 dbDelta($sql);
 
+$sql =	"CREATE TABLE " .KNEWS_AUTOMATED_SELECTION . " (
+		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+		id_automated bigint(20) UNSIGNED NOT NULL,
+		type varchar(100) NOT NULL,
+		value varchar(100) NOT NULL,
+		UNIQUE KEY id (id)
+	   )$charset_collate;";
+	   
+dbDelta($sql);
 
 update_option('knews_version', KNEWS_VERSION);
 ?>

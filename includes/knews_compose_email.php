@@ -34,5 +34,9 @@ if ($Knews_plugin) {
 			}
 		}
 	}
+	
+	if ($results[0]->mobile==0 && $results[0]->id_mobile==0) {
+		$theHtml = iterative_extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $theHtml, true);
+	}
 }
 ?>

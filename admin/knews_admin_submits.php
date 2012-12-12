@@ -2,7 +2,7 @@
 global $Knews_plugin, $wpdb, $knewsOptions;
 
 if ($Knews_plugin->get_safe('da')=='priority') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . $Knews_plugin->get_safe('np') . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . $Knews_plugin->get_safe('np') . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
 
 	//echo $query;
 
@@ -11,21 +11,21 @@ if ($Knews_plugin->get_safe('da')=='priority') {
 }
 
 if ($Knews_plugin->get_safe('da')=='startnow') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET start_time='" . $Knews_plugin->get_mysql_date() . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET start_time='" . $Knews_plugin->get_mysql_date() . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='retry') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE blog_id=" . get_current_blog_id() . " AND status=2 AND submit=" . intval($Knews_plugin->get_safe('rid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE blog_id=" . get_current_blog_id() . " AND status=2 AND submit=" . $Knews_plugin->get_safe('rid', 0, 'int');
 	$result=$wpdb->query( $query );
 	
 	if ($result > 0) {
-		$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET finished=0, paused=0, end_time='0000-00-00 00:00:00', users_error=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('rid'));
+		$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET finished=0, paused=0, end_time='0000-00-00 00:00:00', users_error=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('rid', 0, 'int');
 		$result=$wpdb->query( $query );
 
 		if ($knewsOptions['write_logs']=='yes') {
-			$fp = fopen(KNEWS_DIR . '/tmp/cronlog_' . intval($Knews_plugin->get_safe('rid')), 'a');
+			$fp = fopen(KNEWS_DIR . '/tmp/cronlog_' . $Knews_plugin->get_safe('rid', 0, 'int'), 'a');
 			if ($fp) {
 				$hour = date('H:i:s', current_time('timestamp'));
 				fwrite($fp, "\r\n" . '**' . $hour . ' | ' . __('Knews will try to resend those messages which have reported error','knews') . "<br>\r\n\r\n");
@@ -36,19 +36,19 @@ if ($Knews_plugin->get_safe('da')=='retry') {
 }
 
 if ($Knews_plugin->get_safe('da')=='continue') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=0 WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='pause') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=1 WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET paused=1 WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
 	$result=$wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit start time updated','knews') . '</p></div>';
 }
 
 if ($Knews_plugin->get_safe('da')=='delete') {
-	$query="DELETE FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND id=" . intval($Knews_plugin->get_safe('sid'));
+	$query="DELETE FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
 	$results = $wpdb->query( $query );
 	echo '<div class="updated"><p>' . __('Submit deleted','knews') . '</p></div>';
 }

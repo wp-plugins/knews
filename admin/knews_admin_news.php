@@ -19,12 +19,15 @@
 	//}
 
 	$section = $Knews_plugin->get_safe('section');
-	$id_edit = intval($Knews_plugin->get_safe('idnews'));
+	$id_edit = $Knews_plugin->get_safe('idnews', 0, 'int');
 
-	if ($section=='' && $Knews_plugin->post_safe('action')=='add_news') {
+	$mobile=false;
+	if ($Knews_plugin->post_safe('action')=='add_news_mobile') $mobile=true;
 
-		$name = mysql_real_escape_string($Knews_plugin->post_safe('new_news'));
-		$lang = mysql_real_escape_string($Knews_plugin->post_safe('lang'));
+	if ($section=='' && ($Knews_plugin->post_safe('action')=='add_news' || $mobile)) {
+
+		$name = $Knews_plugin->post_safe('new_news');
+		$lang = $Knews_plugin->post_safe('lang');
 		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
 		$path_template = $Knews_plugin->post_safe('path_' . $Knews_plugin->post_safe('template'));
 
@@ -39,18 +42,22 @@
 		}
 
 		if ($lang_localized != '' || $lang =='') {
-			if ($name != '') {
+			if ($name != '' || $mobile) {
 	
-				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE name='" . $name . "'";
+				if ($mobile) {
+					$query = "SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id_mobile=0 AND id=" . $Knews_plugin->post_safe('parent', 0, 'int');
+				} else {
+					$query = "SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE name='" . $name . "'";
+				}
 				$results = $wpdb->get_results( $query );
 				
-				if (count($results)==0) {
+				if ((!$mobile && count($results)==0) || ($mobile && count($results)!=0)) {
 					
-					$template = mysql_real_escape_string($Knews_plugin->post_safe('template'));
+					$template = $Knews_plugin->post_safe('template');
 	
 					if ($template != '') {
 	
-						$fileTemplate = $path_template . $_POST['template'] . '/template.html';
+						$fileTemplate = $path_template . $Knews_plugin->post_safe('template') . (($mobile) ? '/mobile.html' : '/template.html');
 						$fh = fopen($fileTemplate, 'r');
 						$codeTemplate = fread($fh, filesize($fileTemplate));
 						fclose($fh);
@@ -97,8 +104,8 @@
 	
 						$bodyTemplate = cut_code('<body>', '</body>', $codeTemplate, true);
 	
-						$bodyTemplate = str_replace('"images/', '"' . $url_template . $_POST['template'] . '/images/', $bodyTemplate);
-						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $_POST['template'] . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('"images/', '"' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
 		
 						$count_modules=0; $found_module=true; $codeModule='';
 						while ($found_module) {
@@ -107,7 +114,7 @@
 							if (strpos($bodyTemplate, '[start module ' . ($count_modules + 1) . ']') !== false) {
 								$found_module=true;
 	
-								$codeModule .= '<div class="insertable"><img src="' . $url_template . $_POST['template'] . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
+								$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
 								
 								$extracted_module = cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								$codeModule .= $extracted_module . '</div></div>';
@@ -136,8 +143,7 @@
 						$headTemplate = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($headTemplate));
 						$codeModule = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($codeModule));
 	
-						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject, lang, automated) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0)";
-	
+						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject, lang, automated, mobile, id_mobile) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0, " . (($mobile) ? "1" : "0") . ", 0)";
 						if ($wpdb->query($sql)) {
 							$id_edit=$wpdb->insert_id; $id_edit2=mysql_insert_id(); if ($id_edit==0) $id_edit=$id_edit2;
 							

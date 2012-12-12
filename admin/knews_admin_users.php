@@ -1,4 +1,10 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-usr-adm';
+$knews_nonce_name='_admusr';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
 	global $wpdb;
 	global $Knews_plugin;
 	
@@ -12,30 +18,30 @@
 	}
 	
 	if ($Knews_plugin->get_safe('da')=='activate') {
-		$query = "UPDATE ".KNEWS_USERS." SET state='2' WHERE id=" . intval($Knews_plugin->get_safe('uid'));
+		$query = "UPDATE ".KNEWS_USERS." SET state='2' WHERE id=" . $Knews_plugin->get_safe('uid', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('da')=='block') {
-		$query = "UPDATE ".KNEWS_USERS." SET state='3' WHERE id=" . intval($Knews_plugin->get_safe('uid'));
+		$query = "UPDATE ".KNEWS_USERS." SET state='3' WHERE id=" . $Knews_plugin->get_safe('uid', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('da')=='delete') {
-		$query="DELETE FROM " . KNEWS_USERS . " WHERE id=" . intval($Knews_plugin->get_safe('uid'));
+		$query="DELETE FROM " . KNEWS_USERS . " WHERE id=" . $Knews_plugin->get_safe('uid', 0, 'int');
 		$results = $wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('User deleted','knews') . '</p></div>';
 	}
 
 	if (isset($_POST['action'])) {
-		if ($_POST['action']=='update_user') {
+		if ($Knews_plugin->post_safe('action')=='update_user') {
 			
-			$email = mysql_real_escape_string($_POST['email']);
-			$state = mysql_real_escape_string($_POST['state']);
-			$lang = mysql_real_escape_string($_POST['lang']);
-			$id=intval($_POST['id_user']);
+			$email = $Knews_plugin->post_safe('email');
+			$state = $Knews_plugin->post_safe('state');
+			$lang = $Knews_plugin->post_safe('lang');
+			$id=$Knews_plugin->post_safe('id_user', 0, 'int');
 
 			$query = "UPDATE ".KNEWS_USERS." SET email='" . $email . "', state='" . $state . "', lang='" . $lang . "' WHERE id=" . $id;
 			$result=$wpdb->query( $query );
@@ -57,7 +63,7 @@
 			$extra_fields = $Knews_plugin->get_extra_fields();
 			foreach ($extra_fields as $ef) {
 				
-				$Knews_plugin->set_user_field ($id, $ef->id, $_POST['cf_' . $ef->id]);
+				$Knews_plugin->set_user_field ($id, $ef->id, $Knews_plugin->post_safe('cf_' . $ef->id));
 
 			}
 
@@ -70,7 +76,7 @@
 			
 			foreach ($result as $look_user) {
 
-				if (intval($Knews_plugin->post_safe('batch_' . $look_user->id)) == 1) {
+				if ($Knews_plugin->post_safe('batch_' . $look_user->id, 0, 'int') == 1) {
 
 					$query= 'DELETE FROM ' . KNEWS_USERS . ' WHERE id=' . $look_user->id;
 					$delete=$wpdb->query( $query );
@@ -81,12 +87,12 @@
 			
 		} else if ($_POST['action']=='add_user') {
 		
-			$lang = mysql_real_escape_string($_POST['lang']);
-			$email = mysql_real_escape_string($_POST['email']);
+			$lang = $Knews_plugin->post_safe('lang');
+			$email = $Knews_plugin->post_safe('email');
 			$date = $Knews_plugin->get_mysql_date();
 			$confkey = $Knews_plugin->get_unique_id();
-			$id_list_news = intval($_POST['id_list_news']);
-			$submit_confirm = intval($_POST['submit_confirm']);
+			$id_list_news = $Knews_plugin->post_safe('id_list_news', 0, 'int');
+			$submit_confirm = $Knews_plugin->post_safe('submit_confirm', 0, 'int');
 			
 			if ($submit_confirm==1) {
 				$state='1';
@@ -145,8 +151,7 @@
 		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Subscribers','knews'); ?></h2>
 <?php
 	}
-			$edit_user=0;
-			if (isset ($_GET['edit_user'])) $edit_user=intval($_GET['edit_user']);
+			$edit_user = $Knews_plugin->get_safe('edit_user', 0, 'int');
 			
 			if ($edit_user!=0) {
 				//Edit user
@@ -211,8 +216,12 @@
 						<tfoot><th><?php _e('Field','knews');?></th><th><?php _e('Value','knews');?></th></tfoot>
 					</table>
 					<div class="submit">
-						<input type="submit" value="<?php _e('Update user','knews');?>" class="button-primary" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="<?php _e('Go back','knews');?>" onclick="window.history.go(-1)" />
+						<input type="submit" value="<?php _e('Update user','knews');?>" class="button-primary" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="<?php _e('Go back','knews');?>" onclick="window.history.go(-1)" class="button-secondary" />
 					</div>
+					<?php 
+					//Security for CSRF attacks
+					wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+					?>
 					</form>
 					<?php	
 				} else {
@@ -222,10 +231,10 @@
 			} else {
 				//List users
 				
-				$filter_list = intval($Knews_plugin->get_safe('filter_list', 0));
-				$filter_state = intval($Knews_plugin->get_safe('filter_state', 0));
-				$search_user = mysql_real_escape_string($Knews_plugin->get_safe('search_user', ''));
-				$paged = intval($Knews_plugin->get_safe('paged', 1));
+				$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
+				$filter_state = $Knews_plugin->get_safe('filter_state', 0, 'int');
+				$search_user = $Knews_plugin->get_safe('search_user', '');
+				$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 								
 				$results_per_page=20;
 				
@@ -276,7 +285,7 @@
 					<div class="alignright actions">
 						<form action="admin.php" method="get">
 							<input type="hidden" name="page" id="page" value="knews_users" />
-							<p><?php _e('Find','knews');?>: <input type="text" name="search_user" id="search_user" value="<?php echo $search_user; ?>" /><input type="submit" value="<?php _e('Find','knews');?>" class="button-secondary " /></p>
+							<p><?php _e('Find','knews');?>: <input type="text" name="search_user" id="search_user" value="<?php echo $search_user; ?>" /><input type="submit" value="<?php _e('Find','knews');?>" class="button-secondary" /></p>
 						</form>
 					</div>
 					<br class="clear">
@@ -359,8 +368,12 @@
 							<option selected="selected" value=""><?php _e('Batch actions','knews'); ?></option>
 							<option value="delete_users"><?php _e('Delete','knews'); ?></option>
 						</select>
-						<input type="submit" value="<?php _e('Apply','knews'); ?>">
+						<input type="submit" value="<?php _e('Apply','knews'); ?>" class="button-secondary" />
 					</div>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
 				</form>
 				<?php
 					//Pagination
@@ -444,6 +457,10 @@
 		<div class="submit">
 			<input type="submit" value="<?php _e('Create a user','knews'); ?>" class="button-primary" />
 		</div>
+		<?php 
+		//Security for CSRF attacks
+		wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+		?>
 		</form>
 		<?php
 			}

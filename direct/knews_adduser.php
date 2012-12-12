@@ -6,7 +6,8 @@ if ($Knews_plugin) {
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
 	function different_locale_for_ajax( $locale ) {
-	   return $_POST['lang_locale_user'];
+		global $Knews_plugin;
+		return $Knews_plugin->post_safe('lang_locale_user');
 	}
 	
 	if (KNEWS_MULTILANGUAGE) add_filter('locale', 'different_locale_for_ajax'); 

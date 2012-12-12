@@ -1,45 +1,34 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-config-page';
+$knews_nonce_name='_config';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
 
 global $Knews_plugin, $knewsOptions;
 
 function knews_save_prefs() {
 	global $knewsOptions, $Knews_plugin;
 	if (isset($_POST['update_KnewsAdminSettings'])) {
-		if (isset($_POST['multilanguage_knews'])) $knewsOptions['multilanguage_knews'] = $_POST['multilanguage_knews'];
-		if (isset($_POST['from_mail_knews'])) $knewsOptions['from_mail_knews'] = $_POST['from_mail_knews'];
-		if (isset($_POST['from_name_knews'])) $knewsOptions['from_name_knews'] = $_POST['from_name_knews'];
-		if (isset($_POST['smtp_knews'])) $knewsOptions['smtp_knews'] = $_POST['smtp_knews'];
-		if (isset($_POST['smtp_host_knews'])) $knewsOptions['smtp_host_knews'] = $_POST['smtp_host_knews'];
-		if (isset($_POST['smtp_port_knews'])) $knewsOptions['smtp_port_knews'] = $_POST['smtp_port_knews'];
-		if (isset($_POST['smtp_user_knews'])) $knewsOptions['smtp_user_knews'] = $_POST['smtp_user_knews'];
-		if (isset($_POST['smtp_pass_knews'])) $knewsOptions['smtp_pass_knews'] = $_POST['smtp_pass_knews'];
-		if (isset($_POST['smtp_secure_knews'])) $knewsOptions['smtp_secure_knews'] = $_POST['smtp_secure_knews'];
-		if (isset($_POST['knews_cron'])) $knewsOptions['knews_cron'] = $_POST['knews_cron'];
-		if (isset($_POST['write_logs_knews'])) {
-			$knewsOptions['write_logs'] = $_POST['write_logs_knews'];
-		} else {
-			$knewsOptions['write_logs'] = 'no';
-		}
-		if (isset($_POST['def_autom_post_knews'])) {
-			$knewsOptions['def_autom_post'] = $_POST['def_autom_post_knews'];
-		} else {
-			$knewsOptions['def_autom_post'] = '0';
-		}
-		if (isset($_POST['edited_autom_post_knews'])) {
-			$knewsOptions['edited_autom_post'] = $_POST['edited_autom_post_knews'];
-		} else {
-			$knewsOptions['edited_autom_post'] = '0';
-		}
-		if (isset($_POST['check_bot_knews'])) {
-			$knewsOptions['check_bot'] = $_POST['check_bot_knews'];
-		} else {
-			$knewsOptions['check_bot'] = '0';
-		}
-		if (isset($_POST['apply_filters_on_knews'])) {
-			$knewsOptions['apply_filters_on'] = $_POST['apply_filters_on_knews'];
-		} else {
-			$knewsOptions['apply_filters_on'] = '0';
-		}
+		
+		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
+		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews', $knewsOptions['from_mail_knews']);
+		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews', $knewsOptions['from_name_knews']);
+		$knewsOptions['smtp_knews'] = $Knews_plugin->post_safe('smtp_knews', $knewsOptions['smtp_knews']);
+		$knewsOptions['smtp_host_knews'] = $Knews_plugin->post_safe('smtp_host_knews', $knewsOptions['smtp_host_knews']);
+		$knewsOptions['smtp_port_knews'] = $Knews_plugin->post_safe('smtp_port_knews', $knewsOptions['smtp_port_knews']);
+		$knewsOptions['smtp_user_knews'] = $Knews_plugin->post_safe('smtp_user_knews', $knewsOptions['smtp_user_knews']);
+		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews', $knewsOptions['smtp_pass_knews']);
+		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews', $knewsOptions['smtp_secure_knews']);
+		$knewsOptions['knews_cron'] = $Knews_plugin->post_safe('knews_cron', $knewsOptions['knews_cron']);
+		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
+		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
+		$knewsOptions['write_logs'] = $Knews_plugin->post_safe('write_logs_knews', $knewsOptions['write_logs'], 'no');
+		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', $knewsOptions['def_autom_post'], '0');
+		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', $knewsOptions['edited_autom_post'], '0');
+		$knewsOptions['check_bot'] = $Knews_plugin->post_safe('check_bot_knews', $knewsOptions['check_bot'], '0');
+		$knewsOptions['apply_filters_on'] = $Knews_plugin->post_safe('apply_filters_on_knews', $knewsOptions['apply_filters_on']);
+
 		$knewsOptions['config_knews'] = 'yes';
 
 		if ($Knews_plugin->post_safe('reset_alerts_knews')=='1') {
@@ -162,6 +151,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<div class="submit">
 					<input type="submit" name="update_KnewsAdminCustom" id="update_KnewsAdminCustom" value="<?php _e('Save','knews'); ?>" class="button-primary" />
 				</div>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
 			</form>
 		</div>
 <?php
@@ -274,6 +267,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 		</form>
 	</div>
 <?php
@@ -334,18 +331,22 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<h3><?php _e('Automated options','knews'); ?></h3>
 			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></p>
 
-			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it)','knews'); ?></p>
+			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)','knews'); ?></p>
 
 			<hr />
 
 			<h3><?php _e('Compaibility options','knews'); ?></h3>
-			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><strong>Note</strong>: if you are using <strong>qTranslate</strong> you can't deactivate this option, because it uses this filter to divide the post contents into different languages.</p>
+			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><?php _e('<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages.','knews'); ?></p>
 
 			<p><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> /> <?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></p>
 
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 		</form>
 	</div>
 <?php

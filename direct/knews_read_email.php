@@ -16,12 +16,12 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-	$id_newsletter = intval($Knews_plugin->get_safe('id'));
+	$id_newsletter = $Knews_plugin->get_safe('id', 0, 'int');
 	$email = $Knews_plugin->get_safe('e');
 	$user_id=0;
 	
 	if ($email != '') {
-		$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . mysql_real_escape_string($email) . "'");
+		$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . $email . "'");
 
 		if (count($user)==1) {
 			$user_id=$user->id;
@@ -47,12 +47,16 @@ if ($Knews_plugin) {
 		}
 		$theHtml = str_replace('%unsubscribe_href%', get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey, $theHtml);
 
+		$theHtml = str_replace('%mobile_version_href%', get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email) . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk'), $theHtml);
+
 	} else {
 		foreach ($used_tokens as $token) {
 			$theHtml = str_replace($token['token'], $token['defaultval'], $theHtml);
 		}
 
 		$theHtml = str_replace('%unsubscribe_href%', '#', $theHtml);
+
+		$theHtml = str_replace('%mobile_version_href%', get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk'), $theHtml);
 	}
 	$theHtml = str_replace('%cant_read_href%', '#' , $theHtml);
 

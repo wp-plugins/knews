@@ -3,7 +3,6 @@ global $Knews_plugin;
 
 if ($Knews_plugin) {
 
-	$Knews_plugin->security_for_direct_pages();
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 

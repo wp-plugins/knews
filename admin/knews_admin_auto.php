@@ -1,23 +1,30 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-adm-auto';
+$knews_nonce_name='_autokn';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
 
 	global $Knews_plugin, $wpdb;
+
+	$pending=false;
 
 	$languages = $Knews_plugin->getLangs(true);
 	
 	if ($Knews_plugin->get_safe('da')=='delete') {
-		$query="DELETE FROM " . KNEWS_AUTOMATED . " WHERE id=" . intval($Knews_plugin->get_safe('idauto'));
+		$query="DELETE FROM " . KNEWS_AUTOMATED . " WHERE id=" . $Knews_plugin->get_safe('idauto', 0, 'int');
 		$results = $wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('Automated process deleted','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('activated')==1 || $Knews_plugin->get_safe('activated',2)==0) {
-		$query = "UPDATE ".KNEWS_AUTOMATED." SET paused=" . $Knews_plugin->get_safe('activated') . " WHERE id=" . intval($Knews_plugin->get_safe('idauto'));
+		$query = "UPDATE ".KNEWS_AUTOMATED." SET paused=" . $Knews_plugin->get_safe('activated') . " WHERE id=" . $Knews_plugin->get_safe('idauto', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . (($Knews_plugin->get_safe('activated')==1) ? __('Automated process activated','knews') : __('Automated process deactivated','knews')) . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('auto')==1 || $Knews_plugin->get_safe('auto',2)==0) {
-		$query = "UPDATE ".KNEWS_AUTOMATED." SET auto=" . $Knews_plugin->get_safe('auto') . " WHERE id=" . intval($Knews_plugin->get_safe('idauto'));
+		$query = "UPDATE ".KNEWS_AUTOMATED." SET auto=" . $Knews_plugin->get_safe('auto') . " WHERE id=" . $Knews_plugin->get_safe('idauto', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . (($Knews_plugin->get_safe('auto')==1) ? __('Automated submit activated','knews') : __('Manual submit activated','knews')) . '</p></div>';
 	}
@@ -34,6 +41,7 @@
 		$posts = $Knews_plugin->post_safe('auto_posts', 0);
 		$time = $Knews_plugin->post_safe('auto_time', 0);
 		$day = $Knews_plugin->post_safe('auto_dayweek', 0);
+		$at_once = $Knews_plugin->post_safe('emails_at_once', 50);
 		
 		if ($name =='' || $news=='' || $target=='') {
 			
@@ -50,8 +58,8 @@
 			$results = $wpdb->get_results( $query );
 			
 			if (count($results)==0) {
-				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run) VALUES (";
-				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "')";
+				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run, emails_at_once) VALUES (";
+				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "', " . $at_once . ")";
 				
 				if ($wpdb->query($sql)) {
 					echo '<div class="updated"><p>' . __('Automated submit created','knews') . '</p></div>';
@@ -67,9 +75,9 @@
 	}
 
 	$results_per_page=10;
-	$paged = intval($Knews_plugin->get_safe('paged', 1));
+	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 
-	$query = "SELECT id, name, lang, html_mailing FROM " . KNEWS_NEWSLETTERS . " WHERE automated=0 ORDER BY modified DESC";
+	$query = "SELECT id, name, lang, html_mailing FROM " . KNEWS_NEWSLETTERS . " WHERE automated=0 AND mobile=0 ORDER BY modified DESC";
 	$news = $wpdb->get_results( $query );
 
 	$frequency = array ('daily','weekly','every 15 days','monthly','every 2 months','every 3 months');
@@ -141,6 +149,7 @@ function enfocar() {
 							echo '</td>';
 							echo '<td>' . $automated->lang . '</td>';
 							echo '<td>' . (($automated->paused==1) ? __('Off', 'knews') : __('On', 'knews')) . '</td>';
+							if ($automated->paused!=1) $pending=true;
 							echo '<td>' . (($automated->auto==1) ? __('Automated submit', 'knews') : __('Manual submit', 'knews')) . '</td>';
 							echo '<td>';
 							if ($automated->every_mode ==1) {
@@ -170,6 +179,10 @@ function enfocar() {
 						</tr>
 					</tfoot>
 				</table>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
 				<?php /*
 				<div class="submit">
 					<select name="action">
@@ -207,6 +220,14 @@ function enfocar() {
 						<?php } ?>
 					</div>
 				<br class="clear">
+				</div>
+				<?php
+				}
+				if ($pending) {
+				?>
+				<div class="updated">
+					<p>Knews runs every hour the automated newsletter creation jobs.</p>
+					<p>You can manually trigger this task now (only recommended for testing purposes) <a href="<?php echo $Knews_plugin->get_main_admin_url(); ?>admin-ajax.php?action=knewsForceAutomated&manual=1" class="button" target="_blank">Run Automated Creation Now</a></p>
 				</div>
 				<?php
 				}
@@ -301,7 +322,14 @@ function enfocar() {
 				}
 				?>
 				<p><label for="auto_auto"><?php _e('Submit method:','knews');?></label> <select name="auto_auto" id="auto_auto"><option value="0" selected="selected"><?php _e('Manual submit','knews');?></option><option value="1"><?php _e('Automated submit','knews');?></option></select></p>
+<?php if ($Knews_plugin->im_pro()) {?>
+<div id="at_once" style="display:none;"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select></p></div>
+<?php } ?>
 				<p><input type="submit" value="New Auto-create Newsletters Process" class="button-primary" /></p>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
 			</form>
 	</div>
 <script type="text/javascript">
@@ -321,5 +349,15 @@ function enfocar() {
 				jQuery('span#auto_mode_2').hide();
 			}
 		});
+<?php if ($Knews_plugin->im_pro()) {?>
+		jQuery('#auto_auto').change(function() {
+			val=jQuery(this).val();
+			if (val==0) {
+				jQuery('div#at_once').hide();
+			} else {
+				jQuery('div#at_once').show();
+			}
+		});
+<?php } ?>
 	});
 </script>

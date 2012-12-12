@@ -3,11 +3,10 @@ global $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
-	$Knews_plugin->security_for_direct_pages();
 	
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-	$id_news = intval($_GET['idnews']);
+	$id_news = $Knews_plugin->get_safe('idnews', 0, 'int');
 
 	$query = "SELECT * FROM ".KNEWS_NEWSLETTERS." WHERE id=" . $id_news;
 	$results_news = $wpdb->get_results( $query );

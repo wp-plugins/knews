@@ -1,14 +1,46 @@
 <?php
+function pagination($paged, $maxPage, $link_params) {
+	$link_params .= '&paged=';
+	//$maxPage=ceil(count($users) / $results_per_page);
+		
+	if ($maxPage > 1) {
+?>		
+	<div class="tablenav bottom">
+
+		<div class="tablenav-pages">
+			<?php /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
+			<?php if ($paged > 1) { ?>
+			<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+			<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
+			<?php } else { ?>
+			<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+			<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
+			<?php } ?>
+			<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
+			<?php if ($maxPage > $paged) { ?>
+			<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
+			<?php } else { ?>
+			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
+			<?php } ?>
+		</div>
+	<br class="clear">
+	</div>
+<?php
+	}
+}
+
+
 global $Knews_plugin, $knewsOptions;
 
 if ($Knews_plugin) {
-	$Knews_plugin->security_for_direct_pages();
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
 	require_once( KNEWS_DIR . '/includes/knews_util.php');
 
-	$ajaxid = intval($Knews_plugin->get_safe('ajaxid'));
+	$ajaxid = $Knews_plugin->get_safe('ajaxid', 0, 'int');
 	if ($ajaxid != 0) {
 		global $post;
 		$post = get_post($ajaxid);
@@ -38,6 +70,13 @@ if ($Knews_plugin) {
 		$text1 = iterative_extract_code('<fb:like', '</fb:like>', $text1, true);
  	    $jsondata['content'] = $text1;
 
+
+		if (has_post_thumbnail( $post->ID ) && $Knews_plugin->im_pro()) {
+			$jsondata['image'] = knews_get_image_path();
+		} else {
+			$jsondata['image'] = '';
+		}
+
  		echo json_encode($jsondata);
 		
 	} else {
@@ -46,9 +85,10 @@ if ($Knews_plugin) {
 		$lang = $Knews_plugin->get_safe('lang');
 		$s = $Knews_plugin->get_safe('s');
 		$type = $Knews_plugin->get_safe('type','post');
-		$cat = intval($Knews_plugin->get_safe('cat'));
+		$cat = $Knews_plugin->get_safe('cat', 0, 'int');
 		$orderbt = $Knews_plugin->get_safe('orderby');
 		$order = $Knews_plugin->get_safe('order', 'asc');
+		$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 		
 		//$url_base =  KNEWS_URL . '/direct/select_post.php';
 		$url_base =  get_admin_url() . 'admin-ajax.php';
@@ -126,6 +166,7 @@ if ($Knews_plugin) {
 	p {
 		padding-bottom:10px;
 	}
+	div.tablenav,
 	div.filters {
 		border-top:#dfdfdf 1px solid;
 		border-bottom:#dfdfdf 1px solid;
@@ -162,6 +203,13 @@ if ($Knews_plugin) {
 		border:#DFDFDF 1px solid;
 		padding:1px;
 	}
+	div.tablenav-pages {
+		text-align:right;
+	}
+	div.bottom {
+		height:auto;
+		margin-top:10px;
+	}
 </style>
 
 <script type="text/javascript">
@@ -187,17 +235,25 @@ function select_post(n, lang) {
 				if (!$first) echo ' | ';
 				$first=false;
 				if ($lang==$l['language_code']) echo '<strong>';
-				echo '<a href="' . $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '">' . $l['native_name'] . '</a>';
+				echo '<a href="' . $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&paged=' . $paged . '">' . $l['native_name'] . '</a>';
 				if ($lang==$l['language_code']) echo '</strong>';
 			}
 			echo '</p>';
 		}
-		$url_base .= '?lang=' . $lang;
+		//$url_base .= '&lang=' . $lang;
 		
 		//Posts / Pages
 		echo '<div class="pestanyes">';
-		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=post' . '">' . __('Posts','knews') . '</a>' . (($type=='post') ? '</strong>' : '');
-		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=page' . '">' . __('Pages','knews') . '</a>' . (($type=='page') ? '</strong>' : '') . '</div>';
+		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
+		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
+		
+		if ($Knews_plugin->im_pro()) {
+			$post_types = $Knews_plugin->getCustomPostTypes();
+			foreach ($post_types as $pt) {
+				echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=' . urlencode($pt) . '&lang=' . $lang . '">' . $pt . '</a>';		
+			}
+		}
+		echo '</div>';
 		
 		echo '<div class="filters">';
 		//Filters
@@ -214,7 +270,7 @@ function select_post(n, lang) {
 				foreach ($cats as $c) {
 					echo '<option value="' . $c->cat_ID . '"' . (($c->cat_ID==$cat) ? ' selected="selected"' : '') . '>' . $c->name . '</option>';
 				}
-				echo '</select> <input type="submit" value="' . __('Filter','knews') . '" class="button">';
+				echo '</select> <input type="submit" value="' . __('Filter','knews') . '" class="button" />';
 				echo '</form>';
 			}
 			echo '</div>';
@@ -227,7 +283,7 @@ function select_post(n, lang) {
 		echo '<input type="hidden" name="type" value="' . $type . '">';
 		echo '<input type="hidden" name="action" value="knewsSelPost">';
 		echo '<input type="text" name="s" value="" class="texte">';
-		echo '<input type="submit" value="' . __('Search','knews') . '" class="button">';
+		echo '<input type="submit" value="' . __('Search','knews') . '" class="button" />';
 		echo '</form>';
 		echo '</div>';
 		
@@ -237,7 +293,7 @@ function select_post(n, lang) {
 		}
 		add_filter('excerpt_more', 'new_excerpt_more');*/
 	
-		$args = array('posts_per_page' => -1, 'post_type' => $type);
+		$args = array('posts_per_page' =>10, 'paged' => $paged, 'post_type' => $type, 'post_status' => 'publish');
 	
 		if ($cat != 0) $args['cat'] = $cat;
 		if ($s != '') $args['s'] = $s;
@@ -260,6 +316,8 @@ function select_post(n, lang) {
 			echo get_the_excerpt();
 			echo '</p>';
 		}
+	 global $wp_query; 
+	 pagination($paged, ceil($wp_query->found_posts/ 10), $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
 	 ?>
 	 </div>
 </body>

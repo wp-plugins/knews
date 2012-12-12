@@ -7,7 +7,7 @@ if ($Knews_plugin) {
 		die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 	}
 	
-	$js=intval($Knews_plugin->get_safe('js'));
+	$js=$Knews_plugin->get_safe('js', 0, 'int');
 
 	$mysqldate = $Knews_plugin->get_mysql_date();
 	

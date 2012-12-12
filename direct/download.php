@@ -4,25 +4,22 @@ global $Knews_plugin;
 if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
-
-	if ($Knews_plugin->security_for_direct_pages(false)) {
 	
-		$filename = $Knews_plugin->get_safe('file');
-		
-		if ($filename != '') {
-			$filename = str_replace('/','*', $filename);
-			$filename = str_replace('\\','*', $filename);
-			$filename = str_replace('..','*', $filename);
-			if ($file = @file_get_contents(KNEWS_DIR . '/tmp/' . $filename)) {
+	$filename = $Knews_plugin->get_safe('file');
+	
+	if ($filename != '') {
+		$filename = str_replace('/','*', $filename);
+		$filename = str_replace('\\','*', $filename);
+		$filename = str_replace('..','*', $filename);
+		if ($file = @file_get_contents(KNEWS_DIR . '/tmp/' . $filename)) {
 
-				if (strpos($filename,'.csv') !== false) {
-					header('Content-type: text/csv');
-					header('Content-disposition: attachment;filename=' . $filename);
-				}
-
-				echo $file;
-				die();
+			if (strpos($filename,'.csv') !== false) {
+				header('Content-type: text/csv');
+				header('Content-disposition: attachment;filename=' . $filename);
 			}
+
+			echo $file;
+			die();
 		}
 	}
 }

@@ -1,3 +1,9 @@
+<?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-save-news';
+$knews_nonce_name='_savenews';
+//End Security for CSRF attacks
+?>
 <!--[if lte IE 7]>
 <script type="text/javascript">
 alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 properties, you need upgrade at least to IE8, or use an modern Firefox, Chrome or Safari.",'knews');?>');
@@ -19,6 +25,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	</div>
 <?php
 	} else {
+		$parentid=0;
 ?>
 <script type="text/javascript">
 	url_plugin = '<?php echo KNEWS_URL; ?>';
@@ -30,8 +37,8 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	if (count($one_post)!=1) $one_post = get_pages();
 	echo 'one_post_id=' . intval($one_post[0]->ID) . ';';
 	?>
-	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo $Knews_plugin->get_safe('idnews');?>';
-	reload_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $Knews_plugin->get_safe('idnews');?>';
+	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo (($parentid==0) ? $Knews_plugin->get_safe('idnews') : $parentid);?>';
+	reload_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $Knews_plugin->get_safe('idnews') ;?>';
 	
 	must_apply_undo = "<?php _e('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews'); ?>";
 	edit_image= "<?php echo __('Edit image','knews'); ?>";
@@ -169,5 +176,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 		</div>
 	</div>
 <?php
+	//Security for CSRF attacks
+	wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 	}
 ?>

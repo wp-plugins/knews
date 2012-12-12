@@ -1,20 +1,6 @@
 <?php 
 
-//if (is_file('/home/carlesrever/www/knews/wp-content/uploads/2012/07/lamborghini-sports-car-wallpaper.jpg')) echo '111 ';
-//if (is_file('/usr/home/carlesrever/www/knews/wp-content/uploads/2012/07/lamborghini-sports-car-wallpaper.jpg')) echo '444 ';
-
-global $Knews_plugin;
-
-if ($Knews_plugin) {
-
-	$Knews_plugin->security_for_direct_pages();
-
-	if (! $Knews_plugin->initialized) $Knews_plugin->init();
-
-	$url_img= $Knews_plugin->get_safe('urlimg');
-	$width= intval($Knews_plugin->get_safe('width'));
-	$height= intval($Knews_plugin->get_safe('height'));
-
+function knews_resize_img_fn($url_img, $width, $height) {
 	$wp_dirs = wp_upload_dir();
 		
 	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
@@ -44,17 +30,13 @@ if ($Knews_plugin) {
 			if (is_file($wp_dirs['basedir'] . $try_original2)) $url_img = $try_original;
 		}
 	}
-	knews_get_url_img($wp_dirs, $absolute_dir, $url_img, $width, $height);
-}
-
-function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $cut = true) {
 	
-    if ($img_url != '' && $img_url != 'undefined') {
+    if ($url_img != '' && $url_img != 'undefined') {
 
 		// cut the url
 		//$url_imatge = substr($img_url, strpos($img_url, 'wp-content'));
 
-		$url_imatge = substr($img_url, strlen($wp_dirs['baseurl']));
+		$url_imatge = substr($url_img, strlen($wp_dirs['baseurl']));
 		$url=$url_imatge;
 
 		$url_imatge = str_replace('.jpg', '-' . $width . 'x' . $height .'.jpg', $url_imatge);
@@ -73,9 +55,7 @@ function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $
 
 				$jsondata['result'] = 'ok';
 				$jsondata['url'] = $wp_dirs['baseurl'] . $url;
-				echo json_encode($jsondata);
-	
-				return;
+				return $jsondata;
 			}
 		}
 		
@@ -83,21 +63,18 @@ function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $
 
 			$jsondata['result'] = 'ok';
 			$jsondata['url'] = $wp_dirs['baseurl'] . $url_imatge;
- 			echo json_encode($jsondata);
-
-			return;
+			return $jsondata;
 	
 		} else {
 	
 			// resize the image
-			$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, $cut, $width.'x'.$height);
+			$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, true, $width.'x'.$height);
 			
 			if ( is_wp_error( $thumb ) ) {
 				$jsondata['result'] = 'error';
 				$jsondata['url'] = '';
 				$jsondata['message'] = __('Error','knews') . ': ' . $thumb->get_error_message();;
-				echo json_encode($jsondata);
-				return;
+				return $jsondata;
 			}
 
 			if (is_string($thumb)) {
@@ -107,27 +84,21 @@ function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $
 
 				$jsondata['result'] = 'ok';
 				$jsondata['url'] = $wp_dirs['baseurl'] . $thumb;
-				echo json_encode($jsondata);
-				
-				return;
+				return $jsondata;
 	
 			} else {
 				if (is_file($absolute_dir . $url)) {
 
 					$jsondata['result'] = 'ok';
 					$jsondata['url'] = $wp_dirs['baseurl'] . $url;
-					echo json_encode($jsondata);
-	
-					return;
+					return $jsondata;
 					
 				} else {
 
 					$jsondata['result'] = 'error';
 					$jsondata['url'] = '';
 					$jsondata['message'] = __('Error','knews') . ': ' . __('Check the directory permissions for','knews') . ' ' . $wp_dirs['basedir'] . dirname($url);
-					echo json_encode($jsondata);
-	
-					return;
+					return $jsondata;
 				}
 			}
 		}
@@ -137,8 +108,7 @@ function knews_get_url_img($wp_dirs, $absolute_dir, $img_url, $width, $height, $
 		$jsondata['result'] = 'error';
 		$jsondata['url'] = '';
 		$jsondata['message'] = __('Error: there is no image selected','knews');
-		echo json_encode($jsondata);
+		return $jsondata;
 	}
 }
-die();
 ?>

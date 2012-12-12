@@ -111,7 +111,6 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.0') < 0) {
 		   
 	dbDelta($sql);
 
-	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
 }
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.2.3') < 0) {
@@ -120,7 +119,35 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.3') < 0) {
 	$wpdb->query($sql);
 }
 
-update_option('knews_version', KNEWS_VERSION);
+if (version_compare(get_option('knews_version','0.0.0'), '1.2.6') < 0) {
+	$sql =	"ALTER TABLE " . KNEWS_NEWSLETTERS . " ADD COLUMN mobile varchar(1) NOT NULL DEFAULT 0";
+	$wpdb->query($sql);
+	$sql =	"ALTER TABLE " . KNEWS_NEWSLETTERS . " ADD COLUMN id_mobile bigint(20) UNSIGNED NOT NULL DEFAULT 0";
+	$wpdb->query($sql);
+	$sql =	"ALTER TABLE " . KNEWS_AUTOMATED . " ADD COLUMN emails_at_once int(11) NOT NULL DEFAULT 25";
+	$wpdb->query($sql);
+	$sql =	"ALTER TABLE " . KNEWS_USERS . " CHANGE lang lang varchar(12) NOT NULL;";
+	$wpdb->query($sql);
+	$sql =	"ALTER TABLE " . KNEWS_NEWSLETTERS . " CHANGE lang lang varchar(12) NOT NULL;";
+	$wpdb->query($sql);
+	$sql =	"ALTER TABLE " . KNEWS_AUTOMATED . " CHANGE lang lang varchar(12) NOT NULL;";
+	$wpdb->query($sql);
+
+	$sql =	"CREATE TABLE " .KNEWS_AUTOMATED_SELECTION . " (
+			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			id_automated bigint(20) UNSIGNED NOT NULL,
+			type varchar(100) NOT NULL,
+			value varchar(100) NOT NULL,
+			UNIQUE KEY id (id)
+		   )$charset_collate;";
+		   
+	dbDelta($sql);
+
+	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
+}
+
+
+//update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 
 function knews_update_hooks() {

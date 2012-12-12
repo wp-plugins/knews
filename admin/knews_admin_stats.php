@@ -1,3 +1,10 @@
+<?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-admin-stats';
+$knews_nonce_name='_statsadm';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+?>
 <link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <div class="wrap knews_stats">
 	<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
@@ -215,13 +222,16 @@ if ($fp) {
 			<select name="month_2"><?php print_options(1,12,date("m", $selected_max_date_chart)); ?></select>
 			<select name="year_2"><?php print_options($select_min_year, $select_max_year, date("Y", $selected_max_date_chart)); ?></select>
 
-			<input type="submit" value="<?php _e('Filter','knews');?>" /></p>
+			<input type="submit" value="<?php _e('Filter','knews');?>" class="button-secondary" /></p>
 			<p class="selector"><?php _e('Fast selection:','knews'); if ($fast_select=='all') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=all"><?php _e('All','knews'); ?></a><?php if ($fast_select=='all') echo '</strong>';?> | 
 			<?php if ($fast_select=='7') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=7"><?php _e('last 7 days','knews'); ?></a><?php if ($fast_select=='7') echo '</strong>';?> | 
 			<?php if ($fast_select=='30') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=30"><?php _e('last 30 days','knews'); ?></a><?php if ($fast_select=='30') echo '</strong>';?> | 
 			<?php if ($fast_select=='week') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=week"><?php _e('last week','knews'); ?></a><?php if ($fast_select=='week') echo '</strong>';?> | 
 			<?php if ($fast_select=='month') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=month"><?php _e('last month','knews'); ?></a><?php if ($fast_select=='month') echo '</strong>';?></p>
-			
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 		</form>
 		</div>
 		<?php

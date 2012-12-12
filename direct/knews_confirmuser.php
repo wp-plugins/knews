@@ -12,14 +12,14 @@ if ($Knews_plugin) {
 			global $sitepress;
 
 			if (method_exists($sitepress, 'language_url')) {
-				$user_lang = $Knews_plugin->get_user_lang(mysql_real_escape_string($_GET['e']));
+				$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
 				$url_home = $sitepress->language_url($user_lang);
 			}
 		}
 		if ($knewsOptions['multilanguage_knews']=='qt') {
 
 			if (function_exists('qtrans_convertURL')) {
-				$user_lang = $Knews_plugin->get_user_lang(mysql_real_escape_string($_GET['e']));
+				$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
 				$url_home = qtrans_convertURL(get_bloginfo('url'), $user_lang);
 			}
 		}

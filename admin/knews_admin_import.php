@@ -1,4 +1,10 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-adm-import';
+$knews_nonce_name='_importadm';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
 	ini_set('auto_detect_line_endings', true);
 	
 	global $wpdb, $Knews_plugin;
@@ -87,7 +93,7 @@
 				}
 				?>
 			</select></p>
-			<p><input type="checkbox" name="knews_has_header" id="knews_has_header" value="1"<?php if ( intval($Knews_plugin->post_safe('knews_has_header')) == 1 ) echo ' checked="checked"'; ?> /> <?php _e('The first row is a header','knews'); ?></p>
+			<p><input type="checkbox" name="knews_has_header" id="knews_has_header" value="1"<?php if ( $Knews_plugin->post_safe('knews_has_header', 0, 'int') == 1 ) echo ' checked="checked"'; ?> /> <?php _e('The first row is a header','knews'); ?></p>
 		<?php
 			/*
 			Finals de linia: <select name="knews_line_endings" id="knews_line_endings">
@@ -205,6 +211,9 @@ p.knews_progress span.on {
 </script>
 <?php
 function print_state($step, $where) {
+
+	global $knews_nonce_action, $knews_nonce_name, $Knews_plugin;
+
 	if ($where < $step) return;
 	if ($where == $step) {
 		echo ' class="on"';
@@ -234,6 +243,10 @@ function print_state($step, $where) {
 			<div class="submit">
 				<input type="submit" value="<?php _e('File upload','knews');?>" class="button-primary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 			</form>
 		<?php
 		} elseif ($step=='2') {
@@ -251,7 +264,7 @@ function print_state($step, $where) {
 					$what_row++;
 					if ($what_row%2 != 0) echo '<tr class="alt">'; else echo '<tr>';
 
-					if (intval($Knews_plugin->post_safe('knews_has_header'))==0 && $what_row==1) {
+					if ($Knews_plugin->post_safe('knews_has_header', 0, 'int')==0 && $what_row==1) {
 						$what_row++;
 						$what_col=0;
 						foreach ($csv_data as $my_col) {
@@ -279,8 +292,12 @@ function print_state($step, $where) {
 			<input type="hidden" name="filename" id="filename" value="<?php echo $filename ?>" />
 			<?php put_format_selects(); ?>
 			<div class="submit">
-				<input type="submit" value="<?php _e('Scan CSV again','knews'); ?>"/>
+				<input type="submit" value="<?php _e('Scan CSV again','knews'); ?>" class="button-secondary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 			</form>
 
 			<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" >
@@ -296,6 +313,10 @@ function print_state($step, $where) {
 			<div class="submit">
 				<input type="submit" value="<?php _e('Continue','knews'); ?>" class="button-primary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 			</form>
 		<?php
 		} elseif ($step=='3') {
@@ -320,7 +341,7 @@ function print_state($step, $where) {
 					if ($what_row%2 != 0) echo '<tr class="alt">'; else echo '<tr>';
 					$what_col = 0;
 
-					if (intval($Knews_plugin->post_safe('knews_has_header'))==0 && $what_row==1) {
+					if ($Knews_plugin->post_safe('knews_has_header', 0, 'int')==0 && $what_row==1) {
 						$what_row++;
 						$what_col=0;
 						foreach ($csv_data as $my_col) {
@@ -340,7 +361,7 @@ function print_state($step, $where) {
 						}
 						echo '<td>' . (($what_row==1) ? '<strong>' : '');
 						
-						if ($what_row!=1 && intval($Knews_plugin->post_safe('joined_col_val')) == $what_col) {
+						if ($what_row!=1 && $Knews_plugin->post_safe('joined_col_val', 0, 'int') == $what_col) {
 							echo data_process($my_col, true);
 						} else {
 							echo re_de_encode($my_col);
@@ -369,7 +390,7 @@ function print_state($step, $where) {
 			}
 			?></select>
 			<br /><span class="help"><?php _e('If you choose a column, allowed values ​​are:','knews'); ?> <strong>fr</strong>: fran&ccedil;ais, <strong>en</strong>: english, <strong>es</strong>: espa&ntilde;ol, etc.</span></p>
-			<p><strong><?php _e('User join date','knews');?></strong>: <select name="joined_col_val" id="joined_col_val"><option value="now"<?php if ($Knews_plugin->post_safe('date_order') == 'now') echo ' selected="selected"'; ?>><?php _e('All: today','knews');?></option><?php print_col_options('joined_col_val'); ?></select><span class="date_order_container" <?php if (intval($Knews_plugin->post_safe('joined_col_val')) == 0) echo ' style="display:none"'; ?>>
+			<p><strong><?php _e('User join date','knews');?></strong>: <select name="joined_col_val" id="joined_col_val"><option value="now"<?php if ($Knews_plugin->post_safe('date_order') == 'now') echo ' selected="selected"'; ?>><?php _e('All: today','knews');?></option><?php print_col_options('joined_col_val'); ?></select><span class="date_order_container" <?php if ($Knews_plugin->post_safe('joined_col_val', 0, 'int') == 0) echo ' style="display:none"'; ?>>
 			<select name="date_order" id="date_order">
 			<option value="dd-mm-yy"<?php if ($Knews_plugin->post_safe('date_order') == 'dd-mm-yy') echo ' selected="selected"'; ?>><?php _e('day-month-year','knews'); ?></option>
 			<option value="mm-dd-yy"<?php if ($Knews_plugin->post_safe('date_order') == 'mm-dd-yy') echo ' selected="selected"'; ?>><?php _e('month-day-year','knews'); ?></option>
@@ -393,7 +414,7 @@ function print_state($step, $where) {
 			$lists = $wpdb->get_results( $query );
 			foreach ($lists as $ln) {
 				echo '<input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="check_list"';
-				if (intval($Knews_plugin->post_safe('list_' . $ln->id)) == 1) echo ' checked="checked"';
+				if ($Knews_plugin->post_safe('list_' . $ln->id, 0, 'int') == 1) echo ' checked="checked"';
 				echo '>' . $ln->name . '<br>';
 			}
 			?>
@@ -405,6 +426,10 @@ function print_state($step, $where) {
 				<input type="button" value="<?php _e('Go back','knews'); ?>" id="back_import" />
 				<input type="submit" value="<?php _e('Make preview','knews'); ?>" class="button-primary" />
 			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
 			</form>
 		<?php
 		} elseif ($step=='4' || $step=='5') {
@@ -426,6 +451,9 @@ function print_state($step, $where) {
 				<input type="hidden" name="date_order" id="date_order" value="<?php echo $Knews_plugin->post_safe('date_order'); ?>" />
 				
 				<?php
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+
 				$extra_fields = $Knews_plugin->get_extra_fields();
 				foreach ($extra_fields as $ef) {
 					echo '<input type="hidden" name="ef_' . $ef->name . '" id="ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('ef_' . $ef->name) . '">';
@@ -467,7 +495,7 @@ function print_state($step, $where) {
 					
 					$what_row++;
 					$user_csv=array();
-					if (($what_row != 1 || intval($Knews_plugin->post_safe('knews_has_header'))==0)) {
+					if (($what_row != 1 || $Knews_plugin->post_safe('knews_has_header', 0, 'int')==0)) {
 					//if (($what_row != 1 || intval($Knews_plugin->post_safe('knews_has_header'))==0) && count($csv_data)==$max_fields) {
 						$import_users_total++;
 						foreach ($csv_data as $my_col) {
@@ -475,26 +503,26 @@ function print_state($step, $where) {
 						}
 
 						$confkey = $Knews_plugin->get_unique_id();
-						$email=$user_csv[intval($_POST['email_col'])-1];
+						$email=$user_csv[$Knews_plugin->post_safe('email_col', 0, 'int')-1];
 
 						if (substr($_POST['state_col_val'],0,4)=='val_') {
 							$state=intval(substr($_POST['state_col_val'],4));
 						} else {
-							$state=intval($user_csv[intval($_POST['state_col_val'])-1]);
+							$state=intval($user_csv[$Knews_plugin->post_safe('state_col_val', 0, 'int')-1]);
 						}
-						if (intval($_POST['lang_col_val']) > 0) {
-							$lang=$user_csv[intval($_POST['lang_col_val'])-1];
+						if ($Knews_plugin->post_safe('lang_col_val', 0, 'int') > 0) {
+							$lang=$user_csv[$Knews_plugin->post_safe('lang_col_val', 0, 'int')-1];
 						} else {
-							$lang=$_POST['lang_col_val'];
+							$lang=$Knews_plugin->post_safe('lang_col_val');
 						}
-						if ($_POST['joined_col_val'] == 'now') {
+						if ($Knews_plugin->post_safe('joined_col_val') == 'now') {
 							$date = $Knews_plugin->get_mysql_date();
 						} else {
 							if ($step=='4') {
-								$date=data_process($user_csv[intval($_POST['joined_col_val'])-1], true);
+								$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1], true);
 								if ($date=='#error#') addError (__('Sign up date user cant be understood','knews'), false); 
 							} else {
-								$date=data_process($user_csv[intval($_POST['joined_col_val'])-1]);
+								$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1]);
 							}
 						}
 
@@ -507,7 +535,7 @@ function print_state($step, $where) {
 									$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
 									$user_found = $wpdb->get_results( $query );
 									
-									if (count($user_found)==0 || $_POST['overwrite']=='yes' || $_POST['overwrite']=='add') {
+									if (count($user_found)==0 || $Knews_plugin->post_safe('overwrite')=='yes' || $Knews_plugin->post_safe('overwrite')=='add') {
 
 										$import_users_ok++;
 
@@ -526,7 +554,7 @@ function print_state($step, $where) {
 													//The lists
 													foreach ($lists_name as $ln) {
 														if (isset($_POST['list_'.$ln->id])) {
-															if ($_POST['list_'.$ln->id]=='1') {
+															if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
 										
 																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_new_user . ", " . $ln->id . ")";
 																$results = $wpdb->query( $query );
@@ -547,12 +575,12 @@ function print_state($step, $where) {
 															} else {
 																$cf=$user_csv[intval($cf)-1];
 															}
-															$Knews_plugin->set_user_field ($id_new_user, $ef->id, $cf);
+															$Knews_plugin->set_user_field ($id_new_user, $ef->id, mysql_real_escape_string($cf));
 														}
 													}
 													
 													//Confirm
-													if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
+													if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
 														add_confirm($id_new_user);
 													}
 												} else {
@@ -595,11 +623,11 @@ function print_state($step, $where) {
 															} else {
 																$cf=$user_csv[intval($cf)-1];
 															}
-															$Knews_plugin->set_user_field ($id_updated_user, $ef->id, $cf);
+															$Knews_plugin->set_user_field ($id_updated_user, $ef->id, mysql_real_escape_string($cf));
 														}
 																												
 														//Confirm
-														if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
+														if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
 															add_confirm($id_updated_user);
 														}
 													} else {
@@ -631,7 +659,7 @@ function print_state($step, $where) {
 	
 													
 													//Confirm
-													if ($state==1 && intval($Knews_plugin->post_safe('confirm'))==1) {
+													if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
 														add_confirm($id_updated_user);
 													}
 												}
@@ -684,7 +712,7 @@ function print_state($step, $where) {
 				<tr>
 					<td><img src="<?php echo KNEWS_URL; ?>/images/yellow_led.gif" width="20" height="20" alt="WARNING" /></td><td>
 					<?php
-					if (intval($Knews_plugin->post_safe('confirm'))==1) {
+					if ($Knews_plugin->post_safe('confirm', 0, 'int')==1) {
 						_e('Automatically send confirmation e-mails:','knews');
 					} else {
 						_e('Users unconfirmed (You should do confirmation manually):','knews');
@@ -734,16 +762,17 @@ function addError($txt, $fatal=true) {
 }
 
 function re_de_encode($text) {
+	global $Knews_plugin;
 	
-	if ($_POST['knews_encode'] == 'iso-8859-1') {
+	if ($Knews_plugin->post_safe('knews_encode') == 'iso-8859-1') {
 
 		return utf8_encode($text);
 
-	} elseif ($_POST['knews_encode'] == 'UTF-8') {
+	} elseif ($Knews_plugin->post_safe('knews_encode') == 'UTF-8') {
 		
 		return $text;
 		
-	} elseif ($_POST['knews_encode'] == 'MS-DOS') {
+	} elseif ($Knews_plugin->post_safe('knews_encode') == 'MS-DOS') {
 
 		//Extended ascii: from 128 to 175
 		$ascii=array(	'Ç','ü',
@@ -763,7 +792,7 @@ function re_de_encode($text) {
 		}
 		return $text;
 
-	} elseif ($_POST['knews_encode'] == 'Macintosh') {
+	} elseif ($Knews_plugin->post_safe('knews_encode') == 'Macintosh') {
 
 		//Extended mac ascii: from 128 to 250
 		$mac=array(	'Ä','Å',
@@ -802,12 +831,14 @@ function print_col_options($field) {
 
 	for ($x=1; $x<=count($col_options); $x++) {
 		echo '<option value="' . $x . '"';
-		if (intval($Knews_plugin->post_safe($field))==$x) echo ' selected="selected"';
+		if ($Knews_plugin->post_safe($field, 0, 'int')==$x) echo ' selected="selected"';
 		echo '>Col ' . $x . ' [' . $col_options[$x] . ']</option>';
 	}
 }
 
 function data_process($txt, $human=false) {
+	
+	global $Knews_plugin;
 	
 	if (strpos($txt, '/') !== false) {
 		$separator='/';
@@ -818,13 +849,13 @@ function data_process($txt, $human=false) {
 	
 	if (count($separate) >2) {
 	
-		if ($_POST['date_order']=='dd-mm-yy') {
+		if ($Knews_plugin->post_safe('date_order')=='dd-mm-yy') {
 	
 			$year = intval($separate[2]);
 			$month = intval($separate[1]);
 			$day = intval($separate[0]);
 	
-		} elseif ($_POST['date_order']=='mm-dd-yy') {
+		} elseif ($Knews_plugin->post_safe('date_order')=='mm-dd-yy') {
 	
 			$year = intval($separate[2]);
 			$month = intval($separate[0]);

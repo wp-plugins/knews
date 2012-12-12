@@ -27,9 +27,8 @@ function is_utf8($str) {
 }
 
 function cut_code($start, $end, $code, $delete) {
-
 	$start_pos = strpos($code, $start);
-	$end_pos = strpos($code, $end);
+	$end_pos = strpos($code, $end, $start_pos+strlen($start));
 
 	if ($delete) {
 		$start_pos = $start_pos + strlen($start);
@@ -44,7 +43,7 @@ function cut_code($start, $end, $code, $delete) {
 function extract_code($start, $end, $code, $delete) {
 
 	$start_pos = strpos($code, $start);
-	$end_pos = strpos($code, $end);
+	$end_pos = strpos($code, $end, $start_pos+strlen($start));
 
 	if (!$delete) {
 		$start_pos = $start_pos + strlen($start);
@@ -169,6 +168,113 @@ function rgb2hex($code) {
 		}
 	}
 	return $code;
+}
+function examine_template($folder, $templates_path, $templates_url, $popup=false) {
+	$xml_info = array (
+		'shortname' => $folder,
+		'fullname' => 'Not defined',
+		'version' => '1.0',
+		'url' => '',
+		'date' => 'Unknown',
+		'author' => 'Unknown',
+		'urlauthor' => '',
+		'minver' => '1.0.0',
+		'onlypro' => 'no',
+		'description' => 'Not defined',
+		'desktop' => 'no',
+		'mobile' => 'no',
+		'responsive' => 'no'
+	);
+
+	$xml = simplexml_load_file($templates_path . $folder . '/info.xml');
+
+	foreach($xml->children() as $child) {
+		$xml_info[$child->getName()] = $child;
+	}
+	
+	if (!$popup || ($xml_info['responsive'] == 'yes' || $xml_info['mobile'] == 'yes')) { 
+?>
+		<div style="padding:10px 10px 0 10px; float:left; width:250px; height:350px;" class="template">
+<?php
+		$selectable=false;
+		if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) >= 0) {
+			if ($xml_info['onlypro'] != 'yes' || $Knews_plugin->im_pro()==true) {
+				$selectable=true;
+				
+				echo '<div style="text-align:center"><a href="#" onclick="'. (($popup) ? 'parent.parent.' : '') . 'jQuery(\'input\', '. (($popup) ? 'parent.parent.' : '') . 'jQuery(this).parent().parent()).attr(\'checked\', true); return false;" title="' . __('Select this template','knews') . '">';
+			}
+		}
+?>
+		<img src="<?php echo $templates_url . $folder; ?>/thumbnail.jpg" style="padding-right:20px;" />
+		<?php if ($selectable) echo '</a>'; ?></div>
+		<div>
+			<h1 style="font-size:20px; padding:0 0 10px 0; margin:0">
+			<?php
+			if ($selectable) echo '<input type="radio" name="template" value="' . $folder . '" />';
+
+			echo $xml_info['shortname'] . ' <span style="font-weight:normal">v' . $xml_info['version'] . '</span></h1>';
+			if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) < 0) {
+				echo '<p style="color:#e00; font-weight:bold;">';
+				printf(__('This template requires Knews version %s you must update Knews before use this template'), $xml_info['minver'] . (($xml_info['onlypro'] == 'yes') ? ' Pro' : ''));
+				echo '</p>';
+			} else {
+				if ($xml_info['onlypro'] == 'yes' && !$Knews_plugin->im_pro()) {
+					echo '<p style="color:#e00; font-weight:bold;">';
+					printf( __('This template requires the professional version of Knews. You can get it %s here','knews'),'<a href="http://www.knewsplugin.com" target="_blank">');
+					echo '</a></p>';
+				}
+			}
+			?>
+			<h2 style="font-size:16px; padding:0 0 6px 0; margin:0; line-height:20px;"><?php echo $xml_info['fullname']; ?></h2>
+			<p style="font-size:13px; padding:0 0 0 0; margin:0"><strong><?php echo (($xml_info['urlauthor'] != '') ? '<a href="' . $xml_info['urlauthor'] . '" target="_blank">' : '') . $xml_info['author'] . (($xml_info['urlauthor'] != '') ? '</a>' : '') . '</strong> (' . $xml_info['date'] . ')'; ?></p>
+			<?php
+			if ($xml_info['url'] != '') {
+			?>
+			<p style="font-size:13px; padding:0 0 0 0; margin:0"><a href="<?php echo $xml_info['url']; ?>" target="_blank"><?php _e('Go to template page','knews'); ?></a></p>
+			<?php
+			}
+			$v=$xml_info['version'];
+			$v=substr($v, 0, strpos($v, '.'));
+			if ($v=='1') $v='';
+			?>
+			<input type="hidden" name="vp_<?php echo $folder; ?>" id="vp_<?php echo $folder; ?>" value="<?php echo $v; ?>" />
+			<input type="hidden" name="path_<?php echo $folder; ?>" id="path_<?php echo $folder; ?>" value="<?php echo $templates_path; ?>" />
+			<input type="hidden" name="url_<?php echo $folder; ?>" id="url_<?php echo $folder; ?>" value="<?php echo $templates_url; ?>" />
+			<input type="hidden" name="ver_<?php echo $folder; ?>" id="ver_<?php echo $folder; ?>" value="<?php echo $xml_info['version']; ?>" />
+			<p style="margin:0; padding:0; font-size:11px; color:#333"><?php echo $xml_info['description']; ?></p>
+		</div>
+	</div>
+<?php
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function knews_display_templates($popup=false) {
+	$wp_dirs = wp_upload_dir();
+	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
+	//$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
+	if (is_dir($wp_dirs['basedir'] . '/knewstemplates')) {
+		chdir ($wp_dirs['basedir'] . '/knewstemplates');
+		$folders = scandir( '.' );
+		$anytemplate=false;
+		foreach ($folders as $folder) {
+			if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html')) {
+				if (examine_template($folder, $wp_dirs['basedir'] . '/knewstemplates/', $wp_dirs['baseurl'] . '/knewstemplates/', $popup)) $anytemplate=true;
+			}
+		}
+	}
+	
+	chdir (KNEWS_DIR . '/templates');
+	$folders = scandir( '.' );
+	foreach ($folders as $folder) {
+		if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file(KNEWS_DIR . '/templates/' . $folder . '/info.xml') && is_file(KNEWS_DIR . '/templates/' . $folder . '/template.html')) {
+			if (examine_template($folder, KNEWS_DIR . '/templates/', KNEWS_URL . '/templates/', $popup)) $anytemplate=true;
+		}
+	}
+	
+	if (!$anytemplate && $popup) echo '<p>' . _e('You dont have any mobile template!','knews') . '</p>';
 }
 
 ?>

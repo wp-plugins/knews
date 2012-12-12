@@ -1,4 +1,10 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-news-send';
+$knews_nonce_name='_nwsend';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
 	global $knewsOptions, $Knews_plugin;
 	
 	$submit_enqueued=false;
@@ -12,7 +18,7 @@
 			
 			require( KNEWS_DIR . "/includes/knews_compose_email.php");
 
-			$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . mysql_real_escape_string($_POST['email']) . "'");
+			$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
 			
 			if (count($user)==1) {
 				$aux_array=array();
@@ -27,16 +33,16 @@
 
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			} else {
-				$result=$Knews_plugin->sendMail( $_POST['email'], $theSubject, $theHtml );
+				$result=$Knews_plugin->sendMail( $Knews_plugin->post_safe('email'), $theSubject, $theHtml );
 			}
 
 			if ($result['ok']==1) {
 
-				echo '<div class="updated"><p>' . __('The single e-mail has been sent to:','knews') . ' ' . $_POST['email'] . '.</p></div>';
+				echo '<div class="updated"><p>' . __('The single e-mail has been sent to:','knews') . ' ' . $Knews_plugin->post_safe('email') . '.</p></div>';
 
 			} else {
 
-				echo '<div class="error"><p><strong>' . __('Error','knews') . ': </strong> ' . __("I can't submit an e-mail to:",'knews') . ' ' . $_POST['email'] . '.</p></div>';
+				echo '<div class="error"><p><strong>' . __('Error','knews') . ': </strong> ' . __("I can't submit an e-mail to:",'knews') . ' ' . $Knews_plugin->post_safe('email') . '.</p></div>';
 			}
 			
 		} else if ($_POST['action']=='submit_batch') {
@@ -67,11 +73,11 @@
 				$query .= $args_cats_sql . ')';
 
 				$batch_opts = array (
-					'minute' => intval($Knews_plugin->post_safe('minute')),
-					'hour' => intval($Knews_plugin->post_safe('hour')),
-					'day' => intval($Knews_plugin->post_safe('day')),
-					'month' => intval($Knews_plugin->post_safe('month')),
-					'year' => intval($Knews_plugin->post_safe('year')),
+					'minute' => $Knews_plugin->post_safe('minute', 0, 'int'),
+					'hour' => $Knews_plugin->post_safe('hour', 0, 'int'),
+					'day' => $Knews_plugin->post_safe('day', 0, 'int'),
+					'month' => $Knews_plugin->post_safe('month', 0, 'int'),
+					'year' => $Knews_plugin->post_safe('year', 0, 'int'),
 					'paused' => $Knews_plugin->post_safe('paused'),
 					'priority' => $Knews_plugin->post_safe('priority'),
 					'strict_control' => $Knews_plugin->post_safe('strict_control'),
@@ -195,6 +201,10 @@
 	<div class="submit">
 		<input type="submit" class="button-primary" value="<?php _e('Schedule submit','knews'); ?>">
 	</div>
+	<?php 
+	//Security for CSRF attacks
+	wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+	?>
 	</form>
 	<hr />
 	<h2><?php _e('Send the newsletter manually','knews');?>:</h2>
@@ -205,6 +215,10 @@
 	<div class="submit">
 		<input type="submit" class="button-primary" value="<?php _e('Submit newsletter','knews'); ?>"/>
 	</div>
+	<?php 
+	//Security for CSRF attacks
+	wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+	?>
 	</form>
 </div>
 <?php

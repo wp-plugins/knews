@@ -1,34 +1,56 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-news-list';
+$knews_nonce_name='_newslist';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
+function duplicate_news($results) {
+
+	global $wpdb, $Knews_plugin;
+	
+	if ($results) {
+		
+		$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('(copy)" . mysql_real_escape_string($results[0]->name) . "', '" . mysql_real_escape_string($results[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "', '" . $results[0]->lang . "', 0, " . $results[0]->mobile . ", " . $results[0]->id_mobile . ")";
+			
+		$results = $wpdb->query($sql);
+		
+		if ($results) {
+
+			$news_id=$wpdb->insert_id; $news_id2=mysql_insert_id(); if ($news_id==0) $news_id=$news_id2;
+			return $news_id;
+
+		}
+	}
+	return false;
+}
+
 
 	//global $Knews_plugin;
-	//require_once( KNEWS_DIR . '/includes/knews_util.php');
+	require_once( KNEWS_DIR . '/includes/knews_util.php');
 
 	$languages = $Knews_plugin->getLangs(true);
 
 	$tab=$Knews_plugin->get_safe('tab');
 
 	if ($Knews_plugin->get_safe('da')=='rename') {
-		$query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . mysql_real_escape_string($Knews_plugin->get_safe('nn')) . "' WHERE id=" . intval($Knews_plugin->get_safe('nid'));
+		$query = "UPDATE ".KNEWS_NEWSLETTERS." SET name='" . $Knews_plugin->get_safe('nn') . "' WHERE id=" . $Knews_plugin->get_safe('nid', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('Newsletter name updated','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('da')=='delete') {
-		$query="DELETE FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . intval($Knews_plugin->get_safe('nid'));
+		$query="DELETE FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . $Knews_plugin->get_safe('nid', 0, 'int');
 		$results = $wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('Newsletter deleted','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('da')=='duplicate') {
-		$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . intval($Knews_plugin->get_safe('did'));
+		
+		$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . $Knews_plugin->get_safe('did', 0, 'int');
 		$results = $wpdb->get_results( $query );
-		
-		if ($results) {
-		
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated) VALUES ('(copy)" . mysql_real_escape_string($results[0]->name) . "', '" . mysql_real_escape_string($results[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "', '" . $results[0]->lang . "', 0)";
-			
-			$results = $wpdb->query($sql);
-echo $wpdb->last_error;
+
+		if ($new=duplicate_news($results)) {
 			echo '<div class="updated"><p>' . __('Newsletter duplicated','knews') . '</p></div>';
 		}
 	}
@@ -55,7 +77,7 @@ function enfocar() {
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
 			<h2 class="nav-tab-wrapper"><a class="nav-tab<?php if ($tab=='') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news"><?php _e('Manual Newsletters','knews');?></a><a class="nav-tab<?php if ($tab=='auto') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=auto"><?php _e('Auto-created Newsletters','knews'); ?></a></h2>
 			<?php 
-					$paged = intval($Knews_plugin->get_safe('paged', 1));
+					$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 									
 					if ($tab=='') {
 						echo '<p><a class="add-new-h2" href="#newnews" onclick="enfocar()">' . __('Create new newsletter','knews') . '</a></p>';
@@ -65,7 +87,7 @@ function enfocar() {
 						$results_per_page=20;
 					}
 
-					$query = "SELECT id, name, created, modified, template, lang FROM " . KNEWS_NEWSLETTERS . " WHERE automated=" . (($tab=='') ? '0' : '1') . " ORDER BY modified DESC";
+					$query = "SELECT id, name, created, modified, template, lang, id_mobile FROM " . KNEWS_NEWSLETTERS . " WHERE mobile=0 AND automated=" . (($tab=='') ? '0' : '1') . " ORDER BY modified DESC";
 					$results = $wpdb->get_results( $query );
 					if (count($results) != 0) {
 				?>
@@ -162,8 +184,12 @@ function enfocar() {
 							<option selected="selected" value=""><?php _e('Batch actions','knews'); ?></option>
 							<option value="delete_news"><?php _e('Delete','knews'); ?></option>
 						</select>
-						<input type="submit" value="<?php _e('Apply','knews'); ?>">
+						<input type="submit" value="<?php _e('Apply','knews'); ?>" class="button-secondary" />
 					</div>
+					<?php 
+					//Security for CSRF attacks
+					wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+					?>
 					</form>
 				<?php
 					//Pagination
@@ -238,26 +264,7 @@ function enfocar() {
 						</p>
 						<p><?php _e('Choose a template','knews');?>: </p>
 						<?php
-						$wp_dirs = wp_upload_dir();
-						//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
-						//$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
-						if (is_dir($wp_dirs['basedir'] . '/knewstemplates')) {
-							chdir ($wp_dirs['basedir'] . '/knewstemplates');
-							$folders = scandir( '.' );
-							foreach ($folders as $folder) {
-								if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html')) {
-									examine_template($folder, $wp_dirs['basedir'] . '/knewstemplates/', $wp_dirs['baseurl'] . '/knewstemplates/');
-								}
-							}
-						}
-						
-						chdir (KNEWS_DIR . '/templates');
-						$folders = scandir( '.' );
-						foreach ($folders as $folder) {
-							if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file(KNEWS_DIR . '/templates/' . $folder . '/info.xml') && is_file(KNEWS_DIR . '/templates/' . $folder . '/template.html')) {
-								examine_template($folder, KNEWS_DIR . '/templates/', KNEWS_URL . '/templates/');
-							}
-						}
+						knews_display_templates(); 
 						?>
 						<div style="clear:both;"></div>
 						<div class="submit">
@@ -293,6 +300,10 @@ function enfocar() {
 								});
 							});
 						</script>
+						<?php 
+						//Security for CSRF attacks
+						wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+						?>
 					</form>
 				<?php
 					} else {
@@ -302,80 +313,3 @@ function enfocar() {
 					}
 				?>
 	</div>
-<?php
-function examine_template($folder, $templates_path, $templates_url) {
-		$xml_info = array (
-			'shortname' => $folder,
-			'fullname' => 'Not defined',
-			'version' => '1.0',
-			'url' => '',
-			'date' => 'Unknown',
-			'author' => 'Unknown',
-			'urlauthor' => '',
-			'minver' => '1.0.0',
-			'onlypro' => 'no',
-			'description' => 'Not defined',
-			'mobile' => 'no',
-			'responsive' => 'no'
-		);
-
-		$xml = simplexml_load_file($templates_path . $folder . '/info.xml');
-
-		foreach($xml->children() as $child) {
-			$xml_info[$child->getName()] = $child;
-		}
-		
-?>
-	<div style="padding:10px 10px 0 10px; float:left; width:250px; height:350px;" class="template">
-<?php
-		$selectable=false;
-		if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) >= 0) {
-			if ($xml_info['onlypro'] != 'yes' || $Knews_plugin->im_pro()==true) {
-				$selectable=true;
-				
-				echo '<div style="text-align:center"><a href="#" onclick="jQuery(\'input\', jQuery(this).parent().parent()).attr(\'checked\', true); return false;" title="' . __('Select this template','knews') . '">';
-			}
-		}
-?>
-		<img src="<?php echo $templates_url . $folder; ?>/thumbnail.jpg" style="padding-right:20px;" />
-		<?php if ($selectable) echo '</a>'; ?></div>
-		<div>
-			<h1 style="font-size:20px; padding:0 0 10px 0; margin:0">
-			<?php
-			if ($selectable) echo '<input type="radio" name="template" value="' . $folder . '" />';
-
-			echo $xml_info['shortname'] . ' <span style="font-weight:normal">v' . $xml_info['version'] . '</span></h1>';
-			if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) < 0) {
-				echo '<p style="color:#e00; font-weight:bold;">';
-				printf(__('This template requires Knews version %s you must update Knews before use this template'), $xml_info['minver'] . (($xml_info['onlypro'] == 'yes') ? ' Pro' : ''));
-				echo '</p>';
-			} else {
-				if ($xml_info['onlypro'] == 'yes' && !$Knews_plugin->im_pro()) {
-					echo '<p style="color:#e00; font-weight:bold;">';
-					printf( __('This template requires the professional version of Knews. You can get it %s here','knews'),'<a href="http://www.knewsplugin.com" target="_blank">');
-					echo '</a></p>';
-				}
-			}
-			?>
-			<h2 style="font-size:16px; padding:0 0 6px 0; margin:0; line-height:20px;"><?php echo $xml_info['fullname']; ?></h2>
-			<p style="font-size:13px; padding:0 0 0 0; margin:0"><strong><?php echo (($xml_info['urlauthor'] != '') ? '<a href="' . $xml_info['urlauthor'] . '" target="_blank">' : '') . $xml_info['author'] . (($xml_info['urlauthor'] != '') ? '</a>' : '') . '</strong> (' . $xml_info['date'] . ')'; ?></p>
-			<?php
-			if ($xml_info['url'] != '') {
-			?>
-			<p style="font-size:13px; padding:0 0 0 0; margin:0"><a href="<?php echo $xml_info['url']; ?>" target="_blank"><?php _e('Go to template page','knews'); ?></a></p>
-			<?php
-			}
-			$v=$xml_info['version'];
-			$v=substr($v, 0, strpos($v, '.'));
-			if ($v=='1') $v='';
-			?>
-			<input type="hidden" name="vp_<?php echo $folder; ?>" id="vp_<?php echo $folder; ?>" value="<?php echo $v; ?>" />
-			<input type="hidden" name="path_<?php echo $folder; ?>" id="path_<?php echo $folder; ?>" value="<?php echo $templates_path; ?>" />
-			<input type="hidden" name="url_<?php echo $folder; ?>" id="url_<?php echo $folder; ?>" value="<?php echo $templates_url; ?>" />
-			<input type="hidden" name="ver_<?php echo $folder; ?>" id="ver_<?php echo $folder; ?>" value="<?php echo $xml_info['version']; ?>" />
-			<p style="margin:0; padding:0; font-size:11px; color:#333"><?php echo $xml_info['description']; ?></p>
-		</div>
-	</div>
-<?php
-}
-?>

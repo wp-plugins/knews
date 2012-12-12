@@ -1202,7 +1202,8 @@ function save_news () {
 					title: jQuery('input#title').val(),
 					idnews: id_news,
 					testslash: "aa'aa",
-					action: 'knewsSaveNews' },
+					action: 'knewsSaveNews',
+					_savenews: jQuery('#_savenews').val() },
 	
 			type: "POST",
 			cache: false,

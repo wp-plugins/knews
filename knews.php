@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.5
+Version: 1.2.6
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -90,9 +90,9 @@ if (!class_exists("KnewsPlugin")) {
 
 			$KnewsDefaultMessages1 = array (
 				array ( 'label'=>__('Text direction, Left To Right or Right To Left: put <span style="color:#e00">ltr</span> or <span style="color:#e00">rtl</span>','knews'), 'name'=>'text_direction'),
-				array ( 'label'=>__('Widget title','knews'), 'name'=>'widget_title')
-
+				array ( 'label'=>__('Widget subscription form title','knews'), 'name'=>'widget_title')
 			);
+			if ($this->im_pro()) $KnewsDefaultMessages1[] = array ( 'label'=>__('Widget latest newsletters title','knews'), 'name'=>'widgetln_title');
 
 			$extra_fields = $this->get_extra_fields();
 			foreach ($extra_fields as $field) {
@@ -169,6 +169,7 @@ if (!class_exists("KnewsPlugin")) {
 			define('KNEWS_KEYS', $wpdb->prefix . 'knewskeys');
 			define('KNEWS_AUTOMATED', $wpdb->prefix . 'knewsautomated');
 			define('KNEWS_AUTOMATED_POSTS', $wpdb->prefix . 'knewsautomatedposts');
+			define('KNEWS_AUTOMATED_SELECTION', $wpdb->prefix . 'knewsautomatedsel');
 
 			define('KNEWS_NEWSLETTERS_SUBMITS', $wpdb->base_prefix . 'knewsubmits');
 
@@ -355,13 +356,11 @@ if (!class_exists("KnewsPlugin")) {
 			return $empty;
 		}
 		
-		function set_user_field ($user_id, $field_id, $value, $overwrite=true) {
+		function set_user_field ($user_id, $field_id, $cf, $overwrite=true) {
 			global $wpdb;
 
 			$query = "SELECT * FROM " . KNEWS_USERS_EXTRA . " WHERE user_id=" . $user_id . ' AND field_id=' . $field_id;
 			$field_found = $wpdb->get_results( $query );
-
-			$cf= mysql_real_escape_string($value);
 
 			if (count($field_found)==0) {
 				//Insert field
@@ -388,14 +387,18 @@ if (!class_exists("KnewsPlugin")) {
 			return strcasecmp($wpdb->get_var("show tables like '$table'"), $table) == 0;
 		}
 		
-		function get_safe($field, $un_set='') {
-			if (!isset($_GET[$field])) return $un_set;
-			return $_GET[$field];
+		function get_safe($field, $un_set='', $mode='paranoid') {
+			$value = ((isset($_GET[$field])) ? $_GET[$field] : $un_set);
+			if ($mode=='unsafe') return $value;
+			if ($mode=='paranoid') return mysql_real_escape_string(htmlspecialchars(strip_tags($value)));
+			if ($mode=='int') return intval($value);
 		}
 
-		function post_safe($field, $un_set='') {
-			if (!isset($_POST[$field])) return $un_set;
-			return $_POST[$field];
+		function post_safe($field, $un_set='', $mode='paranoid') {
+			$value = ((isset($_POST[$field])) ? $_POST[$field] : $un_set);
+			if ($mode=='unsafe') return $value;
+			if ($mode=='paranoid') return mysql_real_escape_string(htmlspecialchars(strip_tags($value)));
+			if ($mode=='int') return intval($value);
 		}
 	
 		function get_user_lang($email){
@@ -408,21 +411,9 @@ if (!class_exists("KnewsPlugin")) {
 			$user_found = $wpdb->get_results( $query );
 			return $user_found[0]->lang;
 		}
-		
-		function security_for_direct_pages($kill=true) {
-			$current_user = wp_get_current_user();
-			if ($current_user->ID==0) {
-				if ($kill) {
-					die;
-				} else {
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		function get_unique_id() {
-			return substr(md5(uniqid()),-8);
+				
+		function get_unique_id($long=8) {
+			return substr(md5(uniqid()), $long * -1);
 		}
 		
 		function add_user_self(){
@@ -430,10 +421,10 @@ if (!class_exists("KnewsPlugin")) {
 			global $knewsOptions;
 
 			//$name = mysql_real_escape_string($_POST['name']);
-			$lang = mysql_real_escape_string($this->post_safe('lang_user'));
-			$lang_locale = mysql_real_escape_string($this->post_safe('lang_locale_user'));
-			$email = mysql_real_escape_string($this->post_safe('email'));
-			$id_list_news = intval($_POST['user_knews_list']);
+			$lang = $this->post_safe('lang_user');
+			$lang_locale = $this->post_safe('lang_locale_user');
+			$email = $this->post_safe('email');
+			$id_list_news = $this->post_safe('user_knews_list', 0, 'int');
 			
 			$custom_fields=array();
 			$custom_fields_ok=true;
@@ -506,7 +497,7 @@ if (!class_exists("KnewsPlugin")) {
 			}
 			
 			while ($cf = current($custom_fields)) {
-				$this->set_user_field ($user_id, key($custom_fields), $cf, false);
+				$this->set_user_field ($user_id, key($custom_fields), mysql_real_escape_string($cf), false);
 				next($custom_fields);
 			}
 			
@@ -602,8 +593,8 @@ if (!class_exists("KnewsPlugin")) {
 
 			global $wpdb;
 			
-			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string($_GET['e']);
+			$confkey = $this->get_safe('k');
+			$email = $this->get_safe('e');
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -621,9 +612,9 @@ if (!class_exists("KnewsPlugin")) {
 
 			global $wpdb;
 			
-			$id_newsletter = intval($this->get_safe('n'));
-			$confkey = mysql_real_escape_string($_GET['k']);
-			$email = mysql_real_escape_string($_GET['e']);
+			$id_newsletter = $this->get_safe('n', 0, 'int');
+			$confkey = $this->get_safe('k');
+			$email = $this->get_safe('e');
 			$date = $this->get_mysql_date();
 			
 			if (!$this->validEmail($email)) return false;
@@ -902,7 +893,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 
-		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false) {
+		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false) {
 
 			$test_smtp=is_array($test_array);
 			
@@ -988,6 +979,8 @@ if (!class_exists("KnewsPlugin")) {
 				if (isset($recipient->cant_read)) {
 					$customHtml=str_replace('%cant_read_href%', $recipient->cant_read, $customHtml);
 					$customText=str_replace('%cant_read_href%', $recipient->cant_read, $customText);
+
+					$customHtml=str_replace('%mobile_version_href%', $recipient->cant_read . (($mobile) ? '&m=dsk' : '&m=mbl'), $customHtml);
 				}
 
 				if (isset($recipient->tokens)) {
@@ -1059,7 +1052,7 @@ if (!class_exists("KnewsPlugin")) {
 				}
 
 				if (count($recipients) > 1) {
-					set_time_limit(25);
+					if( !ini_get('safe_mode') ) set_time_limit(25);
 					echo ' ';
 				}
 
@@ -1209,7 +1202,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.5');
+		define('KNEWS_VERSION', '1.2.6');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1245,6 +1238,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		}
 		function knews_wpcron_automate() {
 			require(dirname(__FILE__) . '/includes/automated_jobs.php');
+			die();
 		}
 		function knews_more_reccurences($schedules) {
 			$schedules['knewstime'] = array('interval' => 600, 'display' => 'Knews 10 minutes wpcron submit');
@@ -1278,6 +1272,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		add_action(basename(__FILE__), array(&$Knews_plugin, 'init'));
 		add_action('admin_menu', 'Knews_plugin_ap');
 		add_action("widgets_init", create_function( '', 'register_widget( "knews_widget" );' ) );
+		if ($Knews_plugin->im_pro()) add_action("widgets_init", create_function( '', 'register_widget( "knewssn2_widget" );' ) );
 	}
 
 	function knews_load_jquery() {
@@ -1286,10 +1281,9 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('init', 'knews_load_jquery');
 	
 	function knews_admin_enqueue() {
-		if (isset($_GET['page'])) {
-			if ($_GET['page']=='knews_news' || $_GET['page']=='knews_submit') {
-				add_thickbox();
-			}
+		global $Knews_plugin;
+		if ($Knews_plugin->get_safe('page')=='knews_news' || $Knews_plugin->get_safe('page')=='knews_submit') {
+			add_thickbox();
 		}
 		//wp_enqueue_script('thickbox',null,array('jquery'));
 		//wp_enqueue_style('thickbox.css', '/'.WPINC.'/js/thickbox/thickbox.css', null, '1.0');
@@ -1390,7 +1384,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		echo '<option value="0"' . (($value == 0) ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
 		echo '</select></p>';
 		
-		$sql = 'SELECT kn.name, kap.id_news FROM ' . KNEWS_NEWSLETTERS . ' as kn, ' . KNEWS_AUTOMATED_POSTS . ' as kap WHERE kap.id_post=' . $post->ID . ' AND kap.id_news = kn.id';
+		$sql = 'SELECT kn.name, kap.id_news, kn.mobile FROM ' . KNEWS_NEWSLETTERS . ' as kn, ' . KNEWS_AUTOMATED_POSTS . ' as kap WHERE kn.mobile=0 AND kap.id_post=' . $post->ID . ' AND kap.id_news = kn.id';
 		$results=$wpdb->get_results($sql);
 		if (count($results) > 0) {
 			echo '<p><strong>' . __('This post has been included into:','knews') . '</strong></p>';
@@ -1408,7 +1402,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		global $Knews_plugin, $knewsOptions;
 		if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-		$value=$Knews_plugin->post_safe('knews_automated_post', $knewsOptions['def_autom_post']);
+		$value=$Knews_plugin->post_safe('knews_automated_post', $knewsOptions['def_autom_post'], 0, 'int');
 		update_post_meta($postID, '_knews_automated', $value);
 	}
 	add_action('admin_menu', 'knews_options_box');
@@ -1458,7 +1452,21 @@ if (!function_exists("Knews_plugin_ap")) {
 		require( dirname(__FILE__) . "/direct/off_warn.php");
 	}
 	function knews_resize_img() {
-		require( dirname(__FILE__) . "/direct/resize_img.php");
+		global $Knews_plugin;
+	
+		if (! $Knews_plugin->initialized) $Knews_plugin->init();
+	
+		$url_img= $Knews_plugin->get_safe('urlimg');
+		$width= intval($Knews_plugin->get_safe('width'));
+		$height= intval($Knews_plugin->get_safe('height'));
+	
+		require( dirname(__FILE__) . "/includes/resize_img.php");
+
+		$jsondata = knews_resize_img_fn($url_img, $width, $height);
+		echo json_encode($jsondata);
+
+		die();
+
 	}
 	function knews_save_news() {
 		require( dirname(__FILE__) . "/direct/save_news.php");
@@ -1527,6 +1535,8 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('wp_ajax_knewsTrack', 'knews_track' );
 	add_action('wp_ajax_nopriv_knewsTrack', 'knews_track' );
 
+	add_action('wp_ajax_knewsForceAutomated', 'knews_wpcron_automate' );
+	add_action('wp_ajax_nopriv_knewsForceAutomated', 'knews_ajax_deny' );
 	class knews_widget extends WP_Widget {
 	
 		public function __construct() {

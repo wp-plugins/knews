@@ -1,17 +1,23 @@
 <?php
+//Security for CSRF attacks
+$knews_nonce_action='kn-admin-lists';
+$knews_nonce_name='_admlist';
+if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
+//End Security for CSRF attacks
+
 	global $wpdb, $Knews_plugin;
 
 	$langs_code = array();
 	$langs_name = array();
 
 	if ($Knews_plugin->get_safe('da')=='rename') {
-		$query = "UPDATE ".KNEWS_LISTS." SET name='" . $Knews_plugin->get_safe('nn') . "' WHERE id=" . intval($Knews_plugin->get_safe('lid'));
+		$query = "UPDATE ".KNEWS_LISTS." SET name='" . $Knews_plugin->get_safe('nn') . "' WHERE id=" . $Knews_plugin->get_safe('lid', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('List name updated','knews') . '</p></div>';
 	}
 
 	if ($Knews_plugin->get_safe('da')=='delete') {
-		$query="DELETE FROM " . KNEWS_LISTS . " WHERE id=" . intval($Knews_plugin->get_safe('lid'));
+		$query="DELETE FROM " . KNEWS_LISTS . " WHERE id=" . $Knews_plugin->get_safe('lid', 0, 'int');
 		$results = $wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('List deleted','knews') . '</p></div>';
 	}
@@ -31,7 +37,7 @@
 	if (isset($_POST['action'])) {
 		if ($_POST['action']=='add_list') {
 
-			$name = mysql_real_escape_string($_POST['new_list']);
+			$name = $Knews_plugin->post_safe('new_list');
 
 			$query = "SELECT * FROM " . KNEWS_LISTS . " WHERE name='" . $name . "'";
 			$results = $wpdb->get_results( $query );
@@ -61,7 +67,7 @@
 						//Update only
 						$open = (($Knews_plugin->post_safe($list->id . '_open')=='1') ? '1' : '');
 						$open_registered = (($Knews_plugin->post_safe($list->id . '_open_registered')=='1') ? '1' : '');
-						$order = intval($Knews_plugin->post_safe($list->id . '_order'));
+						$order = $Knews_plugin->post_safe($list->id . '_order', 0, 'int');
 						$langs='none';
 
 						if (KNEWS_MULTILANGUAGE) {
@@ -211,8 +217,12 @@ function enfocar() {
 							<option selected="selected" value="update_lists"><?php _e('Only update','knews'); ?></option>
 							<option value="delete_lists"><?php _e('Only delete','knews'); ?></option>
 						</select>
-						<input type="submit" value="<?php _e('Apply','knews'); ?>">
+						<input type="submit" value="<?php _e('Apply','knews'); ?>" class="button-secondary" />
 					</div>
+					<?php 
+					//Security for CSRF attacks
+					wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+					?>
 					</form>
 					<hr />
 				<?php
@@ -230,6 +240,10 @@ function enfocar() {
 					<div class="submit">
 						<input type="submit" value="<?php _e('Create a mailing list','knews'); ?>" class="button-primary" />
 					</div>
+					<?php 
+					//Security for CSRF attacks
+					wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+					?>
 					</form>
 					
 	</div>
