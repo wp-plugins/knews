@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.0
-Stable tag: 1.6.5
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,7 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
+* **NEW**: Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
 * English - en_US (Knews Team)
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
@@ -49,7 +50,7 @@ A WYSIWYG Editor Demo:
 * Spanish - es_ES (Knews Team)
 * Catalan - ca (Knews Team)
 * Arabic - ar (thanks to: Hasan Yousef)
-* Finnish - fi (thanks to: Eccola http://eccola.fi )
+* Finnish - fi (thanks to: Esa Ratanen http://eccola.fi )
 * Bosnian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 * Croatian - hr - about 60% translated (thanks to: Hasan Yousef)
 * Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
@@ -162,6 +163,24 @@ In any case, the degree of personalisation of our templates is immense, with tho
 9. The Glossy Black Template and a sample customisation (White Background).
 
 == Changelog ==
+
+= 1.2.7 =
+
+* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl)
+* Title added in the newsletter page after user clicks can't read link
+* User administration improvements: search for name and surname and order by any field
+* Subscription form back (if something goes wrong) without reload
+* Special Class added to the subscription form button for easy CSS customisation
+* Now Knews uses the WordPress PHPMailer built-in library, less conflicts with another plugins
+* Plugin upgrade checks for database alter table permision before upgrade
+* FIXES:
+* Admin prefs checkboxes (automated options and compatibility options) changes aren't saved into 1.2.6 version, fixed.
+* Eternal welcome to the 1.2.6 version bug solved
+* Font Picker (selector) blank window bug solved
+* Select page for insertion 404 error solved
+* Magic quotes gpc activated proof (some webservers has this activated)
+* Fifth step importation bug solved (rare issue)
+* JS-Cron step #2 404 error solved
 
 = 1.2.6 =
 
@@ -351,6 +370,24 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.2.7 =
+
+* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl)
+* Title added in the newsletter page after user clicks can't read link
+* User administration improvements: search for name and surname and order by any field
+* Subscription form back (if something goes wrong) without reload
+* Special Class added to the subscription form button for easy CSS customisation
+* Now Knews uses the WordPress PHPMailer built-in library, less conflicts with another plugins
+* Plugin upgrade checks for database alter table permision before upgrade
+* FIXES:
+* Admin prefs checkboxes (automated options and compatibility options) changes aren't saved into 1.2.6 version, fixed.
+* Eternal welcome to the 1.2.6 version bug solved
+* Font Picker (selector) blank window bug solved
+* Select page for insertion 404 error solved
+* Magic quotes gpc activated proof (some webservers has this activated)
+* Fifth step importation bug solved (rare issue)
+* JS-Cron step #2 404 error solved
 
 = 1.2.6 =
 
