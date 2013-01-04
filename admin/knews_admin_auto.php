@@ -286,7 +286,7 @@ function enfocar() {
 				<p><input type="radio" name="auto_mode" autocomplete="off" value="1" checked="checked" /><?php printf(__('Create a newsletter every %s posts','knews'), '<input type="text" name="auto_posts" id="auto_posts" value="5" style="width:30px;" />');?></p>
 				<p><input type="radio" name="auto_mode" autocomplete="off" value="2" /> <?php _e('Create a newsletter every x amount of time','knews');?> 
 				<?php /*<span id="auto_mode_1">Every <input type="text" name="auto_posts" id="auto_posts" value="5" style="width:30px;" /> posts</span>*/?>
-				<span id="auto_mode_2" style="display:none;"><label for="auto_time">Submit</label> <select name="auto_time" id="auto_time" autocomplete="off">
+				<span id="auto_mode_2" style="display:none;"><label for="auto_time"><?php _e('Submit','knews'); ?></label> <select name="auto_time" id="auto_time" autocomplete="off">
 				<?php
 				$f=0;
 				foreach ($frequency as $fre) {
@@ -325,7 +325,7 @@ function enfocar() {
 <?php if ($Knews_plugin->im_pro()) {?>
 <div id="at_once" style="display:none;"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select></p></div>
 <?php } ?>
-				<p><input type="submit" value="New Auto-create Newsletters Process" class="button-primary" /></p>
+				<p><input type="submit" value="<?php _e('New Auto-create Newsletters Process','knews'); ?>" class="button-primary" /></p>
 				<?php 
 				//Security for CSRF attacks
 				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 

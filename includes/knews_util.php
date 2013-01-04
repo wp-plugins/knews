@@ -252,6 +252,9 @@ function examine_template($folder, $templates_path, $templates_url, $popup=false
 }
 
 function knews_display_templates($popup=false) {
+	
+	global $knewsOptions;
+	
 	$wp_dirs = wp_upload_dir();
 	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
 	//$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
@@ -265,6 +268,8 @@ function knews_display_templates($popup=false) {
 			}
 		}
 	}
+	
+	if ($anytemplate && $knewsOptions['hide_templates']=='1') return;
 	
 	chdir (KNEWS_DIR . '/templates');
 	$folders = scandir( '.' );

@@ -44,7 +44,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$confirmation_sql_count=0;
 
 	$step = $Knews_plugin->post_safe('step', 1);
-	$filename = $Knews_plugin->post_safe('filename');
+	$filename = $Knews_plugin->post_safe('filename', '', 'unsafe');
 	
 	if (isset($_FILES['file_csv']['tmp_name'])) {
 		$filename = KNEWS_DIR . '/tmp/' . pathinfo($_FILES['file_csv']['tmp_name'], PATHINFO_FILENAME);
@@ -202,7 +202,7 @@ p.knews_progress span.on {
 	
 				if (!somelist) {
 					/* Traduction pending */
-					if (!confirm('Warning! You aren\'t selected any mailing list, do you want to continue?')) return false;
+					if (!confirm('<?php _e('Warning! You arent selected any mailing list, do you want to continue?','knews'); ?>')) return false;
 				}
 			}
 		});

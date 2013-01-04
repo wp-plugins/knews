@@ -9,6 +9,115 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	global $Knews_plugin;
 	
 	$languages = $Knews_plugin->getLangs(true);
+	$extra_fields = $Knews_plugin->get_extra_fields();
+	$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
+	$filter_state = $Knews_plugin->get_safe('filter_state', 0, 'int');
+	$search_user = $Knews_plugin->get_safe('search_user', '');
+	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
+	
+	$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');
+	$users_cf=$wpdb->get_results('SELECT ku.id FROM ' . KNEWS_USERS . ' ku, ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.user_id=ku.id ORDER BY ku.id');
+	
+	if ($search_user != '' && count($extra_fields) != 0) {
+		$full_insertion='';
+		foreach ($extra_fields as $ef) {
+			if ($full_insertion !='') $full_insertion .= ', ';
+			$full_insertion .= '(%s, ' . $ef->id . ",'')";
+		}
+		$full_insertion = 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES ' . $full_insertion;
+		$index_cf=0;
+		$incomplete_users=array();
+		foreach ($users as $u) {
+			$ok_cf=0;
+			while (isset($users_cf[$index_cf]) && $users_cf[$index_cf]->id == $u->id) {
+				$ok_cf++;
+				$index_cf++;
+			}
+			if ($ok_cf==0) {
+				$query = str_replace('%s', $u->id, $full_insertion);
+				$wpdb->get_results($query);
+			} elseif ($ok_cf != count($extra_fields)) {
+				$incomplete_users[]=$u->id;
+			}
+		}
+		foreach ($incomplete_users as $iu) {
+			foreach ($extra_fields as $ef) {
+				$look = $wpdb->get_results('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
+				if (count($look) == 0) {
+					$wpdb->get_results( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
+				}
+			}
+		}
+	}
+	$results_per_page=20;
+	$mass=0;
+	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	
+	//'admin.php?page=knews_users&filter_list='.$filter_list.'&filter_state='.$filter_state.'&search_user='.$search_user.'&paged=';
+
+	$filtered_query = "FROM " . KNEWS_USERS . " ku";
+	$ef_order=0;
+	$where=false;
+	
+	if ($Knews_plugin->get_safe('orderby') != '' && $Knews_plugin->get_safe('orderby') != 'email') {
+		foreach ($extra_fields as $ef) {
+			if ($ef->name==$Knews_plugin->get_safe('orderby')) {
+				$ef_order = $ef->id;
+				break;
+			}
+		}
+	}
+
+	if (($search_user != '' && count($extra_fields) > 0) || $ef_order != 0) {
+		$filtered_query .= ', ' . KNEWS_USERS_EXTRA . " kue";					
+	}
+	if ($filter_list != 0) {
+		$where=true;
+		$filtered_query .= ", " . KNEWS_USERS_PER_LISTS . " kupl WHERE ku.id = kupl.id_user AND kupl.id_list=" . $filter_list;
+	
+	}
+	if ($search_user != '') {
+		if ($where) {
+			$filtered_query .= " AND";
+		} else {
+			$filtered_query .= " WHERE";
+			$where=true;
+		}
+		if (count($extra_fields) > 0) {
+			$filtered_query .= " ( ku.email LIKE '%" . $search_user . "%'";
+			foreach ($extra_fields as $ef) {
+				$filtered_query .= " OR (kue.value LIKE '%" . $search_user . "%' AND kue.field_id=" . $ef->id . ")";
+			}
+			$filtered_query .= ") AND kue.user_id=ku.id AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
+		} else {
+			$filtered_query .= " ku.email LIKE '%" . $search_user . "%'";
+		}
+	}
+	if ($filter_state != 0) {
+		if ($where) {
+			$filtered_query .= " AND ";
+		} else {
+			$filtered_query .= " WHERE ";
+			$where=true;
+		}
+		$filtered_query .= "ku.state=" . $filter_state;
+	}
+	if ($Knews_plugin->get_safe('orderby') != '') {
+		if ($Knews_plugin->get_safe('orderby') == 'email') {
+			$filtered_query .= ' ORDER BY ku.email ' . $Knews_plugin->get_safe('order', 'asc');
+		} elseif ($ef_order != 0) {
+			if ($search_user == '') {
+				if ($where) {
+					$filtered_query .= " AND ";
+				} else {
+					$filtered_query .= " WHERE ";
+					$where=true;
+				}
+				$filtered_query .= "ku.id = kue.user_id AND kue.field_id=" . $ef_order ;
+			}
+			$filtered_query .= " ORDER BY kue.value " . $Knews_plugin->get_safe('order', 'asc');
+		}
+	}
 
 	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists_name = $wpdb->get_results( $query );
@@ -34,7 +143,12 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		$results = $wpdb->query( $query );
 		echo '<div class="updated"><p>' . __('User deleted','knews') . '</p></div>';
 	}
-
+	if ($Knews_plugin->get_safe('da')=='bounce') {
+		$query = "UPDATE ".KNEWS_USERS." SET state='4' WHERE id=" . $Knews_plugin->get_safe('uid', 0, 'int');
+		$result=$wpdb->query( $query );
+		echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
+	}
+	
 	if (isset($_POST['action'])) {
 		if ($Knews_plugin->post_safe('action')=='update_user') {
 			
@@ -60,30 +174,29 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				}
 			}
 			
-			$extra_fields = $Knews_plugin->get_extra_fields();
 			foreach ($extra_fields as $ef) {
-				
 				$Knews_plugin->set_user_field ($id, $ef->id, $Knews_plugin->post_safe('cf_' . $ef->id));
-
 			}
 
 			echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
-			
+
 		} else if ($_POST['action']=='delete_users') {
 			
 			$query = 'SELECT id FROM ' . KNEWS_USERS;
+			if ($mass==1) $query = 'SELECT ku.id ' . $filtered_query;
 			$result=$wpdb->get_results( $query );
 			
+			$n_users=0;
 			foreach ($result as $look_user) {
 
-				if ($Knews_plugin->post_safe('batch_' . $look_user->id, 0, 'int') == 1) {
-
+				if ($mass==1 || $Knews_plugin->post_safe('batch_' . $look_user->id, 0, 'int') == 1) {
+					$n_users++;
 					$query= 'DELETE FROM ' . KNEWS_USERS . ' WHERE id=' . $look_user->id;
 					$delete=$wpdb->query( $query );
 				}
 			}
 			
-			echo '<div class="updated"><p>' . __('User data updated','knews') . '</p></div>';
+			echo '<div class="updated"><p>' . sprintf(__('%s users deleted.','knews'), $n_users) . '</p></div>';
 			
 		} else if ($_POST['action']=='add_user') {
 		
@@ -135,10 +248,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			} else {
 				echo '<div class="error"><p><strong>' . __('Error','knews') . ':</strong> ' . __('Wrong e-mail','knews') . '.</p></div>';
 			}
-
 		}
 	}
-
 ?>
 	<div class=wrap>
 <?php 
@@ -195,9 +306,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 							<option value="1"<?php if ($users[0]->state=='1') echo ' selected="selected"'; ?>><?php _e('not confirmed','knews');?></option>
 							<option value="2"<?php if ($users[0]->state=='2') echo ' selected="selected"'; ?>><?php _e('confirmed','knews');?></option>
 							<option value="3"<?php if ($users[0]->state=='3') echo ' selected="selected"'; ?>><?php _e('blocked','knews');?></option>
+							<?php if ($Knews_plugin->im_pro()) { ?><option value="4"<?php if ($users[0]->state=='4') echo ' selected="selected"'; ?>><?php _e('Bounced','knews');?></option><?php } ?>
 						</select></td></tr>
 						<?php
-						$extra_fields = $Knews_plugin->get_extra_fields();
 						foreach ($extra_fields as $ef) {
 							echo '<tr><td>' . $ef->name . '</td><td><input type="text" name="cf_' . $ef->id . '" id="cf_' . $ef->id . '" value="' . $Knews_plugin->get_user_field($edit_user, $ef->id) . '" class="regular-text" ></td></tr>';
 						}						?>
@@ -230,187 +341,170 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				
 			} else {
 				//List users
+				//echo '<p>' . 'SELECT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) . '</p>';
+				$users = $wpdb->get_results( 'SELECT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
 				
-				$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
-				$filter_state = $Knews_plugin->get_safe('filter_state', 0, 'int');
-				$search_user = $Knews_plugin->get_safe('search_user', '');
-				$paged = $Knews_plugin->get_safe('paged', 1, 'int');
-								
-				$results_per_page=20;
-				
-				$link_params='admin.php?page=knews_users&filter_list='.$filter_list.'&filter_state='.$filter_state.'&search_user='.$search_user.'&paged=';
-				
-				$query = "SELECT " . KNEWS_USERS . ".id, " . KNEWS_USERS . ".email, " . KNEWS_USERS . ".state, " . KNEWS_USERS . ".lang FROM " . KNEWS_USERS;
-
-				if ($filter_list != 0) {
-					$query .= ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS . ".id = " . KNEWS_USERS_PER_LISTS . ".id_user AND " . KNEWS_USERS_PER_LISTS . ".id_list=" . $filter_list;
-				
-				} else if ($search_user != '') {
-					$query .= " WHERE email LIKE '%" . $search_user . "%'";
-				}
-				
-				if ($filter_state != 0) {
-					if ($filter_list != 0 || $search_user != '') {
-						$query .= " AND ";
-					} else {
-						$query .= " WHERE ";
-					}
-					$query .= KNEWS_USERS . ".state=" . $filter_state;
-				}
-				//echo '*' . $query . '*';
-				$users = $wpdb->get_results( $query );
-	
+				$filtered_users = $wpdb->get_results( 'SELECT COUNT(*) AS n ' . $filtered_query );
+				$filtered_users = $filtered_users[0]->n;
+				$total_users = $wpdb->get_results( 'SELECT COUNT(*) AS n FROM ' . KNEWS_USERS);
+				$total_users = $total_users[0]->n;
 				?>
-				<div class="top">
+				<div class="top" style="height:40px; overflow:hidden;">
 					<div class="alignleft actions">
-						<form action="admin.php" method="get">
-							<input type="hidden" name="page" id="page" value="knews_users" />
-							<p><?php _e('Filter by mailing list','knews'); ?>: <select name="filter_list" id="filter_list">
-							<option value="0"<?php if ($filter_list==0) echo ' selected="selected"'; ?>><?php _e('All','knews');?></option>
-							<?php
-								foreach ($lists_name as $ln) {
-									echo '<option value="' . $ln->id . '"' . (($filter_list == $ln->id) ? ' selected="selected"' : '') . '>' . $ln->name . '</option>';
-								}
-							?>
-							</select>&nbsp;&nbsp;&nbsp;
-							<?php _e('Filter by state','knews'); ?>: <select name="filter_state" id="filter_state">
-								<option value="0"<?php if ($filter_state==0) echo ' selected="selected"'; ?>><?php _e('All','knews'); ?></option>
-								<option value="1"<?php if ($filter_state==1) echo ' selected="selected"'; ?>><?php _e('Not confirmed','knews'); ?></option>
-								<option value="2"<?php if ($filter_state==2) echo ' selected="selected"'; ?>><?php _e('Confirmed','knews'); ?></option>
-								<option value="3"<?php if ($filter_state==3) echo ' selected="selected"'; ?>><?php _e('Blocked','knews'); ?></option>
-							</select>
-							<input type="submit" value="<?php _e('Filter','knews'); ?>" class="button-secondary" /></p>
-						</form>
+						<ul class="subsubsub">
+							<li class="all"><a <?php if ($filtered_users == $total_users) echo 'class="current" '; ?>href="admin.php?page=knews_users"><?php _e('All subscribers','knews'); ?> <span class="count">(<?php echo $total_users; ?>)</span></a></li>
+						</ul>
 					</div>
 					<div class="alignright actions">
 						<form action="admin.php" method="get">
 							<input type="hidden" name="page" id="page" value="knews_users" />
 							<p><?php _e('Find','knews');?>: <input type="text" name="search_user" id="search_user" value="<?php echo $search_user; ?>" /><input type="submit" value="<?php _e('Find','knews');?>" class="button-secondary" /></p>
+							<?php
+							if ($Knews_plugin->get_safe('orderby') != '' && $Knews_plugin->get_safe('order') != '') {
+								echo '<input type="hidden" name="orderby" id="orderby" value="' . $Knews_plugin->get_safe('orderby') . '" />';
+								echo '<input type="hidden" name="order" id="order" value="' . $Knews_plugin->get_safe('order') . '" />';
+							}
+							if ($filter_list != 0) {
+								echo '<input type="hidden" name="filter_list" id="filter_list" value="' . $filter_list . '" />';
+							}
+							if ($filter_state != 0) {
+								echo '<input type="hidden" name="filter_state" id="filter_state" value="' . $filter_state . '" />';
+							}
+							?>
 						</form>
 					</div>
-					<br class="clear">
 				</div>
-				<?php
-				if (count($users) != 0) {
+				<div class="tablenav">
+				<div class="alignleft actions">
+					<form action="admin.php" method="get">
+						<input type="hidden" name="page" id="page" value="knews_users" />
+						<?php _e('Filter by mailing list','knews'); ?>: <select name="filter_list" id="filter_list" style="float:none">
+						<option value="0"<?php if ($filter_list==0) echo ' selected="selected"'; ?>><?php _e('All','knews');?></option>
+						<?php
+							foreach ($lists_name as $ln) {
+								echo '<option value="' . $ln->id . '"' . (($filter_list == $ln->id) ? ' selected="selected"' : '') . '>' . $ln->name . '</option>';
+							}
+						?>
+						</select>&nbsp;&nbsp;&nbsp;
+						<?php _e('Filter by state','knews'); ?>: <select name="filter_state" id="filter_state" style="float:none">
+							<option value="0"<?php if ($filter_state==0) echo ' selected="selected"'; ?>><?php _e('All','knews'); ?></option>
+							<option value="1"<?php if ($filter_state==1) echo ' selected="selected"'; ?>><?php _e('Not confirmed','knews'); ?></option>
+							<option value="2"<?php if ($filter_state==2) echo ' selected="selected"'; ?>><?php _e('Confirmed','knews'); ?></option>
+							<option value="3"<?php if ($filter_state==3) echo ' selected="selected"'; ?>><?php _e('Blocked','knews'); ?></option>
+							<?php if ($Knews_plugin->im_pro()) { ?><option value="4"<?php if ($filter_state==4) echo ' selected="selected"'; ?>><?php _e('Bounced','knews'); ?></option><?php } ?>
+						</select>
+						<input type="submit" value="<?php _e('Filter','knews'); ?>" class="button-secondary" />
+						<?php
+						if ($Knews_plugin->get_safe('orderby') != '' && $Knews_plugin->get_safe('order') != '') {
+							echo '<input type="hidden" name="orderby" id="orderby" value="' . $Knews_plugin->get_safe('orderby') . '" />';
+							echo '<input type="hidden" name="order" id="order" value="' . $Knews_plugin->get_safe('order') . '" />';
+						}
+						if ($search_user != '') {
+							echo '<input type="hidden" name="search_user" id="search_user" value="' . $search_user . '" />';
+						}
+						?>
+					</form>
+				</div>				
+				<?php 
+				knews_pagination($paged, ceil($filtered_users/ $results_per_page), $filtered_users);
 				?>
-				<form action="<?php echo $link_params . $paged; ?>" method="post">
+				</div>
+				<?php if (count($users) != 0) {	?>
+				<form action="<?php echo $link_params;?>" method="post">
 				<?php
 					$alt=false;
-					echo '<table class="widefat"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th><th>E-mail</th>';
-
-					$extra_fields = $Knews_plugin->get_extra_fields();
+					?>
+					<table class="widefat"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th>
+					<?php
+					knews_th_orderable('E-mail','email','asc');
+					$colspan=4;
 					foreach ($extra_fields as $ef) {
-						if ($ef->show_table == 1) echo '<th>' . $ef->name . '</th>';
+						if ($ef->show_table == 1) {
+							knews_th_orderable($ef->name, $ef->name, 'asc');
+							$colspan++;
+						}
 					}
 
 					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></thead><tbody>';
 	
-					$results_counter=0;
 					foreach ($users as $user) {
-						$results_counter++;
-						if ($results_per_page * ($paged-1)<$results_counter) {
+						$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
+						$lists = $wpdb->get_results( $query );
+						
+						echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
+						'<td><strong><a href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . $user->email . '</a></strong>';
+						
+						echo '<div class="row-actions"><span><a title="' . __('Edit this user', 'knews') . '" href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . __('Edit', 'knews') . '</a> | </span>';
+						
+						if ($user->state!=2) echo '<span><a href="' . $link_params . '&da=activate&uid=' . $user->id . '" title="' . __('Activate this user', 'knews') . '">' . __('Activate', 'knews') . '</a> | </span>';							
+						if ($user->state!=3) echo '<span><a href="' . $link_params . '&da=block&uid=' . $user->id . '" title="' . __('Block this user', 'knews') . '">' . __('Block', 'knews') . '</a> | </span>';
+						if ($user->state!=4 && $Knews_plugin->im_pro()) echo '<span><a href="' . $link_params . '&da=bounce&uid=' . $user->id . '" title="' . __('Mark as bounced email', 'knews') . '">' . __('Bounce', 'knews') . '</a> | </span>';						
+						
+						echo '<span class="trash"><a href="' . $link_params . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitively this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 
-							$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
-							$lists = $wpdb->get_results( $query );
-							
-							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
-							'<td><strong><a href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . $user->email . '</a></strong>';
-							
-							echo '<div class="row-actions"><span><a title="' . __('Edit this user', 'knews') . '" href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . __('Edit', 'knews') . '</a> | </span>';
-							
-							if ($user->state!=2) echo '<span><a href="' . $link_params . $paged . '&da=activate&uid=' . $user->id . '" title="' . __('Activate this user', 'knews') . '">' . __('Activate', 'knews') . '</a> | </span>';							
-							if ($user->state!=3) echo '<span><a href="' . $link_params . $paged . '&da=block&uid=' . $user->id . '" title="' . __('Block this user', 'knews') . '">' . __('Block', 'knews') . '</a> | </span>';
-							
-							echo '<span class="trash"><a href="' . $link_params . $paged . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitively this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
-
-							reset($extra_fields);
-							foreach ($extra_fields as $ef) {
-								if ($ef->show_table == 1) echo '<td>' . $Knews_plugin->get_user_field($user->id, $ef->id, '&nbsp;') . '</td>';
-							}
-							echo '<td>' . (($user->lang!='') ? $user->lang : '/') . '</td><td>';
-							if ($user->state==1) echo '<img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" alt="No confirmat" /></td>';
-							if ($user->state==2) echo '<img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" alt="Confirmat" /></td>';
-							if ($user->state==3) echo '<img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" alt="Blocat" /></td>';
-							echo '</td><td>';
-							
-							if (count($lists) != 0) {
-								$first_comma=true;
-								foreach ($lists as $list) {
-									if (!$first_comma) echo ', ';
-									if (isset($lists_indexed[$list->id_list])) {
-										echo $lists_indexed[$list->id_list];
-									} else {
-										echo '<i>';
-										_e('deleted list','knews');
-										echo '</i>';
-									}
-									$first_comma=false;
-								}
-							}
-							//echo '<td><input type="checkbox" value="1" name="user_delete_' . $user->id . '" id="user_delete_' . $user->id . '"></td>';
-							echo '</tr>';
-		
-							$alt=!$alt;
-							if ($results_counter == $results_per_page * $paged) break;
+						reset($extra_fields);
+						foreach ($extra_fields as $ef) {
+							if ($ef->show_table == 1) echo '<td>' . $Knews_plugin->get_user_field($user->id, $ef->id, '&nbsp;') . '</td>';
 						}
+						echo '<td>' . (($user->lang!='') ? $user->lang : '/') . '</td><td>';
+						if ($user->state==1) echo '<img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" title="' . __('Unconfirmed','knews') . '" /></td>';
+						if ($user->state==2) echo '<img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" title="' . __('Confirmed','knews') . '" /></td>';
+						if ($user->state==3) echo '<img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" title="' . __('Blocked','knews') . '" /></td>';
+						if ($user->state==4) echo '<img src="' . KNEWS_URL . '/images/gray_led.gif" width="20" height="20" title="' . __('Bounced','knews') . '" /></td>';
+						echo '</td><td>';
+						
+						if (count($lists) != 0) {
+							$first_comma=true;
+							foreach ($lists as $list) {
+								if (!$first_comma) echo ', ';
+								if (isset($lists_indexed[$list->id_list])) {
+									echo $lists_indexed[$list->id_list];
+								} else {
+									echo '<i>';
+									_e('deleted list','knews');
+									echo '</i>';
+								}
+								$first_comma=false;
+							}
+						}
+						//echo '<td><input type="checkbox" value="1" name="user_delete_' . $user->id . '" id="user_delete_' . $user->id . '"></td>';
+						echo '</tr>';
+	
+						$alt=!$alt;
 					}
-					echo '</tbody><tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th><th>E-mail</th>';
+
+					echo '</tbody><tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th>';
+					
+					knews_th_orderable('E-mail','email','asc');
 
 					reset($extra_fields);
 					foreach ($extra_fields as $ef) {
-						if ($ef->show_table == 1) echo '<th>' . $ef->name . '</th>';
+						if ($ef->show_table == 1) knews_th_orderable($ef->name, $ef->name, 'asc');
 					}
 					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></tfoot>';
 					echo '</table>';
 				?>
-					<div class="submit">
-						<select name="action">
+					<div class="tablenav bottom">
+						<div class="alignleft actions">
+						<select name="action" id="batch_action">
 							<option selected="selected" value=""><?php _e('Batch actions','knews'); ?></option>
 							<option value="delete_users"><?php _e('Delete','knews'); ?></option>
 						</select>
 						<input type="submit" value="<?php _e('Apply','knews'); ?>" class="button-secondary" />
-					</div>
+						</div>
 				<?php 
 				//Security for CSRF attacks
 				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 				?>
+				<?php knews_pagination($paged, ceil($filtered_users/ $results_per_page), $filtered_users); ?>
+					</div>
 				</form>
 				<?php
-					//Pagination
-					$maxPage=ceil(count($users) / $results_per_page);
-					
-					if ($maxPage > 1) {
-			?>		
-					<div class="tablenav bottom">
-
-						<div class="tablenav-pages">
-							<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>
-							<?php if ($paged > 1) { ?>
-							<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
-							<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
-							<?php } else { ?>
-							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
-							<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
-							<?php } ?>
-							<span class="paging-input"><?php echo $paged; ?> de <span class="total-pages"><?php echo $maxPage; ?></span></span>
-							<?php if ($maxPage > $paged) { ?>
-							<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
-							<?php } else { ?>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
-							<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
-							<?php } ?>
-						</div>
-					<br class="clear">
-					</div>
-		<?php
-					}
 				} else {
 					echo '<p>&nbsp;</p>';
-					if ($filter_list != 0 || $search_user != '' || $filter_state != 0) {
-						
+					if ($total_users != 0) {
 						echo '<p>' . __('No users match the search criteria','knews') . '</p>';
-
+						echo '<p><input type="button" class="button" value="Reset criteria" onclick="location.href=\'admin.php?page=knews_users\'"></p>';
 					} else {
 						echo '<p>' . __('There are not yet users','knews') . '</p>';
 					}
@@ -466,3 +560,62 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			}
 		?>
 	</div>
+<?php
+
+function knews_th_orderable ($label, $orderby, $order) {
+	global $Knews_plugin;
+	
+	if ($Knews_plugin->get_safe('orderby') == $orderby) {
+		$order = (($Knews_plugin->get_safe('order')=='asc') ? 'desc' : 'asc');
+		$sortable = 'sorted';
+	} else {
+		$sortable = 'sortable';
+	}
+	$sorted = (($order=='asc') ? 'desc' : 'asc');
+	
+	$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	
+	$current_url = remove_query_arg( array( 'orderby', 'order' ), $current_url );
+	$current_url = add_query_arg( 'orderby', $orderby, $current_url );
+	$current_url = add_query_arg( 'order', $order, $current_url );
+	
+	echo '<th class="manage-column ' . $sortable . ' ' . $sorted . '"><a href="' . esc_url( $current_url ) . '"><span>' . $label . '</span><span class="sorting-indicator"></span></a></th>';
+}
+
+function knews_pagination($paged, $maxPage, $items) {
+	//$link_params .= '&paged=';
+	//$maxPage=ceil(count($users) / $results_per_page);
+	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	$link_params = remove_query_arg('paged', $link_params) . '&paged=';
+
+		
+?>		
+		<div class="tablenav-pages">
+			<span class="displaying-num"><?php echo $items; ?> items</span>
+<?php
+	if ($maxPage > 1) {
+		 /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
+		<?php if ($paged > 1) { ?>
+		<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+		<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
+		<?php } else { ?>
+		<a href="#" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+		<a href="#" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
+		<?php } ?>
+		<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
+		<?php if ($maxPage > $paged) { ?>
+		<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+		<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
+		<?php } else { ?>
+		<a href="#" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+		<a href="#" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
+<?php 
+		}
+	}
+?>
+		</div>
+	<br class="clear">
+<?php
+}
+
+?>

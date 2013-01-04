@@ -244,13 +244,13 @@ function select_post(n, lang) {
 		
 		//Posts / Pages
 		echo '<div class="pestanyes">';
-		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
-		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
+		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
+		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
 		
 		if ($Knews_plugin->im_pro()) {
 			$post_types = $Knews_plugin->getCustomPostTypes();
 			foreach ($post_types as $pt) {
-				echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '&action=knewsSelPost&type=' . urlencode($pt) . '&lang=' . $lang . '">' . $pt . '</a>';		
+				echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=' . urlencode($pt) . '&lang=' . $lang . '">' . $pt . '</a>';		
 			}
 		}
 		echo '</div>';

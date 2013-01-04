@@ -179,7 +179,7 @@ if ($js != 0) {
 		if ($pend) {
 			if (is_multisite()) switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 	?>
-			location.href="<?php echo $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCronDo&js=' . intval($js)+1; ?>"
+			location.href="<?php echo $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCronDo&js=' . (intval($js)+1); ?>"
 	<?php
 		}
 	?>

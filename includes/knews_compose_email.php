@@ -13,6 +13,9 @@ if ($Knews_plugin) {
 	$theSubject = $results[0]->subject;
 	$theHtml = $results[0]->html_head . '<body>' . $results[0]->html_mailing . '</body></html>';
 
+	$title = cut_code('<title>', '</title>', $theHtml, false);
+	$theHtml = str_replace($title, '<title>' . $theSubject . ' - ' . get_bloginfo('title') . '</title>', $theHtml);
+	
 	//Remove some shit from WYSIWYG editor
 	$theHtml = str_replace( $results[0]->html_container, '', $theHtml);
 	$theHtml = str_replace( '<span class="handler"></span>', '', $theHtml);

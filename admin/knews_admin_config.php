@@ -11,28 +11,17 @@ function knews_save_prefs() {
 	global $knewsOptions, $Knews_plugin;
 	if (isset($_POST['update_KnewsAdminSettings'])) {
 		
-		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
-		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews', $knewsOptions['from_mail_knews']);
-		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews', $knewsOptions['from_name_knews']);
-		$knewsOptions['smtp_knews'] = $Knews_plugin->post_safe('smtp_knews', $knewsOptions['smtp_knews']);
-		$knewsOptions['smtp_host_knews'] = $Knews_plugin->post_safe('smtp_host_knews', $knewsOptions['smtp_host_knews']);
-		$knewsOptions['smtp_port_knews'] = $Knews_plugin->post_safe('smtp_port_knews', $knewsOptions['smtp_port_knews']);
-		$knewsOptions['smtp_user_knews'] = $Knews_plugin->post_safe('smtp_user_knews', $knewsOptions['smtp_user_knews']);
-		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews', $knewsOptions['smtp_pass_knews']);
-		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews', $knewsOptions['smtp_secure_knews']);
-		$knewsOptions['knews_cron'] = $Knews_plugin->post_safe('knews_cron', $knewsOptions['knews_cron']);
-		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
-		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews', $knewsOptions['multilanguage_knews']);
-		$knewsOptions['write_logs'] = $Knews_plugin->post_safe('write_logs_knews', $knewsOptions['write_logs'], 'no');
-		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', $knewsOptions['def_autom_post'], '0');
-		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', $knewsOptions['edited_autom_post'], '0');
-		$knewsOptions['check_bot'] = $Knews_plugin->post_safe('check_bot_knews', $knewsOptions['check_bot'], '0');
-		$knewsOptions['apply_filters_on'] = $Knews_plugin->post_safe('apply_filters_on_knews', $knewsOptions['apply_filters_on']);
-
+		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews');
+		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews');
+		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews');
+		$knewsOptions['write_logs'] = $Knews_plugin->post_safe('write_logs_knews', 'no');
+		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', '0');
+		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', '0');
+		$knewsOptions['check_bot'] = $Knews_plugin->post_safe('check_bot_knews', '0');
+		$knewsOptions['apply_filters_on'] = $Knews_plugin->post_safe('apply_filters_on_knews', '0');
 		$knewsOptions['config_knews'] = 'yes';
-
+		
 		if ($Knews_plugin->post_safe('reset_alerts_knews')=='1') {
-
 			$knewsOptions['no_warn_cron_knews'] = 'no';
 			$knewsOptions['no_warn_ml_knews'] = 'no';
 			$knewsOptions['config_knews'] = 'no';
@@ -40,6 +29,20 @@ function knews_save_prefs() {
 			$knewsOptions['update_pro'] = 'no';
 			$knewsOptions['videotutorial'] = 'no';
 		}
+
+	} elseif (isset($_POST['update_KnewsAdminSettingsAdv'])) {
+		
+		$knewsOptions['knews_cron'] = $Knews_plugin->post_safe('knews_cron');
+		$knewsOptions['smtp_knews'] = $Knews_plugin->post_safe('smtp_knews');
+		$knewsOptions['smtp_host_knews'] = $Knews_plugin->post_safe('smtp_host_knews');
+		$knewsOptions['smtp_port_knews'] = $Knews_plugin->post_safe('smtp_port_knews');
+		$knewsOptions['smtp_user_knews'] = $Knews_plugin->post_safe('smtp_user_knews');
+		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews');
+		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews');
+
+	}
+
+	if (isset($_POST['update_KnewsAdminSettings']) || isset($_POST['update_KnewsAdminSettingsAdv']) || isset($_POST['update_KnewsAdminSettingsPro'])) {
 
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	
@@ -56,6 +59,11 @@ function knews_save_prefs() {
 		}
 
 	}
+}
+
+if ($Knews_plugin->get_safe('tab')=='pro' && $Knews_plugin->im_pro()) {
+	require(KNEWS_DIR . '/includes/knews_roles.php');
+	if (isset($_POST['update_KnewsAdminRoles'])) knews_admin_save_caps();
 }
 
 if ($Knews_plugin->get_safe('tab')=='custom') {
@@ -202,7 +210,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					}
 					?>
 					<p><?php _e('You must add this line in your webserver CRONTAB:','knews'); ?></p>
-					<p><strong>*/10 * * * * wget -q -O /dev/null <?php echo $cron_main_url; ?></strong></p>
+					<p><strong>*/10 * * * * wget -q -O/dev/null <?php echo $cron_main_url; ?></strong></p>
 					<?php /*<p><?php printf( __('The file location is: %s','knews'),  KNEWS_DIR . '/direct/knews_cron.php'); ?></p>*/ ?>
 				</div>
 			<?php
@@ -258,14 +266,14 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<p><?php _e('Recipient','knews'); ?>: <input type="text" name="email_test" id="email_test" class="regular-text" /></p>
 				<div class="submit">
 					<div class="resultats_test"></div>
-					<input type="button" name="test_smtp" id="test_smtp" value="<?php _e('Test SMTP config','knews');?>" />
+					<input type="button" name="test_smtp" id="test_smtp" class="button" value="<?php _e('Test SMTP config','knews');?>" />
 				</div>
 			</div>
 			<div style="clear:both"></div>
 			<div class="updated"><p><?php printf(__('The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes','knews'), get_option('admin_email')); ?></p></div>
 			<hr />
 			<div class="submit">
-				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />
+				<input type="submit" name="update_KnewsAdminSettingsAdv" id="update_KnewsAdminSettingsAdv" value="<?php _e('Save','knews');?>" class="button-primary" />
 			</div>
 			<?php 
 			//Security for CSRF attacks

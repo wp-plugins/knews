@@ -270,26 +270,33 @@ function enfocar() {
 						<div class="submit">
 							<input type="submit" value="<?php _e('Add newsletter','knews');?>" class="button-primary" />
 						</div>
-						<div id="knewsshop">
-							<?php 
-							$look = wp_remote_get( 'http://www.knewsplugin.com/shop/look.php' );
-							if (!is_wp_error($look)) {
-								if (isset($look['body'])) echo $look['body'];
-							} else {
-							?>
-							<script type="text/javascript">
-								if ('https:' == document.location.protocol) {
-									document.write('<p>Please, go to <a href="http://www.knewsplugin.com/ps" target="_blank">our shop</a> and see our latest premium templates</p>');
+						<?php
+						global $knewsOptions;
+						if ($knewsOptions['hide_shop']=='0') {
+						?>
+							<div id="knewsshop">
+								<?php 
+								$look = wp_remote_get( 'http://www.knewsplugin.com/shop/look.php' );
+								if (!is_wp_error($look)) {
+									if (isset($look['body'])) echo $look['body'];
 								} else {
-									var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
-									knewsscript.src = 'http://www' + '.knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
-									var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
+								?>
+								<script type="text/javascript">
+									if ('https:' == document.location.protocol) {
+										document.write('<p>Please, go to <a href="http://www.knewsplugin.com/shop" target="_blank">our shop</a> and see our latest premium templates</p>');
+									} else {
+										var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
+										knewsscript.src = 'http://www' + '.knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
+										var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
+									}
+								</script>
+								<?php
 								}
-							</script>
-							<?php
-							}
-							?>
-						</div>
+								?>
+							</div>
+						<?php
+						}
+						?>
 						<script type="text/javascript">
 							jQuery(document).ready(function() {
 								jQuery('form.new_newsletter div.template').each(function() {
