@@ -6,9 +6,9 @@ global $wpdb;
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 	//The 1.1.0 added fields & tables
-	
-	if (!knews_update_sql("ALTER TABLE " .KNEWS_NEWSLETTERS . " ADD COLUMN lang varchar(3) NOT NULL DEFAULT ''")) return;
-	if (!knews_update_sql("ALTER TABLE " .KNEWS_NEWSLETTERS . " ADD COLUMN automated varchar(1) NOT NULL DEFAULT 0")) return;
+
+	if (!knews_add_column(KNEWS_NEWSLETTERS, 'lang', "varchar(3) NOT NULL DEFAULT ''")) return;
+	if (!knews_add_column(KNEWS_NEWSLETTERS, 'automated', "varchar(1) NOT NULL DEFAULT 0")) return;
 
 	if (!$this->tableExists(KNEWS_NEWSLETTERS_SUBMITS)) {
 	
@@ -38,7 +38,7 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 		$exists = $wpdb->get_results($sql);
 		if (count($exists)==0) {
 	
-			if (!knews_update_sql("ALTER TABLE " .KNEWS_NEWSLETTERS_SUBMITS . " ADD COLUMN blog_id bigint(20) UNSIGNED NOT NULL DEFAULT " . $this->KNEWS_MAIN_BLOG_ID)) return;
+			if (!knews_add_column(KNEWS_NEWSLETTERS_SUBMITS, 'blog_id', "bigint(20) UNSIGNED NOT NULL DEFAULT " . $this->KNEWS_MAIN_BLOG_ID)) return;
 	
 		}
 	}
@@ -69,7 +69,7 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.2') < 0) {
 	if ($this->tableExists(KNEWS_AUTOMATED)) {
 		
 		if (strcasecmp($wpdb->get_var("show columns from " . KNEWS_AUTOMATED . " like 'last_run'"), 'last_run') != 0) {
-			if (!knews_update_sql("ALTER TABLE " .KNEWS_AUTOMATED . " ADD COLUMN last_run datetime NOT NULL")) return;
+			if (!knews_add_column(KNEWS_AUTOMATED, 'last_run', "datetime NOT NULL")) return;
 		}
 	}
 }
@@ -111,16 +111,17 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.0') < 0) {
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.2.3') < 0) {
 	//The 1.2.3 added fields & tables
-	if (!knews_update_sql("ALTER TABLE " . KNEWS_LISTS . " ADD COLUMN orderlist int(11) NOT NULL DEFAULT 0")) return;
+	if (!knews_add_column(KNEWS_LISTS, 'orderlist', "int(11) NOT NULL DEFAULT 0")) return;
 }
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.2.6') < 0) {
-	if (!knews_update_sql("ALTER TABLE " . KNEWS_NEWSLETTERS . " ADD COLUMN mobile varchar(1) NOT NULL DEFAULT 0")) return;
-	if (!knews_update_sql("ALTER TABLE " . KNEWS_NEWSLETTERS . " ADD COLUMN id_mobile bigint(20) UNSIGNED NOT NULL DEFAULT 0")) return;
-	if (!knews_update_sql("ALTER TABLE " . KNEWS_AUTOMATED . " ADD COLUMN emails_at_once int(11) NOT NULL DEFAULT 25")) return;
+	if (!knews_add_column(KNEWS_NEWSLETTERS, 'mobile', "varchar(1) NOT NULL DEFAULT 0")) return;
+	if (!knews_add_column(KNEWS_NEWSLETTERS, 'id_mobile', "bigint(20) UNSIGNED NOT NULL DEFAULT 0")) return;
+	if (!knews_add_column(KNEWS_AUTOMATED, 'emails_at_once', "int(11) NOT NULL DEFAULT 25")) return;
 	if (!knews_update_sql("ALTER TABLE " . KNEWS_USERS . " CHANGE lang lang varchar(12) NOT NULL;")) return;
 	if (!knews_update_sql("ALTER TABLE " . KNEWS_NEWSLETTERS . " CHANGE lang lang varchar(12) NOT NULL;")) return;
 	if (!knews_update_sql("ALTER TABLE " . KNEWS_AUTOMATED . " CHANGE lang lang varchar(12) NOT NULL;")) return;
+
 
 	$sql =	"CREATE TABLE " .KNEWS_AUTOMATED_SELECTION . " (
 			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -153,6 +154,23 @@ function knews_update_sql($sql) {
 	}
 	return true;
 }
+
+function knews_add_column($table, $field, $typefield) {
+	global $wpdb;
+	
+	if (strcasecmp($wpdb->get_var("show columns from $table like '$field'"), $field) == 0) return true;
+
+	$sql = "ALTER TABLE " . $table . " ADD COLUMN " . $field . " " . $typefield;
+	
+	if (!$wpdb->query($sql)) {
+		echo '<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
+		_e('Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE).','knews');
+		echo '</div>';
+		return false;
+	}
+	return true;
+}
+
 
 function knews_update_hooks() {
 	//Reset hooks (bug in 1.2.0 - 1.2.3 versions)

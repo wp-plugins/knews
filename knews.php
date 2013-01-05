@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.7
+Version: 1.2.8
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -818,11 +818,15 @@ if (!class_exists("KnewsPlugin")) {
 
 			$response = '<script type="text/javascript">
 				jQuery(document).ready(function() {
-					jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').submit( function() {
+					jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').live(\'submit\', function() {
 						if (jQuery(this).attr(\'submitted\') !== "true") {
+							save_knews_form = jQuery(\'#knewsform_' . $this->knews_form_n . '\').html();
 							jQuery(this).attr(\'submitted\', "true");
 							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
 								jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(data);
+								jQuery(\'#knewsform_' . $this->knews_form_n . ' a.knews_back\').click( function () {
+									jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(save_knews_form);								
+								});
 							});
 						}
 						return false;
@@ -1218,7 +1222,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.7');
+		define('KNEWS_VERSION', '1.2.8');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
