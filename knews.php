@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.2.8
+Version: 1.2.9
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -66,11 +66,12 @@ if (!class_exists("KnewsPlugin")) {
 				'def_autom_post' => '0',
 				'apply_filters_on' => '1',
 				'edited_autom_post' => '0',
-				'registration_email' => '',
-				'registration_serial' => '',
 				'hide_shop' => '0',
 				'hide_templates' => '0',
 				'bounce_on' => '0',
+				'is_sendmail' => '0',
+				'registration_email' => '',
+				'registration_serial' => '',
 				'check_bot' => '1'
 				);
 
@@ -81,8 +82,6 @@ if (!class_exists("KnewsPlugin")) {
 			} else {
 				update_option($this->adminOptionsName, $KnewsAdminOptions);
 			}
-
-			define('KNEWS_MULTILANGUAGE', $this->check_multilanguage_plugin($KnewsAdminOptions['multilanguage_knews']));
 
 			return $KnewsAdminOptions;
 		}
@@ -188,6 +187,10 @@ if (!class_exists("KnewsPlugin")) {
 			$this->knews_load_plugin_textdomain();
 
 			$knewsOptions = $this->getAdminOptions();
+
+			global $KnewsAdminOptions;
+			define('KNEWS_MULTILANGUAGE', $this->check_multilanguage_plugin($KnewsAdminOptions['multilanguage_knews']));
+
 			$this->creaSiNoExisteixDB();
 			
 			$this->knewsLangs = $this->getLangs();
@@ -475,7 +478,7 @@ if (!class_exists("KnewsPlugin")) {
 			echo '</p></div>';
 		}
 		
-		function add_user($email, $id_list_news, $lang='en', $lang_locale='en_US', $custom_fields=array()){
+		function add_user($email, $id_list_news, $lang='en', $lang_locale='en_US', $custom_fields=array(), $bypass_confirmation=false){
 			
 			if (! $this->initialized) $this->init();
 			
@@ -489,7 +492,7 @@ if (!class_exists("KnewsPlugin")) {
 			$submit_mail=true;
 
 			if (count($user_found)==0) {
-				$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . $email . "','" . $lang . "', '1', '" . $date . "','" . $confkey . "');";
+				$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . $email . "','" . $lang . "', " . ($bypass_confirmation ? '2' : '1') . ", '" . $date . "','" . $confkey . "');";
 				$results = $wpdb->query( $query );
 				$user_id=$wpdb->insert_id; $user_id2=mysql_insert_id(); if ($user_id==0) $user_id=$user_id2;
 
@@ -526,6 +529,8 @@ if (!class_exists("KnewsPlugin")) {
 				$results = $wpdb->query( $query );
 								
 				if ($submit_mail) {
+					
+					if ($bypass_confirmation) return 1;
 										
 					if ($this->submit_confirmation ($email, $confkey, $lang_locale)) {
 						return 1; //Confirmation sent
@@ -825,7 +830,8 @@ if (!class_exists("KnewsPlugin")) {
 							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
 								jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(data);
 								jQuery(\'#knewsform_' . $this->knews_form_n . ' a.knews_back\').click( function () {
-									jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(save_knews_form);								
+									jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(save_knews_form);
+									return false;								
 								});
 							});
 						}
@@ -922,7 +928,7 @@ if (!class_exists("KnewsPlugin")) {
 			if ($knewsOptions['smtp_knews']=='0' && !$test_smtp) {
 				
 				$headers='';
-				if ($knewsOptions['bounce_on'] == '1') $headers .= 'Return-Path: <' . $knewsOptions['bounce_user'] . '>' . "\r\n";
+
 				$headers .= 'From: ' . $knewsOptions['from_name_knews'] . ' <' . $knewsOptions['from_mail_knews'] . '>' . "\r\n";
 				if ($theHtml != '') add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
 
@@ -932,16 +938,19 @@ if (!class_exists("KnewsPlugin")) {
 				//include_once (KNEWS_DIR . '/includes/class-smtp.php');
 				if ( !class_exists("PHPMailer") ) require_once ABSPATH . WPINC . '/class-phpmailer.php';
 				if ( !class_exists("SMTP") ) require_once ABSPATH . WPINC . '/class-smtp.php';
-
-				$mail=new PHPMailer();
-				$mail->IsSMTP();
-				$mail->CharSet='UTF-8';
-	
-				$mail->Subject=$theSubject;
 				
 				if (!$test_smtp) {
 
-					if ($knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_user'];
+					$mail=new PHPMailer();
+					if ($knewsOptions['is_sendmail']=='1') {
+						$mail->IsSendmail();
+					} else {
+						$mail->IsSMTP();
+					}
+					$mail->CharSet='UTF-8';
+					$mail->Subject=$theSubject;
+
+					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_user'];
 					
 					$mail->From = $knewsOptions['from_mail_knews'];
 					$mail->FromName = $knewsOptions['from_name_knews'];
@@ -959,6 +968,15 @@ if (!class_exists("KnewsPlugin")) {
 					}
 
 				} else {
+
+					$mail=new PHPMailer();
+					if ($test_array['is_sendmail']=='1') {
+						$mail->IsSendmail();
+					} else {
+						$mail->IsSMTP();
+					}
+					$mail->CharSet='UTF-8';
+					$mail->Subject=$theSubject;
 
 					$mail->From = $knewsOptions['from_mail_knews'];
 					$mail->FromName = $knewsOptions['from_name_knews'];
@@ -1068,6 +1086,7 @@ if (!class_exists("KnewsPlugin")) {
 						
 					$mail->ClearAddresses();
 					$mail->ClearAttachments();
+					$mail->ClearCustomHeaders();
 
 				}
 
@@ -1222,7 +1241,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.2.8');
+		define('KNEWS_VERSION', '1.2.9');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1236,27 +1255,18 @@ if (!function_exists("Knews_plugin_ap")) {
 			$menu_order=103.2;
 			if (defined('KNEWS_MENU_POS')) $menu_order=KNEWS_MENU_POS;
 
-			if ($Knews_plugin->im_pro()) {
-				$print_menu=false;
-				$caps = $Knews_plugin->get_caps();
-				foreach ($caps as $c) {
-					if (current_user_can($c)) {
-						$print_menu=true;
-						break;
-					}
-				}
-				if (!$print_menu) return;
-			}
-			add_menu_page( 'K-news', 'K-news', 'edit_posts', 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), plugins_url() . '/knews/images/icon16.png', $menu_order);
-			add_submenu_page( 'knews_news', __('Newsletters','knews'), __('Newsletters','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), '');
-			add_submenu_page( 'knews_news', __('Mailing lists','knews'), __('Mailing lists','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_users' : 'edit_posts'), 'knews_lists', array(&$Knews_plugin, 'KnewsAdminLists'), '');
-			$hook_asm = add_submenu_page( 'knews_news', __('Subscribers','knews'), __('Subscribers','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_users' : 'edit_posts'), 'knews_users', array(&$Knews_plugin, 'KnewsAdminUsers'), '');
-			add_submenu_page( 'knews_news', __('Submits','knews'), __('Submits','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_submit', array(&$Knews_plugin, 'KnewsAdminSubmit'), '');
-			add_submenu_page( 'knews_news', __('Import CSV','knews'), __('Import CSV','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_users' : 'edit_posts'), 'knews_import', array(&$Knews_plugin, 'KnewsAdminImport'), '');
-			add_submenu_page( 'knews_news', __('Export CSV','knews'), __('Export CSV','knews'), ($Knews_plugin->im_pro() ? 'knews_manage_users' : 'edit_posts'), 'knews_export', array(&$Knews_plugin, 'KnewsAdminExport'), '');
-			add_submenu_page( 'knews_news', __('Auto-create','knews'), __('Auto-create','knews'), ($Knews_plugin->im_pro() ? 'knews_configure' : 'edit_posts'), 'knews_auto', array(&$Knews_plugin, 'KnewsAdminAuto'), '');
-			add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), ($Knews_plugin->im_pro() ? 'knews_see_stats' : 'edit_posts'), 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
-			add_submenu_page( 'knews_news', __('Configuration','knews'), __('Configuration','knews'), ($Knews_plugin->im_pro() ? 'knews_configure' : 'edit_posts'), 'knews_config', array(&$Knews_plugin, 'KnewsAdminConfig'), '');
+			$pro_menus=false;
+
+			add_menu_page( 'K-news', $Knews_plugin->im_pro() ? 'K-news Pro' : 'K-news', 'edit_posts', 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), plugins_url() . '/knews/images/icon16.png', $menu_order);
+			add_submenu_page( 'knews_news', __('Newsletters','knews'), __('Newsletters','knews'), ($pro_menus ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), '');
+			add_submenu_page( 'knews_news', __('Mailing lists','knews'), __('Mailing lists','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_lists', array(&$Knews_plugin, 'KnewsAdminLists'), '');
+			$hook_asm = add_submenu_page( 'knews_news', __('Subscribers','knews'), __('Subscribers','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_users', array(&$Knews_plugin, 'KnewsAdminUsers'), '');
+			add_submenu_page( 'knews_news', __('Submits','knews'), __('Submits','knews'), ($pro_menus ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_submit', array(&$Knews_plugin, 'KnewsAdminSubmit'), '');
+			add_submenu_page( 'knews_news', __('Import CSV','knews'), __('Import CSV','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_import', array(&$Knews_plugin, 'KnewsAdminImport'), '');
+			add_submenu_page( 'knews_news', __('Export CSV','knews'), __('Export CSV','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_export', array(&$Knews_plugin, 'KnewsAdminExport'), '');
+			add_submenu_page( 'knews_news', __('Auto-create','knews'), __('Auto-create','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_auto', array(&$Knews_plugin, 'KnewsAdminAuto'), '');
+			add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), ($pro_menus ? 'knews_see_stats' : 'edit_posts'), 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
+			add_submenu_page( 'knews_news', __('Configuration','knews'), __('Configuration','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_config', array(&$Knews_plugin, 'KnewsAdminConfig'), '');
 
 	        add_action('wp_dashboard_setup', array(&$Knews_plugin, 'dashboard_widget_setup'));
 			if ($Knews_plugin->im_pro()) add_action( "load-$hook_asm", 'knews_asm_add_option' );
@@ -1265,10 +1275,29 @@ if (!function_exists("Knews_plugin_ap")) {
 		//WP Cron :: http://blog.slaven.net.au/2007/02/01/timing-is-everything-scheduling-in-wordpress/
 		function knews_wpcron_function() {
 			require(dirname(__FILE__) . '/direct/knews_cron_do.php');
+			if( is_multisite() ) {
+				$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+				$url = 'http' . $s . '://' . $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+				if(!headers_sent()) {
+					//If headers not sent yet... then do php redirect
+					header('Location: '.$url, true, 302);
+					exit;
+				} else {
+					//If headers are sent... do javascript redirect... if javascript disabled, do html redirect.
+					echo '<script type="text/javascript">';
+					echo 'window.location.href="'.$url.'";';
+					echo '</script>';
+					echo '<noscript>';
+					echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+					echo '</noscript>';
+					exit;
+				}
+			}
 		}
 		function knews_wpcron_automate() {
+			global $Knews_plugin;
 			require(dirname(__FILE__) . '/includes/automated_jobs.php');
-			die();
+			if ($Knews_plugin->im_pro()) require(dirname(__FILE__) . '/includes/knews_bounce.php');
 		}
 		function knews_more_reccurences($schedules) {
 			$schedules['knewstime'] = array('interval' => 600, 'display' => 'Knews 10 minutes wpcron submit');
@@ -1285,6 +1314,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		register_deactivation_hook(__FILE__, 'knews_deactivate');
 
 		function knews_activate() {
+			
 			//if (!wp_next_scheduled('knews_wpcron_automate_hook')) wp_schedule_event( time(), 'twicedaily', 'knews_wpcron_automate_hook');
 			if (!wp_next_scheduled('knews_wpcron_automate_hook')) wp_schedule_event( time(), 'hourly', 'knews_wpcron_automate_hook');
 

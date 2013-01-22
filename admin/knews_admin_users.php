@@ -516,7 +516,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		<h2><?php _e('Create a subscriber manually','knews'); ?></h2>
 		<form action="admin.php?page=knews_users" method="post">
 		<input type="hidden" name="action" id="action" value="add_user" />
-		<p>E-mail: <input type="text" name="email" id="email" /></p>
+		<p>E-mail: <input type="text" name="email" id="email" class="regular-text" /></p>
 		<?php
 			if (count($languages) > 1) {
 				

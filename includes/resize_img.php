@@ -1,6 +1,7 @@
 <?php 
 
 function knews_resize_img_fn($url_img, $width, $height) {
+
 	$wp_dirs = wp_upload_dir();
 		
 	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
@@ -68,14 +69,36 @@ function knews_resize_img_fn($url_img, $width, $height) {
 		} else {
 	
 			// resize the image
-			$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, true, $width.'x'.$height);
 			
-			if ( is_wp_error( $thumb ) ) {
-				$jsondata['result'] = 'error';
-				$jsondata['url'] = '';
-				$jsondata['message'] = __('Error','knews') . ': ' . $thumb->get_error_message();;
-				return $jsondata;
+			global $wp_version;
+			if (version_compare('3.5', $wp_version, '<=')) {
+
+				$image_editor = wp_get_image_editor( $wp_dirs['basedir'] . $url );
+				if ( ! is_wp_error( $image_editor ) ) {
+
+					$file_extension = pathinfo($wp_dirs['basedir'] . $url, PATHINFO_EXTENSION);
+					$thumb = $wp_dirs['basedir'] . substr($url, 0, (strlen($file_extension) + 1) * -1) . '-' . $width.'x'.$height . '.' . $file_extension;
+
+					$image_editor->resize( $width, $height, true );
+					$image_editor->save( $thumb );
+
+				} else {
+					$jsondata['result'] = 'error';
+					$jsondata['url'] = '';
+					$jsondata['message'] = __('Error','knews') . ': ' . $image_editor->get_error_message();;
+					return $jsondata;
+				}
+
+			} else {
+				$thumb = image_resize($wp_dirs['basedir'] . $url, $width, $height, true, $width.'x'.$height);
+				if ( is_wp_error( $thumb ) ) {
+					$jsondata['result'] = 'error';
+					$jsondata['url'] = '';
+					$jsondata['message'] = __('Error','knews') . ': ' . $thumb->get_error_message();;
+					return $jsondata;
+				}
 			}
+			
 
 			if (is_string($thumb)) {
 

@@ -180,10 +180,5 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED_SELECTION . " (
 	   
 dbDelta($sql);
 
-if ($this->im_pro()) {
-	require(KNEWS_DIR . '/includes/knews_roles.php');
-	knews_start_caps();
-}
-
 update_option('knews_version', KNEWS_VERSION);
 ?>

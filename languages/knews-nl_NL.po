@@ -68,7 +68,7 @@ msgstr "Voeg veld toe"
 #. Text in echo
 #: admin/knews_admin_news_list.php:214
 msgid "Add newsletter"
-msgstr "Creëer nieuwsbrief"
+msgstr "Creëer een nieuwsbrief"
 
 #. Text in function
 #: admin/knews_admin_import.php:358
@@ -111,7 +111,7 @@ msgstr "Stuur automatisch bevestigings e-mails:"
 #. Text in echo
 #: admin/knews_admin_config.php:219
 msgid "Before enabling the sending SMTP, enter the values and your e-mail and then click on TEST button"
-msgstr "Voer voor het enabelen van de SMTP server de parameters in en je e-mail adres en klik dan op de TEST knop"
+msgstr "Voer voor het aanzetten van de SMTP optie de parameters in en je e-mail adres, en klik daarna op de TEST knop"
 
 #. Text in function
 #: admin/knews_admin_import.php:360
@@ -216,7 +216,7 @@ msgstr "Maak een nieuwe mailing lijst"
 #. Text in echo
 #: admin/knews_admin_news_list.php:175
 msgid "Create new newsletter"
-msgstr "Maak een nieuwsbrief"
+msgstr "Voeg een nieuwsbrief toe"
 
 #. Text in echo
 #: admin/knews_admin_users.php:457
@@ -275,12 +275,7 @@ msgstr "Bewerk"
 #. Text in echo
 #: admin/knews_admin_news_edit.php:28
 msgid "Editing newsletter"
-msgstr "Bezig nieuwsbrief te bewerken"
-
-#. Text in echo
-#: admin/knews_admin_news_send.php:183
-msgid "E-mail for close supervision"
-msgstr "E-mail met strikt toezicht"
+msgstr "Bewerken nieuwsbrief"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -445,11 +440,6 @@ msgid "If you enter a value manually, this will be the same for all users import
 msgstr "Als je handmatig een waarde invoert zal deze hetzelfde zijn voor alle geïmprteerde gebruikers"
 
 #. Text in echo
-#: admin/knews_admin_config.php:154
-msgid "Ignore WPML and operate Knews as monolingual"
-msgstr "Negeer WPML en gebruik Knews in één taal"
-
-#. Text in echo
 #: admin/knews_admin_import.php:221
 msgid "Import"
 msgstr "Importeer"
@@ -553,7 +543,7 @@ msgstr "Creëer een voorbeeld"
 #. Text in echo
 #: admin/knews_admin_users.php:171
 msgid "Marking this box, this field will be visible in the users table. We recommend you don't mark more than 2 or 3 fields to avoid a confusing table"
-msgstr "Door deze box te markeren zal het veld zichtbaar worden in de gebruikers tabel. We adviseren niet meer dan 2 of 3 velden te markeren om een onduidelijke tabel te vorokomen"
+msgstr "Door deze box te markeren zal het veld zichtbaar worden in de gebruikers tabel. We adviseren niet meer dan 2 of 3 velden te markeren om een onduidelijke tabel te voorkomen"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:154
@@ -736,12 +726,6 @@ msgstr "SMTP gebruiker"
 msgid "Save"
 msgstr "Opslaan"
 
-#. Text in echo
-#: admin/knews_admin_news_list.php:164
-#: admin/knews_admin_lists.php:148
-msgid "Save changes"
-msgstr "Sla wijzigingen op"
-
 #. Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
@@ -852,7 +836,7 @@ msgstr "Status"
 #. Text in echo
 #: admin/knews_admin_submits.php:69
 msgid "Submit end"
-msgstr "Einde verzenden"
+msgstr "Einde verzending"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:158
@@ -877,7 +861,7 @@ msgstr "Ga door met bewerken"
 #. Text in echo
 #: admin/knews_admin_submits.php:68
 msgid "Submit start"
-msgstr "Start verzenden"
+msgstr "Start verzending"
 
 #. Text in echo
 #: admin/knews_admin_submits.php:2
@@ -907,11 +891,6 @@ msgstr "Abonnees"
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "Verzend methode"
-
-#. Text in function
-#: knews.php:520
-msgid "Subscribe me"
-msgstr "Abonneer mij"
 
 #. Text in function
 #: knews.php:520
@@ -997,7 +976,7 @@ msgstr "De nieuwsbrief is succesvol aangemaakt"
 #. Text in echo
 #: admin/knews_admin_users.php:176
 msgid "A token is used to insert a field in the newsletter. Should be located between %, with no spaces, for example: %name%"
-msgstr "Een token is gebruikt om een veld in de nieuwsbrief in te voegen. Het moet staan tussen % tekens, zonder spaties. Bijvoorbeeld: %naam%"
+msgstr "Een token wordt gebruikt om een extra veld in de nieuwsbrief in te voegen. Het moet staan tussen % tekens, zonder spaties. Bijvoorbeeld: %aanhef%"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1164,11 +1143,6 @@ msgstr "Gebruik van speciale characters (accenten) juist gecodeerd"
 msgid "Value"
 msgstr "Waarde"
 
-#. Text in echo
-#: admin/knews_admin_news_send.php:154
-msgid "WARNING"
-msgstr "WAARSCHUWING"
-
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
@@ -1210,16 +1184,8 @@ msgstr "Je moet een bestand uploaden."
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr "Je zou 4 kopregels moeten zien aan het begin van de CSV:"
 
-#. Text in function
-#: knews.php:1
-msgid "Widget title"
-msgstr "Widget titel"
-
 msgid "widget_title"
 msgstr "Abonneer mij"
-
-msgid "Widget e-mail label form"
-msgstr "Widget e-mail label formulier"
 
 msgid "widget_label_email"
 msgstr "Email:"
@@ -1344,11 +1310,6 @@ msgstr "verwijderd"
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "dag-maand-jaar"
-
-#. Text in echo
-#: admin/knews_admin_config.php:149
-msgid "here"
-msgstr "hier"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1536,7 +1497,7 @@ msgid "Batch actions"
 msgstr "Bulk acties"
 
 msgid "Apply"
-msgstr "Pas toe"
+msgstr "Uitvoeren"
 
 msgid "Rename"
 msgstr "Hernoem"
@@ -1607,9 +1568,6 @@ msgstr "Fout: Deze nieuwsbrief bestaat niet"
 msgid "Do you really want to delete this module?"
 msgstr "Wil je deze module echt verwijderen?"
 
-msgid "Show/hide handlers"
-msgstr "Toon/verberg handlers"
-
 msgid "Move module"
 msgstr "Verplaats module"
 
@@ -1624,9 +1582,6 @@ msgstr "Berichten"
 
 msgid "Pages"
 msgstr "Paginas"
-
-msgid "Alerts"
-msgstr "Waarschuwingen"
 
 msgid "Reset all alerts"
 msgstr "Reset alle waarschuwingen"
@@ -1822,9 +1777,6 @@ msgstr "Uitleg CRON configureren"
 
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "Je moet deze regel in de CRONTAB van je webserver toevoegen:"
-
-msgid "The file location is: %s"
-msgstr "De bestandslocatie is: %s"
 
 msgid "Configure SMTP tutorial"
 msgstr "Uitleg SMTP configureren"
@@ -2048,9 +2000,6 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 msgid "http://www.knewsplugin.com/configure-webserver-cron/"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 
-msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-
 msgid "Multisite detected. Only one instance of %s must be called for all websites."
 msgstr "Multisite detected. Only one instance of %s must be called for all websites."
 
@@ -2151,7 +2100,7 @@ msgid "Automated submits"
 msgstr "Automatische verzendingen"
 
 msgid "At the moment there is no automated task, you can create new ones"
-msgstr "Er is op dit moment geen geautomatiseerde taak, je kunt nieuwe aanmaken"
+msgstr "Er is op dit moment nog geen geautomatiseerde taak."
 
 msgid "New Auto-creation Process"
 msgstr "Nieuw automatisch nieuwsbrief proces"
@@ -2166,7 +2115,7 @@ msgid "Use as template:"
 msgstr "Gebruik als template:"
 
 msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
-msgstr "Je moet eerst een nieuwsbrief aanmaken met invoegbare informatie (behoud %the_content%, %the_title% etc.)"
+msgstr "Je moet eerst een nieuwsbrief aanmaken met invoegbare informatie (met %the_content%, %the_title% etc.)"
 
 msgid "Create a newsletter every %s posts"
 msgstr "Maak elke %s berichten een nieuwsbrief"
@@ -2190,7 +2139,7 @@ msgid "Auto-created Newsletters"
 msgstr "Automatische Nieuwsbrieven"
 
 msgid "There is no auto-created newsletter."
-msgstr "Er is (nog) geen automatisch aangemaakte nieuwsbrief."
+msgstr "Er is (nog) geen automatische nieuwsbrief aangemaakt."
 
 msgid "http://www.knewsplugin.com/automated-newsletter-creation/"
 msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
@@ -2233,4 +2182,286 @@ msgstr "Verzend methode:"
 
 msgid "Messages reset to defaults."
 msgstr "Berichten naar standaard herstelt."
+
+msgid "Widget subscription form title"
+msgstr "Inschrijvingsformulier Widget titel"
+
+msgid "Widget latest newsletters title"
+msgstr "Laatste nieuwsbrief Widget titel"
+
+msgid "Mobile version text link"
+msgstr "Tekst link voor Mobiel"
+
+msgid "Desktop version text link"
+msgstr "Tekst link Desktop versie"
+
+msgid "You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here"
+msgstr "Je bent gedowngrade naar de gratis versie van Knews, je kunt daardoor data verliezen, update snel! De Pro verise %s is hier te krijgen "
+
+msgid "Max number of newsletters: <br />(-1 for infinite):"
+msgstr "Max. aantal nieuwsbrieven: <br />(-1 is onbeperkt):"
+
+msgid "Hide not sent newsletters?"
+msgstr "Niet verzonden nieuwsbrieven verbergen?"
+
+msgid "Hide automated newsletters?"
+msgstr "Automatische nieuwsbrieven verbergen?"
+
+msgid "Customize widget title"
+msgstr "Pas de widget titel aan"
+
+msgid "Knews Pro options"
+msgstr "Knews Pro opties"
+
+msgid "Your e-mail (used for the Knews Shop account):"
+msgstr "Je e-mail (wordt het Knews Shop account):"
+
+msgid "Registration"
+msgstr "Registratie"
+
+msgid "Serial Key:"
+msgstr "Serienummer:"
+
+msgid "(get it in our shop, login and click on \"My Downloads\" page)"
+msgstr "(Verkrijgbaar in onze shop. Log in en klik op de \"My Downloads\" pagina)"
+
+msgid "Save Serial"
+msgstr "Serienummer opslaan"
+
+msgid "Bounce configuration"
+msgstr "Bounce configuratie"
+
+msgid "Bounce detection deactivated"
+msgstr "Bounce detectie niet actief  (Bouncen is het terugontvangen van niet afleverbare email. Meestal vanwege foute email adressen)"
+
+msgid "Bounce detection activated"
+msgstr "Bounce detectie actief"
+
+msgid "POP3 Mail host:"
+msgstr "POP3 Mail server:"
+
+msgid "POP3 Port:"
+msgstr "POP3 Poort:"
+
+msgid "User account:"
+msgstr "Gebruikers account:"
+
+msgid "User password"
+msgstr "Gebruikers wachtwoord:"
+
+msgid "Secure connection:"
+msgstr "Veilige verbinding:"
+
+msgid "Before enabling the Bounce detection, enter the values and click on TEST button"
+msgstr "Vordat je de Bounce detectie aanzet, vul de waardes in en klik op de TEST knop"
+
+msgid "Test POP3 config"
+msgstr "Test POP3 configuratie"
+
+msgid "Cant connect to POP3 mail server, please, check the configuration values"
+msgstr "Kan niet verbinden met de POP3 mail server. Controleer a.u.b. de instellingen"
+
+msgid "Bounce tutorial"
+msgstr "Bounce Uitleg"
+
+msgid "Knews Pro includes a bounce email detection system, it needs an dedicated account like bounce@yourdomain.com. First, create the account, next, fill the configuation fields, then test the connection and if all works fine, activate & save."
+msgstr "Knews Pro bevat een bounce email detectie systeem, er is daarvoor een speciaal mailadres nodig als bijvoorbeeld bounce@jouwdomein.nl. Maak eerst zo'n email account aan, pas dan de configuratie aan, test de verbinding en als alles werkt kies dan Activeer & Opslaan."
+
+msgid "Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)"
+msgstr "Gebruik de wijzigingsdatum van het bericht, i.p.v. de aanmaakdatum, voor de automatische nieuwsbrieven (Oudere berichten zullen dan worden bijgevoegd als je ze bewerkt en deze optie is geactiveerd)"
+
+msgid "Compatibility options"
+msgstr "Compatibiliteit opties"
+
+msgid "Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)"
+msgstr "Pas the_content filter toe bij het invoegen van berichten in nieuwsbrieven (Deactiveer bij compatibiliteit problemen met sommige plugins zoals NextGen Gallery) "
+
+msgid "<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages."
+msgstr "<strong>Let op</strong>: Als je <strong>qTranslate</strong> gebruikt kun je deze optie niet uitschakelen, omdat het dit filter gebruikt om de bericht inhoud in de verschillende talen op te delen."
+
+msgid "Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
+msgstr "Voorkom bot registraties. Bij sommige Cache Plugins moet deze optie uitgeschakeld worden (Aanmelden gaat altijd fout met een \"fout e-mail adres\" melding). "
+
+msgid "Premium options"
+msgstr "Premium opties"
+
+msgid "Hide default templates (only works if at least one template is installed into (/wp-content/uploads/knewstemplates/)"
+msgstr "Verberg standaard templates (werkt alleen als er minstens één template is opgeslagen in /wp-content/uploads/knewstemplates/ )"
+
+msgid "Hide Knews Shop Products offers"
+msgstr "Verberg Knews Shop product aanbiedingen"
+
+msgid "WordPress user syncronization"
+msgstr "WordPress gebruiker synchronisatie"
+
+msgid "Subscribe new WordPress users to:"
+msgstr "Meldt nieuwe WordPress gebruikers aan bij:"
+
+msgid "None"
+msgstr "Geen"
+
+msgid "Newsletter deleted"
+msgstr "Nieuwsbrief verwijderd"
+
+msgid "Newsletter name updated"
+msgstr "Nieuwsbrief naam gewijzigd"
+
+msgid "Newsletter duplicated"
+msgstr "Nieuwsbrief gekopieerd"
+
+msgid "Desktop and mobile versions"
+msgstr "Destop en mobiele versies"
+
+msgid "Desktop version only"
+msgstr "Alleen Desktop versie"
+
+msgid "Unconfirmed"
+msgstr "Onbevestigd"
+
+msgid "Bounce"
+msgstr "Bounce"
+
+msgid "Bounced"
+msgstr "Bounced"
+
+msgid "Mark as bounced email"
+msgstr "Markeer als Bounced email"
+
+msgid "Mark as activated"
+msgstr "Markeer als geactiveerd"
+
+msgid "Mark as blocked"
+msgstr "Markeer als geblokkeerd"
+
+msgid "Mark as bounced"
+msgstr "Markeer als bounced"
+
+msgid "Subscribe to list"
+msgstr "Abonneer op mailinglijst"
+
+msgid "Unsubscribe to list"
+msgstr "Meldt af van mailinglijst"
+
+msgid "Choose one list"
+msgstr "Kies één mailinglijst"
+
+msgid "You dont have any mobile template!"
+msgstr "Je hebt geen mobiele template!"
+
+msgid "There is a videotutorial about Knews WYSIWYG Editor, %s view it in Youtube"
+msgstr "Er bestaat een video uitleg over de Knews WYSIWYG editor, %s bekijk deze in Youtube"
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
+msgstr "Sorry, dit is een Premium functie. %s Klik hier om al de Knews pro functies te bekijken"
+
+msgid "Warning! You arent selected any mailing list, do you want to continue?"
+msgstr "Waarschuwing! Je hebt geen enkele mailing lijst geselecteerd, wil je verder gaan?"
+
+msgid "The field name cant be empty"
+msgstr "Het veld Naam kan niet leeg zijn"
+
+msgid "Select the %s filtered subscribers to perform a massive action"
+msgstr "Selecteer de %s gefilterde abonnees om een bulk actie uit te voeren"
+
+msgid "Select all your subscribers (%s) to perform a massive action"
+msgstr "Selecteer alle abonnees (%s) om een bulk actie uit te voeren"
+
+msgid "Roles and capabilities saved."
+msgstr "Rollen en rechten opgeslagen."
+
+msgid "Roles and capabilities"
+msgstr "Rollen en rechten"
+
+msgid "Role name"
+msgstr "Rol naam"
+
+msgid "Can see Knews Stats"
+msgstr "Kan Knews statistieken bekijken"
+
+msgid "Can manage newsletters"
+msgstr "Kan nieuwsbrieven beheren"
+
+msgid "Can manage users"
+msgstr "Kan gebruikers beheren"
+
+msgid "Can configure Knews"
+msgstr "Kan Knews configureren"
+
+msgid "All subscribers"
+msgstr "Alle abonnees"
+
+msgid "Do WordPress user importation"
+msgstr "Importeer WordPress gebruikers"
+
+msgid "Import <strong>all</strong> the WordPress users and subscribe into the mailing list:"
+msgstr "Importeer <strong>alle</strong> WordPress gebruikers en abonneer deze op de mailinglijst:"
+
+msgid "Assign the language:"
+msgstr "Wijs de taal toe:"
+
+msgid "Import WP users into Knews"
+msgstr "Importeer WP gebruikers in Knews"
+
+msgid "Users imported: %s. Users found before (not re-imported): %s."
+msgstr "Geïmporteerde gebruikers: %s. Al bestaande gebruikers (niet opnieuw geïmporteerd): %s."
+
+msgid "Errors submitting confirmation: %s"
+msgstr "Fouten bij versturen bevestiging: %s"
+
+msgid "Order"
+msgstr "Volgorde"
+
+msgid "New Auto-create Newsletters Process"
+msgstr "Nieuw Automatisch Nieuwsbrief Proces"
+
+msgid "Automated process name:"
+msgstr "Automatisch proces naam:"
+
+msgid "(high performance SMTP)"
+msgstr ""
+
+msgid "All categories"
+msgstr "Alle categorieën"
+
+msgid "Error: Please, fill all the form"
+msgstr "Fout: Vul a.u.b. het hele formulier in"
+
+msgid "Mantain current data and add new mailing lists"
+msgstr "Behoud huidige gegevens en voeg nieuwe mailing lijsten toe"
+
+msgid "of"
+msgstr "van"
+
+msgid "SMTP Secure"
+msgstr "SMTP Secure"
+
+msgid "Step"
+msgstr "Stap"
+
+msgid "Submit automatic"
+msgstr "Automatisch verzenden"
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr "Deze template vereist Knews versie %s Je moet Knews updaten om deze te kunnen gebruiken."
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr "Deze template vereist de Pro versie van Knews. Deze kun je %s hier verkrijgen"
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr "<strong>Knews is nu geregistreerd</strong>. Ga naar de %s Plugins pagina %s en klik bij knews op de 'Check for updates' link om te updaten. Hartelijk dank!"
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr ""
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr ""
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr ""
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr ""
 

@@ -8,7 +8,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -278,11 +278,6 @@ msgid "Editing newsletter"
 msgstr "Muokkaa uutiskirjett&auml;"
 
 #. Text in echo
-#: admin/knews_admin_news_send.php:183
-msgid "E-mail for close supervision"
-msgstr "E-mail tarkasteltavaksi"
-
-#. Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "E-mails sent at once"
 msgstr "Postitettu v&auml;litt&ouml;m&auml;sti"
@@ -445,11 +440,6 @@ msgid "If you enter a value manually, this will be the same for all users import
 msgstr "Jos annat arvon manuaalisesti, t&auml;m&auml; p&auml;tee kaikkiin tuotuihin tilaajiin"
 
 #. Text in echo
-#: admin/knews_admin_config.php:154
-msgid "Ignore WPML and operate Knews as monolingual"
-msgstr "Ohita WPML ja k&auml;yt&auml; Knewsia yksikielisen&auml;"
-
-#. Text in echo
 #: admin/knews_admin_import.php:221
 msgid "Import"
 msgstr "Tuo"
@@ -563,7 +553,7 @@ msgstr "Muokattu"
 #. Text in echo
 #: admin/knews_admin_config.php:145
 msgid "Multilingual"
-msgstr "Monikielinen"
+msgstr "Monikielisyys"
 
 #. Text in echo
 #: admin/knews_admin_users.php:165
@@ -736,12 +726,6 @@ msgstr "SMTP K&auml;ytt&auml;j&auml;"
 msgid "Save"
 msgstr "Tallenna"
 
-#. Text in echo
-#: admin/knews_admin_news_list.php:164
-#: admin/knews_admin_lists.php:148
-msgid "Save changes"
-msgstr "Tallenna muutokset"
-
 #. Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
@@ -877,7 +861,7 @@ msgstr "Jatka muokkaamista"
 #. Text in echo
 #: admin/knews_admin_submits.php:68
 msgid "Submit start"
-msgstr "Postituksen aloitus"
+msgstr "Postitus alkaa"
 
 #. Text in echo
 #: admin/knews_admin_submits.php:2
@@ -907,11 +891,6 @@ msgstr "Tilaukset"
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "L&auml;hetystapa"
-
-#. Text in function
-#: knews.php:520
-msgid "Subscribe me"
-msgstr "Tilaa uutiskirje"
 
 #. Text in function
 #: knews.php:520
@@ -1164,11 +1143,6 @@ msgstr "K&auml;ytet&auml;&auml;n erikoismerkkej&auml; (esim. aksentteja) oikein 
 msgid "Value"
 msgstr "Arvo"
 
-#. Text in echo
-#: admin/knews_admin_news_send.php:154
-msgid "WARNING"
-msgstr "VAROITUS"
-
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
@@ -1210,16 +1184,8 @@ msgstr "Tuo tiedosto."
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr "Sinun pit&auml;isi n&auml;hd&auml; CSV:n otsikko ja nelj&auml; ensimm&auml;ist&auml; rivi&auml;:"
 
-#. Text in function
-#: knews.php:1
-msgid "Widget title"
-msgstr "Vimpaimen otsikko"
-
 msgid "widget_title"
 msgstr "Tilaa uutiskirje"
-
-msgid "Widget e-mail label form"
-msgstr "E-mail"
 
 msgid "widget_label_email"
 msgstr "E-mail:"
@@ -1344,11 +1310,6 @@ msgstr "poistettu"
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "p&auml;iv&auml;-kuukausi-vuosi"
-
-#. Text in echo
-#: admin/knews_admin_config.php:149
-msgid "here"
-msgstr "t&auml;st&auml;"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1607,9 +1568,6 @@ msgstr "Virhe: Uutiskirjett&auml; ei ole olemassa"
 msgid "Do you really want to delete this module?"
 msgstr "Haluatko todella poistaa t&auml;m&auml;n modulin?"
 
-msgid "Show/hide handlers"
-msgstr "N&auml;yt&auml;/piilota "
-
 msgid "Move module"
 msgstr "Siirr&auml; modulia"
 
@@ -1624,9 +1582,6 @@ msgstr "Artikkelit"
 
 msgid "Pages"
 msgstr "Sivut"
-
-msgid "Alerts"
-msgstr "Virheilmoitukset"
 
 msgid "Reset all alerts"
 msgstr "Nollaa kaikki virheilmoitukset"
@@ -1822,9 +1777,6 @@ msgstr "CRON:in asetukset -ohjeet"
 
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "Lisää seuraava rivi palvelimesi crontab -tiedostoon:"
-
-msgid "The file location is: %s"
-msgstr "Oikea tiedosto on: %s"
 
 msgid "Configure SMTP tutorial"
 msgstr "SMTP:n asetukset -ohjeet"
@@ -2048,9 +2000,6 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 msgid "http://www.knewsplugin.com/configure-webserver-cron/"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 
-msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr "Aseta p&auml;&auml;saitin  www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-
 msgid "Multisite detected. Only one instance of %s must be called for all websites."
 msgstr "Multisite havaittu.  Aktivoi vain yksi %s kaikille saiteille Verkon asetuksista."
 
@@ -2165,7 +2114,7 @@ msgstr "Hae artikkelit kielest&auml;:"
 msgid "Use as template:"
 msgstr "K&auml;yt&auml; pohjana:"
 
-msgid "You must create first a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
+msgid "You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)"
 msgstr "SInun t&auml;ytyy ensin luoda uutiskirje jossa insertoitava info (j&auml;t&auml; %the_content%, %the_title% yms.)"
 
 msgid "Create a newsletter every %s posts"
@@ -2198,7 +2147,7 @@ msgstr "http://www.knewsplugin.com/automated-newsletter-creation/"
 msgid "widget_label_name"
 msgstr "Name:"
 
-msgid "widget_label_sourname"
+msgid "widget_label_surname"
 msgstr "Surname:"
 
 msgid "General options"
@@ -2233,4 +2182,298 @@ msgstr "Postitustapa:"
 
 msgid "Messages reset to defaults."
 msgstr "Viestit resetoitu oletuksiin."
+
+msgid "Widget subscription form title"
+msgstr "Tilaa uutiskirje -vimpaimen otsikko"
+
+msgid "Widget latest newsletters title"
+msgstr "Uusimmat uutiskirjeet -vimpaimen otsikko"
+
+msgid "Mobile version text link"
+msgstr "Mobiiliversion linkkiteksti"
+
+msgid "Desktop version text link"
+msgstr "Ty&ouml;p&ouml;yt&auml;version linkkiteksti"
+
+msgid "You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here"
+msgstr "Olet p&auml;ivitt&auml;nyt Knewsin ilmaisversioon, voit menett&auml;&auml; tietoa, p&auml;ivit&auml; pikaisesti! Hanki Pro-versio %s t&auml;&auml;lt&auml;"
+
+msgid "Max number of newsletters: <br />(-1 for infinite):"
+msgstr "Uutiskirjeiden maksimim&auml;&auml;r&auml;: <br />(-1 on rajoittamaton)"
+
+msgid "Hide not sent newsletters?"
+msgstr "Piilota ei-l&auml;hetetyt uutiskirjeet?"
+
+msgid "Hide automated newsletters?"
+msgstr "Piilota automaattiset uutiskirjeet?"
+
+msgid "Customize widget title"
+msgstr "Muokkaa vimpaimen otsikkoa"
+
+msgid "Knews Pro options"
+msgstr "Knews Pro asetukset"
+
+msgid "Your e-mail (used for the Knews Shop account):"
+msgstr "Email-osoitteesi (k&auml;ytet&auml;&auml;n Knews-kaupan k&auml;ytt&auml;j&auml;tiliss&auml;):"
+
+msgid "Registration"
+msgstr "Rekister&ouml;ityminen"
+
+msgid "Serial Key:"
+msgstr "Sarjanumero:"
+
+msgid "(get it in our shop, login and click on \"My Downloads\" page)"
+msgstr "(hanki se kaupastamme, kirjaudu sis&auml;&auml;n ja klikkaa \"My Downloads\" -sivulle)"
+
+msgid "Save Serial"
+msgstr "Tallenna sarjanumero"
+
+msgid "Bounce configuration"
+msgstr "Palautumisenhavaitsemisen asetukset"
+
+msgid "Bounce detection deactivated"
+msgstr "Palautumisenhavaitseminen pois k&auml;yt&ouml;st&auml;"
+
+msgid "Bounce detection activated"
+msgstr "Palautumisenhavaitseminen otettu k&auml;ytt&ouml;&ouml;n"
+
+msgid "POP3 Mail host:"
+msgstr "POP3 palveluntarjoaja:"
+
+msgid "POP3 Port:"
+msgstr "POP3 portti:"
+
+msgid "User account:"
+msgstr "K&auml;ytt&auml;j&auml;tili:"
+
+msgid "User password"
+msgstr "K&auml;ytt&auml;j&auml;n salasana"
+
+msgid "Secure connection:"
+msgstr "Suojattu yhteys:"
+
+msgid "Before enabling the Bounce detection, enter the values and click on TEST button"
+msgstr "Ennen palautumisenhavaitsemisen k&auml;ytt&ouml;&ouml;nottoa, anna tiedot ja klikkaa TEST nappia"
+
+msgid "Test POP3 config"
+msgstr "Testaa POP3 asetukset"
+
+msgid "Cant connect to POP3 mail server, please, check the configuration values"
+msgstr "Ei voi yhdist&auml;&auml; POP3-postipalvelimeen, tarkista asetukset, kiitos."
+
+msgid "Bounce tutorial"
+msgstr "Palautuneet postit (Bounce) ohjeet"
+
+msgid "Knews Pro includes a bounce email detection system, it needs an dedicated account like bounce@yourdomain.com. First, create the account, next, fill the configuation fields, then test the connection and if all works fine, activate & save."
+msgstr "Knews Pro sis&auml;lt&auml;&auml; palautuneiden emailien havaitsemismekanismin. Tarvitset erillisen osoitteen, esim. bounce@sinundomain.com. Luo osoite, t&auml;yt&auml; asetuskent&auml;t, testaa yhteys, aktivoi ja tallenna."
+
+msgid "Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)"
+msgstr "K&auml;yt&auml; artikkelin muokkausp&auml;iv&auml;&auml; luomisp&auml;iv&auml;n sijasta automatisoituihin uutiskirjeisiin (vanhat artikkelit sis&auml;llytet&auml;&auml;n jos muokkaat sit&auml; ja aktivoit t&auml;m&auml;n valinnan, muuten ei koskaan)"
+
+msgid "Compatibility options"
+msgstr "Yhteensopivuuden valinnat"
+
+msgid "Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)"
+msgstr "K&auml;yt&auml; the_content -filtteri&auml; artikkelin tuomisessa uutiskirjeeseen (Ota pois k&auml;yt&ouml;st&auml; yhteensopivuusongelmien takia, mm. NextGen Gallery)"
+
+msgid "<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages."
+msgstr "<strong>Huomaa</strong>: jos k&auml;yt&auml;t <strong>qTranslate</strong>-lis&auml;osaa, et voi ottaa t&auml;t&auml; pois k&auml;yt&ouml;st&auml;, koska se k&auml;ytt&auml;&auml; t&auml;t&auml; filtteri&auml; sis&auml;lt&ouml;jen k&auml;&auml;nn&ouml;ksiin."
+
+msgid "Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
+msgstr "Estä bottirekister&ouml;itymiset.  Jotkut Cache-lis&auml;osat eiv&auml;t ole yhteensopivia (Tilaaminen ep&auml;onnistuu \"v&auml;&auml;r&auml; email-osoite\" -viestill&auml;)."
+
+msgid "Premium options"
+msgstr "Premium-valinnat"
+
+msgid "Hide default templates (only works if at least one template is installed into (/wp-content/uploads/knewstemplates/)"
+msgstr "Piilota oletusivumallit (toimii vain jos v&auml;hint&auml;&auml;n yksi sivumalli on asennettu /wp-content/uploads/knewstemplates/)"
+
+msgid "Hide Knews Shop Products offers"
+msgstr "Piilota Knews Shopin tuotetarjoukset"
+
+msgid "WordPress user syncronization"
+msgstr "WordPress-k&auml;ytt&auml;jien synkronointi"
+
+msgid "Subscribe new WordPress users to:"
+msgstr "Liit&auml; uudet WordPress-k&auml;ytt&auml;j&auml;t:"
+
+msgid "None"
+msgstr "Ei mit&auml;&auml;n"
+
+msgid "Newsletter deleted"
+msgstr "Uutiskirje poistettu"
+
+msgid "Newsletter name updated"
+msgstr "Uutiskirjeen nimi p&auml;ivitetty"
+
+msgid "Newsletter duplicated"
+msgstr "Uutiskirje monistettu"
+
+msgid "Desktop and mobile versions"
+msgstr "Ty&ouml;p&ouml;yt&auml;- ja mobiiliversio"
+
+msgid "Desktop version only"
+msgstr "Vain ty&ouml;p&ouml;yt&auml;versio"
+
+msgid "Unconfirmed"
+msgstr "Ei varmistettu"
+
+msgid "Bounce"
+msgstr "Palautuminen"
+
+msgid "Bounced"
+msgstr "Palautunut"
+
+msgid "Mark as bounced email"
+msgstr "Merkitse palautuneeksi emailiksi"
+
+msgid "Mark as activated"
+msgstr "Merkitse aktivoiduksi"
+
+msgid "Mark as blocked"
+msgstr "Merkitse estetyksi"
+
+msgid "Mark as bounced"
+msgstr "Merkitse palautuneeksi"
+
+msgid "Subscribe to list"
+msgstr "Tilaa lista"
+
+msgid "Unsubscribe to list"
+msgstr "Peruuta listan tilaus"
+
+msgid "Choose one list"
+msgstr "Valitse lista"
+
+msgid "You dont have any mobile template!"
+msgstr "Sinulla ei ole mobiilitemplateja!"
+
+msgid "There is a videotutorial about Knews WYSIWYG Editor, %s view it in Youtube"
+msgstr "Katso video Knewsin WYSIWYG-editorista %s YouTubessa"
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
+msgstr "Sorry, t&auml;m&auml; on premium-ominaisuus. Klikkaa %s t&auml;st&auml; n&auml;hd&auml;ksesi kaikki Pro-ominaisuudet."
+
+msgid "Warning! You arent selected any mailing list, do you want to continue?"
+msgstr "Varoitus! Et ole valinnut yht&auml;&auml;n postituslistaa. Haluatko jatkaa?"
+
+msgid "The field name cant be empty"
+msgstr "Kentän nimi ei voi olla tyhj&auml;"
+
+msgid "Select the %s filtered subscribers to perform a massive action"
+msgstr "Valitse %s suodatettua tilaajaa suorittaaksesi massatoimintoja"
+
+msgid "Select all your subscribers (%s) to perform a massive action"
+msgstr "Valitse kaikki tilaajat (%s) suorittaaksesi massatoimintoja"
+
+msgid "Roles and capabilities saved."
+msgstr "Roolit ja k&auml;ytt&ouml;oikeudet tallennettu."
+
+msgid "Roles and capabilities"
+msgstr "Roolit ja k&auml;ytt&ouml;oikeudet"
+
+msgid "Role name"
+msgstr "Rooli nimi"
+
+msgid "Can see Knews Stats"
+msgstr "Voi tarkastella Knewsin tilastoja"
+
+msgid "Can manage newsletters"
+msgstr "Voi hallita uutiskirjeit&auml;"
+
+msgid "Can manage users"
+msgstr "Voi hallita k&auml;ytt&auml;ji&auml;"
+
+msgid "Can configure Knews"
+msgstr "Voi tehd&auml; Knewsin asetuksia"
+
+msgid "All subscribers"
+msgstr "Kaikki tilaajat"
+
+msgid "Do WordPress user importation"
+msgstr "Tuo WordPressin k&auml;ytt&auml;ji&auml;"
+
+msgid "Import <strong>all</strong> the WordPress users and subscribe into the mailing list:"
+msgstr "Tuo <strong>kaikki</strong> WordPressin k&auml;ytt&auml;j&auml;t ja liit&auml; postituslistalle:"
+
+msgid "Assign the language:"
+msgstr "M&auml;&auml;rit&auml; kieli:"
+
+msgid "Import WP users into Knews"
+msgstr "Tuo WP k&auml;ytt&auml;ji&auml; Knewsiin"
+
+msgid "Users imported: %s. Users found before (not re-imported): %s."
+msgstr "K&auml;ytt&auml;ji&auml; tuotu: %s. Vanhoja k&auml;ytt&auml;ji&auml; (ei tuotu uudelleen): %s."
+
+msgid "Errors submitting confirmation: %s"
+msgstr "Virheet varmistuksen l&auml;hetyksess&auml;: %s"
+
+msgid "Order"
+msgstr "Järjestys"
+
+msgid "New Auto-create Newsletters Process"
+msgstr "Uusi automatisoitu uutiskirjeen luontiprosessi"
+
+msgid "Automated process name:"
+msgstr "Automatisoidun prosessin nimi:"
+
+msgid "(high performance SMTP)"
+msgstr "(tehokas SMTP)"
+
+msgid "All categories"
+msgstr "Kaikki kategoriat"
+
+msgid "Error: Please, fill all the form"
+msgstr "Virhe: T&auml;yt&auml; kaikki kent&auml;t"
+
+msgid "Mantain current data and add new mailing lists"
+msgstr "S&auml;ilyt&auml; olemassaoleva data ja lis&auml;&auml; uusia postituslistoja"
+
+msgid "of"
+msgstr "/"
+
+msgid "SMTP Secure"
+msgstr "Varmistettu SMTP"
+
+msgid "Step"
+msgstr "Vaihe"
+
+msgid "Submit automatic"
+msgstr "Postita automaattisesti"
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr "T&auml;m&auml;n mallin k&auml;yttoauml; vaatii Knews %s -version.  P&auml;ivit&auml; Knews."
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr "T&auml;m&auml;n mallin k&auml;yttoauml; vaatii Knews Pro -version.  Hanki se %s t&auml;&auml;lt&auml;"
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr "<strong>Knews on rekister&ouml;ity</strong>.  Vieraile %s lis&auml;osien hallintasivulla %s, klikkaa Knews 'Check for updates' -linkki&auml; p&auml;ivitt&auml;&auml;ksesi.  Kiitos oikein paljon."
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr "Knews suorittaa automaatisoidun uutiskirjeen luomisen tunnin v&auml;lein"
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr "Voit ajaa t&auml;m&auml;n teht&auml;v&auml;n manuaalisesti nyt (suositellaan vain testaukseen) %s Suorita automaattinen luonti nyt"
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr "Knewsin postitus ajetaan 10 min. v&auml;lein ja l&auml;hett&auml;&auml; osan listasta."
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr "Voit ajaa JavaScript CRON -emulaation manuaalisesti jos uutiskirjeesi postitus ei jostain syyst&auml; toimi: %s K&auml;ynnist&auml; JS-Cron nyt"
+
+msgid "mobile_version_text_link"
+msgstr "N&auml;yt&auml; mobiiliversio"
+
+msgid "desktop_version_text_link"
+msgstr "N&auml;yt&auml; ty&ouml;p&ouml;yt&auml;versio"
+
+msgid "Knews Pro is currently installed."
+msgstr "Knes Pro on asennettu."
+
+msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
+msgstr "Knewsin p&auml;ivityksi&auml; voidaan tehd&auml; vain Verkon hallinnan kautta.  Verkon j&auml;rjestelm&auml;nvalvojan oikeudet tarvitaan."
 

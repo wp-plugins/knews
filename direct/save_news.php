@@ -43,7 +43,7 @@ if ($Knews_plugin) {
 			$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET modified='" . $date . "', subject='" . $title . "' WHERE id=" . $newsparent[0]->id;
 			$wpdb->query($query);
 		}
-		echo 'ok';
+		echo 'knews:ok';
 	} else {
 		echo $wpdb->last_error;
 	}

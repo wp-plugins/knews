@@ -165,7 +165,14 @@ function enfocar() {
 						<tbody>
 				<?php
 						$alt=false;
+						$anyopened=false;
+						$anyopened_logged=false;
+
 						foreach ($results as $list) {
+
+							if ($list->open == '1') $anyopened=true;
+							if ($list->open_registered == '1') $anyopened_logged=true;
+
 							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $list->id . '" value="1"><input type="hidden" name="find_' . $list->id . '" value="1"></th>';
 							echo '<td>' . $list->id . '</td>';
 							echo '<td class="name_' . $list->id  . '"><strong>' . $list->name . '</strong>';
@@ -212,6 +219,15 @@ function enfocar() {
 							</tr>
 						</tfoot>
 					</table>
+					<?php
+						if (!$anyopened) {
+							echo '<div class="error"><p>' . __("Warning: if you haven't any mailing list opened, the subscription widget will not shown",'knews') . '</p></div>';
+						} else {
+							if (!$anyopened_logged) {
+								echo '<div class="error"><p>' . __("Warning: you haven't any mailing list opened for logged users, the subscription widget will not shown until you make log out",'knews') . '</p></div>';
+							}
+						}
+					?>
 					<div class="submit">
 						<select name="action">
 							<option selected="selected" value="update_lists"><?php _e('Only update','knews'); ?></option>
@@ -236,7 +252,7 @@ function enfocar() {
 					<h2><?php _e('Create new mailing list','knews'); ?></h2>
 					<form method="post" action="admin.php?page=knews_lists">
 					<input type="hidden" name="action" id="action" value="add_list" />
-					<p><label for="new_list"><?php _e('Mailing list','knews'); ?>:</label><input type="text" name="new_list" id="new_list" /></p>
+					<p><label for="new_list"><?php _e('Mailing list','knews'); ?>:</label><input type="text" name="new_list" id="new_list" class="regular-text" /></p>
 					<div class="submit">
 						<input type="submit" value="<?php _e('Create a mailing list','knews'); ?>" class="button-primary" />
 					</div>

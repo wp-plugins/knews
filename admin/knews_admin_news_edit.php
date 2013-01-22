@@ -49,7 +49,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	free_handler= "<?php echo __('Free text content','knews'); ?>";
 	move_handler= "<?php echo __('Move module','knews'); ?>";
 	delete_handler= "<?php echo __('Delete module','knews'); ?>";
-	unsaved_message= "<?php echo __('If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the \"Save\" button (blue coloured).','knews'); ?>";
+	unsaved_message= "<?php echo addslashes(__('If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the "Save" button (blue coloured).','knews')); ?>";
 	url_admin = "<?php echo get_admin_url(); ?>";
 	error_resize = "<?php echo __('Error','knews') . ': ' . __('Check the directory permissions for','knews'); ?> '/wp-content/uploads'";
 	error_save = "<?php  echo __('Error saving','knews'); ?>";

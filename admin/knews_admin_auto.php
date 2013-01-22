@@ -226,8 +226,8 @@ function enfocar() {
 				if ($pending) {
 				?>
 				<div class="updated">
-					<p>Knews runs every hour the automated newsletter creation jobs.</p>
-					<p>You can manually trigger this task now (only recommended for testing purposes) <a href="<?php echo $Knews_plugin->get_main_admin_url(); ?>admin-ajax.php?action=knewsForceAutomated&manual=1" class="button" target="_blank">Run Automated Creation Now</a></p>
+					<p><?php _e('Knews runs every hour the automated newsletter creation jobs.','knews'); ?></p>
+					<p><?php echo sprintf(__('You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now','knews'), '<a href="' . $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsForceAutomated&manual=1" class="button" target="_blank">'); ?></a></p>
 				</div>
 				<?php
 				}

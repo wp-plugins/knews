@@ -17,7 +17,9 @@ if ($Knews_plugin) {
 				header('Content-type: text/csv');
 				header('Content-disposition: attachment;filename=' . $filename);
 			}
-
+			if (strpos($filename,'.png') !== false) {
+				header('Content-type: image/png');
+			}
 			echo $file;
 			die();
 		}

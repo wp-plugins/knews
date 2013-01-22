@@ -136,11 +136,6 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.6') < 0) {
 	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
 }
 
-if ($this->im_pro()) {
-	require(KNEWS_DIR . '/includes/knews_roles.php');
-	knews_start_caps();
-}
-
 update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 

@@ -277,11 +277,6 @@ msgid "Editing newsletter"
 msgstr "Édition de newsletter"
 
 #. Text in echo
-#: admin/knews_admin_news_send.php:183
-msgid "E-mail for close supervision"
-msgstr "E-mail pour supervision stricte"
-
-#. Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "E-mails sent at once"
 msgstr "E-mails envoyés en une seule fois"
@@ -442,11 +437,6 @@ msgstr "Si vous ne savez pas quelles valeurs indiquer, laissez-les telles quelle
 #: admin/knews_admin_import.php:437
 msgid "If you enter a value manually, this will be the same for all users imported"
 msgstr "Si vous introduisez une valeur manuellement, cette dernière sera la même pour tous les utilisateurs importés"
-
-#. Text in echo
-#: admin/knews_admin_config.php:154
-msgid "Ignore WPML and operate Knews as monolingual"
-msgstr "Ignorer WPML et faire fonctionner Knews en mode monolingue"
 
 #. Text in echo
 #: admin/knews_admin_import.php:221
@@ -735,12 +725,6 @@ msgstr "Utilisateur SMTP"
 msgid "Save"
 msgstr "Enregistrer"
 
-#. Text in echo
-#: admin/knews_admin_news_list.php:164
-#: admin/knews_admin_lists.php:148
-msgid "Save changes"
-msgstr "Enregistrer les modifications"
-
 #. Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
@@ -906,11 +890,6 @@ msgstr "Abonnements"
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "Méthode d'envoi"
-
-#. Text in function
-#: knews.php:520
-msgid "Subscribe me"
-msgstr "Abonnez-moi"
 
 #. Text in function
 #: knews.php:520
@@ -1163,11 +1142,6 @@ msgstr "Les caractères spéciaux (accents) correctement codés"
 msgid "Value"
 msgstr "Valeur"
 
-#. Text in echo
-#: admin/knews_admin_news_send.php:154
-msgid "WARNING"
-msgstr "ATTENTION"
-
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
@@ -1209,16 +1183,8 @@ msgstr "Veuillez télécharger un fichier."
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr "Vous devriez voir l'en-tête et les quatre premières lignes du CSV :"
 
-#. Text in function
-#: knews.php:1
-msgid "Widget title"
-msgstr "Titre du widget"
-
 msgid "widget_title"
 msgstr "M'abonner"
-
-msgid "Widget e-mail label form"
-msgstr "Étiquette e-mail du formulaire du widget"
 
 msgid "widget_label_email"
 msgstr "E-mail :"
@@ -1343,11 +1309,6 @@ msgstr "éliminé"
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "jour-mois-année"
-
-#. Text in echo
-#: admin/knews_admin_config.php:149
-msgid "here"
-msgstr "ici"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1606,9 +1567,6 @@ msgstr "Erreur : cette newsletter n'existe pas"
 msgid "Do you really want to delete this module?"
 msgstr "Souhaitez-vous vraiment éliminer ce module ?"
 
-msgid "Show/hide handlers"
-msgstr "Afficher/masquer gestionnaires"
-
 msgid "Move module"
 msgstr "Déplacer module"
 
@@ -1623,9 +1581,6 @@ msgstr "Entrées"
 
 msgid "Pages"
 msgstr "Pages"
-
-msgid "Alerts"
-msgstr "Alertes"
 
 msgid "Reset all alerts"
 msgstr "Réinitialiser toutes les alertes"
@@ -1821,9 +1776,6 @@ msgstr "Modèle pour configurer CRON"
 
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "Vous devez ajouter cette ligne sur le CRONTAB de votre serveur web :"
-
-msgid "The file location is: %s"
-msgstr "La localisation du fichier est la suivante : %s"
 
 msgid "Configure SMTP tutorial"
 msgstr "Modèle pour configurer SMTP"
@@ -2047,9 +1999,6 @@ msgstr "http://www.knewsplugin.com/configure-smtp-submits/"
 msgid "http://www.knewsplugin.com/configure-webserver-cron/"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 
-msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr "Vous devez appeler l'URL du blog principal www.tondomaine.com/wp-admin/admin-ajax?action=knewsCron"
-
 msgid "Multisite detected. Only one instance of %s must be called for all websites."
 msgstr "Multisite détecté. Seule une instance de %s doit être nommée pour tous les sites."
 
@@ -2232,4 +2181,52 @@ msgstr "Méthode d'envoi :"
 
 msgid "Messages reset to defaults."
 msgstr "Messages réinitialisés aux valeurs par défaut."
+
+msgid "(high performance SMTP)"
+msgstr ""
+
+msgid "All categories"
+msgstr ""
+
+msgid "Error: Please, fill all the form"
+msgstr ""
+
+msgid "Mantain current data and add new mailing lists"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "SMTP Secure"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "Submit automatic"
+msgstr ""
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr ""
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr ""
+
+msgid "Compatibility options"
+msgstr ""
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr ""
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr ""
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr ""
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr ""
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr ""
 

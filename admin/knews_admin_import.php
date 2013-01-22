@@ -252,7 +252,7 @@ function print_state($step, $where) {
 		} elseif ($step=='2') {
 			echo "<p>" . __("You should be seeing the header and the four first lines of the CSV:", 'knews') . '</p><p>&middot; ' .
 			__('Properly tabulated', 'knews') . '<br>&middot; ' . __('No delimiters','knews') . '<br>&middot; ' . __('Using special characters (accents) correctly coded','knews') . '</p><p>' . 
-			__('If not, change the separator values and / or closing. Then press \"Scan CSV again\":','knews') . "</p>";
+			__('If not, change the separator values and / or closing. Then press "Scan CSV again":','knews') . "</p>";
 			
 			//PHP 5.3 en endavant: $csv_data=fgetcsv($filename, 10000, $knews_delimiters[$_POST['knews_delimiters']], $knews_enclosure[$_POST['knews_enclosure']], $knews_line_endings[$_POST['knews_line_endings']]);
 			

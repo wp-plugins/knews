@@ -1,18 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Knews\n"
 "POT-Creation-Date: 2012-06-10\n"
-"PO-Revision-Date: 2012-10-18 12:33+0100\n"
+"PO-Revision-Date: 2013-01-22 12:08+0100\n"
 "Last-Translator: Carles <mail@carlesrever.com>\n"
-"Language-Team: Native Arabic\n"
+"Language-Team: Hasan Yousef\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Arabic\n"
+"X-Poedit-Country: EGYPT\n"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Schedule submit"
-msgstr "برمجة زمنية إلارسال"
+msgstr "برمجة زمنية ألارسال"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -37,7 +39,7 @@ msgstr " تم تنفيذ دفعات عملية الارسال بشكل صحيح
 #. Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Activate user directly (don't send e-mail confirmation)"
-msgstr "تنشيط المستخدم مباشرة (لا ترسل تأكيد البريد الإلكتروني)"
+msgstr "- تنشيط المستخدم مباشرة ( لا ترسل تأكيد البريد الإلكتروني  ) "
 
 #. Text in echo
 #: admin/knews_admin_users.php:455
@@ -47,12 +49,12 @@ msgstr "فلتره حسب الحالة"
 #. Text in echo
 #: admin/knews_admin_users.php:455
 msgid "No users match the search criteria"
-msgstr "لا يوجد أى مستخدم يلبي معايير البحث"
+msgstr "لا يوجد أى مستخدم يتوافق مع معايير البحث"
 
 #. Text in echo
 #: admin/knews_admin_lists.php:142
 msgid "Active users"
-msgstr "المستخدمين النشطين  "
+msgstr "المستخدمين المؤكدين  "
 
 #. Text in echo
 #: admin/knews_admin_users.php:162
@@ -75,7 +77,7 @@ msgstr "اضف النشرة الإخبارية"
 #: admin/knews_admin_import.php:360
 #: admin/knews_admin_users.php:309
 msgid "All"
-msgstr "الإجمالي"
+msgstr "الكل"
 
 #. Text in function
 #: admin/knews_admin_import.php:362
@@ -130,7 +132,7 @@ msgstr "لم يتم بعد تهيئه  ال CRON"
 #. Text in function
 #: admin/knews_admin_config.php:172
 msgid "CRON has stopped working."
-msgstr "CRON توقفت عن العمل"
+msgstr "CRON توقف عن العمل"
 
 #. Text in echo
 #: admin/knews_admin_config.php:164
@@ -170,7 +172,7 @@ msgstr " تحقق من التواريخ "
 #. Text in function
 #: direct/edit_news.php:49
 msgid "Check the directory permissions for"
-msgstr "تحقق من أذونات الدليل من اجل"
+msgstr "تحقق من أذونات الملف فى"
 
 #. Text in echo
 #: admin/knews_admin_import.php:356
@@ -235,7 +237,7 @@ msgstr "كرون-ج اس انهى العمل، يمكنك إغلاق الناف�
 #. Text in echo
 #: direct/knews_cron.php:131
 msgid "Cron-JS in the process, don't close this window..."
-msgstr "كرون، مايزال ينفذ العملية، لا تغلق هذه النافذة..."
+msgstr "كرون-ج اس، مايزال ينفذ العملية، لا تغلق هذه النافذة..."
 
 #. Text in echo
 #: admin/knews_admin_config.php:85
@@ -257,12 +259,12 @@ msgstr "حذف"
 #. Text in echo
 #: admin/knews_admin_import.php:686
 msgid "Do the import"
-msgstr "نفذ الاستيراد"
+msgstr "نفذ عمليه الاستيراد"
 
 #. Text in echo
 #: admin/knews_admin_config.php:209
 msgid "E-mails sent internally using WordPress (wp_mail() function)"
-msgstr "رسائل البريد الإلكتروني يتم ارسالها داخليا باستخدام وظيفه ووردبريس (()wp_mail)"
+msgstr "رسائل البريد الإلكتروني يتم ارسالها داخليا باستخدام وظيفه ووردبريس (()function wp_mail)"
 
 #. Text in echo
 #: admin/knews_admin_news_list.php:156
@@ -275,11 +277,6 @@ msgstr "تعديل"
 #: admin/knews_admin_news_edit.php:28
 msgid "Editing newsletter"
 msgstr "تعديل النشره"
-
-#. Text in echo
-#: admin/knews_admin_news_send.php:183
-msgid "E-mail for close supervision"
-msgstr "بريد إلكتروني للمتابعه والإشراف االدقيق"
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:173
@@ -340,7 +337,7 @@ msgstr "حقل"
 #. Text in echo
 #: admin/knews_admin_import.php:219
 msgid "Fields assignement"
-msgstr "حقول مهمة"
+msgstr "حقول التعيين"
 
 #. Text in echo
 #: admin/knews_admin_import.php:232
@@ -360,7 +357,7 @@ msgstr "الفلترة"
 #. Text in echo
 #: admin/knews_admin_users.php:308
 msgid "Filter by mailing list"
-msgstr "الفلترة بناء على القائمة البريدية"
+msgstr "الفلترة حسب القائمة البريدية"
 
 #. Text in echo
 #: admin/knews_admin_users.php:321
@@ -444,20 +441,15 @@ msgid "If you enter a value manually, this will be the same for all users import
 msgstr "إذا قمت بإدخال قيمة يدويا، سوف تكون هي نفسها لجميع المستخدمين المستوردة"
 
 #. Text in echo
-#: admin/knews_admin_config.php:154
-msgid "Ignore WPML and operate Knews as monolingual"
-msgstr "تجاهل WPML وتشغيل ك-نيوز بشكل أحادي اللغة"
-
-#. Text in echo
 #: admin/knews_admin_import.php:221
 msgid "Import"
-msgstr " عمليه استيراد"
+msgstr "عمليه استيراد"
 
 #. Text in echo
 #: admin/knews_admin_import.php:214
 #: knews.php:520
 msgid "Import CSV"
-msgstr "عمليه استيراد ملف CSV"
+msgstr "استيراد ملف CSV"
 
 #. Text in echo
 #: admin/knews_admin_import.php:691
@@ -500,7 +492,7 @@ msgstr "اتركه خالى"
 #. Text in echo
 #: admin/knews_admin_lists.php:131
 msgid "List name"
-msgstr "قائمة الاسماء"
+msgstr "اسم القائمه "
 
 #. Text in echo
 #: admin/knews_admin_lists.php:162
@@ -583,12 +575,12 @@ msgstr "اسم الحقل إضافي"
 #. Text in echo
 #: admin/knews_admin_submits.php:66
 msgid "Newsletter"
-msgstr "الرسائل الاخباريه"
+msgstr "النشره الاخباريه"
 
 #. Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "Failed to create the Newsletter"
-msgstr " فشل في إنشاء الرسائل الاخباريه"
+msgstr " فشل في إنشاء النشره الاخباريه"
 
 #. Text in function
 #: admin/knews_admin_news_edit.php:22
@@ -652,7 +644,7 @@ msgstr "جاري"
 #: admin/knews_admin_lists.php:90
 #: admin/knews_admin_lists.php:132
 msgid "Open"
-msgstr "فتح"
+msgstr "مفتوحه"
 
 #. Text in echo
 #: admin/knews_admin_lists.php:91
@@ -735,12 +727,6 @@ msgstr "مستخدم SMTP "
 msgid "Save"
 msgstr "حفظ"
 
-#. Text in echo
-#: admin/knews_admin_news_list.php:164
-#: admin/knews_admin_lists.php:148
-msgid "Save changes"
-msgstr "حفظ التغييرات"
-
 #. Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
@@ -764,7 +750,7 @@ msgstr "اختر المقال لإدراجه في النشرة الإخباري�
 #. Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Send e-mail confirmation"
-msgstr "إرسال رساله التأكيد"
+msgstr "- إرسال رساله التأكيد"
 
 #. Text in echo
 #: admin/knews_admin_config.php:210
@@ -774,12 +760,12 @@ msgstr "إرسال رسائل البريد الإلكتروني باستخدام
 #. Text in echo
 #: admin/knews_admin_news_send.php:191
 msgid "Send the newsletter manually"
-msgstr "إرسال الرسالة الإخبارية يدويا"
+msgstr "إرسال الرسالة الإخبارية يدويا "
 
 #. Text in echo
 #: admin/knews_admin_news_send.php:131
 msgid "Send the newsletter to the following lists"
-msgstr "إرسال الرسالة الإخبارية إلى القوائم التالية"
+msgstr "إرسال الرسالة الإخبارية إلى القوائم التالية "
 
 #. Text in echo
 #: admin/knews_admin_config.php:187
@@ -809,7 +795,7 @@ msgstr "إرسال SMTP غير مفعل، الدفعات المرسله ستكو
 #. Text in echo
 #: admin/knews_admin_news_send.php:130
 msgid "Sending newsletter"
-msgstr "يتم إرسال الرسائل الإخبارية"
+msgstr " إرسال الرساله الإخبارية"
 
 #. Text in echo
 #: admin/knews_admin_import.php:66
@@ -829,7 +815,7 @@ msgstr "مميز"
 #. Text in echo
 #: admin/knews_admin_news_send.php:172
 msgid "Start (now or deferred)?"
-msgstr "ابدأ (الآن أو المؤجل)؟"
+msgstr "ابدأ (الآن أو مؤجل)؟"
 
 #. Text in echo
 #: admin/knews_admin_import.php:357
@@ -868,7 +854,7 @@ msgstr "خطء عند الارسال"
 #. Text in echo
 #: admin/knews_admin_news_send.php:197
 msgid "Submit newsletter"
-msgstr "إرسال الرسائل الإخبارية"
+msgstr "إرسال النشره الإخبارية"
 
 msgid "Continue editing"
 msgstr "متابعة التعديل"
@@ -900,17 +886,12 @@ msgstr "المشتركين"
 #: admin/knews_admin_users.php:245
 #: admin/knews_admin_users.php:326
 msgid "Subscriptions"
-msgstr "طلبات الاشتراك"
+msgstr "قوائم الاشتراك "
 
 #. Text in echo
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "أسلوب الارسال"
-
-#. Text in function
-#: knews.php:520
-msgid "Subscribe me"
-msgstr "اضف عضويتى"
 
 #. Text in function
 #: knews.php:520
@@ -996,7 +977,7 @@ msgstr "تم إنشاء النشرة بنجاح"
 #. Text in echo
 #: admin/knews_admin_users.php:176
 msgid "A token is used to insert a field in the newsletter. Should be located between %, with no spaces, for example: %name%"
-msgstr "يتم استخدام رمز لإدراج حقل في النشرة الإخبارية,  يجب أن يكون موجودا بين ٪، مع وجود مسافات، على سبيل المثال: ٪اسم٪"
+msgstr "يتم استخدام رمز لإدراج حقل في النشرة الإخبارية,  يجب أن يكون موجودا بين ٪، مع عدم وجود مسافات، على سبيل المثال: ٪اسم٪"
 
 #. Text in function
 #: admin/knews_admin_users.php:464
@@ -1163,11 +1144,6 @@ msgstr "باستخدام أحرف خاصة (لهجات) مشفرة بشكل صح
 msgid "Value"
 msgstr "قيمة"
 
-#. Text in echo
-#: admin/knews_admin_news_send.php:154
-msgid "WARNING"
-msgstr "تحذير"
-
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
@@ -1209,16 +1185,8 @@ msgstr "يجب تحميل ملف"
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr " ينبغي أن تتمكن من رؤية مقدمة الصفحه والخطوط الأربعة الأولى من ال CSV"
 
-#. Text in function
-#: knews.php:1
-msgid "Widget title"
-msgstr "عنوان الويدجت"
-
 msgid "widget_title"
 msgstr " اضف عضويتى"
-
-msgid "Widget e-mail label form"
-msgstr "خانه البريد الالكتروني فى نموذج الويدجت"
 
 msgid "widget_label_email"
 msgstr "البريد الالكتروني:"
@@ -1343,11 +1311,6 @@ msgstr "محذوف"
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "يوم - شهر- عام"
-
-#. Text in echo
-#: admin/knews_admin_config.php:149
-msgid "here"
-msgstr "هنا"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1606,9 +1569,6 @@ msgstr "خطأ: هذه النشرة الإخبارية غير موجوده"
 msgid "Do you really want to delete this module?"
 msgstr "هل تريد فعلا حذف هذه النموذج؟"
 
-msgid "Show/hide handlers"
-msgstr "إظهار / إخفاء المعالجات"
-
 msgid "Move module"
 msgstr "نقل النموذج"
 
@@ -1623,9 +1583,6 @@ msgstr "المقالات"
 
 msgid "Pages"
 msgstr "الصفحات"
-
-msgid "Alerts"
-msgstr "التنبيهات"
 
 msgid "Reset all alerts"
 msgstr "إعادة تعيين كافة التنبيهات"
@@ -1727,10 +1684,10 @@ msgid "Warning! Opera can't edit newsletters. You must use a modern Firefox, Chr
 msgstr "تحذير! أوبرا لا يمكنه تحرير النشرات الإخبارية. يجب استخدام  الاحدث مثل، كروم، سفاري أو إنترنت إكسبلورر ٨ على الأقل."
 
 msgid "Warning! You should activate JavaScript to edit newsletters!"
-msgstr "تحذير! يجب عليك تفعيل الجافا لتحرير النشرات الإخبارية!"
+msgstr "تحذير! يجب عليك تفعيل الجافاسكريبت لتحرير النشرات الإخبارية"
 
 msgid "No submits yet. First go to Newsletters, create one, and then submit it."
-msgstr "لا ارسال حتى الآن. اذهب أولا إلى صفحه النشرات الإخبارية، وقم بإنشاء واحده، ومن ثم قم بإرسالها"
+msgstr "لا توجد اية عمليات ارسال حتى هذه اللحظه. اذهب أولا إلى صفحه النشرات الإخبارية، وقم بإنشاء واحده ، ومن ثم قم بإرسالها."
 
 msgid "Error: I can't write the .CSV file."
 msgstr "خطأ: لا أستطيع أن أكتب ملف CSV"
@@ -1822,9 +1779,6 @@ msgstr "ارشادات عن كيفيه اعدادات CRON  كرون"
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "يجب إضافة هذا السطر في خادم الويب الخاص بك CRONTAB:"
 
-msgid "The file location is: %s"
-msgstr "الملف الحقيقي هو:%s"
-
 msgid "Configure SMTP tutorial"
 msgstr "ارشادات عن كيفيه اعدادات SMTP"
 
@@ -1877,10 +1831,10 @@ msgid "Current status of subscriptions"
 msgstr "الوضع الحالي للاشتراكات"
 
 msgid "Active users:"
-msgstr "المستخدمين النشطين:"
+msgstr "المستخدمين المؤكدين:"
 
 msgid "Not confirmed:"
-msgstr "غير مؤكد"
+msgstr "غير مؤكدين"
 
 msgid "Unsubscribed users:"
 msgstr "المستخدمين اللاغيين لاءشتراكهم:"
@@ -1892,7 +1846,7 @@ msgid "Currently have no subscribers."
 msgstr "لايوجد حاليا أي أعضاء."
 
 msgid "Accumulated sign ups and unsubscribes from date:"
-msgstr "الاشتراكات المتراكمة والتى منعت من تاريخ:"
+msgstr "بيان باجمالي الاشتراكات الناجحه و الاخرى التى منعت من تاريخ:"
 
 msgid "You must select a right date range"
 msgstr "يجب تحديد نطاق التاريخ المناسب"
@@ -1949,7 +1903,7 @@ msgid "SQL Error while updating user"
 msgstr "SQL خطأ أثناء تحديث المستخدم"
 
 msgid "Warning: the email has no subject! %s Edit it again before submit!"
-msgstr "تحذير: البريد الإلكتروني  ينقصه  الموضوع  %s  قم بالتعديل مرة أخرى قبل الارسال"
+msgstr "تحذير: الرسالة الإخبارية ينقصها رأس الموضوع  %s  قم بالتعديل مرة أخرى قبل الارسال"
 
 msgid "Warning: %sConfigure sender name before submit!"
 msgstr "تحذير: %s قم  باعداد اسم المرسل قبل الارسال"
@@ -2063,7 +2017,7 @@ msgid "Auto-create"
 msgstr "انشاء بصوره آليه"
 
 msgid "Knews Post Options"
-msgstr "خيارات ك ـ نيوز لل بوست"
+msgstr "خيارات ك ـ نيوز للتدوينات"
 
 msgid "Add a subscription form into the sidebar"
 msgstr "إضافة نموذج الاشتراك في الشريط الجانبي"
@@ -2159,7 +2113,7 @@ msgid "Auto-create Newsletters Tutorial"
 msgstr "ملخص ارشادى عن عمليه البناء الآلى للنشرات"
 
 msgid "Get posts from language:"
-msgstr "الحصول على البوستس من احدى اللغات:"
+msgstr "الحصول على التدوينات من احدى اللغات:"
 
 msgid "Use as template:"
 msgstr "استخدام كنموذج:"
@@ -2168,7 +2122,7 @@ msgid "You must first create a newsletter with insertable info (leave the %the_c
 msgstr " أولا يجب إنشاء رسالة إخبارية مع معلومات قابله للإدخال ( مع ترك %the_content%, %the_title% إلخ.."
 
 msgid "Create a newsletter every %s posts"
-msgstr "إنشاء رسالة إخبارية كل %s بوستس "
+msgstr "إنشاء رسالة إخبارية كل %s تدوينات "
 
 msgid "Error: there are no mailing lists"
 msgstr "خطأ : لا يوجد قوائم بريدية"
@@ -2180,7 +2134,7 @@ msgid "Automated options"
 msgstr "خيارات الارسال الآلى"
 
 msgid "Include the posts in the automated newsletters (default value for the new created posts)"
-msgstr "اضف البوست في النشرات المبنيه آليا (القيمة الافتراضية لأى بوست جديد يتم إنشاؤه)"
+msgstr "اضف التدوينة في النشرات المبنيه آليا (القيمة الافتراضية لأى تدوينة جديده يتم إنشاؤها)"
 
 msgid "Manual Newsletters"
 msgstr "النشرات المبنيه يدويا"
@@ -2204,13 +2158,13 @@ msgid "General options"
 msgstr "خيارات عامة"
 
 msgid "Include this post in the automated newsletters?"
-msgstr "اضف هذا البوست في النشرات المبنيه آليا؟"
+msgstr "اضف هذه التدوينة في النشرات المبنيه آليا؟"
 
 msgid "This post has been included into:"
-msgstr "تم اضافة هذا البوست في :"
+msgstr "تم اضافة هذه التدوينة في :"
 
 msgid "This post still not included into any automated newsletter."
-msgstr "لم يتم اضافة هذا البوست في اى نشره مبنيه آليا"
+msgstr "لم يتم اضافة هذه التدوينة في اى نشره مبنيه آليا"
 
 msgid "Active process:"
 msgstr "تفعيل العمليه :"
@@ -2225,11 +2179,305 @@ msgid "Newsletter submit options"
 msgstr "خيارات ارسال النشرات"
 
 msgid "Target for newsletter:"
-msgstr "الهدف في النشرة ـ Target"
+msgstr "الهدف ـ Target"
 
 msgid "Submit method:"
 msgstr "اسلوب الارسال :"
 
 msgid "Messages reset to defaults."
 msgstr "تم اعادة كل الرسائل الى محتواها الاساسى"
+
+msgid "Widget subscription form title"
+msgstr "عنوان ويدجت نموذج الاشتراك"
+
+msgid "Widget latest newsletters title"
+msgstr "عنوان ويدجت احدث النشرات "
+
+msgid "Mobile version text link"
+msgstr "نص رابط نسخه اجهزه المحمول"
+
+msgid "Desktop version text link"
+msgstr "نص رابط نسخه اجهزه الحاسب"
+
+msgid "You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here"
+msgstr "%s يمكنك الحصول على النسخه المتقدمه هنا لقد قمت بالرجوع الى الاصدار المجانى من  ك - نيوز، يمكنك أن تفقد البيانات، يرجى التحديث بسرعة!"
+
+msgid "Max number of newsletters: <br />(-1 for infinite):"
+msgstr "اقصى عدد من النشرات الإخبارية:  <br/> (-1 لانهائي):"
+
+msgid "Hide not sent newsletters?"
+msgstr "إخفاء الرسائل الإخبارية التى لم يتم إرسالها؟"
+
+msgid "Hide automated newsletters?"
+msgstr "إخفاء الرسائل الإخباريه المرسله بصوره آليه ؟"
+
+msgid "Customize widget title"
+msgstr "تعديل عنوان الويدجت"
+
+msgid "Knews Pro options"
+msgstr "خيارات  ك-نيوز برو"
+
+msgid "Your e-mail (used for the Knews Shop account):"
+msgstr "البريد الإلكتروني الخاص بك (يستخدم لحسابك بمتجر ك-نيوز):"
+
+msgid "Registration"
+msgstr "التسجيل"
+
+msgid "Serial Key:"
+msgstr "الرقم  التسلسلي:"
+
+msgid "(get it in our shop, login and click on \"My Downloads\" page)"
+msgstr "(احصل عليه في متجرنا، قم بتسجيل دخولك ثم اضغط على رابط صفحه \"My Downloads\") "
+
+msgid "Save Serial"
+msgstr "حفظ الرقم التسلسلي"
+
+msgid "Bounce configuration"
+msgstr " اعدادات الرسائل المرتده  "
+
+msgid "Bounce detection deactivated"
+msgstr " تعطيل خاصيه استشعار الرسائل المرتده "
+
+msgid "Bounce detection activated"
+msgstr "تفعيل خاصيه استشعار الرسائل المرتده"
+
+msgid "POP3 Mail host:"
+msgstr "POP3 Mail host:"
+
+msgid "POP3 Port:"
+msgstr " منفذ POP3 Port :"
+
+msgid "User account:"
+msgstr "حساب المستخدم:"
+
+msgid "User password"
+msgstr "كلمة المرور"
+
+msgid "Secure connection:"
+msgstr "اتصال آمن:"
+
+msgid "Before enabling the Bounce detection, enter the values and click on TEST button"
+msgstr "قبل تفعيل خاصيه استشعار الرسائل المرتده ، أدخل القيم وانقر على زر اختبار"
+
+msgid "Test POP3 config"
+msgstr "اختبار اعدادات POP3  "
+
+msgid "Cant connect to POP3 mail server, please, check the configuration values"
+msgstr "غير قادر على الاتصال بخادم البريد POP3، الرجاء التحقق من قيم الاعدادات"
+
+msgid "Bounce tutorial"
+msgstr "ارشادات عن الرسائل المرتده"
+
+msgid "Knews Pro includes a bounce email detection system, it needs an dedicated account like bounce@yourdomain.com. First, create the account, next, fill the configuation fields, then test the connection and if all works fine, activate & save."
+msgstr "ك-نيوز برو يتميز بنظام استشعار البريد الإلكتروني المرتد، فإنه يحتاج إلى حساب مخصص مثل bounce@yourdomain.com. أولا: إنشاء الحساب ، ثم ، قم بتعبئة حقول الاعدادات ، ثم اختبر الاتصال وإذا كان يعمل بشكل جيد ، قم بالتفعيل والحفظ."
+
+msgid "Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)"
+msgstr "استخدام تاريخ تعديل التدوينة  بدلا من تاريخ إنشاءها فى النشرات الإخبارية الآليه (التدوينة  ذات التاريخ المتأخر لن يتم ادراجها فى النشرات الاليه, وستدرج فقط اذا قمت بتحديثها بعد تفعيل هذه الخاصيه)"
+
+msgid "Compatibility options"
+msgstr "خيارات التوافق"
+
+msgid "Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)"
+msgstr "تطبيق فيلتر the_content  خلال ادراج التدوينة فى النشرة الإخبارية (لا تقم بالتفعيل فى حال وجود مشاكل توافق مع بعض الإضافات مثل NextGen Gallery)"
+
+msgid "<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages."
+msgstr "<strong> ملاحظة</strong>:  إذا كنت تستخدم  <strong>qTranslate</strong> لايمكنك تعطيل هذا الخيار، لأنه يستخدم هذا الفلتر لتقسيم محتويات آخر إلى لغات مختلفة ."
+
+msgid "Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
+msgstr " منع تسجيل العضويات غير الرغوب فيها (Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
+
+msgid "Premium options"
+msgstr "خيارات النسخه المميزه"
+
+msgid "Hide default templates (only works if at least one template is installed into (/wp-content/uploads/knewstemplates/)"
+msgstr "إخفاء النماذج الاعتياديه هذه الخاصيه تعمل فقط إذا تم تثبيت نموذج واحد على الأقل في (/wp-content/uploads/knewstemplates/)"
+
+msgid "Hide Knews Shop Products offers"
+msgstr "إخفاء قائمه عروض منتجات متجر ك-نيوز"
+
+msgid "WordPress user syncronization"
+msgstr "تزامن مستخدمى ووردبريس"
+
+msgid "Subscribe new WordPress users to:"
+msgstr "اشتراك  مستخدمى ووردبريس الجدد إلى:"
+
+msgid "None"
+msgstr "لا شيء"
+
+msgid "Newsletter deleted"
+msgstr "تم حذف النشره"
+
+msgid "Newsletter name updated"
+msgstr "تم تحديث اسم النشره"
+
+msgid "Newsletter duplicated"
+msgstr "تم تكرار النشره"
+
+msgid "Desktop and mobile versions"
+msgstr "نسخه اجهزه الحاسب و  المحمول"
+
+msgid "Desktop version only"
+msgstr "نسخه اجهزه الحاسب فقط"
+
+msgid "Unconfirmed"
+msgstr "غير مؤكد"
+
+msgid "Bounce"
+msgstr "ارتداد"
+
+msgid "Bounced"
+msgstr "مرتد"
+
+msgid "Mark as bounced email"
+msgstr "علم كانه بريد مرتد"
+
+msgid "Mark as activated"
+msgstr "علم كانه تم تفعيله"
+
+msgid "Mark as blocked"
+msgstr "علم كانه مرفوض"
+
+msgid "Mark as bounced"
+msgstr "علم كانه مرتد"
+
+msgid "Subscribe to list"
+msgstr "الاشتراك في قائمة"
+
+msgid "Unsubscribe to list"
+msgstr " الغاء الاشتراك من قائمة"
+
+msgid "Choose one list"
+msgstr "قم باختيار قائمة"
+
+msgid "You dont have any mobile template!"
+msgstr "ليس لديك أي نموذج للهواتف النقاله! "
+
+msgid "There is a videotutorial about Knews WYSIWYG Editor, %s view it in Youtube"
+msgstr "هناك شريط فيديو تعليمي عن محرر ك-نيوز WYSIWYG, %s يمكنك مشاهدته فى يوتيوب "
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
+msgstr "نآسف، هذه تكون احدى الخواص المتميزه. من فضلك، %s  انقر هنا لترى كل مميزات ك-نيوز النسخه المميزه"
+
+msgid "Warning! You arent selected any mailing list, do you want to continue?"
+msgstr "تحذير! لم تقم باختيار أي قائمة بريدية، هل تريد الاستمرار؟"
+
+msgid "The field name cant be empty"
+msgstr "خانه الاسم لا يمكن ان تكون فارغه"
+
+msgid "Select the %s filtered subscribers to perform a massive action"
+msgstr "اختر  ال %s من المستخدمين التى تم فلترهم للقيام بعمليه اجماليه "
+
+msgid "Select all your subscribers (%s) to perform a massive action"
+msgstr "اختر كل المستخدمين ( %s )   للقيام بعمليه اجماليه"
+
+msgid "Roles and capabilities saved."
+msgstr " تم حفظ الادوار والقدرات "
+
+msgid "Roles and capabilities"
+msgstr " الادوار والقدرات"
+
+msgid "Role name"
+msgstr "درجه المستخدم "
+
+msgid "Can see Knews Stats"
+msgstr "يمكنه الدخول الى احصائيات ك-نيوز "
+
+msgid "Can manage newsletters"
+msgstr "يمكنه تعديل النشرات "
+
+msgid "Can manage users"
+msgstr "يمكنه تعديل المستخدمين "
+
+msgid "Can configure Knews"
+msgstr "يمكنه تعديل اعدادات وخواص ك-نيوز"
+
+msgid "All subscribers"
+msgstr "إجمالى المشتركين"
+
+msgid "Do WordPress user importation"
+msgstr " قم بعمليه استيراد لمستخدمى ووردبريس"
+
+msgid "Import <strong>all</strong> the WordPress users and subscribe into the mailing list:"
+msgstr " قم بعمليه استيراد <strong>كل</strong>  مستخدمى ووردبريس واجعل اشتراكهم الى قائمه:"
+
+msgid "Assign the language:"
+msgstr "قم بتعيين اللغة:"
+
+msgid "Import WP users into Knews"
+msgstr " قم بعمليه استيراد مستخدمى ووردبريس الى ك-نيوز"
+
+msgid "Users imported: %s. Users found before (not re-imported): %s."
+msgstr "المستخدمين الذى تم استيرادهم : %s . المستخدمين الموجودين من قبل( لم يتم استيرادهم) : %s"
+
+msgid "Errors submitting confirmation: %s"
+msgstr "أخطاء عمليه  تأكيد الارسال:%s"
+
+msgid "Order"
+msgstr "الترتيب"
+
+msgid "New Auto-create Newsletters Process"
+msgstr "انشاء عمليه بناء آلى جديدة للنشرات الإخبارية "
+
+msgid "Automated process name:"
+msgstr "اسم عمليه الارسال التلقائى:"
+
+msgid "(high performance SMTP)"
+msgstr "(بروتوكول SMTP ذو اداء عالي)"
+
+msgid "All categories"
+msgstr "جميع الأقسام"
+
+msgid "Error: Please, fill all the form"
+msgstr "خطأ: الرجاء، ملء كل الخانات"
+
+msgid "Mantain current data and add new mailing lists"
+msgstr "الحفاظ على البيانات الحالية وإضافة القوائم البريدية الجديدة"
+
+msgid "of"
+msgstr "من"
+
+msgid "SMTP Secure"
+msgstr "بروتوكول SMTP  آمن"
+
+msgid "Step"
+msgstr "خطوة"
+
+msgid "Submit automatic"
+msgstr "إرسال تلقائي"
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr "هذا النموذج يتطلب إصدار ك-نيوز ال %s , يجب عليك تحديث  ك-نيوز قبل استخدام هذا النموذج"
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr "هذا النموذج يتطلب نسخه ك-نيوز المتميزه , يمكنك الحصول عليها هنا %s "
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr "<strong>تم تسجيل ك-نيوز </strong>   اذهب الى  %s صفحه الاضافات%s واضغط على رابط  \"تحديث\" الخاص ب ك-نيوز. لك منا جزيل الشكر."
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr "ك-نيوز  يدير كل فتره ساعة عمليه الإنشاء الآلي للنشرات"
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr "يمكنك تحريك هذه المهمة يدويا الآن (مستحسن فقط لأغراض الاختبار) %s تفعيل  الإنشاء  الآلي الآن"
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr "ك-نيوز  يدير الارسال كل فتره 10 دقائق ويرسل لجزء من القائمة."
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr "يمكنك تحريك جافاسكريبت كرون  يدويا إذا لم يتم إرسال الرسائل الإخبارية الخاصة بك لأي سبب من الأسباب:  %s  - تشغيل كرون JS الآن."
+
+msgid "mobile_version_text_link"
+msgstr ""
+
+msgid "desktop_version_text_link"
+msgstr ""
+
+msgid "Knews Pro is currently installed."
+msgstr "نسخه ك-نيوز برو المتميزه مثبته الآن"
+
+msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
+msgstr "يمكن تنفيذ عمليه تحديث نسخه ك- نيوز فقط من %s الصفحه الرئيسيه لإدارة المدونه %s . فى مقدرة القائم باعمال ادارة شبكة الموقع تنفيذ التحديث."
 

@@ -33,7 +33,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			} else {
-				$result=$Knews_plugin->sendMail( $Knews_plugin->post_safe('email'), $theSubject, $theHtml );
+				$user = new stdClass;
+				$user->unsubscribe = '#';
+				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter;
+				$user->email = $Knews_plugin->post_safe('email');
+				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			}
 
 			if ($result['ok']==1) {
@@ -211,7 +215,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 	<input type="hidden" name="action" id="action" value="submit_manual" />
 	<input type="hidden" name="idnews" id="idnews" value="<?php echo $id_newsletter; ?>" />
-	<p>E-mail: <input type="text" name="email" /></p>
+	<p>E-mail: <input type="text" name="email" class="regular-text" /></p>
 	<div class="submit">
 		<input type="submit" class="button-primary" value="<?php _e('Submit newsletter','knews'); ?>"/>
 	</div>

@@ -46,6 +46,8 @@ if ($Knews_plugin) {
 		$post = get_post($ajaxid);
 		setup_postdata($post);
 
+		$excerpt = (string) get_the_excerpt();
+		
 		$text1 = get_the_content();
 		$text = strip_shortcodes( $text1 );
 		if ($knewsOptions['apply_filters_on']=='1') $text = apply_filters('the_content', $text);
@@ -64,7 +66,7 @@ if ($Knews_plugin) {
 
 		$jsondata['permalink'] = get_permalink($ajaxid);
  	    $jsondata['title'] = get_the_title();
- 	    $jsondata['excerpt'] = $text;
+ 	    $jsondata['excerpt'] = ($excerpt=='') ? $text : $excerpt;
 		if ($knewsOptions['apply_filters_on']=='1') $text1 = apply_filters( 'the_content', $text1 );
 		$text1 = iterative_extract_code('<script', '</script>', $text1, true);
 		$text1 = iterative_extract_code('<fb:like', '</fb:like>', $text1, true);

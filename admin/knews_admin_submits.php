@@ -219,8 +219,8 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 			if ($pending) {
 			?>
 			<div class="updated">
-				<p>Knews submit runs every 10 minutes and sends a portion of the list.</p>
-				<p>You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: <a href="<?php echo $Knews_plugin->get_main_admin_url(); ?>admin-ajax.php?action=knewsCron&js=1" class="button" target="_blank">Run JS-Cron Now</a></p>
+				<p><?php _e('Knews submit runs every 10 minutes and sends a portion of the list.','knews'); ?></p>
+				<p><?php echo sprintf(__('You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now','knews'), '<a href="' . $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCron&js=1" class="button" target="_blank">'); ?></a></p>
 			</div>
 			<?php
 			}

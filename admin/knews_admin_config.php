@@ -39,6 +39,12 @@ function knews_save_prefs() {
 		$knewsOptions['smtp_user_knews'] = $Knews_plugin->post_safe('smtp_user_knews');
 		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews');
 		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews');
+		$knewsOptions['is_sendmail'] = $Knews_plugin->post_safe('is_sendmail_knews');
+
+	} elseif (isset($_POST['update_KnewsAdminRegister'])) {
+
+		$knewsOptions['registration_email'] = $Knews_plugin->post_safe('registration_email_knews');
+		$knewsOptions['registration_serial'] = $Knews_plugin->post_safe('registration_serial_knews');
 
 	}
 
@@ -46,7 +52,11 @@ function knews_save_prefs() {
 
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	
-		echo '<div class="updated"><p><strong>' . __('Saved.','knews') . '</strong></p></div>';
+		if (isset($_POST['update_KnewsAdminRegister'])) {
+			echo '<div class="updated"><p>' . sprintf(__("<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much.",'knews'), '<a href="plugins.php">', '</a>') . '</strong></p></div>';		
+		} else {
+			echo '<div class="updated"><p><strong>' . __('Saved.','knews') . '</strong></p></div>';
+		}
 
 		if (!wp_next_scheduled('knews_wpcron_function_hook')) {
 			if ($knewsOptions['knews_cron']=='cronwp') {
@@ -62,7 +72,7 @@ function knews_save_prefs() {
 }
 
 if ($Knews_plugin->get_safe('tab')=='pro' && $Knews_plugin->im_pro()) {
-	require(KNEWS_DIR . '/includes/knews_roles.php');
+	require_once(KNEWS_DIR . '/includes/knews_roles.php');
 	if (isset($_POST['update_KnewsAdminRoles'])) knews_admin_save_caps();
 }
 
@@ -204,7 +214,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					<?php
 					$cron_main_url = $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCron';
 					if( is_multisite() ) {
-						echo '<p><strong>' . printf(__('Multisite detected. Only one instance of %s must be called for all websites.','knews'), $cron_main_url) . '</strong></p>';
+						echo '<p><strong>' . sprintf(__('Multisite detected. Only one instance of %s must be called for all websites.','knews'), $cron_main_url) . '</strong></p>';
 						//switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 						//restore_current_blog();
 					}
@@ -233,6 +243,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 							smtp_user_knews: jQuery('input#smtp_user_knews').val(),
 							smtp_pass_knews: jQuery('input#smtp_pass_knews').val(),
 							smtp_secure_knews: jQuery('select#smtp_secure_knews').val(),
+							is_sendmail_knews: jQuery('select#is_sendmail_knews').val(),
 							action: 'knewsTestSMTP'
 						},
 						type: "POST",
@@ -258,7 +269,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<tr><td><?php _e('SMTP Secure','knews');?>: </td><td><select name="smtp_secure_knews" id="smtp_secure_knews" autocomplete="off" >
 					<option value=""<?php if ($knewsOptions['smtp_secure_knews']=='') echo ' selected="selected"'; ?>>none</option>
 					<option value="tls"<?php if ($knewsOptions['smtp_secure_knews']=='tls') echo ' selected="selected"'; ?>>tls</option>
-					<option value="ssl"<?php if ($knewsOptions['smtp_secure_knews']=='ssl') echo ' selected="selected"'; ?>>ssl</option></select></td></tr></table>
+					<option value="ssl"<?php if ($knewsOptions['smtp_secure_knews']=='ssl') echo ' selected="selected"'; ?>>ssl</option></select></td></tr>
+				<tr><td><?php _e('Conn mode:','knews');?> </td><td><select name="is_sendmail_knews" id="is_sendmail_knews" autocomplete="off" >
+					<option value="0"<?php if ($knewsOptions['is_sendmail']=='0') echo ' selected="selected"'; ?>>IsSMTP()</option>
+					<option value="1"<?php if ($knewsOptions['is_sendmail']=='1') echo ' selected="selected"'; ?>>IsSendmail()</option></select></td></tr></table>
 				<p>* <?php _e('Pay attention: If your SMTP server is anonymous leave SMTP User and SMTP Password fields blank','knews');?></p>
 			</div>
 			<div style="width:300px; float:left; padding-left:20px;">
@@ -282,6 +296,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 		</form>
 	</div>
 <?php
+
 } else {
 	knews_save_prefs();
 ?>
@@ -343,7 +358,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 
 			<hr />
 
-			<h3><?php _e('Compaibility options','knews'); ?></h3>
+			<h3><?php _e('Compatibility options','knews'); ?></h3>
 			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><?php _e('<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages.','knews'); ?></p>
 
 			<p><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> /> <?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></p>

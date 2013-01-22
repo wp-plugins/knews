@@ -279,11 +279,6 @@ msgid "Editing newsletter"
 msgstr "Editing newsletter"
 
 #. Text in echo
-#: admin/knews_admin_news_send.php:183
-msgid "E-mail for close supervision"
-msgstr "E-mail for close supervision"
-
-#. Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "E-mails sent at once"
 msgstr "E-mails sent at once"
@@ -444,11 +439,6 @@ msgstr "If you do not know what values ​​to put, leave these initially, late
 #: admin/knews_admin_import.php:437
 msgid "If you enter a value manually, this will be the same for all users imported"
 msgstr "If you enter a value manually, this will be the same for all users imported"
-
-#. Text in echo
-#: admin/knews_admin_config.php:154
-msgid "Ignore WPML and operate Knews as monolingual"
-msgstr "Ignore WPML and operate Knews as monolingual"
 
 #. Text in echo
 #: admin/knews_admin_import.php:221
@@ -737,12 +727,6 @@ msgstr "SMTP User"
 msgid "Save"
 msgstr "Save"
 
-#. Text in echo
-#: admin/knews_admin_news_list.php:164
-#: admin/knews_admin_lists.php:148
-msgid "Save changes"
-msgstr "Save changes"
-
 #. Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
@@ -908,11 +892,6 @@ msgstr "Subscriptions"
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "Submit method"
-
-#. Text in function
-#: knews.php:520
-msgid "Subscribe me"
-msgstr "Prijavite se"
 
 #. Text in function
 #: knews.php:520
@@ -1165,11 +1144,6 @@ msgstr "Using special characters (accents) correctly coded"
 msgid "Value"
 msgstr "Value"
 
-#. Text in echo
-#: admin/knews_admin_news_send.php:154
-msgid "WARNING"
-msgstr "UPOZORENJE"
-
 #. Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
@@ -1211,16 +1185,8 @@ msgstr "You must upload a file."
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr "You should be seeing the header and the four first lines of the CSV:"
 
-#. Text in function
-#: knews.php:1
-msgid "Widget title"
-msgstr "Widget title"
-
 msgid "widget_title"
 msgstr "Prijavite se"
-
-msgid "Widget e-mail label form"
-msgstr "Widget e-mail label form"
 
 msgid "widget_label_email"
 msgstr "Email:"
@@ -1345,11 +1311,6 @@ msgstr "deleted"
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "day-month-year"
-
-#. Text in echo
-#: admin/knews_admin_config.php:149
-msgid "here"
-msgstr "ovdje"
 
 #. Text in function
 #: admin/knews_admin_import.php:405
@@ -1608,9 +1569,6 @@ msgstr "Greška: Ovaj newsletter ne postoji"
 msgid "Do you really want to delete this module?"
 msgstr "Da li stvarno želite izbrisati ovaj modul?"
 
-msgid "Show/hide handlers"
-msgstr "Show/hide handlers"
-
 msgid "Move module"
 msgstr "Pomakni modul"
 
@@ -1625,9 +1583,6 @@ msgstr "Članci"
 
 msgid "Pages"
 msgstr "Stranice"
-
-msgid "Alerts"
-msgstr "Alerts"
 
 msgid "Reset all alerts"
 msgstr "Reset all alerts"
@@ -1823,9 +1778,6 @@ msgstr "Configure CRON tutorial"
 
 msgid "You must add this line in your webserver CRONTAB:"
 msgstr "You must add this line in your webserver CRONTAB:"
-
-msgid "The file location is: %s"
-msgstr "The file location is: %s"
 
 msgid "Configure SMTP tutorial"
 msgstr "Configure SMTP tutorial"
@@ -2234,4 +2186,52 @@ msgstr "Metod slanja:"
 
 msgid "Messages reset to defaults."
 msgstr "Poruke resetovane na default."
+
+msgid "(high performance SMTP)"
+msgstr ""
+
+msgid "All categories"
+msgstr ""
+
+msgid "Error: Please, fill all the form"
+msgstr ""
+
+msgid "Mantain current data and add new mailing lists"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "SMTP Secure"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "Submit automatic"
+msgstr ""
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr ""
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr ""
+
+msgid "Compatibility options"
+msgstr ""
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr ""
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr ""
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr ""
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr ""
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr ""
 
