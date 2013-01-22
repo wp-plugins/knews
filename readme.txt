@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.0
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
-* **Multilingual back office**: English, German, French, Italian, Spanish and Catalan.
+* **Multilingual back office**: English, Russian, Arabic, Spanish, German, French, Italian, Finnish, Dutch and Catalan.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
@@ -42,6 +42,7 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
+* **NEW**: Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
 * **NEW**: Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
 * English - en_US (Knews Team)
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
@@ -164,6 +165,20 @@ In any case, the degree of personalisation of our templates is immense, with tho
 
 == Changelog ==
 
+= 1.2.9 =
+
+* Russian language added (Thanks to Ivan Komarov. http://http://ivkom.ru ).
+* Google + icon added in the newsletter templates.
+* Added IsSendmail() in mailserver connection options (before only IsSMTP(), 1&1 webservers needs this method ).
+* Added alerts if all the mailing lists are closed (subscribe widget doesn't shown).
+* Fixed image resize issue under WP 3.5v (first time image resize / change).
+* Solved broken links can't read and unsubscribe for users not subscribed (submits through manual submit).
+* Some unstranslated strings solved (some strings added in latest releases).
+* Solved issue while saving in the editor (broken ajax communication).
+* Now the_excerpt gets the real post excerpt if there is one.
+* Subscription form back (if something goes wrong) now doesn't scroll up when doing click.
+* Right headers for stats images (some users can't see graphics stats).
+
 = 1.2.8 =
 
 * Error message "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)." solved. We're Sorry!!!
@@ -171,7 +186,7 @@ In any case, the degree of personalisation of our templates is immense, with tho
 
 = 1.2.7 =
 
-* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl)
+* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl )
 * Title added in the newsletter page after user clicks can't read link
 * User administration improvements: search for name and surname and order by any field
 * Subscription form back (if something goes wrong) without reload
@@ -376,6 +391,20 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.2.9 =
+
+* Russian language added (Thanks to Ivan Komarov. http://http://ivkom.ru ).
+* Google + icon added in the newsletter templates.
+* Added IsSendmail() in mailserver connection options (before only IsSMTP(), 1&1 webservers needs this method ).
+* Added alerts if all the mailing lists are closed (subscribe widget doesn't shown).
+* Fixed image resize issue under WP 3.5v (first time image resize / change).
+* Solved broken links can't read and unsubscribe for users not subscribed (submits through manual submit).
+* Some unstranslated strings solved (some strings added in latest releases).
+* Solved issue while saving in the editor (broken ajax communication).
+* Now the_excerpt gets the real post excerpt if there is one.
+* Subscription form back (if something goes wrong) now doesn't scroll up when doing click.
+* Right headers for stats images (some users can't see graphics stats).
+
 = 1.2.8 =
 
 * Error message "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)." solved. We're Sorry!!!
@@ -383,7 +412,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 = 1.2.7 =
 
-* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl)
+* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl )
 * Title added in the newsletter page after user clicks can't read link
 * User administration improvements: search for name and surname and order by any field
 * Subscription form back (if something goes wrong) without reload
@@ -399,30 +428,3 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Fifth step importation bug solved (rare issue)
 * JS-Cron step #2 404 error solved
 
-= 1.2.6 =
-
-* TESTED IN WP 3.5
-* DEEP CHANGES IN SECURITY: XSS & CSRF attaks prevention
-* AUTOMATION IMPROVEMENTS:
-* Added button to force automate script start with debugging info
-* Now the imported posts gets the "include posts for automation by default" preference
-* Autosave posts deactivating automation user preference solved
-* Automate posts by creation/update date preference added
-* FIXES:
-* Pagination added into select post popup (preventing memory overflow for much posts)
-* Long lang code support added (chinese and portuguese)
-* First character ? in newsletters fixed (rare, only a few webservers issue)
-* Import users bug fixed
-* PHP set_time_limit warning solved
-
-= 1.2.5 =
-
-* Added automated config option: older edited posts should be included on automation (on/off)
-* Added subscribe config option: Antispam bot check (on/off) (Subscribe always fails "wrong e-mail adress" message issue in some Cache systems)
-* Fatal error in admin newsletter page fixed
-* Added 250 and 500 users per iteration submit (only for high performance SMTP)
-* Fixed issue in the text email version (Thanks to Ernscht)
-* Fixed issue in special chars email validation (Thanks to Ernscht)
-* Added widget format (label/input position)
-* Hidden Knews in admin menu fixed
-* Fixed mailto in links on newsletters
