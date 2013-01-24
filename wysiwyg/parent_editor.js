@@ -59,10 +59,12 @@ var ratoli_offset_left=0;
 
 var save_var_module_callback='';
 var save_var_values=new Array();
+var is_saved=true;
+var knews_save_before='';
 
 function confirmExit() { return unsaved_message; }
-function not_saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = confirmExit; }
-function saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = null; }
+function not_saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = confirmExit; is_saved=false; }
+function saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = null; is_saved=true; }
 
 function dontstart () { return false; }
 
@@ -626,7 +628,7 @@ function tb_dialog_click (what, where) {
 	tb_remove();
 	
 	if (where == 'saveok' && what) {
-		document.location=submit_news;
+		window.location=submit_news;
 	}
 	if (where == 'saveok' && !what) {
 		window.location=reload_news + '&r=' + Math.floor(Math.random()*100000);
@@ -1211,15 +1213,15 @@ function save_news () {
 			url: url_admin + 'admin-ajax.php',
 			success: function(data) { 
 
-				if (data=='ok') {
-					saved();
-					//alert(ok_save);
-					tb_dialog('Knews', ok_save, button_submit_newsletter, button_continue_editing, 'saveok');
-				} else {
+				if (data.indexOf('knews:ok')==-1) {
 					tb_dialog('Knews', error_save + ": (" + data + ")", button_continue_editing, '', '');
 					//alert(error_save);
 					save_news_sem=false;
-
+					knews_save_before='';
+				} else {
+					saved();
+					//alert(ok_save);
+					tb_dialog('Knews', ok_save, button_submit_newsletter, button_continue_editing, 'saveok');
 				}
 			},
 

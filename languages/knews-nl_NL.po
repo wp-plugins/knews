@@ -1,76 +1,77 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Knews\n"
+"Language: nl\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Carles <mail@carlesrever.com>\n"
 "Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Schedule submit"
 msgstr "Plan verzending"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "(highest)"
 msgstr "(hoogste)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "(lowest)"
 msgstr "(laagste)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "(normal)"
 msgstr "(normaal)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Batch submit process has been properly scheduled."
 msgstr "Batch verzendproces is correct  gepland"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Activate user directly (don't send e-mail confirmation)"
 msgstr "Activeer deze gebruiker direct (zonder e-mail bevestiging)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Filter by state"
 msgstr "Filter op status"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:455
 msgid "No users match the search criteria"
 msgstr "Geen gebruikers die voldoen aan de zoek criteria"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:142
 msgid "Active users"
 msgstr "Actieve gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:162
 msgid "Add extra field"
 msgstr "Voeg een extra veld toe"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:178
 msgid "Add field"
 msgstr "Voeg veld toe"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:214
 msgid "Add newsletter"
 msgstr "Creëer een nieuwsbrief"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:358
 #: admin/knews_admin_import.php:359
 #: admin/knews_admin_import.php:360
@@ -78,221 +79,221 @@ msgstr "Creëer een nieuwsbrief"
 msgid "All"
 msgstr "Alle"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:362
 msgid "All in"
 msgstr "All in"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:668
 msgid "And have been blocked in this import:"
 msgstr "En zijn geblokkeerd in deze import:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:649
 msgid "And there have not been imported:"
 msgstr "En zijn niet geïmporteerd:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:155
 msgid "At the moment there is no list, you can create new ones"
 msgstr "Er is op dit moment (nog) geen lijst. Je kunt nieuwe aanmaken."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:170
 msgid "At the moment there is no newsletter, you can create new ones"
 msgstr "Er is op dit moment (nog) geen nieuwsbrief. Je kunt nieuwe aanmaken."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:658
 msgid "Automatically send confirmation e-mails:"
 msgstr "Stuur automatisch bevestigings e-mails:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:219
 msgid "Before enabling the sending SMTP, enter the values and your e-mail and then click on TEST button"
 msgstr "Voer voor het aanzetten van de SMTP optie de parameters in en je e-mail adres, en klik daarna op de TEST knop"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:360
 msgid "Blocked"
 msgstr "Geblokkeerd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:157
 msgid "CRON"
 msgstr "CRON"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_config.php:172
 msgid "CRON has not yet been configured"
 msgstr "CRON is nog niet geconfigureerd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_config.php:172
 msgid "CRON has stopped working."
 msgstr "CRON is gestopt."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:164
 msgid "CRON is properly configured"
 msgstr "CRON is correct geconfigureerd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:228
 msgid "CSV File"
 msgstr "CSV Bestand"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:217
 msgid "CSV Upload"
 msgstr "CSV Upload"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:644
 msgid "CSV total:"
 msgstr "CSV totaal:"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:201
 msgid "I can't submit an e-mail to:"
 msgstr "Ik kan geen e-mail verzenden naar:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:216
 msgid "Pay attention: If your SMTP server is anonymous leave SMTP User and SMTP Password fields blank"
 msgstr "Let op: Gebruik je een SMTP server zonder verificatie laat dan de SMTP Gebruiker en het SMTP wachtwoord veld leeg"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:374
 msgid "Check dates"
 msgstr "Controleer datums"
 
-#. Text in function
+#: Text in function
 #: direct/edit_news.php:49
 msgid "Check the directory permissions for"
 msgstr "Controleer de directory rechten voor"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:356
 msgid "Select a column"
 msgstr "Selecteer een kolom"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:179
 msgid "Choose a template"
 msgstr "Kies een template"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "Configuration"
 msgstr "Configuratie"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:360
 msgid "Confirmed"
 msgstr "Bevestigd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:294
 msgid "Continue"
 msgstr "Ga verder"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:164
 msgid "Create a mailing list"
 msgstr "Mailing lijst aanmaken"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:421
 msgid "Create a subscriber manually"
 msgstr "Voeg handmatig een abonnee toe"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:159
 msgid "Create new mailing list"
 msgstr "Maak een nieuwe mailing lijst"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:175
 msgid "Create new newsletter"
 msgstr "Voeg een nieuwsbrief toe"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:457
 msgid "Create a user"
 msgstr "Maak gebruiker aan"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:153
 msgid "Created"
 msgstr "Aangemaakt"
 
-#. Text in echo
+#: Text in echo
 #: direct/knews_cron.php:135
 msgid "Cron-JS finished, you can close the window"
 msgstr "Cron-JS beëindigd, je kunt het window sluiten"
 
-#. Text in echo
+#: Text in echo
 #: direct/knews_cron.php:131
 msgid "Cron-JS in the process, don't close this window..."
 msgstr "Cron-JS bezig, sluit dit window niet..."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:85
 #: admin/knews_admin_config.php:143
 msgid "Customised messages"
 msgstr "Aangepaste berichten"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:172
 msgid "Date (day/month/year)"
 msgstr "Datum (dag/maand/jaar)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:159
 #: admin/knews_admin_lists.php:143
 msgid "Delete"
 msgstr "Verwijder"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:686
 msgid "Do the import"
 msgstr "Importeer nu"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:209
 msgid "E-mails sent internally using WordPress (wp_mail() function)"
 msgstr "Intern door WordPress verzonden E-mails  (wp_mail() functie)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:156
 #: admin/knews_admin_news_list.php:167
 #: admin/knews_admin_lists.php:141
 msgid "Edit"
 msgstr "Bewerk"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_edit.php:28
 msgid "Editing newsletter"
 msgstr "Bewerken nieuwsbrief"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "E-mails sent at once"
 msgstr "Tegelijk verzonden emails"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:74
 msgid "Enclosure"
 msgstr "Aanhalingstekens"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:82
 msgid "Encoding"
 msgstr "Encoding"
 
-#. Text in function
+#: Text in function
 #: direct/edit_news.php:49
 #: admin/knews_admin_news_send.php:201
 #: admin/knews_admin_news_send.php:124
@@ -305,177 +306,177 @@ msgstr "Encoding"
 msgid "Error"
 msgstr "Fout"
 
-#. Text in echo
+#: Text in echo
 #: direct/edit_news.php:50
 msgid "Error saving"
 msgstr "Fout bij opslaan"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:203
 msgid "Error: can't move uploaded file."
 msgstr "Fout: Kan ge-upload bestand niet verplaatsen"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "Error: can't open the file"
 msgstr "Fout: Kan bestand niet openen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:136
 #: admin/knews_admin_users.php:190
 msgid "Extra fields"
 msgstr "Extra velden"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:152
 #: admin/knews_admin_users.php:207
 #: admin/knews_admin_users.php:257
 msgid "Field"
 msgstr "Velden"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:219
 msgid "Fields assignement"
 msgstr "Velden toekenning"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:232
 msgid "File upload"
 msgstr "Upload bestand"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:203
 msgid "File uploaded correctly"
 msgstr "Bestand correct ge-upload"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:315
 msgid "Filter"
 msgstr "Filter"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:308
 msgid "Filter by mailing list"
 msgstr "Filter op mailing lijst"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:321
 msgid "Find"
 msgstr "Vind"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_submits.php:16
 msgid "Finished"
 msgstr "Beëindigd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:218
 msgid "Formatting"
 msgstr "Opmaak"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:401
 #: admin/knews_admin_import.php:686
 #: admin/knews_admin_users.php:260
 msgid "Go back"
 msgstr "Ga terug"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:396
 #: admin/knews_admin_users.php:399
 msgid "Go to first page"
 msgstr "Ga naar de eerste pagina"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:405
 #: admin/knews_admin_users.php:408
 msgid "Go to last page"
 msgstr "Ga naar de laatste pagina"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:404
 #: admin/knews_admin_users.php:407
 msgid "Go to next page"
 msgstr "Ga naar de volgende pagina"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:397
 #: admin/knews_admin_users.php:400
 msgid "Go to previous page"
 msgstr "Ga naar de vorige pagina"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:212
 msgid "Host SMTP"
 msgstr "Host SMTP"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:397
 msgid "If a user already exists (matches e-mail)"
 msgstr "Als een gebruiker al bestaat (zelfde e-mail adres)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:287
 msgid "If you see the correct values, press \"Continue\""
 msgstr "Zie je de juiste waarden, klik \"Ga verder\""
 
-#. Text in function
+#: Text in function
 #: direct/test_smtp.php:1
 msgid "If you can read this e-mail, SMTP is correctly configured and you can activate it in Knews preferences"
 msgstr "Als je deze email kan lezen is SMTP correct geconfigureerd, je kunt het dan activeren in de Knews voorkeuren"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:368
 msgid "If you choose a column, allowed values ​​are:"
 msgstr "Als je een kolom kiest zijn de toegstane waardes:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:229
 msgid "If you do not know what values ​​to put, leave these initially, later you can change it"
 msgstr "Als je niet weet welke waardes te gebruiken laat deze dan eerst leeg, je kunt ze later aanpassen"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "If you enter a value manually, this will be the same for all users imported"
 msgstr "Als je handmatig een waarde invoert zal deze hetzelfde zijn voor alle geïmprteerde gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:221
 msgid "Import"
 msgstr "Importeer"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:214
 #: knews.php:520
 msgid "Import CSV"
 msgstr "Importeer CSV"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:691
 msgid "Import finished"
 msgstr "Import beëindigd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Import preview (we have not made ​​any changes yet:"
 msgstr "Import preview (we hebben nog niets gewijzigd):"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Import results"
 msgstr "Import resultaten"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:246
 msgid "Inactive language"
 msgstr "Inactieve taal"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:180
 msgid "Instructions for setting up CRON"
 msgstr "Instructies om CRON in te stellen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:362
 #: admin/knews_admin_users.php:246
 #: admin/knews_admin_users.php:326
@@ -483,125 +484,125 @@ msgstr "Instructies om CRON in te stellen"
 msgid "Language"
 msgstr "Taal"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Leave empty"
 msgstr "Laat leeg"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:131
 msgid "List name"
 msgstr "Lijst naam"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:162
 msgid "Mailing list"
 msgstr "Mailing lijst"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_lists.php:1
 msgid "Mailing list created"
 msgstr "Mailing lijst aangemaakt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:78
 #: knews.php:520
 msgid "Mailing lists"
 msgstr "Mailing lijsten"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_lists.php:1
 msgid "Mailing lists updated"
 msgstr "Mailing lijsten bijgewerkt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:152
 msgid "Main"
 msgstr "Hoofd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:170
 msgid "Main field"
 msgstr "Hoofd veld"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:84
 #: admin/knews_admin_config.php:142
 msgid "Main options"
 msgstr "Opties"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:398
 msgid "Maintain current data"
 msgstr "Behoud huidige data"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:402
 msgid "Make preview"
 msgstr "Creëer een voorbeeld"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:171
 msgid "Marking this box, this field will be visible in the users table. We recommend you don't mark more than 2 or 3 fields to avoid a confusing table"
 msgstr "Door deze box te markeren zal het veld zichtbaar worden in de gebruikers tabel. We adviseren niet meer dan 2 of 3 velden te markeren om een onduidelijke tabel te voorkomen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:154
 msgid "Modified"
 msgstr "Bijgewerkt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:145
 msgid "Multilingual"
 msgstr "Meertalig"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:165
 #: admin/knews_admin_news_list.php:178
 msgid "Name"
 msgstr "Naam"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:89
 msgid "Name list"
 msgstr "Lijst naam"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:167
 msgid "Name of extra field"
 msgstr "Naam van extra veld"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:66
 msgid "Newsletter"
 msgstr "Nieuwsbrief"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "Failed to create the Newsletter"
 msgstr "Nieuwsbrief aanmaken mislukt"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_edit.php:22
 msgid "Newsletter doesn't exists"
 msgstr "Nieuwsbrief bestaat niet"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "Newsletter list updated"
 msgstr "Nieuwsbrieven lijst bijgewerkt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:152
 msgid "Newsletter name"
 msgstr "Nieuwsbrief naam"
 
-#. Text in echo
+#: Text in echo
 #: direct/edit_news.php:51
 msgid "Newsletter saved"
 msgstr "Nieuwsbrief opgeslagen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:123
 #: admin/knews_admin_news_edit.php:21
 #: admin/knews_admin_news_list.php:111
@@ -609,248 +610,248 @@ msgstr "Nieuwsbrief opgeslagen"
 msgid "Newsletters"
 msgstr "Nieuwsbrieven"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "No"
 msgstr "Nee"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "No delimiters"
 msgstr "Geen scheidingstekens"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:360
 msgid "Not confirmed"
 msgstr "Niet bevestigd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:179
 msgid "Now you must click here, then a window that emulates CRON with JavaScript will open. You should leave it open till sending ends."
 msgstr "Je moet nu hier klikken. Een windows waarin CRON wordt uitgevoerd d.m.v. Javascript zal openen. Deze moet openblijven totdat het verzenden is afgerond."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:646
 msgid "Of which have been successfully imported:"
 msgstr "Waarvan succesvol zijn geïmporteerd:"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_submits.php:16
 msgid "Ongoing"
 msgstr "Lopend"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:90
 #: admin/knews_admin_lists.php:132
 msgid "Open"
 msgstr "Open"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_lists.php:91
 #: admin/knews_admin_lists.php:133
 msgid "Open for registered users"
 msgstr "Open voor geregistreerde gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:399
 msgid "Overwrite"
 msgstr "Overschrijven"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_submits.php:16
 msgid "Paused"
 msgstr "Gepauseerd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Paused?"
 msgstr "Gepauseerd?"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:361
 msgid "Permission"
 msgstr "Toestemming"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:213
 msgid "Port SMTP"
 msgstr "SMTP poort"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:220
 #: admin/knews_admin_news_list.php:157
 #: admin/knews_admin_news_list.php:167
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:67
 #: admin/knews_admin_news_send.php:173
 msgid "Priority"
 msgstr "Prioriteit"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:71
 msgid "Progress / Results"
 msgstr "Voortgang / Resultaten"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "Properly tabulated"
 msgstr "Netjes getabuleerd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:220
 msgid "Recipient"
 msgstr "Ontvanger"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:215
 msgid "SMTP Password"
 msgstr "SMTP wachtwoord"
 
-#. Text in function
+#: Text in function
 #: direct/test_smtp.php:1
 msgid "SMTP Submit e-mail test done"
 msgstr "SMTP e-mail verzend test klaar"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:214
 msgid "SMTP User"
 msgstr "SMTP gebruiker"
 
-#. Text in echo
+#: Text in echo
 #: direct/edit_news.php:73
 #: admin/knews_admin_config.php:116
 #: admin/knews_admin_config.php:228
 msgid "Save"
 msgstr "Opslaan"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_config.php:232
 msgid "Saved."
 msgstr "Opgeslagen."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:279
 msgid "Scan CSV again"
 msgstr "Scan CSV nogmaals"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_lists.php:152
 msgid "See users"
 msgstr "Zie gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: direct/select_post.php:59
 msgid "Select the post to insert in the newsletter"
 msgstr "Selecteer het in de nieuwsbrief in te voegen bericht "
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:455
 msgid "Send e-mail confirmation"
 msgstr "Stuur e-mail bevestiging"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:210
 msgid "Send e-mails using SMTP (recommended)"
 msgstr "Stuur e-mails d.m.v. SMTP (aanbevolen)"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:191
 msgid "Send the newsletter manually"
 msgstr "Verzend de nieuwsbrief handmatig"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:131
 msgid "Send the newsletter to the following lists"
 msgstr "Verzend de nieuwsbrief naar de volgende lijst"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:187
 msgid "Sender"
 msgstr "Afzender"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:188
 msgid "Sender e-mail"
 msgstr "Afzender e-mail"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:189
 msgid "Sender name"
 msgstr "Afzender naam"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:194
 msgid "Sending"
 msgstr "Aan het verzenden"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:179
 msgid "Sending SMTP is not enabled, the shipments are less reliable."
 msgstr "Verzending d.m.v. SMTP is niet enabled. De verzending is minder betrouwbaar."
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:130
 msgid "Sending newsletter"
 msgstr "Nieuwsbrief aan het versturen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:66
 msgid "Separator"
 msgstr "Scheidingsteken"
 
-#. Text in function
+#: Text in function
 #: direct/test_smtp.php:1
 msgid "Shipping done, check that the mail has arrived."
 msgstr "Verzending afgerond, controleer dat de email is aangekomen."
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_submits.php:16
 msgid "Special"
 msgstr "Speciaal"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:172
 msgid "Start (now or deferred)?"
 msgstr "Start (nu of geplanned)?"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:357
 #: admin/knews_admin_users.php:233
 #: admin/knews_admin_users.php:326
 msgid "State"
 msgstr "Status"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "Stats"
 msgstr "Statistieken"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:72
 msgid "Status"
 msgstr "Status"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:69
 msgid "Submit end"
 msgstr "Einde verzending"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:158
 #: admin/knews_admin_news_list.php:167
 #: knews.php:517
 msgid "Submit"
 msgstr "Verzenden"
 
-#. Text in function
+#: Text in function
 #: direct/test_smtp.php:1
 msgid "Submit error."
 msgstr "Verzend fout"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:197
 msgid "Submit newsletter"
 msgstr "Verzend nieuwsbrief"
@@ -858,208 +859,208 @@ msgstr "Verzend nieuwsbrief"
 msgid "Continue editing"
 msgstr "Ga door met bewerken"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:68
 msgid "Submit start"
 msgstr "Start verzending"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:2
 #: knews.php:520
 msgid "Submits"
 msgstr "Verzendingen"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:387
 msgid "Subscribe all users to the following mailing lists:"
 msgstr "Abonneer alle gerbuikers op de volgende mailing lijsten:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:136
 #: admin/knews_admin_users.php:190
 #: knews.php:520
 msgid "Subscribers"
 msgstr "Abonnees"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:245
 #: admin/knews_admin_users.php:326
 msgid "Subscriptions"
 msgstr "Abonnees"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:208
 msgid "Submit method"
 msgstr "Verzend methode"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "Today, at"
 msgstr "Vandaag, om"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "Tomorrow, at"
 msgstr "Morgen, om"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "at"
 msgstr "om"
 
-#. Text in function
+#: Text in function
 #: knews.php:520
 msgid "Yesterday, at"
 msgstr "Gisteren, om"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_list.php:155
 msgid "Template"
 msgstr "Template"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:223
 msgid "Test SMTP config"
 msgstr "Test SMTP configuratie"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:148
 msgid "The WPML plugin was not detected, multilingual options are not functional"
 msgstr "De WPML plugin is niet gedetecteert, meertaligheid opties werken niet"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:203
 msgid "The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)"
 msgstr "De directory /wp-content/plugins/knews/tmp moet schrijfbaar zijn (chmod 700)"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The field already exists"
 msgstr "Het veld bestaat al"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The field has been added"
 msgstr "Het veld is toegevoegd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The field name can't be empty"
 msgstr "De veldnaam kan niet leeg zijn"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The fields have been updated"
 msgstr "De velden zijn bijgewerkt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:90
 msgid "The first row is a header"
 msgstr "De eerste rij is de kopregel"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:165
 #: admin/knews_admin_config.php:172
 msgid "The last execution was done"
 msgstr "De laatste uitvoering is klaar"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:124
 msgid "The newsletter doesn't exists"
 msgstr "De nieuwsbrief bestaat niet"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "The newsletter has been created successfully"
 msgstr "De nieuwsbrief is succesvol aangemaakt"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:176
 msgid "A token is used to insert a field in the newsletter. Should be located between %, with no spaces, for example: %name%"
 msgstr "Een token wordt gebruikt om een extra veld in de nieuwsbrief in te voegen. Het moet staan tussen % tekens, zonder spaties. Bijvoorbeeld: %aanhef%"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added and an e-mail confirmation has been sent"
 msgstr "De gebruiker is toegevoegd, en een bevestigings email is verzonden"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added and from now on he will receive the newsletters"
 msgstr "De gebruiker is toegevoegd, van nu af zal hij de nieuwsbrieven ontvangen"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added but an error occurred in sending e-mail confirmation"
 msgstr "De gebruiker is toegevoegd, maar er is een fout opgetreden bij het verzenden van de bevestigings email."
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has not been inserted"
 msgstr "De gebruiker is niet toegevoegd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user was already introduced"
 msgstr "De gebruiker was al toegevoegd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "There is already another newsletter with the same name!"
 msgstr "Er is al een nieuwsbrief met diezelfde naam"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:651
 msgid "There have been created:"
 msgstr "Aangemaakt zijn:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:653
 msgid "There have been updated:"
 msgstr "Bijgewerkt zijn:"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:356
 msgid "This field is required to take it in some column"
 msgstr "Dit veld is nodig om in een kolom te gebruiken"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:172
 msgid "Time"
 msgstr "Tijd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:152
 #: admin/knews_admin_users.php:174
 msgid "Token"
 msgstr "Token"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:201
 msgid "The single e-mail has been sent to:"
 msgstr "The enkele e-mail is verzonden naar:"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "Unique language"
 msgstr "Unieke taal:"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Unknown language"
 msgstr "Onbekende taal"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:154
 msgid "Update fields"
 msgstr "Werk velden bij"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:260
 msgid "Update user"
 msgstr "Werk gebruiker bij"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:153
 msgid "Use the WPML defined languages to operate Knews in multilanguage mode"
 msgstr "Gebruik de in WPML gedefinieerde talen om Knews in multilanguage mode te gebruiken"
@@ -1097,89 +1098,89 @@ msgstr "Ga a.u.b. naar %s configuratiie pagina"
 msgid "Don't show this message again [x]"
 msgstr "Laat dit bericht niet opnieuw zien [x]"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "The user already exists"
 msgstr "De gebruiker bestaat al"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:464
 msgid "User data updated"
 msgstr "Gebruiker data bijgewerkt"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:263
 msgid "User not found"
 msgstr "Gebruiker niet gevonden"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_submits.php:70
 msgid "Users"
 msgstr "Gebruikers"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:460
 msgid "There are not yet users"
 msgstr "Er zijn nog geen gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:658
 msgid "Users unconfirmed (You should do confirmation manually):"
 msgstr "Gebruikers niet bevestigd (Je moet de bevestiging handmatig doen):"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:361
 msgid "Send a confirmation e-mail to the unconfirmed users (not to the locked ones)"
 msgstr "Stuur een bevestigings email naar de niet bevestigde gebruikers (niet de gelockte gebruikers)"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "Using special characters (accents) correctly coded"
 msgstr "Gebruik van speciale characters (accenten) juist gecodeerd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_users.php:207
 #: admin/knews_admin_users.php:257
 msgid "Value"
 msgstr "Waarde"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 #: admin/knews_admin_users.php:464
 msgid "Wrong e-mail"
 msgstr "Verkeerde e-mail"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Wrong state"
 msgstr "Verkeerde status"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "Yes"
 msgstr "Ja"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_send.php:179
 msgid "You cannot schedule a delayed delivery. You must leave an auxiliary window open (JavaScript CRON Emulation) until the sending ends"
 msgstr "Je kunt geen verzending inplannen. Je moet een window open houden (JavaScript CRON emulatie) totdat de verzending is afgerond"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "You must choose a name for the new newsletter!"
 msgstr "De nieuwsbrief moet een naam hebbenr!"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "You must choose a template!"
 msgstr "Je moet een template kiezen!"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:203
 msgid "You must upload a file."
 msgstr "Je moet een bestand uploaden."
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "You should be seeing the header and the four first lines of the CSV:"
 msgstr "Je zou 4 kopregels moeten zien aan het begin van de CSV:"
@@ -1199,167 +1200,167 @@ msgstr "Verzend"
 msgid "You were already a subscriber (AJAX message)"
 msgstr "U was al abonnee(AJAX message)"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "ajax_subscription"
 msgstr "We hebben u een bevestigings email gestuurd"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "ajax_subscription_direct"
 msgstr "U bent succesvol aangemeld"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "ajax_subscription_oops"
 msgstr "U was al aangemeld"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "ajax_subscription_error"
 msgstr "Er is een fout opgetreden bij het verzende van de bevestigings email"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "ajax_wrong_email"
 msgstr "Uw emailadres lijkt niet correct. Controleer aub opnieuw"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "email_subscription_subject"
 msgstr "Nieuwsbrief aanmelding"
 
-#. Text in function
+#: Text in function
 #: knews.php:1
 msgid "email_subscription_body"
 msgstr "<p>U heeft zich aangemeld voor de nieuwsbrief van #blog_name#. Om uw aanmelding te bevestigen klikt u <a href=\"#url_confirm#\">hier</a>.</p><p>U kunt ook het volgende adres in uw browser plakken:<br>#url_confirm#</p>"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:28
 msgid "subscription_ok_title"
 msgstr "Uw aanmelding is bevestigd"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:29
 msgid "subscription_ok_message"
 msgstr "Vanaf nu ontvangt u onze nieuwsbrieven.<br><br><strong>Dank u.</strong>"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:35
 msgid "subscription_error_title"
 msgstr "Fout bij aanmelding"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:50
 msgid "subscription_error_message"
 msgstr "Probeert u het a.u.b opnieuw. Kopieer indien nodig de volledige link in de adresbalk van uw browser.<br><br><strong>Excuses voor het ongemak</strong>"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:49
 msgid "subscription_stop_error_title"
 msgstr "Uw afmelding is mislukt"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:50
 msgid "subscription_stop_error_message"
 msgstr "Probeert u het a.u.b opnieuw. Kopieer indien nodig de volledige link in de adresbalk van uw browser.<br><br><strong>Excuses voor het ongemak</strong>"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:42
 msgid "subscription_stop_ok_title"
 msgstr "Uw aanmelding is beëindigd"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:43
 msgid "subscription_stop_ok_message"
 msgstr "Vanaf nu ontvangt u onze nieuwsbrieven niet meer. Dank u"
 
-#. Text in echo
+#: Text in echo
 #: dialogs.php:52
 msgid "dialogs_close_button"
 msgstr "Sluiten"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:373
 msgid "year-month-day"
 msgstr "jaar-maand-dag"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:360
 #: admin/knews_admin_users.php:236
 msgid "blocked"
 msgstr "geblokkeerd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_lists.php:1
 msgid "can't create the mailing list"
 msgstr "Kan de mailing lijst niet aanmaken"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:359
 #: admin/knews_admin_users.php:235
 msgid "confirmed"
 msgstr "bevestigd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_submits.php:16
 msgid "deleted"
 msgstr "verwijderd"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:371
 msgid "day-month-year"
 msgstr "dag-maand-jaar"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:405
 msgid "If not, change the separator values and / or closing. Then press \"Scan CSV again\":"
 msgstr "Zo niet, verander het scheidingsteken en/of afsluiting. Dan druk op \"Scan CSV opnieuw\":"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:437
 msgid "introduce value"
 msgstr "introduceer waarde"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:372
 msgid "month-day-year"
 msgstr "maand-dag-jaar"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_config.php:165
 #: admin/knews_admin_config.php:172
 msgid "minutes ago"
 msgstr "minuten geleden"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_news_list.php:167
 msgid "never"
 msgstr "nooit"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_import.php:358
 #: admin/knews_admin_users.php:234
 msgid "not confirmed"
 msgstr "niet bevestigd"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_users.php:246
 #: admin/knews_admin_users.php:460
 msgid "Language not detected!"
 msgstr "Taal niet gedecteerd!"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_news_send.php:173
 msgid "test mode"
 msgstr "test modus"
 
-#. Text in function
+#: Text in function
 #: admin/knews_admin_lists.php:1
 msgid "there is already a list with this name!"
 msgstr "Er is al een lijst met deze naam!"
 
-#. Text in echo
+#: Text in echo
 #: admin/knews_admin_import.php:644
 #: admin/knews_admin_import.php:646
 #: admin/knews_admin_import.php:649
@@ -1371,97 +1372,97 @@ msgstr "Er is al een lijst met deze naam!"
 msgid "users"
 msgstr "gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:17
 msgid "E-mail on automatically import (body)"
 msgstr "E-mail bij automatische import (body)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:16
 msgid "E-mail on automatically import (title)"
 msgstr "E-mail bij automatische import (titel)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:26
 msgid "Close Button Caption"
 msgstr "Sluit knop Caption"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:15
 msgid "Confirmation E-mail (body)"
 msgstr "Bevestigings Email (body)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:14
 msgid "Confirmation E-mail (subject)"
 msgstr "Bevestigings Email (onderwerp)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:21
 msgid "Subscription Error Dialog (Message)"
 msgstr "Aanmelding mislukt dialoog (Bericht)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:20
 msgid "Subscription Error Dialog (Title)"
 msgstr "Aanmelding mislukt dialoog (Titel)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:19
 msgid "Subscription OK Dialog (Message)"
 msgstr "Aanmelding gelukt dialoog (Bericht)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:18
 msgid "Subscription OK Dialog (Title)"
 msgstr "Aanmelding gelukt dialoog (Titel)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:11
 msgid "Subscription done, you were already subscribed (AJAX message)"
 msgstr "Aanmelding gereed, u was al aangemeld (AJAX message)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:10
 msgid "We have sent you a confirmation e-mail (AJAX message)"
 msgstr "We hebben u een bevestigingsmail gestuurdl (AJAX message)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:13
 msgid "Subscription error (AJAX message)"
 msgstr "Aanmeldingsfout (AJAX message)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:23
 msgid "UnSubscribe Error Dialog (Message)"
 msgstr "Afmelding mislukt dialoog (Bericht)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:22
 msgid "UnSubscribe Error Dialog (Title)"
 msgstr "Afmelding mislukt dialoog (Titel)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:25
 msgid "UnSubscribe OK Dialog (Message)"
 msgstr "Afmelding gelukt dialoog (Bericht)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:24
 msgid "UnSubscribe OK Dialog (Title)"
 msgstr "Afmelding gelukt dialoog (Titel)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:9
 msgid "Wrong e-mail address, please check (AJAX message)"
 msgstr "Fout email adres, controleer a.u.b. (AJAX message)"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:36
 msgid "email_importation_body"
 msgstr "U bent aangemeld bij de nieuwsbrieven van #blog_name#, U moet deze aanmelding bevestigen door te <a href=\"#url_confirm#\">hier</a> te klikken.</p><p>U kunt ook deze link in uw browser openen:<br>#url_confirm#</p>"
 
-#. Text in echo
+#: Text in echo
 #: phpscanner.php:35
 msgid "email_importation_subject"
 msgstr "Nieuwsbrief aanmelding"
@@ -1598,53 +1599,53 @@ msgstr "Verzend berichten die een fout gemeld hebben opnieuw"
 msgid "Retry"
 msgstr "Probeer opnieuw"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:152
 msgid "1. Select the users you want to export:"
 msgstr "1. Selecteer de gebruikers die je wilt exporteren:"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:152
 msgid "1.1. Select the lists to export:"
 msgstr "1.1.Selecteer de te exporteren lijsten:"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:152
 msgid "1.2. Select the languages to export:"
 msgstr "1.2. Selecteer de te exporteren talen:"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:152
 msgid "2. Format options:"
 msgstr "2. Opmaak opties:"
 
-#. Text in function
+#: Text in function
 #: knews_admin_export.php:143
 msgid "E-mail"
 msgstr "E-mail"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:71
 #: knews_admin_export.php:195
 msgid "Export users"
 msgstr "Exporteer gebruikers"
 
-#. Text in echo
+#: Text in echo
 #: knews_admin_export.php:189
 msgid "Insert a header in the first row"
 msgstr "Voeg een kopregel in op de eerste rij"
 
-#. Text in function
+#: Text in function
 #: knews_admin_export.php:143
 msgid "No users match criteria"
 msgstr "Geen gebruikers voldoen aan de criteria"
 
-#. Text in function
+#: Text in function
 #: knews_admin_export.php:143
 msgid "Select at least one list and one language."
 msgstr "Selecteer minstens één lijst en één taal."
 
-#. Text in function
+#: Text in function
 #: knews_admin_export.php:142
 msgid "To download the .CSV, click %s here"
 msgstr "Om de CSV te downlaoden, Klik %s hier"
@@ -2183,6 +2184,54 @@ msgstr "Verzend methode:"
 msgid "Messages reset to defaults."
 msgstr "Berichten naar standaard herstelt."
 
+msgid "(high performance SMTP)"
+msgstr "(high performance SMTP)"
+
+msgid "All categories"
+msgstr "Alle categorieën"
+
+msgid "Error: Please, fill all the form"
+msgstr "Fout: Vul a.u.b. het hele formulier in"
+
+msgid "Mantain current data and add new mailing lists"
+msgstr "Behoud huidige gegevens en voeg nieuwe mailing lijsten toe"
+
+msgid "of"
+msgstr "van"
+
+msgid "SMTP Secure"
+msgstr "SMTP Secure"
+
+msgid "Step"
+msgstr "Stap"
+
+msgid "Submit automatic"
+msgstr "Automatisch verzenden"
+
+msgid "This template requires Knews version %s you must update Knews before use this template"
+msgstr "Deze template vereist Knews versie %s Je moet Knews updaten om deze te kunnen gebruiken."
+
+msgid "This template requires the professional version of Knews. You can get it %s here"
+msgstr "Deze template vereist de Pro versie van Knews. Deze kun je %s hier verkrijgen"
+
+msgid "Compatibility options"
+msgstr "Compatibiliteit opties"
+
+msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
+msgstr "<strong>Knews is nu geregistreerd</strong>. Ga naar de %s Plugins pagina %s en klik bij knews op de 'Check for updates' link om te updaten. Hartelijk dank!"
+
+msgid "Knews runs every hour the automated newsletter creation jobs."
+msgstr "Elk uur voert Knews the automatische nieuwsbrief aanmaak taak uit"
+
+msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
+msgstr "Je kunt deze taak handmatig starten (alleen aanbevolen voor test doeleinden) %s Voer Automatische aanmaak nu uit"
+
+msgid "Knews submit runs every 10 minutes and sends a portion of the list."
+msgstr "De Knews verzend taak draait elke 10 minuten en verstuurt dan een deel van de lijst. "
+
+msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
+msgstr "Je kunt de JavaScript CRON handmatig starten als de nieuwsbrief om onduidelijke reden niet verstuurt wordt."
+
 msgid "Widget subscription form title"
 msgstr "Inschrijvingsformulier Widget titel"
 
@@ -2269,9 +2318,6 @@ msgstr "Knews Pro bevat een bounce email detectie systeem, er is daarvoor een sp
 
 msgid "Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)"
 msgstr "Gebruik de wijzigingsdatum van het bericht, i.p.v. de aanmaakdatum, voor de automatische nieuwsbrieven (Oudere berichten zullen dan worden bijgevoegd als je ze bewerkt en deze optie is geactiveerd)"
-
-msgid "Compatibility options"
-msgstr "Compatibiliteit opties"
 
 msgid "Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)"
 msgstr "Pas the_content filter toe bij het invoegen van berichten in nieuwsbrieven (Deactiveer bij compatibiliteit problemen met sommige plugins zoals NextGen Gallery) "
@@ -2420,48 +2466,57 @@ msgstr "Nieuw Automatisch Nieuwsbrief Proces"
 msgid "Automated process name:"
 msgstr "Automatisch proces naam:"
 
-msgid "(high performance SMTP)"
-msgstr ""
+msgid "desktop_version_text_link"
+msgstr "desktop_versie_tekst_link"
 
-msgid "All categories"
-msgstr "Alle categorieën"
+msgid "Knews Pro is currently installed."
+msgstr "Knews Pro is al geïnstalleerd."
 
-msgid "Error: Please, fill all the form"
-msgstr "Fout: Vul a.u.b. het hele formulier in"
+msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
+msgstr "Knews updates kunnen alleen van de %s dashboard worden beheerd. Soms kan alleen de beheerder dat."
 
-msgid "Mantain current data and add new mailing lists"
-msgstr "Behoud huidige gegevens en voeg nieuwe mailing lijsten toe"
+msgid "Warning: if you haven't any mailing list opened, the subscription widget will not shown"
+msgstr "Let op: Als er geen mailing lijsten zijn wordt de aanmeldingswidget niet getoond."
 
-msgid "of"
-msgstr "van"
+msgid "Warning: you haven't any mailing list opened for logged users, the subscription widget will not shown until you make log out"
+msgstr "Let op: Er zijn geen mailinglijsten voor ingelogde gebruikers. De aanmeldingswidget wordt pas getoond als je uitlogt. "
 
-msgid "SMTP Secure"
-msgstr "SMTP Secure"
+#: Text in echo
+#: admin/knews_admin_news_list.php:164
+#: admin/knews_admin_lists.php:148
+msgid "Save changes"
+msgstr "Sla wijzigingen op"
 
-msgid "Step"
-msgstr "Stap"
+#: Text in function
+#: knews.php:520
+msgid "Subscribe me"
+msgstr "Abonneer mij"
 
-msgid "Submit automatic"
-msgstr "Automatisch verzenden"
+#: Text in echo
+#: admin/knews_admin_news_send.php:154
+msgid "WARNING"
+msgstr "WAARSCHUWING"
 
-msgid "This template requires Knews version %s you must update Knews before use this template"
-msgstr "Deze template vereist Knews versie %s Je moet Knews updaten om deze te kunnen gebruiken."
+#: Text in echo
+#: admin/knews_admin_config.php:149
+msgid "here"
+msgstr "hier"
 
-msgid "This template requires the professional version of Knews. You can get it %s here"
-msgstr "Deze template vereist de Pro versie van Knews. Deze kun je %s hier verkrijgen"
+msgid "Show/hide handlers"
+msgstr "Toon/verberg handlers"
 
-msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
-msgstr "<strong>Knews is nu geregistreerd</strong>. Ga naar de %s Plugins pagina %s en klik bij knews op de 'Check for updates' link om te updaten. Hartelijk dank!"
+msgid "Alerts"
+msgstr "Waarschuwingen"
 
-msgid "Knews runs every hour the automated newsletter creation jobs."
-msgstr ""
+msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
+msgstr "Je moet de juiste URL gebruiken: www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron"
 
-msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
-msgstr ""
+msgid "mobile_version_text_link"
+msgstr "mobiele_versie_tekst_link"
 
-msgid "Knews submit runs every 10 minutes and sends a portion of the list."
-msgstr ""
+msgid "Widget %s label form"
+msgstr "Widget %s label formulier"
 
-msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
-msgstr ""
+msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
+msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
 
