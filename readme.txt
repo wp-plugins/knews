@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
-Tested up to: 3.5.0
-Stable tag: 1.3.0
+Tested up to: 3.5.1
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 = Features =
 
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
-* New **premium** template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
+* New **premium** template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
@@ -44,9 +44,9 @@ A WYSIWYG Editor Demo:
 
 * **NEW**: Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
 * **NEW**: Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
-* English - en_US (Knews Team)
+* English - en_US (Knews Team & Ypsilon http://www.ypsilonet.com )
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
-* German - de_DE (thanks to: Ypsilon http://www.ypsilonet.com )
+* German - de_DE (thanks to: Oliver-Frank Hebel http://www.brand-bull.com )
 * Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com )
 * Spanish - es_ES (Knews Team)
 * Catalan - ca (Knews Team)
@@ -146,9 +146,9 @@ If sending is done by SMTP, the amount of e-mails reported as SPAM will drop. Kn
 
 No problem. Simply choose the option to use Cron emulation in JavaScript and send normally. You will have to keep a window open until the sending ends that's all.
 
-**Does Knews only have 4 templates?**
+**Does Knews only have 5 templates?**
 
-At the moment Knews only has 3 free templates. Just we launched our first premium template "Glossy Black", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
+At the moment Knews only has 3 free templates. Just we launched our second premium template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 In any case, the degree of personalisation of our templates is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
 
 == Screenshots ==
@@ -162,8 +162,18 @@ In any case, the degree of personalisation of our templates is immense, with tho
 7. The Sweet Barcelona Template and a sample customization (Wine).
 8. The Casablanca Template and a sample customisation (Christmas).
 9. The Glossy Black Template and a sample customisation (White Background).
+10. The Officina Template.
 
 == Changelog ==
+
+= 1.3.1 =
+
+* Cleaner in the WYSIWYG Editor for the font size bug (appears only in some mail clients, most times in some letters inside the link) now solved.
+* More clean and shorter code lines in sent newsletters html: solves rare mail client issues.
+* Support for the new jQuery 1.9: alternatives for the deprecated live() and browser() methods. More performance and support for older jQuery versions.
+* Export subscribers: Now exports the name and surname fields.
+* Post content: insertion now really gets the_excerpt content (if exists, otherwise generates it using the content).
+* Select post pagination() function re-declaration bug solved (some WP themes uses this function name).
 
 = 1.3.0 =
 
@@ -394,6 +404,15 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+
+* Cleaner in the WYSIWYG Editor for the font size bug (appears only in some mail clients, most times in some letters inside the link) now solved.
+* More clean and shorter code lines in sent newsletters html: solves rare mail client issues.
+* Support for the new jQuery 1.9: alternatives for the deprecated live() and browser() methods. More performance and support for older jQuery versions.
+* Export subscribers: Now exports the name and surname fields.
+* Post content: insertion now really gets the_excerpt content (if exists, otherwise generates it using the content).
+* Select post pagination() function re-declaration bug solved (some WP themes uses this function name).
 
 = 1.3.0 =
 
