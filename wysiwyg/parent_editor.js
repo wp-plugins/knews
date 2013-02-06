@@ -62,6 +62,15 @@ var save_var_values=new Array();
 var is_saved=true;
 var knews_save_before='';
 
+navigator.sayswho= (function(){
+    var N= navigator.appName, ua= navigator.userAgent, tem;
+    var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+    if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+    M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+    return M;
+})();
+
 function confirmExit() { return unsaved_message; }
 function not_saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = confirmExit; is_saved=false; }
 function saved() { document.getElementById('knews_editor').contentWindow.window.onbeforeunload = null; is_saved=true; }
@@ -70,7 +79,7 @@ function dontstart () { return false; }
 
 jQuery(window).load(function() {
 	
-	if (jQuery.browser.opera) alert(opera_no);
+	if (navigator.sayswho[0]=='Opera') alert(opera_no);
 
 	if (jQuery('#title').val() == "") jQuery('#title-prompt-text').show();
 	jQuery('#title')
@@ -162,7 +171,7 @@ jQuery(window).load(function() {
 				//e.cancelBubble=true; 
 				//window.event.returnValue = false;
 				//window.event.cancelBubble = true;
-				if (jQuery.browser.msie  && parseInt(jQuery.browser.version, 10) === 8) {
+				if (navigator.sayswho[0]=='MSIE'  && parseInt(navigator.sayswho[1], 10) === 8) {
 					this.attachEvent("ondragstart", dontstart );
 				} else {
 					e.preventDefault();
@@ -843,7 +852,7 @@ function CallBackPost(n, lang) {
 	not_saved();
 	tb_remove();
 
-	if (jQuery.browser.msie  && parseInt(jQuery.browser.version, 10) === 8 && to_shitty_ie8=='') {
+	if (navigator.sayswho[0]=='MSIE' && parseInt(navigator.sayswho[1], 10) === 8 && to_shitty_ie8=='') {
 		//alert("callback_img('" + html + "')");
 		to_shitty_ie8 = setTimeout("CallBackPost('" + n + "','" + lang + "')", 2000);
 		//alert("ie8b");
@@ -958,7 +967,7 @@ function callback_img(html, a, b, hs, vs, align) {
 	
 	jQuery('div.image_properties input#image_url').val(img_url);
 
-	if (jQuery.browser.msie  && parseInt(jQuery.browser.version, 10) === 8 && to_shitty_ie8=='') {
+	if (navigator.sayswho[0]=='MSIE' && parseInt(navigator.sayswho[1], 10) === 8 && to_shitty_ie8=='') {
 		//alert("callback_img('" + html + "')");
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");

@@ -33,16 +33,26 @@ parent.jQuery(document).ready( function () {
 			return false;
 		}
 	});
-	parent.jQuery('.droppable_empty', document)
-		.live('mouseover', function() {
-			//alert("ooo");
-			parent.droppable_over=this;
-			parent.jQuery(this).addClass('droppable_empty_hover');
-		})
-		.live('mouseout', function() {
-			parent.droppable_over=null;
-			parent.jQuery(this).removeClass('droppable_empty_hover');
-		});
+
+	/*parent.jQuery('.droppable_empty', document)
+		.live('mouseover', function() {*/
+	live_fn_1 = function() {
+		parent.droppable_over=this;
+		parent.jQuery(this).addClass('droppable_empty_hover');
+	}
+	//.live('mouseout', function() {
+	live_fn_2 = function() {
+		parent.droppable_over=null;
+		parent.jQuery(this).removeClass('droppable_empty_hover');
+	}
+	if (parseInt(parent.jQuery.fn.jquery.split('.').join(''), 10) >= 170) {
+		parent.jQuery(document).on('mouseover', '.droppable_empty', live_fn_1);
+		parent.jQuery(document).on('mouseout', '.droppable_empty', live_fn_2);
+	} else {
+		parent.jQuery('.droppable_empty', document).live('mouseover', live_fn_1);						
+		parent.jQuery('.droppable_empty', document).live('mouseout', live_fn_2);						
+	}
+
 	/*1.1.0 parent.jQuery('img.editable', document).live('mouseover', function(e) {
 		parent.jQuery(this).prev().css('display','block');
 	});
@@ -118,11 +128,14 @@ parent.jQuery(document).ready( function () {
 		parent.referer_image_size_ajax='';
 		return false;
 	});
-	parent.jQuery('a', document).live('click', function(e) {
+	/*parent.jQuery('a', document).live('click', */
+	live_fn_ret_false = function(e) {
 		return false;
-	});
-	parent.jQuery('img', document).live('mousedown', function(e) {
-		
+	}
+	/*);
+	parent.jQuery('img', document).live('mousedown', function(e) {*/
+	
+	live_fn_3 = function(e) {
 		if (!parent.jQuery(this).hasClass('editable')) return false;
 		
 		if (parent.referer_image_size != this && parent.referer_image_size != '') {
@@ -223,9 +236,18 @@ parent.jQuery(document).ready( function () {
 			move_resize_handlers(ww, hh, tt, ll);
 		}
 		return false;
+	}
+	//);
+
+	/*parent.jQuery('a', document).live('click', function(e) {
+		return false;
 	});
-	parent.jQuery('span.img_resizer', document)
-		.live('mousedown', function(e) {
+*/
+
+	/*parent.jQuery('span.img_resizer', document)
+		.live('mousedown', function(e) {*/
+
+		live_fn_4 = function(e) {
 
 			ww = parseInt(parent.jQuery(parent.referer_image_size).attr('width'), 10);
 			hh = parseInt(parent.jQuery(parent.referer_image_size).attr('height'), 10);
@@ -246,14 +268,31 @@ parent.jQuery(document).ready( function () {
 			parent.resizing_image_handler_y=parent.jQuery(this).offset().top;
 
 			return false;
-		})
-		.live('mouseup', function(e) {
+		}
+		/*)
+		.live('mouseup', function(e) {*/
+		live_fn_5 = function(e) {
 			parent.resizing_image='';
 			return false;
-		})
+		}
+		/*)
 		.live('click', function(e) {
 			return false;
-		});
+		});*/
+
+	if (parseInt(parent.jQuery.fn.jquery.split('.').join(''), 10) >= 170) {
+		parent.jQuery(document).on('click', 'a', live_fn_ret_false);
+		parent.jQuery(document).on('mousedown', 'img', live_fn_3);
+		parent.jQuery(document).on('mousedown', 'span.img_resizer', live_fn_4);
+		parent.jQuery(document).on('mouseup', 'span.img_resizer', live_fn_5);
+		parent.jQuery(document).on('click', 'span.img_resizer', live_fn_ret_false);
+	} else {
+		parent.jQuery('a', document).live('click', live_fn_ret_false);						
+		parent.jQuery('img', document).live('mousedown', live_fn_3);						
+		parent.jQuery('span.img_resizer', document).live('mousedown', live_fn_4);						
+		parent.jQuery('span.img_resizer', document).live('mouseup', live_fn_5);						
+		parent.jQuery('span.img_resizer', document).live('click', live_fn_ret_false);						
+	}
 
 	parent.jQuery(document).bind('keypress keydown click', function() {
 		update_editor();
@@ -532,6 +571,20 @@ function find_tag(node) {
 
 })*/
 function update_editor() {
+	
+	//Netejar doble font FF
+	parent.jQuery('div.wysiwyg_editor font',document).each(function() {
+		var attrmap=new Array();
+		parent.jQuery.each(this.attributes, function(i, attrib) {
+			 var name = attrib.name;
+			 var value = attrib.value;
+			 attrmap[attrmap.length] = new Array(name, value);
+		});
+		if (attrmap.length == 1 && attrmap[0][0]=='size') {
+			parent.jQuery(this).contents().unwrap();
+		}
+	});
+	
 	inside_editor=false;
 	can_justify=false;
 	im_on_link=false;

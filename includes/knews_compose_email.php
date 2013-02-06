@@ -18,9 +18,37 @@ if ($Knews_plugin) {
 	
 	//Remove some shit from WYSIWYG editor
 	$theHtml = str_replace( $results[0]->html_container, '', $theHtml);
+
 	$theHtml = str_replace( '<span class="handler"></span>', '', $theHtml);
+	$theHtml = str_replace( '<!--[start module]-->', '', $theHtml);
+	$theHtml = str_replace( '<!--[end module]-->', '', $theHtml);
+	$theHtml = str_replace( '<!--[cant_read_block_start]-->', '', $theHtml);
+	$theHtml = str_replace( '<!--[cant_read_block_end]-->', '', $theHtml);
+	$theHtml = str_replace( '<!--[mobile_block_start]-->', '', $theHtml);
+	$theHtml = str_replace( '<!--[mobile_block_end]-->', '', $theHtml);
+
 	$theHtml = str_replace( "\r\n\r\n", "\r\n", $theHtml);
 	$theHtml = preg_replace('/(?:(?:\r\n|\r|\n)\s*){2}/s', "\n\n", $theHtml);
+	
+	$cut_lines=split("\n",$theHtml);
+	$theHtml='';
+	foreach ($cut_lines as $cl) {
+		if (strlen($cl) > 250) {
+			//echo 'tallarem: ' . htmlentities($cl) . '<br>';
+			while (strlen($cl) > 250) {
+				$seek=strpos($cl,'><',200);
+				if ($seek !== false) {
+					$theHtml .= substr($cl, 0, $seek+1) . "\n";
+					$cl=substr($cl,$seek+1);
+				} else {
+					//echo 'no puc tallar';
+					$theHtml .= $cl . "\n";
+					$cl='';
+				}
+			}
+		}
+		$theHtml .= $cl . "\n";
+	}
 	
 	$used_tokens = array();
 	

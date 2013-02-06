@@ -304,7 +304,7 @@ function print_state($step, $where) {
 			<input type="hidden" name="step" id="step" value="3" />
 			<input type="hidden" name="next_step" id="next_step" value="3" />
 			<input type="hidden" name="filename" id="filename" value="<?php echo $filename ?>" />
-			<p><?php _e('If  you see the correct values, press "Continue"','knews'); ?></p>
+			<p><?php _e('If you see the correct values, press "Continue"','knews'); ?></p>
 			<input type="hidden" name="knews_delimiters" id="knews_delimiters" value="<?php echo $Knews_plugin->post_safe('knews_delimiters'); ?>" />
 			<input type="hidden" name="knews_enclosure" id="knews_enclosure" value="<?php echo $Knews_plugin->post_safe('knews_enclosure'); ?>" />
 			<input type="hidden" name="knews_encode" id="knews_encode" value="<?php echo $Knews_plugin->post_safe('knews_encode'); ?>" />

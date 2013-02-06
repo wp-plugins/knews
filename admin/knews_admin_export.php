@@ -81,9 +81,15 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$csv_code = '';
 			$delimiter = $knews_delimiters[$Knews_plugin->post_safe('knews_delimiters')];
 			$enclosure = $knews_enclosure[$Knews_plugin->post_safe('knews_enclosure')];
+			$extra_fields = $Knews_plugin->get_extra_fields();
 
 			if ($knews_has_header==1) {
 					$csv_code .= $enclosure . __('E-mail','knews') . $enclosure . $delimiter;
+
+					foreach ($extra_fields as $ef) {
+						$csv_code .= $enclosure . $ef->name . $enclosure . $delimiter;					
+					}
+
 					$csv_code .= $enclosure . __('Language','knews') . $enclosure . $delimiter;
 					$csv_code .= $enclosure . __('State','knews') . $enclosure . $delimiter;
 					$csv_code .= $enclosure . __('Lists','knews') . $enclosure . "\r\n";
@@ -123,6 +129,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				if ($in_langs && $in_lists)  {
 					$exported_users++;
 					$csv_code .= $enclosure . $user->email . $enclosure . $delimiter;
+
+					foreach ($extra_fields as $ef) {
+						$csv_code .= $enclosure . $Knews_plugin->get_user_field($user->id, $ef->id) . $enclosure . $delimiter;					
+					}
+
 					$csv_code .= $enclosure . $user->lang . $enclosure . $delimiter;
 					$csv_code .= $enclosure . $user->state . $enclosure . $delimiter;
 					$csv_code .= $enclosure . $lists_user . $enclosure . "\r\n";

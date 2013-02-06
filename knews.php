@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.3.0
+Version: 1.3.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -823,7 +823,7 @@ if (!class_exists("KnewsPlugin")) {
 
 			$response = '<script type="text/javascript">
 				jQuery(document).ready(function() {
-					jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').live(\'submit\', function() {
+					knewsfunc = function() {
 						if (jQuery(this).attr(\'submitted\') !== "true") {
 							save_knews_form = jQuery(\'#knewsform_' . $this->knews_form_n . '\').html();
 							jQuery(this).attr(\'submitted\', "true");
@@ -836,7 +836,12 @@ if (!class_exists("KnewsPlugin")) {
 							});
 						}
 						return false;
-					});
+					}
+					if (parseInt(jQuery.fn.jquery.split(\'.\').join(\'\'), 10) >= 170) {
+						jQuery(document).on(\'submit\', \'#knewsform_' . $this->knews_form_n . ' form\', knewsfunc);
+					} else {
+						jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').live(\'submit\', knewsfunc);						
+					}
 				})
 			</script>';
 
@@ -913,7 +918,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 
-		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false) {
+		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0) {
 
 			$test_smtp=is_array($test_array);
 			
@@ -1132,7 +1137,7 @@ if (!class_exists("KnewsPlugin")) {
 			$now_time = time();
 			if ($now_time - $last_advice_time > 86400) {
 
-				$response = wp_remote_get( 'http://www.knewsplugin.com/read_advice.php?v=' . KNEWS_VERSION . '&l=' . WPLANG );
+				$response = wp_remote_get( 'http://www.knewsplugin.com/read_advice.php?v=' . KNEWS_VERSION . '&l=' . WPLANG . '&p=' . ($this->im_pro() ? '1' : '0') );
 
 			} else {
 				$response = get_option('knews_advice_response', '0');
@@ -1241,7 +1246,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.3.0');
+		define('KNEWS_VERSION', '1.3.1');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
