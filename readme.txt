@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,8 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+* *NEW:* HTML code edition inside WYSIWYG Editor!
+* *NEW:* Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
 * New **premium** template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
@@ -165,6 +167,14 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.3.2 =
+
+* Added HTML edition for the HTML coders inside HTML WYSIWYG Editor
+* Easy SMTP default configuration for 1&1 and GoDaddy hostings (the most asked & confuse hostings). And Gmail and Yahoo external accounts (most used external SMTP).
+* Solved a bug in the Test SMTP config for IsSendmail() configuration: always failed with right config (thanks to Manuel López Riego)
+* Solved PHP Warning in automated_jobs.php for qTranslate users (thanks to Andrija Kokanovic)
+* Solved PHP notice in newsletter creation: notice undefined variable anytemplate (thanks to Hasan Yousef)
 
 = 1.3.1 =
 
@@ -405,6 +415,14 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.3.2 =
+
+* Added HTML edition for the HTML coders inside HTML WYSIWYG Editor
+* Easy SMTP default configuration for 1&1 and GoDaddy hostings (the most asked & confuse hostings). And Gmail and Yahoo external accounts (most used external SMTP).
+* Solved a bug in the Test SMTP config for IsSendmail() configuration: always failed with right config (thanks to Manuel López Riego)
+* Solved PHP Warning in automated_jobs.php for qTranslate users (thanks to Andrija Kokanovic)
+* Solved PHP notice in newsletter creation: notice undefined variable anytemplate (thanks to Hasan Yousef)
+
 = 1.3.1 =
 
 * Cleaner in the WYSIWYG Editor for the font size bug (appears only in some mail clients, most times in some letters inside the link) now solved.
@@ -418,40 +436,5 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 * Solved a bug while saving the newsletter in the WYSIWYG editor
 
-= 1.2.9 =
 
-* Russian language added (Thanks to Ivan Komarov. http://http://ivkom.ru ).
-* Google + icon added in the newsletter templates.
-* Added IsSendmail() in mailserver connection options (before only IsSMTP(), 1&1 webservers needs this method ).
-* Added alerts if all the mailing lists are closed (subscribe widget doesn't shown).
-* Fixed image resize issue under WP 3.5v (first time image resize / change).
-* Solved broken links can't read and unsubscribe for users not subscribed (submits through manual submit).
-* Some unstranslated strings solved (some strings added in latest releases).
-* Solved issue while saving in the editor (broken ajax communication).
-* Now the_excerpt gets the real post excerpt if there is one.
-* Subscription form back (if something goes wrong) now doesn't scroll up when doing click.
-* Right headers for stats images (some users can't see graphics stats).
-
-= 1.2.8 =
-
-* Error message "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)." solved. We're Sorry!!!
-* Subscription form back (if something goes wrong) without reload NOW WORKS.
-
-= 1.2.7 =
-
-* Dutch language added (Thanks to Carl Rozema. http://www.hetsites.nl )
-* Title added in the newsletter page after user clicks can't read link
-* User administration improvements: search for name and surname and order by any field
-* Subscription form back (if something goes wrong) without reload
-* Special Class added to the subscription form button for easy CSS customisation
-* Now Knews uses the WordPress PHPMailer built-in library, less conflicts with another plugins
-* Plugin upgrade checks for database alter table permision before upgrade
-* FIXES:
-* Admin prefs checkboxes (automated options and compatibility options) changes aren't saved into 1.2.6 version, fixed.
-* Eternal welcome to the 1.2.6 version bug solved
-* Font Picker (selector) blank window bug solved
-* Select page for insertion 404 error solved
-* Magic quotes gpc activated proof (some webservers has this activated)
-* Fifth step importation bug solved (rare issue)
-* JS-Cron step #2 404 error solved
 
