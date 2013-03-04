@@ -8,7 +8,7 @@ if ($Knews_plugin) {
 
 	$warn=$Knews_plugin->get_safe('w');
 	
-	if ($warn == 'no_warn_cron_knews' || $warn == 'no_warn_ml_knews' || $warn == 'config_knews' || $warn == 'update_knews' || $warn == 'update_pro' || $warn == 'videotutorial') {
+	if ($warn == 'no_warn_cron_knews' || $warn == 'no_warn_ml_knews' || $warn == 'config_knews' || $warn == 'update_knews' || $warn == 'update_pro' || $warn == 'videotutorial' || $warn == 'newsletter') {
 		$knewsOptions[$warn]='yes';
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	}

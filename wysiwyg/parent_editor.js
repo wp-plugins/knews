@@ -1176,6 +1176,32 @@ function free_text(obj, n) {
 	document.getElementById('knews_editor').contentWindow.listen_module(module);
 }
 
+function clean_before_save() {
+	b_preview('save');
+
+	//input.replace(/^\s*$[\n\r]{1,}/gm, '');
+
+	code=jQuery('iframe#knews_editor').contents().find('div.wysiwyg_editor').html();
+	code=code.replace(/[\n\r][\s\t]*[\n\r]/g, '\n\r');
+	jQuery('iframe#knews_editor').contents().find('div.wysiwyg_editor').html(code);
+
+
+	document.getElementById('knews_editor').contentWindow.normalize_html();
+
+	jQuery('span.img_handler', io).remove();
+	jQuery('span.handler a, span.handler span, span.chooser a', io).remove();
+	jQuery('span.handler', io).removeAttr('style');
+
+	jQuery('span.content_editable', io)
+		.removeAttr('contenteditable');
+
+	jQuery('.droppable', io).children().each( function() {
+		str_mod = jQuery(this).html();
+		if (str_mod.indexOf("<!--[start module]-->") == -1 && str_mod != '') {
+			jQuery(this).html("<!--[start module]-->" + str_mod + "<!--[end module]-->");
+		}
+	});
+}
 
 save_news_sem=false;
 function save_news () {
@@ -1187,23 +1213,7 @@ function save_news () {
 	if (!save_news_sem) {
 		save_news_sem=true;
 
-		b_preview('save');
-
-		document.getElementById('knews_editor').contentWindow.normalize_html();
-
-		jQuery('span.img_handler', io).remove();
-		jQuery('span.handler a, span.handler span, span.chooser a', io).remove();
-		jQuery('span.handler', io).removeAttr('style');
-
-		jQuery('span.content_editable', io)
-			.removeAttr('contenteditable');
-
-		jQuery('.droppable', io).children().each( function() {
-			str_mod = jQuery(this).html();
-			if (str_mod.indexOf("<!--[start module]-->") == -1 && str_mod != '') {
-				jQuery(this).html("<!--[start module]-->" + str_mod + "<!--[end module]-->");
-			}
-		});
+		clean_before_save();
 
 		savecode=jQuery('div.wysiwyg_editor', io).html();
 		savecode=savecode.replace(/</g,"#@!");
@@ -1278,6 +1288,15 @@ function b_color() {
 	not_saved();
 	if (document.getElementById('knews_editor').contentWindow.inside_editor) {
 		tb_show('Color Picker', url_admin + 'admin-ajax.php?action=knewsPickColor&hex=' + rgb2hex(jQuery('#botonera a.color').css('backgroundColor')) + '&amp;editor=1&amp;TB_iframe=true&amp;width=545&amp;height=330');
+	}
+}
+function b_htmledit() {
+	if (referer_image_size != this && referer_image_size != '') {
+		alert(must_apply_undo);
+		return false;
+	}
+	if (!save_news_sem) {
+		tb_show('HTML Editor', url_admin + 'admin-ajax.php?action=knewsHTMLedit&amp;editor=1&amp;TB_iframe=true&amp;width=' + (parseInt(jQuery(parent.window).width(), 10)-100) + '&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100) );
 	}
 }
 function CallBackColourEditor(hex) {

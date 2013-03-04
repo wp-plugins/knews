@@ -96,6 +96,7 @@ div#botonera a.color, div#botonera div.desactivada a.color:hover { background-po
 div#botonera a.redo, div#botonera div.desactivada a.redo:hover { background-position:-300px 0; }	div#botonera a.redo:hover { background-position:-300px -25px; }
 div#botonera a.undo, div#botonera div.desactivada a.undo:hover { background-position:-325px 0; }	div#botonera a.undo:hover { background-position:-325px -25px; }
 
+div#botonera a.htmledit, div#botonera div.desactivada a.htmledit:hover { background-position:-600px 0; }	div#botonera a.htmledit:hover { background-position:-600px -25px; }
 
 div#botonera div.desactivada a {
 	cursor:default;

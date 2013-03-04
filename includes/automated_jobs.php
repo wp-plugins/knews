@@ -21,7 +21,7 @@ if ($Knews_plugin) {
 	$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE paused=0";
 	$automated_jobs = $wpdb->get_results( $query );
 
-	if (KNEWS_MULTILANGUAGE) {
+	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') {
 		global $sitepress;
 		$save_lang = $sitepress->get_current_language();
 	}
@@ -32,9 +32,7 @@ if ($Knews_plugin) {
 		
 		//$sql="SELECT wp_posts.ID from wp_posts, wp_postmeta WHERE wp_posts.post_status='publish' AND wp_posts.post_type='post' AND wp_posts.post_modified > '" . $aj->last_run . "' AND wp_posts.ID=wp_postmeta.post_id AND wp_postmeta.meta_key='_knews_automated' AND wp_postmeta.meta_value='1' AND NOT EXISTS ( SELECT * FROM wp_knewsautomatedposts WHERE wp_knewsautomatedposts.id_automated=" . $aj->id . " AND wp_knewsautomatedposts.id_post=wp_posts.ID )";
 		
-		if (KNEWS_MULTILANGUAGE) {
-			$sitepress->switch_lang($aj->lang);
-		}
+		if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
 
 		if ($aj->every_mode ==1) {
 			$knews_aj_look_date = $aj->last_run;
@@ -86,7 +84,7 @@ if ($Knews_plugin) {
 		}
 	}
 	remove_filter('posts_where', 'knews_aj_posts_where' );
-	if (KNEWS_MULTILANGUAGE) $sitepress->switch_lang($save_lang);
+	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($save_lang);
 }
 
 function knews_debug($message) {
@@ -108,7 +106,7 @@ function knews_search_posts($id_automated, $max) {
 	if ($Knews_plugin->im_pro()) {
 		$post_types = $Knews_plugin->getCustomPostTypes();
 		foreach ($post_types as $pt) {
-			$cpt[]=$pt;
+			if ($pt['automate']==1) $cpt[]=$pt['name'];
 		}
 	}
 	$cpt[]='post';

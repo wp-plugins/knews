@@ -131,3 +131,33 @@ div.knews_stats p.selector {
 	margin-top:0;
 	color:#666;
 }
+.knews-button, .knews-button-primary, .knews-button-secondary {
+    -moz-box-sizing: border-box;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    height: 24px;
+    line-height: 23px;
+    margin: 0;
+    padding: 0 10px 1px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.knews-button, .knews-button-secondary {
+    background: linear-gradient(to bottom, #FEFEFE, #F4F4F4) repeat scroll 0 0 #F3F3F3;
+    border-color: #BBBBBB;
+    color: #333333;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+.knews-button-primary {
+    background-color: #21759B;
+    background-image: linear-gradient(to bottom, #2A95C5, #21759B);
+    border-color: #21759B #21759B #1E6A8D;
+    box-shadow: 0 1px 0 rgba(120, 200, 230, 0.5) inset;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}

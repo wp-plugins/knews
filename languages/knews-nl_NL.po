@@ -459,7 +459,7 @@ msgstr "Import beëindigd"
 #: Text in function
 #: admin/knews_admin_import.php:437
 msgid "Import preview (we have not made ​​any changes yet:"
-msgstr "Import preview (we hebben nog niets gewijzigd):"
+msgstr "Import voorbeeld (we hebben nog niets gewijzigd):"
 
 #: Text in function
 #: admin/knews_admin_import.php:437
@@ -539,7 +539,7 @@ msgstr "Behoud huidige data"
 #: Text in echo
 #: admin/knews_admin_import.php:402
 msgid "Make preview"
-msgstr "Creëer een voorbeeld"
+msgstr "Laat een voorbeeld zien"
 
 #: Text in echo
 #: admin/knews_admin_users.php:171
@@ -873,7 +873,7 @@ msgstr "Verzendingen"
 #: Text in echo
 #: admin/knews_admin_import.php:387
 msgid "Subscribe all users to the following mailing lists:"
-msgstr "Abonneer alle gerbuikers op de volgende mailing lijsten:"
+msgstr "Abonneer alle gebruikers op de volgende mailing lijsten:"
 
 #: Text in echo
 #: admin/knews_admin_users.php:136
@@ -1168,7 +1168,7 @@ msgstr "Je kunt geen verzending inplannen. Je moet een window open houden (JavaS
 #: Text in function
 #: admin/knews_admin_news_list.php:1
 msgid "You must choose a name for the new newsletter!"
-msgstr "De nieuwsbrief moet een naam hebbenr!"
+msgstr "De nieuwsbrief moet een naam hebben!"
 
 #: Text in function
 #: admin/knews_admin_news_list.php:1
@@ -1648,7 +1648,7 @@ msgstr "Selecteer minstens één lijst en één taal."
 #: Text in function
 #: knews_admin_export.php:142
 msgid "To download the .CSV, click %s here"
-msgstr "Om de CSV te downlaoden, Klik %s hier"
+msgstr "Om de CSV te downloaden, Klik %s hier"
 
 msgid "Export CSV"
 msgstr "Exporteer CSV"
@@ -1663,7 +1663,7 @@ msgid "%s users have been exported."
 msgstr "%s gebruikers zijn geëxporteerd."
 
 msgid "Lists"
-msgstr "Liijsten"
+msgstr "Lijsten"
 
 msgid "Edit image"
 msgstr "Bewerk afbeelding"
@@ -1714,7 +1714,7 @@ msgid "Go to template page"
 msgstr "Ga naar de template pagina"
 
 msgid "Redirecting to editor..."
-msgstr "Omleiding naar de editor..."
+msgstr "Je wordt doorgestuurd naar de editor..."
 
 msgid "The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes"
 msgstr "Voor test doeleinden zullen emails die worden verzonden naar een adres dat eindigt op @knewstest.com (bijvoorbeeld: test@knewstest.com) worden verzonden naar: %s"
@@ -2502,6 +2502,7 @@ msgstr "WAARSCHUWING"
 msgid "here"
 msgstr "hier"
 
+#, fuzzy
 msgid "Show/hide handlers"
 msgstr "Toon/verberg handlers"
 

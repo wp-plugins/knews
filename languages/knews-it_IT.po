@@ -745,7 +745,7 @@ msgstr "Visualizzare utenti"
 #: Text in echo
 #: direct/select_post.php:59
 msgid "Select the post to insert in the newsletter"
-msgstr "Seleziona il post da inserire nella newsletter"
+msgstr "Selezionare il post da inserire nella newsletter"
 
 #: Text in echo
 #: admin/knews_admin_users.php:455
@@ -2185,13 +2185,13 @@ msgid "Messages reset to defaults."
 msgstr "Messaggi resettati ai valori default."
 
 msgid "(high performance SMTP)"
-msgstr ""
+msgstr "(SMTP ad alta prestazione)"
 
 msgid "All categories"
 msgstr "Tutte le categorie"
 
 msgid "Error: Please, fill all the form"
-msgstr ""
+msgstr "Errore: Prego compilare tutto il modulo"
 
 msgid "Mantain current data and add new mailing lists"
 msgstr ""
@@ -2209,82 +2209,82 @@ msgid "Submit automatic"
 msgstr "Invio automatico"
 
 msgid "This template requires Knews version %s you must update Knews before use this template"
-msgstr ""
+msgstr "Questo template richiede la versione %s di Knews. È necessario aggiornare Knews prima di utilizzare questo template"
 
 msgid "This template requires the professional version of Knews. You can get it %s here"
-msgstr ""
+msgstr "Questo template richiede la versione professionale di Knews. È possibile scaricarla %s qui"
 
 msgid "Compatibility options"
 msgstr "Opzioni  di compatibilità"
 
 msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
-msgstr ""
+msgstr "<strong> Knews è ora registrato </ strong>. Vai a %s amministrazione plugin e fare clic sul link Knews 'Verificare aggiornamenti' per l'aggiornamento. Grazie mille."
 
 msgid "Knews runs every hour the automated newsletter creation jobs."
-msgstr ""
+msgstr "Knews esegue ogni ora il compito di creazione di newsletter automatici."
 
 msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
-msgstr ""
+msgstr "È possibile attivare manualmente questo compito ora (consigliato solo a scopo di test) %s Eseguire Creazione Automatizzata Ora"
 
 msgid "Knews submit runs every 10 minutes and sends a portion of the list."
-msgstr ""
+msgstr "Knews invia esegue ogni 10 minuti e invia una parte della list."
 
 msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
-msgstr ""
+msgstr "È possibile attivare manualmente il JavaScript CRON se per qualsiasi motivo la newsletter non viene inviata: %s Eseguire JS-Cron Ora"
 
 msgid "Widget subscription form title"
-msgstr ""
+msgstr "Titolo del widget modulo di abbonamento"
 
 msgid "Widget latest newsletters title"
-msgstr ""
+msgstr "Titolo del widget ultime newsletter "
 
 msgid "Mobile version text link"
-msgstr ""
+msgstr "Testo del link alla versione mobile"
 
 msgid "Desktop version text link"
-msgstr ""
+msgstr "Testo del link alla versione desktop"
 
 msgid "You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here"
-msgstr ""
+msgstr "È stato fatto un downgrade alla versione gratuita di Knews, si possono perdere i dati, si prega di aggiornare presto! È possibile scaricare la versione professionale %s qui"
 
 msgid "Max number of newsletters: <br />(-1 for infinite):"
-msgstr ""
+msgstr "Numero massimo di newsletter: <br /> (-1 per infinite):"
 
 msgid "Hide not sent newsletters?"
-msgstr ""
+msgstr "Nascondere newsletter non inviate?"
 
 msgid "Hide automated newsletters?"
-msgstr ""
+msgstr "Nascondere le newsletter create automaticamente?"
 
 msgid "Customize widget title"
-msgstr ""
+msgstr "Personalizzare il titolo del widget"
 
 msgid "Knews Pro options"
 msgstr "Opzioni di Knews Pro"
 
 msgid "Your e-mail (used for the Knews Shop account):"
-msgstr ""
+msgstr "Il tuo indirizzo e-mail (utilizzato per l'account al Knews Shop):"
 
 msgid "Registration"
 msgstr "Registrazione"
 
 msgid "Serial Key:"
-msgstr ""
+msgstr "Chiave seriale (Serial Key):"
 
 msgid "(get it in our shop, login and click on \"My Downloads\" page)"
-msgstr ""
+msgstr "(ottienilo presso la nostra Knews Shop, fai il login e vai a \"I miei download\")"
 
 msgid "Save Serial"
-msgstr ""
+msgstr "Salva chiave seriale (Serial Key)"
 
 msgid "Bounce configuration"
-msgstr ""
+msgstr "Configurazione bounce"
 
 msgid "Bounce detection deactivated"
-msgstr ""
+msgstr "Bounce detection disattivata"
 
 msgid "Bounce detection activated"
-msgstr ""
+msgstr "Bounce detection attivata"
 
 msgid "POP3 Mail host:"
 msgstr "POP3 Mail host:"
@@ -2293,55 +2293,55 @@ msgid "POP3 Port:"
 msgstr "POP3 Port:"
 
 msgid "User account:"
-msgstr ""
+msgstr "Account utente:"
 
 msgid "User password"
 msgstr "Password utente"
 
 msgid "Secure connection:"
-msgstr ""
+msgstr "Connessione sicura:"
 
 msgid "Before enabling the Bounce detection, enter the values and click on TEST button"
-msgstr ""
+msgstr "Prima di attivare la bounce detection, inserire i valori e fare clic sul pulsante TEST"
 
 msgid "Test POP3 config"
-msgstr ""
+msgstr "Test configurazione POP3"
 
 msgid "Cant connect to POP3 mail server, please, check the configuration values"
-msgstr ""
+msgstr "Impossibile connettersi al server di posta POP3, per favore controlla i valori di configurazione"
 
 msgid "Bounce tutorial"
-msgstr ""
+msgstr "Tutorial bounce detection"
 
 msgid "Knews Pro includes a bounce email detection system, it needs an dedicated account like bounce@yourdomain.com. First, create the account, next, fill the configuation fields, then test the connection and if all works fine, activate & save."
-msgstr ""
+msgstr "Knews Pro include un sistema di bounce detection, è necessario un account dedicato di posta come bounce@tuodominio.com. Prima, crea il tuo account, poi, compila i campi di configurazione, esegui un test di connessione e se tutto funziona correttamente, attivalo e salva le modifiche."
 
 msgid "Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)"
-msgstr ""
+msgstr "Utilizzare la data di edizione del post invece della data di creazione per l’automatizzazione delle newsletter (vecchi post che non vengono mai incluse nell’automatizzazione saranno inclusi se attivi questa opzione e li revisioni) "
 
 msgid "Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)"
-msgstr ""
+msgstr "Applicare il filtro the_content nell’inserzione dei post delle newsletter (Disattivare per problemi di compatibilità con plugin come NextGen Gallery)"
 
 msgid "<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages."
-msgstr ""
+msgstr "<strong>Nota</strong>: se stai usando<strong>qTranslate</strong> non puoi disattivare questa opzione, perché utilizza questo filtro per dividere il contenuto del post nelle diverse lingue."
 
 msgid "Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
-msgstr ""
+msgstr "Evita la registrazione di robot. Alcuni plugin della cache potrebbero aver bisogno della disattivazione di questa opzione (se la sottoscrizione segnala sempre \"indirizzo e-mail inesatto\")."
 
 msgid "Premium options"
 msgstr "Opzioni Premium"
 
 msgid "Hide default templates (only works if at least one template is installed into (/wp-content/uploads/knewstemplates/)"
-msgstr ""
+msgstr "Nascondi template di default (funziona solo se almeno un template è installato in /wp-content/uploads/knewstemplates/)"
 
 msgid "Hide Knews Shop Products offers"
-msgstr ""
+msgstr "Nascondi le offerte di prodotti della Knews Shop"
 
 msgid "WordPress user syncronization"
-msgstr ""
+msgstr "Sincronizzazione utenti WordPress"
 
 msgid "Subscribe new WordPress users to:"
-msgstr ""
+msgstr "Abbonare i nuovi utenti di WordPress a:"
 
 msgid "None"
 msgstr "Nessuna"
@@ -2350,142 +2350,142 @@ msgid "Newsletter deleted"
 msgstr "Newsletter eliminata"
 
 msgid "Newsletter name updated"
-msgstr ""
+msgstr "Nome della newsletter aggiornato"
 
 msgid "Newsletter duplicated"
 msgstr "Newsletter duplicata"
 
 msgid "Desktop and mobile versions"
-msgstr ""
+msgstr "Versioni desktop e mobile"
 
 msgid "Desktop version only"
-msgstr ""
+msgstr "Solo versione desktop"
 
 msgid "Unconfirmed"
-msgstr ""
+msgstr "Non confermato"
 
 msgid "Bounce"
-msgstr ""
+msgstr "Bounce"
 
 msgid "Bounced"
-msgstr ""
+msgstr "Bounced"
 
 msgid "Mark as bounced email"
-msgstr ""
+msgstr "Segnare come bounced e-mail"
 
 msgid "Mark as activated"
-msgstr ""
+msgstr "Segnare come attivato"
 
 msgid "Mark as blocked"
-msgstr ""
+msgstr "Segnare come bloccato"
 
 msgid "Mark as bounced"
-msgstr ""
+msgstr "Segnare come bounced"
 
 msgid "Subscribe to list"
 msgstr "Iscriversi alla mailing list"
 
 msgid "Unsubscribe to list"
-msgstr ""
+msgstr "Annullare abbonamento alla lista"
 
 msgid "Choose one list"
 msgstr "Scegliere una list"
 
 msgid "You dont have any mobile template!"
-msgstr ""
+msgstr "Non hai un template per mobile!"
 
 msgid "There is a videotutorial about Knews WYSIWYG Editor, %s view it in Youtube"
-msgstr ""
+msgstr "C'è un video-tutorial dell’editore WYSIWYG di Knews, %s Guardalo su Youtube"
 
 msgid "SSL"
 msgstr "SSL"
 
 msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
-msgstr ""
+msgstr "Siamo spiacenti, questa è una funzione Premium. Per favore, %s clicca qui per vedere tutte le funzioni di Knews Pro."
 
 msgid "Warning! You arent selected any mailing list, do you want to continue?"
-msgstr ""
+msgstr "Attenzione! Non hai selezionato alcuna mailing list, vuoi continuare?"
 
 msgid "The field name cant be empty"
-msgstr ""
+msgstr "Il campo del nome non può rimanere vuoto"
 
 msgid "Select the %s filtered subscribers to perform a massive action"
-msgstr ""
+msgstr "Selezionare gli %s abbonati filtrati per eseguire un'azione massiccia"
 
 msgid "Select all your subscribers (%s) to perform a massive action"
-msgstr ""
+msgstr "Selezionare tutti i tuoi abbonati (%s) per eseguire un'azione massiccia"
 
 msgid "Roles and capabilities saved."
-msgstr ""
+msgstr "Ruoli e permessi salvati."
 
 msgid "Roles and capabilities"
-msgstr ""
+msgstr "Ruoli e permessi"
 
 msgid "Role name"
-msgstr ""
+msgstr "Nome del ruolo"
 
 msgid "Can see Knews Stats"
-msgstr ""
+msgstr "Puoi visualizzare le statistiche Knews"
 
 msgid "Can manage newsletters"
-msgstr ""
+msgstr "Puoi gestire newsletter (creare e editare) "
 
 msgid "Can manage users"
-msgstr ""
+msgstr "Puoi gestire gli utenti"
 
 msgid "Can configure Knews"
-msgstr ""
+msgstr "Puoi configurare Knews"
 
 msgid "All subscribers"
 msgstr "Tutti gli utenti "
 
 msgid "Do WordPress user importation"
-msgstr ""
+msgstr "Importare utenti di WordPress"
 
 msgid "Import <strong>all</strong> the WordPress users and subscribe into the mailing list:"
-msgstr ""
+msgstr "Importare<strong>tutti</ strong> gli utenti di WordPress e abbonarli alla mailing list:"
 
 msgid "Assign the language:"
 msgstr ""
 
 msgid "Import WP users into Knews"
-msgstr ""
+msgstr "Importare gli utenti WP in Knews"
 
 msgid "Users imported: %s. Users found before (not re-imported): %s."
-msgstr ""
+msgstr "Utenti importati:%s. Gli utenti già presenti prima (non reimportati):%s."
 
 msgid "Errors submitting confirmation: %s"
-msgstr ""
+msgstr "Errori inviando conferme:%s"
 
 msgid "Order"
 msgstr "Ordine"
 
 msgid "New Auto-create Newsletters Process"
-msgstr ""
+msgstr "Nuovo processo di auto-creazione di newsletter"
 
 msgid "Automated process name:"
-msgstr ""
+msgstr "Nome del processo automatizzato:"
 
 msgid "desktop_version_text_link"
 msgstr "Versione desktop"
 
 msgid "Knews Pro is currently installed."
-msgstr ""
+msgstr "Knews Pro è attualmente installato."
 
 msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
-msgstr ""
+msgstr "Solo dal %s dashboard del blog principale %s possono essere amministrati gli aggiornamenti di Knews. È possibile che solo l'amministratore di rete lo possa fare."
 
 msgid "Warning: if you haven't any mailing list opened, the subscription widget will not shown"
-msgstr ""
+msgstr "Attenzione: se non hai nessuna mailing list aperta, il widget di abbonamento non apparirà"
 
 msgid "Warning: you haven't any mailing list opened for logged users, the subscription widget will not shown until you make log out"
-msgstr ""
+msgstr "Attenzione: non hai nessuna mailing list aperta per gli utenti che hanno fatto il login, il widget di abbonamento non sarà mostrato prima di aver effettuato il logout"
 
 #: Text in echo
 #: admin/knews_admin_news_list.php:164
 #: admin/knews_admin_lists.php:148
 msgid "Save changes"
-msgstr ""
+msgstr "Salvare le modifiche"
 
 #: Text in function
 #: knews.php:520
@@ -2503,16 +2503,16 @@ msgid "here"
 msgstr "qui"
 
 msgid "Show/hide handlers"
-msgstr ""
+msgstr "Mostrare / nascondere gli handler"
 
 msgid "Alerts"
-msgstr ""
+msgstr "Avvisi"
 
 msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr ""
+msgstr "Devi chiamare l’URL del blog principale www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron "
 
 msgid "mobile_version_text_link"
-msgstr "Versione cellulare"
+msgstr "Versione mobile"
 
 msgid "Widget %s label form"
 msgstr "Etichetta %s per il modulo del widget"

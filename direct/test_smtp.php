@@ -16,7 +16,8 @@ if ($Knews_plugin) {
 					'smtp_port_knews' => $Knews_plugin->post_safe('smtp_port_knews'),
 					'smtp_user_knews' => $Knews_plugin->post_safe('smtp_user_knews'),
 					'smtp_pass_knews' => $Knews_plugin->post_safe('smtp_pass_knews'),
-					'smtp_secure_knews' => $Knews_plugin->post_safe('smtp_secure_knews')
+					'smtp_secure_knews' => $Knews_plugin->post_safe('smtp_secure_knews'),
+					'is_sendmail' => $Knews_plugin->post_safe('is_sendmail_knews')
 				);
 
 	$enviament = $Knews_plugin->sendMail($Knews_plugin->post_safe('email_test'), 'Test Knews', $theHtml, '', $test_array);

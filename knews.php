@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.3.1
+Version: 1.3.2
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -72,7 +72,8 @@ if (!class_exists("KnewsPlugin")) {
 				'is_sendmail' => '0',
 				'registration_email' => '',
 				'registration_serial' => '',
-				'check_bot' => '1'
+				'check_bot' => '1',
+				'newsletter' => 'no'
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -1246,7 +1247,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.3.1');
+		define('KNEWS_VERSION', '1.3.2');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1422,6 +1423,13 @@ if (!function_exists("Knews_plugin_ap")) {
 								'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
 							echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=no_warn_cron_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
 						}
+					} else {
+						if ($knewsOptions['newsletter'] == 'no') {
+							echo $div;
+							printf( __('<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here','knews'), '<a href="http://www.knewsplugin.com/multi-language/" target="_blank">');
+							echo '</a>';
+							echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=newsletter&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
+						}							
 					}
 				}
 			}
@@ -1545,6 +1553,9 @@ if (!function_exists("Knews_plugin_ap")) {
 	function knews_track() {
 		require( dirname(__FILE__) . "/direct/track.php");
 	}
+	function knews_htmleditor() {
+		require( dirname(__FILE__) . "/direct/html_edit.php");
+	}
 	function knews_ajax_deny() {
 		die();
 	}
@@ -1602,6 +1613,10 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	add_action('wp_ajax_knewsForceAutomated', 'knews_wpcron_automate' );
 	add_action('wp_ajax_nopriv_knewsForceAutomated', 'knews_ajax_deny' );
+
+	add_action('wp_ajax_knewsHTMLedit', 'knews_htmleditor' );
+	add_action('wp_ajax_nopriv_knewsHTMLedit', 'knews_ajax_deny' );
+
 	class knews_widget extends WP_Widget {
 	
 		public function __construct() {

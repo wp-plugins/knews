@@ -215,12 +215,12 @@ function examine_template($folder, $templates_path, $templates_url, $popup=false
 			echo $xml_info['shortname'] . ' <span style="font-weight:normal">v' . $xml_info['version'] . '</span></h1>';
 			if (version_compare( KNEWS_VERSION, $xml_info['minver'] ) < 0) {
 				echo '<p style="color:#e00; font-weight:bold;">';
-				printf(__('This template requires Knews version %s you must update Knews before use this template'), $xml_info['minver'] . (($xml_info['onlypro'] == 'yes') ? ' Pro' : ''));
+				echo sprintf(__('This template requires Knews version %s you must update Knews before use this template','knews'), $xml_info['minver'] . (($xml_info['onlypro'] == 'yes') ? ' Pro' : ''));
 				echo '</p>';
 			} else {
 				if ($xml_info['onlypro'] == 'yes' && !$Knews_plugin->im_pro()) {
 					echo '<p style="color:#e00; font-weight:bold;">';
-					printf( __('This template requires the professional version of Knews. You can get it %s here','knews'),'<a href="http://www.knewsplugin.com" target="_blank">');
+					echo sprintf( __('This template requires the professional version of Knews. You can get it %s here','knews'),'<a href="http://www.knewsplugin.com" target="_blank">');
 					echo '</a></p>';
 				}
 			}
@@ -258,10 +258,10 @@ function knews_display_templates($popup=false) {
 	$wp_dirs = wp_upload_dir();
 	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-content'));
 	//$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
+	$anytemplate=false;
 	if (is_dir($wp_dirs['basedir'] . '/knewstemplates')) {
 		chdir ($wp_dirs['basedir'] . '/knewstemplates');
 		$folders = scandir( '.' );
-		$anytemplate=false;
 		foreach ($folders as $folder) {
 			if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html')) {
 				if (examine_template($folder, $wp_dirs['basedir'] . '/knewstemplates/', $wp_dirs['baseurl'] . '/knewstemplates/', $popup)) $anytemplate=true;
@@ -269,7 +269,7 @@ function knews_display_templates($popup=false) {
 		}
 	}
 	
-	if ($anytemplate && $knewsOptions['hide_templates']=='1') return;
+	if (isset($knewsOptions['hide_templates']) && $anytemplate && $knewsOptions['hide_templates']=='1') return;
 	
 	chdir (KNEWS_DIR . '/templates');
 	$folders = scandir( '.' );

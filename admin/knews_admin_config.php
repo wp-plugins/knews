@@ -28,6 +28,7 @@ function knews_save_prefs() {
 			$knewsOptions['update_knews'] = 'no';
 			$knewsOptions['update_pro'] = 'no';
 			$knewsOptions['videotutorial'] = 'no';
+			$knewsOptions['newsletter'] = 'no';
 		}
 
 	} elseif (isset($_POST['update_KnewsAdminSettingsAdv'])) {
@@ -48,7 +49,7 @@ function knews_save_prefs() {
 
 	}
 
-	if (isset($_POST['update_KnewsAdminSettings']) || isset($_POST['update_KnewsAdminSettingsAdv']) || isset($_POST['update_KnewsAdminSettingsPro'])) {
+	if (isset($_POST['update_KnewsAdminSettings']) || isset($_POST['update_KnewsAdminSettingsAdv']) || isset($_POST['update_KnewsAdminSettingsPro']) || isset($_POST['update_KnewsAdminRegister'])) {
 
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	
@@ -284,6 +285,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				</div>
 			</div>
 			<div style="clear:both"></div>
+			<p><?php _e('Load SMTP defaults:','knews'); ?> <a href="#" onclick="knews_conf('gmail')"><?php _e('Gmail SMTP','knews'); ?></a> | <a href="#" onclick="knews_conf('1and1')"><?php _e('My hosting is 1&1','knews'); ?></a> | <a href="#" onclick="knews_conf('godaddy')"><?php _e('My Hosting is GoDaddy','knews'); ?></a> |  <a href="#" onclick="knews_conf('yahoo')"><?php _e('Yahoo SMTP','knews'); ?></a></p>
 			<div class="updated"><p><?php printf(__('The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes','knews'), get_option('admin_email')); ?></p></div>
 			<hr />
 			<div class="submit">
@@ -295,6 +297,40 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			?>
 		</form>
 	</div>
+	<script type="text/javascript">
+		function knews_conf(w) {
+			if (w=='gmail') {
+				user='youremail@gmail.com';
+				host='smtp.gmail.com';
+				port='587';
+				secure='ssl';
+				comnn='0';
+			} else if (w=='1and1') {
+				user='';
+				host='';
+				port='';
+				secure='';
+				comnn='1';
+			} else if (w=='godaddy') {
+				user='your@email.com';
+				host='relay-hosting.secureserver.net';
+				port='25';
+				secure='';
+				comnn='0';
+			} else if (w=='yahoo') {
+				user='youryahooname';
+				host='smtp.mail.yahoo.com';
+				port='465';
+				secure='ssl';
+				comnn='0';
+			}
+			jQuery('#smtp_host_knews').val(host);
+			jQuery('#smtp_port_knews').val(port);
+			jQuery('#smtp_user_knews').val(user);
+			jQuery('#smtp_secure_knews').val(secure);
+			jQuery('#is_sendmail_knews').val(comnn);			
+		}
+	</script>
 <?php
 
 } else {

@@ -165,6 +165,9 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 							<a href="#" class="undo" title="undo" onclick="b_simple('undo'); return false;">U</a>
 							<a href="#" class="redo" title="redo" onclick="b_simple('redo'); return false;">R</a>
 						</div>
+						<div>
+							<a href="#" class="htmledit" title="HTML edit" onclick="b_htmledit(); return false;">H</a>
+						</div>
 
 						<span class="clear"></span>
 					</div>
