@@ -839,10 +839,6 @@ msgstr "Estado"
 msgid "Submit end"
 msgstr "Fin envío"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
 msgstr "Enviar"
 
@@ -1804,7 +1800,7 @@ msgid "Multilanguage"
 msgstr "Multiidioma"
 
 msgid "Make your own templates how-to"
-msgstr "Tutorial para hacer tus prpios templates"
+msgstr "Tutorial para hacer tus propios templates"
 
 msgid "From date:"
 msgstr "Desde la fecha:"
@@ -2401,7 +2397,7 @@ msgid "SSL"
 msgstr "SSL"
 
 msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
-msgstr "Lo sentimos, esta es una característica Premium. Por favor, haz click aquí e infórmate de todas las características de Knews Pro."
+msgstr "Lo sentimos, esta es una característica Premium. Por favor, %s haz click aquí e infórmate de todas las características de Knews Pro."
 
 msgid "Warning! You arent selected any mailing list, do you want to continue?"
 msgstr "Atención! No has seleccionado ninguna lista de correo, seguro que quieres continuar?"
@@ -2446,7 +2442,7 @@ msgid "Import <strong>all</strong> the WordPress users and subscribe into the ma
 msgstr "Importar <strong>todos</strong> los usuarios de WordPress y subscribirles en la lista de correo:"
 
 msgid "Assign the language:"
-msgstr "Assignarles el idioma:"
+msgstr "Asignarles el idioma:"
 
 msgid "Import WP users into Knews"
 msgstr "Importar los usuarios de WP en Knews"
@@ -2503,7 +2499,7 @@ msgid "here"
 msgstr "aquí"
 
 msgid "Show/hide handlers"
-msgstr ""
+msgstr "Mostrar/ocultar manejadores"
 
 msgid "Alerts"
 msgstr "Alertas"
@@ -2515,8 +2511,59 @@ msgid "mobile_version_text_link"
 msgstr "Versión móvil"
 
 msgid "Widget %s label form"
-msgstr ""
+msgstr "Etiqueta %s del formulario del widget"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Cargar valores por defecto SMTP:"
+
+msgid "Gmail SMTP"
+msgstr "SMTP de Gmail"
+
+msgid "My hosting is 1&1"
+msgstr "Mi hosting es 1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "Mi hosting es GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "SMTP de Yahoo"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> Quieres estar informado de las últimas novedades, funcionalidades y trucos de Knews? Por favor, subscrívete a nuestra newsletter %s aquí"
+
+msgid "Prioritary Support"
+msgstr "Soporte prioritario"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Soporte prioritario para Knews Pro"
+
+msgid "Name:"
+msgstr "Nombre:"
+
+msgid "E-mail:"
+msgstr "E-mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Por favor, explica tu duda o problema en Español, Inglés o Catalán:"
+
+msgid "Close and Save Changes"
+msgstr "Cerrar y Guardar Cambios"
+
+msgid "Close and Discard Changes"
+msgstr "Cerrar y Descartar Cambios"
+
+msgid "Custom Post Types configuration"
+msgstr "Configuración de los Custom Post Types"
+
+msgid "Custom Post Type"
+msgstr "Custom Post Type"
+
+msgid "Use in manual post selection"
+msgstr "Usar en la selección manual de post"
+
+msgid "Use it for automate newsletters"
+msgstr "Usar para las newsletter automáticas"
 

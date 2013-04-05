@@ -839,10 +839,6 @@ msgstr "État"
 msgid "Submit end"
 msgstr "Fin envoi"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -2194,7 +2190,7 @@ msgid "Error: Please, fill all the form"
 msgstr "Erreur : veuillez remplir tout le formulaire"
 
 msgid "Mantain current data and add new mailing lists"
-msgstr ""
+msgstr "Maintenir les informations actuelles et ajouter aux nouvelles listes de mailings"
 
 msgid "of"
 msgstr "de"
@@ -2227,7 +2223,7 @@ msgid "You can manually trigger this task now (only recommended for testing purp
 msgstr "Vous pouvez exécuter manuellement cette tâche maintenant (recommandé uniquement à des fins d’essai) %s Exécuter la création automatique maintenant"
 
 msgid "Knews submit runs every 10 minutes and sends a portion of the list."
-msgstr ""
+msgstr "L’envoi de Knews s’exécute toutes les 10 minutes et une part de  la liste est envoyée."
 
 msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
 msgstr "Vous pouvez effectuer manuellement le CRON de JavaScript si votre newsletter n’a pas été envoyée pour quelque raison que ce soit : %s Exécuter JS-Cron maintenant"
@@ -2305,7 +2301,7 @@ msgid "Before enabling the Bounce detection, enter the values and click on TEST 
 msgstr "Avant d’activer la détection des courriels rejetés, saisissez les paramètres et cliquez sur le bouton TEST"
 
 msgid "Test POP3 config"
-msgstr ""
+msgstr "Configuration du test POP3"
 
 msgid "Cant connect to POP3 mail server, please, check the configuration values"
 msgstr "Impossible de connecter le serveur de courriel POP3, veuillez vérifier les valeurs de paramétrage"
@@ -2401,7 +2397,7 @@ msgid "SSL"
 msgstr "SSL"
 
 msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
-msgstr ""
+msgstr "Nous sommes désolés mais cette caractéristique est réservée aux comptes Premium. Veuillez %s cliquer ici pour vous informer de toutes les caractéristiques de Knews Pro."
 
 msgid "Warning! You arent selected any mailing list, do you want to continue?"
 msgstr "Attention ! Vous n’avez sélectionné aucune liste de mailings, voulez-vous poursuivre ?"
@@ -2416,10 +2412,10 @@ msgid "Select all your subscribers (%s) to perform a massive action"
 msgstr "Sélectionner tous les abonnés (%s) pour réaliser une action de masse"
 
 msgid "Roles and capabilities saved."
-msgstr ""
+msgstr "Rôles et capacités sauvegardés"
 
 msgid "Roles and capabilities"
-msgstr ""
+msgstr "Rôles et capacités"
 
 msgid "Role name"
 msgstr "Nom du rôle"
@@ -2428,7 +2424,7 @@ msgid "Can see Knews Stats"
 msgstr "Vous pouvez voir les statistiques de Knews"
 
 msgid "Can manage newsletters"
-msgstr ""
+msgstr "Vous pouvez créer et éditer les newsletters"
 
 msgid "Can manage users"
 msgstr "Vous pouvez gérer les utilisateurs"
@@ -2443,10 +2439,10 @@ msgid "Do WordPress user importation"
 msgstr "Importer les utilisateurs de WordPress"
 
 msgid "Import <strong>all</strong> the WordPress users and subscribe into the mailing list:"
-msgstr ""
+msgstr "Importer <strong>tous</strong> les utilisateurs de WordPress et les inscrire sur la liste de mailings :"
 
 msgid "Assign the language:"
-msgstr ""
+msgstr "Leur assigner une langue :"
 
 msgid "Import WP users into Knews"
 msgstr "Importer les utilisateurs de WP dans Knews "
@@ -2455,7 +2451,7 @@ msgid "Users imported: %s. Users found before (not re-imported): %s."
 msgstr "Utilisateurs importés : %s. Utilisateurs déjà présents (pas importés à nouveau) : %s"
 
 msgid "Errors submitting confirmation: %s"
-msgstr "Confirmation de l’envoi du message d’erreur : %s"
+msgstr "Erreur lors de l’envoi de la confirmation : %s"
 
 msgid "Order"
 msgstr "Ordre"
@@ -2479,7 +2475,7 @@ msgid "Warning: if you haven't any mailing list opened, the subscription widget 
 msgstr "Attention : si aucune liste de mailings n’est ouverte, le widget d’abonnement n’apparaîtra pas"
 
 msgid "Warning: you haven't any mailing list opened for logged users, the subscription widget will not shown until you make log out"
-msgstr ""
+msgstr "Attention : aucune liste de mailings n’est ouverte pour les utilisateurs connectés, le widget d’abonnement n’apparaîtra qu’au moment de la déconnexion"
 
 #: Text in echo
 #: admin/knews_admin_news_list.php:164
@@ -2509,14 +2505,65 @@ msgid "Alerts"
 msgstr "Alertes"
 
 msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
-msgstr ""
+msgstr "Vous devez appeler l’URL du blog principal www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron"
 
 msgid "mobile_version_text_link"
-msgstr ""
+msgstr "Version téléphone portable"
 
 msgid "Widget %s label form"
 msgstr "Widget %s pour le formulaire du widget"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Charger SMTP par defaut :"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "Mon serveur est 1&1."
+
+msgid "My Hosting is GoDaddy"
+msgstr "Mon serveur est GoDaddy."
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong>Vous voulez être au courant des dernières caractéristiques, conseils et astuces de Knews ? Veuillez vous inscrire à notre newsletter %s ici"
+
+msgid "Prioritary Support"
+msgstr "Assistance prioritaire"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Assistance prioritaire pour Knews Pro"
+
+msgid "Name:"
+msgstr "Nom :"
+
+msgid "E-mail:"
+msgstr "E-mail :"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Veuillez poser votre question en anglais, espagnol ou catalan :\t"
+
+msgid "Close and Save Changes"
+msgstr "Fermer et sauvegarder les changements"
+
+msgid "Close and Discard Changes"
+msgstr "Fermer et refuser les changements"
+
+msgid "Custom Post Types configuration"
+msgstr "Paramétrages des types de posts personnalisables"
+
+msgid "Custom Post Type"
+msgstr "Types de posts personnalisables"
+
+msgid "Use in manual post selection"
+msgstr "Utiliser en mode post-sélection manuelle"
+
+msgid "Use it for automate newsletters"
+msgstr "L’utiliser pour les newsletters automatiques"
 

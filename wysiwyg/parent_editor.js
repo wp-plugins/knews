@@ -609,11 +609,11 @@ function sel_fon(ambit, nfont, obj) {
 		lh = 0; if (look_for_css_property(jQuery(found_obj).attr('style'),'line-height')) 
 			lh = parseInt(jQuery(found_obj).css('lineHeight'), 10);
 		
-		debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh);
+		debug_alert('We will get the URL (local):', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh);
 		tb_show('Font Picker', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(ff) + '&amp;fs=' + fs + '&amp;ss=' + ss + '&amp;lh=' + lh + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
 	} else {
 		//alert(fonts_globals[nfont-1][3]);
-		debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3]);
+		debug_alert('We will get the URL (global):', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3]);
 		tb_show('Font Picker', url_admin + 'admin-ajax.php?action=knewsPickFont&ff=' + escape(fonts_globals[nfont-1][0]) + '&amp;fs=' + fonts_globals[nfont-1][1] + '&amp;ss=' + fonts_globals[nfont-1][2] + '&amp;lh=' + fonts_globals[nfont-1][3] + '&amp;TB_iframe=true&amp;width=545&amp;height=420');
 	}
 }
@@ -924,6 +924,8 @@ function setCatcherInsertion() {
 	}
 }
 
+
+
 function callback_img_insertion(html) {
 	align='';
 	if (html.indexOf('alignleft') != -1) align="left";
@@ -1124,8 +1126,20 @@ function CallBackFont(ff, fs, ss, lh) {
 
 	if (font_picker_ambit=='global') {
 		font_picker_referer = io;
+		
+		fonts_globals[font_picker_number-1][0]=ff;		
+		fonts_globals[font_picker_number-1][1]=fs;
+		fonts_globals[font_picker_number-1][2]=ss;
+		fonts_globals[font_picker_number-1][3]=lh;
+		
 	} else {
 		font_picker_referer = jQuery(font_picker_referer).parent();
+	}
+
+	if (lh=='0') {
+		lh='normal';
+	} else {
+		lh=lh+'px';
 	}
 
 	jQuery('.' + font_picker_ambit + '_font_' + font_picker_number, font_picker_referer).each(function () {
@@ -1134,7 +1148,7 @@ function CallBackFont(ff, fs, ss, lh) {
 		if (jQuery(this).attr('size') !== undefined) jQuery(this).attr('size', fs);
 
 		if (look_for_css_property(jQuery(this).attr('style'),'font-size')) jQuery(this).css('fontSize', ss + 'px');
-		if (look_for_css_property(jQuery(this).attr('style'),'line-height')) jQuery(this).css('lineHeight', lh + 'px');
+		if (look_for_css_property(jQuery(this).attr('style'),'line-height')) jQuery(this).css('lineHeight', lh);
 	});
 }
 
@@ -1178,6 +1192,19 @@ function free_text(obj, n) {
 
 function clean_before_save() {
 	b_preview('save');
+
+	//Netejar doble font FF
+	parent.jQuery('iframe#knews_editor').contents().find('div.wysiwyg_editor font').each(function() {
+		var attrmap=new Array();
+		jQuery.each(this.attributes, function(i, attrib) {
+			 var name = attrib.name;
+			 var value = attrib.value;
+			 attrmap[attrmap.length] = new Array(name, value);
+		});
+		if (attrmap.length == 1 && attrmap[0][0]=='size') {
+			jQuery(this).contents().unwrap();
+		}
+	});
 
 	//input.replace(/^\s*$[\n\r]{1,}/gm, '');
 

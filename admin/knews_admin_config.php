@@ -135,6 +135,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
 					<a class="nav-tab" href="admin.php?page=knews_config"><?php _e('Main options','knews'); ?></a>
 					<a class="nav-tab" href="admin.php?page=knews_config&tab=advanced"><?php _e('Advanced options','knews'); ?></a>
+					<a class="nav-tab" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
 					<a class="nav-tab nav-tab-active" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 				</h2>
 				<?php
@@ -185,6 +186,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
 				<a class="nav-tab" href="admin.php?page=knews_config"><?php _e('Main options','knews'); ?></a>
 				<a class="nav-tab nav-tab-active" href="admin.php?page=knews_config&tab=advanced"><?php _e('Advanced options','knews'); ?></a>
+				<a class="nav-tab" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 			</h2>
 			<h3><?php _e('CRON','knews'); ?></h3>
@@ -333,6 +335,83 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 	</script>
 <?php
 
+
+} elseif ($Knews_plugin->get_safe('tab')=='pro') {
+	knews_save_prefs();
+?>
+	<div class=wrap>
+		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
+			<a class="nav-tab" href="admin.php?page=knews_config"><?php _e('Main options','knews'); ?></a>
+			<a class="nav-tab" href="admin.php?page=knews_config&tab=advanced"><?php _e('Advanced options','knews'); ?></a>
+			<a class="nav-tab nav-tab-active" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
+			<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
+		</h2>
+		<h3><?php _e('Registration','knews');?></h3>
+		<?php 
+		if (!$Knews_plugin->im_pro()) {
+			$look = wp_remote_get( 'http://www.knewsplugin.com/shop/be_pro.php' );
+			if (!is_wp_error($look)) {
+				if (isset($look['body'])) echo $look['body'];
+			} else {
+			?>
+			<script type="text/javascript">
+				if ('https:' == document.location.protocol) {
+					document.write('<p>Please, go to <a href="http://www.knewsplugin.com/shop" target="_blank">our shop</a> and see our latest premium templates</p>');
+				} else {
+					var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
+					knewsscript.src = 'http://www' + '.knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
+					var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
+				}
+			</script>
+			<?php
+			}
+			echo '<hr>';
+		} else {
+			echo '<h3>' . __('Knews Pro is currently installed.','knews') . '</h3>';	
+		}
+		$can_serialize=true;
+		if( is_multisite() ) {
+			if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) $can_serialize=false;
+		}
+		if (!$can_serialize) {
+			echo '<h3>' . sprintf(__('Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it.','knews'), '<a href="' . $Knews_plugin->get_main_admin_url() . 'admin.php?page=knews_config&tab=pro' . '"><strong>', '</strong></a>') . '</h3>';
+		} else {
+		?>
+		<form method="post" action="admin.php?page=knews_config&tab=pro">
+			<?php 
+			if ($Knews_plugin->im_pro() || ($knewsOptions['registration_email'] != '' || $knewsOptions['registration_serial'] != '')) {
+				echo '<div style="position:absolute; margin-left:420px; padding-top:10px;" id="look_registration">';
+				$look = wp_remote_get( 'http://www.knewsplugin.com/look_registration.php?email=' . urlencode($knewsOptions['registration_email']) . '&serial=' . $knewsOptions['registration_serial'] );
+				if (!is_wp_error($look)) {
+					if (isset($look['body'])) echo $look['body'];
+				} else {
+				?>
+					<script type="text/javascript">
+						if ('http:' == document.location.protocol) {
+							var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
+							knewsscript.src = 'http://www' + '.knewsplugin.com/look_registration.php?email=<?php echo urlencode($knewsOptions['registration_email']);?>&serial=<?php echo $knewsOptions['registration_serial'];?>&js=1&x=3';
+							var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
+						}
+					</script>
+				<?php
+				}
+				echo '</div>';
+			}
+			?>
+			<p><label><?php _e('Your e-mail (used for the Knews Shop account):','knews'); ?></label><br />
+			<input type="text" value="<?php echo $knewsOptions['registration_email']; ?>" autocomplete="off" class="regular-text" id="registration_email_knews" name="registration_email_knews"></p>
+			<p><label><?php _e('Serial Key:','knews'); ?></label><br />
+			<input type="text" value="<?php echo $knewsOptions['registration_serial']; ?>" autocomplete="off" class="regular-text" id="registration_serial_knews" name="registration_serial_knews"><br /><small><?php _e('(get it in our shop, login and click on "My Downloads" page)','knews'); ?></small></p>
+			<div class="submit">
+				<input type="submit" name="update_KnewsAdminRegister" id="update_KnewsAdminRegister" value="<?php _e('Save Serial','knews');?>" class="button-primary" />
+			</div>
+			<?php 
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+			?>
+		</form>
+<?php
+		}
 } else {
 	knews_save_prefs();
 ?>
@@ -341,6 +420,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
 				<a class="nav-tab nav-tab-active" href="admin.php?page=knews_config"><?php _e('Main options','knews'); ?></a>
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=advanced"><?php _e('Advanced options','knews'); ?></a>
+				<a class="nav-tab" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 			</h2>
 			<h3><?php _e('Multilingual','knews'); ?></h3>

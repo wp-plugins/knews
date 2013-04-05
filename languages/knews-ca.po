@@ -839,10 +839,6 @@ msgstr "Estat"
 msgid "Submit end"
 msgstr "Fi d'enviament"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
 msgstr "Enviar"
 
@@ -2119,7 +2115,7 @@ msgid "You must first create a newsletter with insertable info (leave the %the_c
 msgstr "Has de crear primer una newsletter amb informació insertable (deixa els %the_content%, %the_title% etc.)"
 
 msgid "Create a newsletter every %s posts"
-msgstr "Crear una newsletter cada % posts"
+msgstr "Crear una newsletter cada %s posts"
 
 msgid "Error: there are no mailing lists"
 msgstr "Error: no hi ha llistes de correu"
@@ -2401,7 +2397,7 @@ msgid "SSL"
 msgstr "SSL"
 
 msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
-msgstr "Ens sap greu, aquesta és una característica Premium. Siusplau, fes click aquí i informa't de totes les característiques de Knews Pro."
+msgstr "Ens sap greu, aquesta és una característica Premium. Siusplau, %s fes click aquí i informa't de totes les característiques de Knews Pro."
 
 msgid "Warning! You arent selected any mailing list, do you want to continue?"
 msgstr "Atenció! No has sel·leccionat cap llista de correu, segur que vols continuar?"
@@ -2473,7 +2469,7 @@ msgid "Knews Pro is currently installed."
 msgstr "Knews pro està actualment instal·lat."
 
 msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
-msgstr "Només desde l'%escriptori del blog principal %s es poden administrar les actualitzacions de Knews. Pot ser que només l'administrador de la xarxa pugui fer aixó."
+msgstr "Només desde %s l'escriptori del blog principal %s es poden administrar les actualitzacions de Knews. Pot ser que només l'administrador de la xarxa pugui fer aixó."
 
 msgid "Warning: if you haven't any mailing list opened, the subscription widget will not shown"
 msgstr "Atenció: si no tens cap llista de correu oberta, el widget de subscripció no es mostrarà"
@@ -2503,7 +2499,7 @@ msgid "here"
 msgstr "aquí"
 
 msgid "Show/hide handlers"
-msgstr ""
+msgstr "Mostra/amaga els manipuladors"
 
 msgid "Alerts"
 msgstr "Alertes"
@@ -2515,8 +2511,59 @@ msgid "mobile_version_text_link"
 msgstr "Versió mòbil"
 
 msgid "Widget %s label form"
-msgstr ""
+msgstr "Etiqueta %s del formulari del widget"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
-msgstr ""
+msgstr "http://www.knewsplugin.com/ca/deteccio-automatica-demails-retornats/"
+
+msgid "Load SMTP defaults:"
+msgstr "Carregar valors per defecte SMTP:"
+
+msgid "Gmail SMTP"
+msgstr "SMTP de Gmail"
+
+msgid "My hosting is 1&1"
+msgstr "El meu hosting es 1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "El meu hosting es GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "SMTP de Yahoo"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> Vols estar al dia sobre les novetats, funcionalitats i trucs de Knews? Siusplau, subscriu-te a la nostra newsletter %s aquí"
+
+msgid "Prioritary Support"
+msgstr "Suport prioritari"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Suport prioritari per a Knews Pro"
+
+msgid "Name:"
+msgstr "Nom:"
+
+msgid "E-mail:"
+msgstr "E-mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Siusplau, explica'ns el teu dubte o problema en Català, Castellà o Anglés:"
+
+msgid "Close and Save Changes"
+msgstr "Tancar i Guardar Canvis"
+
+msgid "Close and Discard Changes"
+msgstr "Tancar i Descartar Canvis"
+
+msgid "Custom Post Types configuration"
+msgstr "Configuració dels Custom Post Types"
+
+msgid "Custom Post Type"
+msgstr "Custom Post Type"
+
+msgid "Use in manual post selection"
+msgstr "Usar a la selecció manual de post"
+
+msgid "Use it for automate newsletters"
+msgstr "Usar per a la automatització de newsletters"
 

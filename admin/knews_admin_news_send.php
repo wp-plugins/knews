@@ -18,6 +18,25 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			
 			require( KNEWS_DIR . "/includes/knews_compose_email.php");
 
+
+
+/*
+			preg_match_all ("/(a|A)[\s]+[^>]*?href[\s]?=[\s\"\']+".
+				"(.*?)[\"\']+.*?>"."([^<]+|.*?)?<\/(a|A)>/", 
+				$theHtml, $matches);
+
+			foreach ($matches[3] as $textlink) {
+				if (strpos($textlink, '/') !== false)  {
+					$textlink2=str_replace('/', "<span>\r\n</span>" . '/', $textlink);
+					//$textlink2=str_replace('/', '<span>' . "\r\n" . '</span>/', $textlink);
+					//$textlink2=str_replace('<span>' . "\r\n" . '</span>/<span>' . "\r\n" . '</span>/', '//', $textlink2);
+					$theHtml=str_replace($textlink, $textlink2, $theHtml);
+				}
+			}
+			
+*/
+
+
 			$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
 			
 			if (count($user)==1) {

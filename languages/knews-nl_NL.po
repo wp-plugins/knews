@@ -839,10 +839,6 @@ msgstr "Status"
 msgid "Submit end"
 msgstr "Einde verzending"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
 msgstr "Verzenden"
 
@@ -2230,7 +2226,7 @@ msgid "Knews submit runs every 10 minutes and sends a portion of the list."
 msgstr "De Knews verzend taak draait elke 10 minuten en verstuurt dan een deel van de lijst. "
 
 msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
-msgstr "Je kunt de JavaScript CRON handmatig starten als de nieuwsbrief om onduidelijke reden niet verstuurt wordt."
+msgstr "Je kunt de JavaScript CRON handmatig starten als de nieuwsbrief om onduidelijke reden niet verstuurt wordt. %s Start JS-Cron Nu"
 
 msgid "Widget subscription form title"
 msgstr "Inschrijvingsformulier Widget titel"
@@ -2520,4 +2516,55 @@ msgstr "Widget %s label formulier"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Laad SMTP standaard instellingen:"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "Mijn hostingprovider is 1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "Mijn hostingprovider is GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> WIl je op de hoogte blijven van de laatste Knews features, tips en truuks? Meldt u dan %s hier aan voor onze nieuwsbrief."
+
+msgid "Prioritary Support"
+msgstr "Priority support"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Priority support voor Knews Pro"
+
+msgid "Name:"
+msgstr "Naam:"
+
+msgid "E-mail:"
+msgstr "E-mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Stel a.u.b. uw vragen in het Engels, Spaans of Catalaans:"
+
+msgid "Close and Save Changes"
+msgstr "Sluit en sla wijzigingen op"
+
+msgid "Close and Discard Changes"
+msgstr "Sluit en negeer wijzigingen"
+
+msgid "Custom Post Types configuration"
+msgstr "Custom Post Types configuratie"
+
+msgid "Custom Post Type"
+msgstr "Custom Post Type"
+
+msgid "Use in manual post selection"
+msgstr "Gebruik in handmatige bericht selectie"
+
+msgid "Use it for automate newsletters"
+msgstr "Gebruik in automatische nieuwsbrieven"
 

@@ -26,6 +26,8 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 <?php
 	} else {
 		$parentid=0;
+		$title=$results_news[0]->name;
+		$subject=$results_news[0]->subject;
 ?>
 <script type="text/javascript">
 	url_plugin = '<?php echo KNEWS_URL; ?>';
@@ -63,11 +65,35 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	button_continue = "<?php echo __('Continue','knews'); ?>";
 	
 	opera_no = "<?php echo __("Warning! Opera can't edit newsletters. You must use a modern Firefox, Chrome, Safari or at least Internet Explorer 8.",'knews'); ?>";
+
+	function sorrypro() {
+		tb_dialog("Knews","<?php echo sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">'); ?></a>", '', '', '');
+	}
 </script>
 	<div class="wrap">
-		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Editing newsletter','knews'); ?>: <?php echo $results_news[0]->name; ?></h2>
+
 		<div id="poststuff">
 			<div id="titlediv">
+			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
+			<div id="titlewrap">
+				<label for="title" id="title-prompt-text" style="" class="hide-if-no-js"><?php _e('Subject','knews'); ?></label>
+				<input type="text" autocomplete="off" id="title" value="<?php echo $subject; ?>" tabindex="1" size="30" name="post_title">
+			</div>
+			<h2 class="nav-tab-wrapper"><a href="#" title="<?php _e('Editing newsletter','knews'); ?>:" style="text-decoration:none; color:#000;">&gt;</a> <?php echo $title; ?>&nbsp;&nbsp;&nbsp;
+			<?php
+			if ($parentid==0) {
+				echo '<a href="#" class="nav-tab nav-tab-active">' . __('Desktop version','knews') . '</a>';
+				if ($results_news[0]->id_mobile == 0) {
+					echo '<a href="#" class="nav-tab" onclick="' . (($Knews_plugin->im_pro()) ? 'select_mobile_template()' : 'sorrypro()' ) . '">' . __('+ Add mobile version','knews') . '</a>';
+				} else {
+					echo '<a href="' . get_admin_url() . 'admin.php?page=knews_news&section=edit&idnews=' . $results_news[0]->id_mobile . '" class="nav-tab knews_save_before">' . __('Mobile version','knews') . '</a>';
+				}
+			} else {
+				echo '<a href="' . get_admin_url() . 'admin.php?page=knews_news&section=edit&idnews=' . $parentid . '" class="nav-tab knews_save_before">' . __('Desktop version','knews') . '</a>';
+				echo '<a href="#" class="nav-tab nav-tab-active">' . __('Mobile version','knews') . '</a>';				
+			}
+			?>
+			</h2>
 				<?php
 				$lang_attr='';
 				if ($Knews_plugin->get_safe('lang') != '') {
@@ -131,10 +157,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 						<a href="#" title="<?php _e('Resize toolbox','knews');?>">&nbsp;</a>
 					</div>
 				</div>
-				<div id="titlewrap">
-					<label for="title" id="title-prompt-text" style="" class="hide-if-no-js"><?php _e('Subject','knews'); ?></label>
-					<input type="text" autocomplete="off" id="title" value="<?php echo $results_news[0]->subject; ?>" tabindex="1" size="30" name="post_title">
-				</div>
+
 				<div class="editor_iframe">
 					<div id="botonera">
 						<div class="right_icons">

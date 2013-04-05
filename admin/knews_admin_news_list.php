@@ -272,7 +272,7 @@ function enfocar() {
 						</div>
 						<?php
 						global $knewsOptions;
-						if ($knewsOptions['hide_shop']=='0') {
+						if (!isset($knewsOptions['hide_shop']) || $knewsOptions['hide_shop']=='0') {
 						?>
 							<div id="knewsshop">
 								<?php 

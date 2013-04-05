@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.3.2
+Version: 1.4.0
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -70,10 +70,17 @@ if (!class_exists("KnewsPlugin")) {
 				'hide_templates' => '0',
 				'bounce_on' => '0',
 				'is_sendmail' => '0',
+				'bounce_host' => 'mail.yourdomain.com',
+				'bounce_port' => '110',
+				'bounce_user' => 'bounce@yourdomain.com',
+				'bounce_pass' => '',
+				'bounce_ssl' => 'no',
+				'new_users_list' => '0',
 				'registration_email' => '',
 				'registration_serial' => '',
 				'check_bot' => '1',
-				'newsletter' => 'no'
+				'newsletter' => 'no',
+				'notify_signups_email' => ''
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -131,10 +138,12 @@ if (!class_exists("KnewsPlugin")) {
 				array ( 'label'=>__('Cant read text 1','knews'), 'name'=>'cant_read_text_1'),
 				array ( 'label'=>__('Cant read text link','knews'), 'name'=>'cant_read_text_link'),
 				array ( 'label'=>__('Cant read text 2','knews'), 'name'=>'cant_read_text_2'),
+				array ( 'label'=>__('Mobile version text link','knews'), 'name'=>'mobile_version_text_link'),
+				array ( 'label'=>__('Desktop version text link','knews'), 'name'=>'desktop_version_text_link'),
 				array ( 'label'=>__('Unsubscribe text 1','knews'), 'name'=>'unsubscribe_text_1'),
 				array ( 'label'=>__('Unsubscribe text link','knews'), 'name'=>'unsubscribe_text_link'),
 				array ( 'label'=>__('Unsubscribe text 2','knews'), 'name'=>'unsubscribe_text_2'),
-				array ( 'label'=>__('The read more text link','knews'), 'name'=>'read_more_link'),
+				array ( 'label'=>__('The read more text link','knews'), 'name'=>'read_more_link')
 			);
 			return array_merge($KnewsDefaultMessages1, $KnewsDefaultMessages2);
 		}
@@ -435,7 +444,7 @@ if (!class_exists("KnewsPlugin")) {
 			//$name = mysql_real_escape_string($_POST['name']);
 			$lang = $this->post_safe('lang_user');
 			$lang_locale = $this->post_safe('lang_locale_user');
-			$email = $this->post_safe('email');
+			$email = $this->post_safe('knewsemail');
 			$id_list_news = $this->post_safe('user_knews_list', 0, 'int');
 			
 			$custom_fields=array();
@@ -470,7 +479,23 @@ if (!class_exists("KnewsPlugin")) {
 			} else {
 				$response = $this->add_user($email, $id_list_news, $lang, $lang_locale, $custom_fields);
 				
-				if ($response==1) echo $this->get_custom_text('ajax_subscription', $lang_locale);
+				if ($response==1) {
+					echo $this->get_custom_text('ajax_subscription', $lang_locale);
+					if ($knewsOptions['notify_signups_email'] != '') {
+
+						$theHtml = '<p>' . sprintf('A new user was subscribed to: %s', get_bloginfo('name')) . '</p>';
+						
+						foreach ($extra_fields as $field) {
+							if ($this->post_safe($field->name) != '') {
+								$theHtml.= '<p>' . $field->name . ': ' . $this->post_safe($field->name) . '</p>';
+							}
+						}
+
+						$theHtml.= '<p>Email: ' . $this->post_safe('knewsemail') . '</p>';
+
+						$this->sendMail($knewsOptions['notify_signups_email'], 'New user subscribed to: ' . get_bloginfo('name'), $theHtml);
+					}
+				}
 				if ($response==2) echo $this->get_custom_text('ajax_subscription_error', $lang_locale);
 				if ($response==3) echo $this->get_custom_text('ajax_subscription_direct', $lang_locale);
 				if ($response==4) echo $this->get_custom_text('ajax_subscription_oops', $lang_locale);
@@ -787,16 +812,16 @@ if (!class_exists("KnewsPlugin")) {
 				}
 			}
 			if (count($lists) > 1) {
-				$response = '<select name="user_knews_list" id="user_knews_list">';
+				$response = '<select name="user_knews_list">';
 				while ($list = current($lists)) {
 					$response .= '<option value="' . key($lists) . '">' . $list . '</option>';
 					next($lists);
 				}
 				$response .= '</select>';
 			} else if (count($lists) == 1) {
-				$response = '<input type="hidden" name="user_knews_list" id="user_knews_list" value="' . key($lists) . '" />';
+				$response = '<input type="hidden" name="user_knews_list" value="' . key($lists) . '" />';
 			} else {
-				$response = '<input type="hidden" name="user_knews_list" id="user_knews_list" value="-" />';			
+				$response = '<input type="hidden" name="user_knews_list" value="-" />';			
 			}
 			return $response;
 		}
@@ -814,8 +839,8 @@ if (!class_exists("KnewsPlugin")) {
 			
 			if (!$html) return $lang;
 			
-			$response = '<input type="hidden" name="lang_user" id="lang_user" value="' . $lang['language_code'] . '" />';
-			$response .= '<input type="hidden" name="lang_locale_user" id="lang_locale_user" value="' . $lang['localized_code'] . '" />';
+			$response = '<input type="hidden" name="lang_user" value="' . $lang['language_code'] . '" />';
+			$response .= '<input type="hidden" name="lang_locale_user" value="' . $lang['localized_code'] . '" />';
 			
 			return $response;
 		}
@@ -868,25 +893,25 @@ if (!class_exists("KnewsPlugin")) {
 
 				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
-					div.' . $container . ' textarea#knewscomment {position:absolute; top:-3000px; left:-3000px;}
+					div.' . $container . ' textarea.knewscomment {position:absolute; top:-3000px; left:-3000px;}
 					</style>
 					<form action="' . $this->getAddUserUrl() . '" method="post">';
 
 				foreach ($extra_fields as $field) {
 					if (isset($instance[$field->name]) && ($instance[$field->name]=='ask' || $instance[$field->name]=='required')) {
 						$response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '</label>
-						<input type="text" id="' . $field->name . '" name="' . $field->name . '" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
+						<input type="text" name="' . $field->name . '" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
 						
-						if ($instance[$field->name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" id="required_' . $field->name . '" />';
+						if ($instance[$field->name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" />';
 					}
 				}
 
-				$response .= '<label for="email"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>
-						<input type="text" id="email" name="email" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
+				$response .= '<label for="knewsemail"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>
+						<input type="text" name="knewsemail" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
 				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
-				$response .= '<input type="hidden" name="knewskey" id="knewskey" value="' . $key . '" />
-						<textarea name="knewscomment" id="knewscomment" style="width:150px; height:80px"></textarea>
-						<input type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />
+				$response .= '<input type="hidden" name="knewskey" value="' . $key . '" />
+						<textarea name="knewscomment" class="knewscomment" style="width:150px; height:80px" rows="5" cols="20"></textarea>
+						<input class="knewsbutton" type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />
 						<input type="hidden" name="action" value="knewsAddUser" />
 					</form>
 				</div>';
@@ -913,6 +938,13 @@ if (!class_exists("KnewsPlugin")) {
 			$values = array_values($list);
 		
 			$search = array_map('utf8_encode', $search);
+
+			//Add hungarian chars support
+			$search[] = chr(0xc5).chr(0x91); $values[] = '&#337';
+			$search[] = chr(0xc5).chr(0xb1); $values[] = '&#369';
+			$search[] = chr(0xc5).chr(0x90); $values[] = '&#336';
+			$search[] = chr(0xc5).chr(0xb0); $values[] = '&#368';
+
 			$str_in = str_replace($search, $values, $str_in);
 			
 			return $str_in;
@@ -1212,7 +1244,10 @@ if (!class_exists("KnewsPlugin")) {
 			if (! $this->initialized) $this->init();
 			require( KNEWS_DIR . "/admin/knews_admin_config.php");
 		}
-		
+		function KnewsAdminSupport() {
+			if (! $this->initialized) $this->init();
+			require( KNEWS_DIR . "/admin/knews_admin_support.php");
+		}
 		function knews_dashboard_widget(){
 			include_once KNEWS_DIR . '/includes/dashboard-widget.php';
 		}
@@ -1247,7 +1282,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.3.2');
+		define('KNEWS_VERSION', '1.4.0');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1273,7 +1308,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			add_submenu_page( 'knews_news', __('Auto-create','knews'), __('Auto-create','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_auto', array(&$Knews_plugin, 'KnewsAdminAuto'), '');
 			add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), ($pro_menus ? 'knews_see_stats' : 'edit_posts'), 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
 			add_submenu_page( 'knews_news', __('Configuration','knews'), __('Configuration','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_config', array(&$Knews_plugin, 'KnewsAdminConfig'), '');
-
+			add_submenu_page( 'knews_news', __('Prioritary Support','knews'), __('Prioritary Support','knews'), 'edit_posts', ($Knews_plugin->im_pro() ? 'knews_support' : 'knews_config&tab=pro'), array(&$Knews_plugin, 'KnewsAdminSupport'), '');
 	        add_action('wp_dashboard_setup', array(&$Knews_plugin, 'dashboard_widget_setup'));
 			if ($Knews_plugin->im_pro()) add_action( "load-$hook_asm", 'knews_asm_add_option' );
 		}
@@ -1662,7 +1697,15 @@ if (!function_exists("Knews_plugin_ap")) {
 		global $knews_aj_look_date, $knewsOptions;
    		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' ";
 	}
-
+	
+	
+	if (is_admin()) {
+		$knewsOptions = $Knews_plugin->getAdminOptions();
+		if ($Knews_plugin->im_pro() || ($knewsOptions['registration_email'] != '' && $knewsOptions['registration_serial'] != '')) {
+			require 'includes/plugin-updates/plugin-update-checker.php';
+			$MyUpdateChecker = new PluginUpdateChecker( 'http://www.knewsplugin.com/upgradeinfo.php?email=' . urlencode($knewsOptions['registration_email']) . '&serial=' . urlencode($knewsOptions['registration_serial']), __FILE__, 'knews');
+		}
+	}
 }
 
 ?>

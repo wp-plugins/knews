@@ -571,20 +571,7 @@ function find_tag(node) {
 
 })*/
 function update_editor() {
-	
-	//Netejar doble font FF
-	parent.jQuery('div.wysiwyg_editor font',document).each(function() {
-		var attrmap=new Array();
-		parent.jQuery.each(this.attributes, function(i, attrib) {
-			 var name = attrib.name;
-			 var value = attrib.value;
-			 attrmap[attrmap.length] = new Array(name, value);
-		});
-		if (attrmap.length == 1 && attrmap[0][0]=='size') {
-			parent.jQuery(this).contents().unwrap();
-		}
-	});
-	
+		
 	inside_editor=false;
 	can_justify=false;
 	im_on_link=false;

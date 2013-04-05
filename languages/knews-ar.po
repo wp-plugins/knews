@@ -839,12 +839,8 @@ msgstr "الحالة"
 msgid "Submit end"
 msgstr "انتهاء الارسال"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
-msgstr "إرسال"
+msgstr "ارسل"
 
 #: Text in function
 #: direct/test_smtp.php:1
@@ -2519,4 +2515,55 @@ msgstr "عنوان ال %s  لنموذج الويدجت"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "اعدادات  الافتراضيهSMTP:"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "المضيف الخاص بى هو 1 & 1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "المضيف الخاص بى هو GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "هل ترغب في البقاء على اتصال معنا حول  أحدث ميزات ك-نيوز ، نصائح وحيَل ذكية؟ من فضلك، قم بالاشتراك في النشرة الإخبارية لدينا %s هنا"
+
+msgid "Prioritary Support"
+msgstr "أولوية الدعم"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "  أولوية الدعم ل ك نيوز النسخه المميزه"
+
+msgid "Name:"
+msgstr "الاسم:"
+
+msgid "E-mail:"
+msgstr "البريد الإلكتروني:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "من فضلك، إشرح أسئلتك باللغة الإنجليزية اوالإسبانية اوالكاتالونية:"
+
+msgid "Close and Save Changes"
+msgstr "إغلاق وحفظ التغييرات"
+
+msgid "Close and Discard Changes"
+msgstr "إغلاق وتجاهل التغييرات"
+
+msgid "Custom Post Types configuration"
+msgstr "اعدادات Custom Post Types"
+
+msgid "Custom Post Type"
+msgstr "Custom Post Types"
+
+msgid "Use in manual post selection"
+msgstr "استخدام فى عمليه الاختيار اليدوى للتدوينات"
+
+msgid "Use it for automate newsletters"
+msgstr "استخدامه للرسائل الإخبارية الآلي"
 

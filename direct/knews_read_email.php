@@ -26,8 +26,10 @@ if ($Knews_plugin) {
 		if (count($user)==1) {
 			$user_id=$user->id;
 			$mysqldate = $Knews_plugin->get_mysql_date();
+			$what=2;
+			if ($Knews_plugin->get_safe('m')=='mbl') $what=4;
 			
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date) VALUES (2, " . $user_id . ", " . $id_newsletter . ", '" . $mysqldate . "')";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date) VALUES (" . $what . ", " . $user_id . ", " . $id_newsletter . ", '" . $mysqldate . "')";
 			$result=$wpdb->query( $query );
 
 		}
@@ -35,6 +37,7 @@ if ($Knews_plugin) {
 		$user=array();
 	}
 	
+	$do_mobile=false;
 	require( KNEWS_DIR . "/includes/knews_compose_email.php");
 
 	if (count($user)==1) {
@@ -61,6 +64,8 @@ if ($Knews_plugin) {
 	$theHtml = str_replace('%cant_read_href%', '#' , $theHtml);
 
 	if ($Knews_plugin->get_safe('preview',0)!=1) $theHtml = extract_code('<!--cant_read_block_start-->','<!--cant_read_block_end-->',$theHtml,true);
+	
+	if ($do_mobile) $theHtml=str_replace('</head>','<meta name="viewport" content="width=480"></head>',$theHtml);
 ?>
 <?php echo $theHtml; ?>
 <?php

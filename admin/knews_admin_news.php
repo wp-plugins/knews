@@ -68,6 +68,8 @@
 						$codeTemplate = str_replace('<!--[ ', '<!--[', $codeTemplate);
 						$codeTemplate = str_replace(' ]-->', ']-->', $codeTemplate);
 						
+						if (!$Knews_plugin->im_pro()) $codeTemplate = extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $codeTemplate, true);
+						
 						if ($lang_localized =='' ) $lang_localized='en_US';
 						$codeTemplate = str_replace('%cant_read_text_1%', $Knews_plugin->get_custom_text('cant_read_text_1', $lang_localized), $codeTemplate);
 						$codeTemplate = str_replace('%cant_read_text_link%', $Knews_plugin->get_custom_text('cant_read_text_link', $lang_localized), $codeTemplate);
@@ -114,7 +116,7 @@
 							if (strpos($bodyTemplate, '[start module ' . ($count_modules + 1) . ']') !== false) {
 								$found_module=true;
 	
-								$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
+								$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/' . ($mobile ? 'm_' : '') . 'module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
 								
 								$extracted_module = cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								$codeModule .= $extracted_module . '</div></div>';
@@ -175,7 +177,8 @@
 		?>
 		<script type="text/javascript">
 			function goto_editor() {
-				location.href = '<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $id_edit; ?>';
+				location.href = '<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $id_edit;
+				?>';
 			}
 			jQuery(document).ready ( function() {
 				setTimeout ('goto_editor()', 1000); // 1 second

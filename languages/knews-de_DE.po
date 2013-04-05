@@ -839,12 +839,8 @@ msgstr "Status"
 msgid "Submit end"
 msgstr "Senden Ende"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
-msgstr "Senden"
+msgstr "Absenden"
 
 #: Text in function
 #: direct/test_smtp.php:1
@@ -2224,13 +2220,13 @@ msgid "Knews runs every hour the automated newsletter creation jobs."
 msgstr "Knews überprüft automatisch jede Stunde alle automatisierten Newsletter-Aufträge."
 
 msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
-msgstr "Sie können jetzt diese Aufgabe manuell auslösen. (nur für Testzwecke empfohlen)% Automatische Erstellung jetzt starten."
+msgstr "Sie können jetzt diese Aufgabe manuell auslösen. (nur für Testzwecke empfohlen)%s Automatische Erstellung jetzt starten."
 
 msgid "Knews submit runs every 10 minutes and sends a portion of the list."
 msgstr "Knews wird alle 10 Minuten einen Teil der Liste senden/abschicken."
 
 msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
-msgstr "Sie können JavaScript CRON manuell auslösen, wenn Ihr Newsletter wird aus irgendeinem Grund nicht gesendet wird:% s Run JS-Cron Jetzt starten."
+msgstr "Sie können JavaScript CRON manuell auslösen, wenn Ihr Newsletter wird aus irgendeinem Grund nicht gesendet wird: %s Run JS-Cron Jetzt starten."
 
 msgid "Widget subscription form title"
 msgstr "Widget Anmeldeformular / Titel"
@@ -2467,7 +2463,7 @@ msgid "Automated process name:"
 msgstr "Automatischer Ablauf Name:"
 
 msgid "desktop_version_text_link"
-msgstr "Textlink / Desktop Version"
+msgstr "Desktop Version"
 
 msgid "Knews Pro is currently installed."
 msgstr "Ihre Knews Pro-Version wird derzeit installiert."
@@ -2512,11 +2508,62 @@ msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?ac
 msgstr "Sie müssen folgende Hauptseite aufrufen: www.meinedomain.de/wp-admin/admin-ajax?action=knewsCron"
 
 msgid "mobile_version_text_link"
-msgstr "Textlink / Mobile Version"
+msgstr "Mobile Version"
 
 msgid "Widget %s label form"
 msgstr "Widget %s Beschriftung"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Lade SMTP Standard-Einstellungen:"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "Mein Webhoster ist 1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "Mein Webhoster ist GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> Möchten Sie aktuelle Neuigkeiten, Tips & Tricks rund um das Knews-Newsletter-Plugin erhalten? Bitte melden Sie sich %s hier zu unserem Newsletter an."
+
+msgid "Prioritary Support"
+msgstr "Erweiteter / Vorrangiger Support"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Erweiteter / Vorrangiger Support für Knews Pro"
+
+msgid "Name:"
+msgstr "Name:"
+
+msgid "E-mail:"
+msgstr "E-Mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Bitte geben Sie Ihre Fragen in Englisch, Spanisch oder Catalan ein:"
+
+msgid "Close and Save Changes"
+msgstr "Schliessen / Einstellungen speichern"
+
+msgid "Close and Discard Changes"
+msgstr "Schliessen / Einstellungen verwerfen"
+
+msgid "Custom Post Types configuration"
+msgstr "Einrichtung eines Eigenen Beitrags-Typs"
+
+msgid "Custom Post Type"
+msgstr "Eigener Beitrags-Typ"
+
+msgid "Use in manual post selection"
+msgstr "Verwenden in manueller Beitrags-Auswahl"
+
+msgid "Use it for automate newsletters"
+msgstr "Für Automatische Newsletter verwenden"
 

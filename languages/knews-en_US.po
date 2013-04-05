@@ -839,10 +839,6 @@ msgstr "Status"
 msgid "Submit end"
 msgstr "Submit end"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
 msgstr "Submit"
 
@@ -2467,7 +2463,7 @@ msgid "Automated process name:"
 msgstr "Automated process name:"
 
 msgid "desktop_version_text_link"
-msgstr "desktop_version_text_link"
+msgstr "Desktop version"
 
 msgid "Knews Pro is currently installed."
 msgstr "Knews Pro is currently installed."
@@ -2512,11 +2508,62 @@ msgid "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?ac
 msgstr "You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL"
 
 msgid "mobile_version_text_link"
-msgstr "mobile_version_text_link"
+msgstr "Mobile version"
 
 msgid "Widget %s label form"
-msgstr ""
+msgstr "Widget %s label form"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Load SMTP defaults:"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "My hosting is 1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "My Hosting is GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+
+msgid "Prioritary Support"
+msgstr "Prioritary Support"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Prioritary Support for Knews Pro"
+
+msgid "Name:"
+msgstr "Name:"
+
+msgid "E-mail:"
+msgstr " \tE-mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Please, explain your questions in English, Spanish or Catalan:"
+
+msgid "Close and Save Changes"
+msgstr "Close and Save Changes"
+
+msgid "Close and Discard Changes"
+msgstr "Close and Discard Changes"
+
+msgid "Custom Post Types configuration"
+msgstr "Custom Post Types configuration"
+
+msgid "Custom Post Type"
+msgstr "Custom Post Type"
+
+msgid "Use in manual post selection"
+msgstr "Use in manual post selection"
+
+msgid "Use it for automate newsletters"
+msgstr "Use it for automate newsletters"
 

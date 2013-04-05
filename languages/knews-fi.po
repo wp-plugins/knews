@@ -839,12 +839,8 @@ msgstr "Tila"
 msgid "Submit end"
 msgstr "Postitus p&auml;&auml;ttyy"
 
-#: Text in echo
-#: admin/knews_admin_news_list.php:158
-#: admin/knews_admin_news_list.php:167
-#: knews.php:517
 msgid "Submit"
-msgstr "L&auml;het&auml;"
+msgstr "Lähetä"
 
 #: Text in function
 #: direct/test_smtp.php:1
@@ -1810,7 +1806,7 @@ msgid "From date:"
 msgstr "Alku pvm:"
 
 msgid "to date:"
-msgstr "loppu pvm."
+msgstr "loppu pvm:"
 
 msgid "last 7 days"
 msgstr "viime 7 p&auml;iv&auml;&auml;"
@@ -1933,7 +1929,7 @@ msgid "Sign Ups & Blocks"
 msgstr "Tilaukset ja estot"
 
 msgid "Use the CRON server (recommended)"
-msgstr "K&auml;yt&auml; CRON-palvelinta (suositeltu)"
+msgstr "K&auml;yt&auml; palvelimen CRON:ia (suositeltu)"
 
 msgid "Text direction, Left To Right or Right To Left: put <span style=\"color:#e00\">ltr</span> or <span style=\"color:#e00\">rtl</span>"
 msgstr "Tekstin suunta, vasemmalta oikealla tai oikealta vasemmalle: <span style=\"color:#e00\">ltr</span> tai <span style=\"color:#e00\">rtl</span>"
@@ -2519,4 +2515,55 @@ msgstr "Vimpaimen %s nimi"
 
 msgid "http://www.knewsplugin.com/automated-bounced-email-handling"
 msgstr "http://www.knewsplugin.com/automated-bounced-email-handling"
+
+msgid "Load SMTP defaults:"
+msgstr "Lataa SMTP oletukset:"
+
+msgid "Gmail SMTP"
+msgstr "Gmail SMTP"
+
+msgid "My hosting is 1&1"
+msgstr "1&1"
+
+msgid "My Hosting is GoDaddy"
+msgstr "GoDaddy"
+
+msgid "Yahoo SMTP"
+msgstr "Yahoo SMTP"
+
+msgid "<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here"
+msgstr "<strong>Knews:</strong> Pysy ajan tasalla uusista ominaisuuksista, vihjeistä ja nikseistä! Ole hyvä, tilaa uutiskirjeemme %s tästä"
+
+msgid "Prioritary Support"
+msgstr "Etuoikeutettu tukipalvelu"
+
+msgid "Prioritary Support for Knews Pro"
+msgstr "Etuoikeutettu tukipalvelu Knews Pro:lle"
+
+msgid "Name:"
+msgstr "Nimi:"
+
+msgid "E-mail:"
+msgstr "E-mail:"
+
+msgid "Please, explain your questions in English, Spanish or Catalan:"
+msgstr "Kysymykset Englanniksi tai Espanjaksi, kiitos:"
+
+msgid "Close and Save Changes"
+msgstr "Sulje ja tallenna muutokset"
+
+msgid "Close and Discard Changes"
+msgstr "Sulje tallentamatta muutoksia"
+
+msgid "Custom Post Types configuration"
+msgstr "Kustomoitu sisältötyyppi - asetukset"
+
+msgid "Custom Post Type"
+msgstr "Kustomoitu sisältötyyppi"
+
+msgid "Use in manual post selection"
+msgstr "Käytä manuaalisessa uutiskirjeessä"
+
+msgid "Use it for automate newsletters"
+msgstr "Käytä automaattisessa uutiskirjeessä"
 

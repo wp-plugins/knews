@@ -5,7 +5,7 @@ $knews_nonce_name='_admlist';
 if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
 //End Security for CSRF attacks
 
-	global $wpdb, $Knews_plugin;
+	global $wpdb, $Knews_plugin, $knewsOptions;
 
 	$langs_code = array();
 	$langs_name = array();
@@ -167,9 +167,9 @@ function enfocar() {
 						$alt=false;
 						$anyopened=false;
 						$anyopened_logged=false;
-
+						
 						foreach ($results as $list) {
-
+							
 							if ($list->open == '1') $anyopened=true;
 							if ($list->open_registered == '1') $anyopened_logged=true;
 
