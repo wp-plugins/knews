@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,8 +18,9 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* *NEW:* HTML code edition inside WYSIWYG Editor!
-* *NEW:* Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
+* **PREMIUM VERSION RELEASED:** Knews still free and unlimited... but there is a Premim Version also (see below)
+* HTML code edition inside WYSIWYG Editor!
+* Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
 * New **premium** template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
@@ -36,6 +37,19 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
 * **Free and without limitations**.
+
+**Premium features:**
+
+Knews has a Premium version, with this extra features:
+
+* **Automated bounce** handling
+* **Double width newslettering**: desktop and mobile 
+* **User mass** management 
+* **Latest Newsletters** Widget, shortcode & function 
+* **Permission management**: Allow & disallow users by roles 
+* **Custom Post Types**: support for manual & automated 
+* Add **custom fields** as you want to the users 
+* **Featured post image** support for manual and automated insertion
 
 More info here: [http://www.knewsplugin.com](http://www.knewsplugin.com/).
 
@@ -167,6 +181,14 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.0 =
+
+* Automated update to premium version
+* Hungarian special chars support added
+* Subscription form IDs removed (now code validates W3C rules)
+* Solved line height editor bug in font dialog
+* Solved dancing cursor in  Firefox while writing
 
 = 1.3.2 =
 
@@ -414,6 +436,14 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+
+* Automated update to premium version
+* Hungarian special chars support added
+* Subscription form IDs removed (now code validates W3C rules)
+* Solved line height editor bug in font dialog
+* Solved dancing cursor in  Firefox while writing
 
 = 1.3.2 =
 
