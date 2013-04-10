@@ -12,7 +12,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$extra_fields = $Knews_plugin->get_extra_fields();
 	$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
 	$filter_state = $Knews_plugin->get_safe('filter_state', 0, 'int');
-	$search_user = $Knews_plugin->get_safe('search_user', '');
+	$search_user = trim($Knews_plugin->get_safe('search_user', ''));
 	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 	
 	$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');

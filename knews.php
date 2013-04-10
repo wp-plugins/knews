@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.0
+Version: 1.4.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -506,6 +506,8 @@ if (!class_exists("KnewsPlugin")) {
 		
 		function add_user($email, $id_list_news, $lang='en', $lang_locale='en_US', $custom_fields=array(), $bypass_confirmation=false){
 			
+			$email=trim($email);
+
 			if (! $this->initialized) $this->init();
 			
 			global $wpdb;
@@ -596,6 +598,9 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function validEmail($email) {
+			
+			$email=trim($email);
+
 			if (empty($email) || !is_email($email)) {
 				return false;
 			} else {
@@ -1282,7 +1287,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.0');
+		define('KNEWS_VERSION', '1.4.1');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1386,6 +1391,20 @@ if (!function_exists("Knews_plugin_ap")) {
 		if ($Knews_plugin->get_safe('page')=='knews_news' || $Knews_plugin->get_safe('page')=='knews_submit') {
 			add_thickbox();
 		}
+
+		//wp_enqueue_script('media-upload');
+		if ( get_bloginfo( 'version' ) >= '3.5' && $Knews_plugin->get_safe('page')=='knews_news' && $Knews_plugin->get_safe('section')=='edit') {
+			wp_enqueue_media();
+	        //wp_enqueue_style( 'wp-color-picker' );
+			//wp_enqueue_script( 'wp-color-picker' );
+		}
+
+		if ( get_bloginfo( 'version' ) >= '3.3' ) {
+			// Register the pointer styles and scripts
+			wp_enqueue_style( 'wp-pointer' );
+			wp_enqueue_script( 'wp-pointer' );
+		}
+
 		//wp_enqueue_script('thickbox',null,array('jquery'));
 		//wp_enqueue_style('thickbox.css', '/'.WPINC.'/js/thickbox/thickbox.css', null, '1.0');
 	}

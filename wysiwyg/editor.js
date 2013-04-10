@@ -66,7 +66,13 @@ parent.jQuery(document).ready( function () {
 	parent.jQuery('div.wysiwyg_toolbar a.change_image').click(function(e) {
 		parent.setCatcher();
 		//1.1.0 parent.referer_image=parent.jQuery(this).parent().next();
-		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
+
+		if(typeof(parent.wp) == "undefined" || typeof(parent.wp.media) != "function") {
+			parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(parent.jQuery(parent.window).height(), 10)-100));
+		} else {
+			parent.wp.media.editor.open('nothing');
+		}
+
 		return false;
 	});
 	//1.1.0 parent.jQuery('span.img_handler a.rredraw_image', document).live('click', function(e) {
