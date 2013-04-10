@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
-* **Multilingual back office**: English, Russian, Arabic, Spanish, German, French, Italian, Finnish, Dutch and Catalan.
+* **Multilingual back office**: English, Russian, Arabic, Spanish, German, French, Italian, Finnish, Dutch, Greek and Catalan.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
@@ -58,8 +58,7 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* **NEW**: Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
-* **NEW**: Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
+* **NEW**: Greek - gr_GR (Thanks to Konstantinos Marinoglou)
 * English - en_US (Knews Team & Ypsilon http://www.ypsilonet.com )
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Oliver-Frank Hebel http://www.brand-bull.com )
@@ -71,6 +70,8 @@ A WYSIWYG Editor Demo:
 * Bosnian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 * Croatian - hr - about 60% translated (thanks to: Hasan Yousef)
 * Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
+* Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
+* Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
 
 = Future release =
 
@@ -181,6 +182,12 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.1 =
+
+* Support for the new Wordpress 3.5 media uploader
+* Greek language added
+* Emails with spaces behind or before now supported (in subscription form, CSV import and user search)
 
 = 1.4.0 =
 
@@ -436,6 +443,12 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+
+* Support for the new Wordpress 3.5 media uploader
+* Greek language added
+* Emails with spaces behind or before now supported (in subscription form, CSV import and user search)
 
 = 1.4.0 =
 
