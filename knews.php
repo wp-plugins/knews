@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.1
+Version: 1.4.2
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -507,7 +507,7 @@ if (!class_exists("KnewsPlugin")) {
 		function add_user($email, $id_list_news, $lang='en', $lang_locale='en_US', $custom_fields=array(), $bypass_confirmation=false){
 			
 			$email=trim($email);
-
+			
 			if (! $this->initialized) $this->init();
 			
 			global $wpdb;
@@ -598,7 +598,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function validEmail($email) {
-			
+
 			$email=trim($email);
 
 			if (empty($email) || !is_email($email)) {
@@ -868,10 +868,24 @@ if (!class_exists("KnewsPlugin")) {
 						}
 						return false;
 					}
+					knewsfuncInputs = function() {
+						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
+							if (jQuery(this).val() == jQuery(this).attr(\'title\') ) jQuery(this).val(\'\');
+						}
+					}
+					knewsfuncInputsExit = function() {
+						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
+							if (jQuery(this).val() == \'\' ) jQuery(this).val( jQuery(this).attr(\'title\') );
+						}
+					}
 					if (parseInt(jQuery.fn.jquery.split(\'.\').join(\'\'), 10) >= 170) {
 						jQuery(document).on(\'submit\', \'#knewsform_' . $this->knews_form_n . ' form\', knewsfunc);
+						jQuery(document).on(\'focus\', \'#knewsform_' . $this->knews_form_n . ' input\', knewsfuncInputs);
+						jQuery(document).on(\'blur\', \'#knewsform_' . $this->knews_form_n . ' input\', knewsfuncInputsExit);
 					} else {
 						jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').live(\'submit\', knewsfunc);						
+						jQuery(\'#knewsform_' . $this->knews_form_n . ' input\').live(\'focus\', knewsfuncInputs);						
+						jQuery(\'#knewsform_' . $this->knews_form_n . ' input\').live(\'blur\', knewsfuncInputsExit);						
 					}
 				})
 			</script>';
@@ -881,9 +895,9 @@ if (!class_exists("KnewsPlugin")) {
 		
 		function getForm($mandatory_id=0, $args='', $instance=array(), $container='knews_add_user') {
 			global $knewsOptions;
-			$stylize = false;
-			if ((isset($instance['stylize']) && $instance['stylize']==1) || is_array($args)) $stylize = true;
-
+			$stylize = false; if ((isset($instance['stylize']) && $instance['stylize']==1) || is_array($args)) $stylize = true;
+			$labelwhere = 'outside'; if (isset($instance['labelwhere'])) $labelwhere = $instance['labelwhere'];
+			
 			$extra_fields = $this->get_extra_fields();
 			$response='';
 			if (! $this->initialized) $this->init();
@@ -904,19 +918,32 @@ if (!class_exists("KnewsPlugin")) {
 
 				foreach ($extra_fields as $field) {
 					if (isset($instance[$field->name]) && ($instance[$field->name]=='ask' || $instance[$field->name]=='required')) {
-						$response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '</label>
-						<input type="text" name="' . $field->name . '" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
+						$response .= '<fieldset class="' . $field->name . '">';
+
+						if ($labelwhere == 'outside') $response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '</label>';
+
+						$response .= '<input type="text" name="' . $field->name . '" value="';
+						if ($labelwhere == 'inside') $response .= $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '" title="' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']);
+						$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
 						
 						if ($instance[$field->name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" />';
+						$response .= '</fieldset>';
 					}
 				}
 
-				$response .= '<label for="knewsemail"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>
-						<input type="text" name="knewsemail" value=""' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
+				$response .= '<fieldset class="knewsemail">';
+				
+				if ($labelwhere == 'outside') $response .= '<label for="knewsemail"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>';
+				
+				$response .= '<input type="text" name="knewsemail" value="';
+				
+				if ($labelwhere == 'inside') $response .= $this->get_custom_text('widget_label_email', $lang['localized_code']) . '" title="' . $this->get_custom_text('widget_label_email', $lang['localized_code']);
+
+				$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
 				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
 				$response .= '<input type="hidden" name="knewskey" value="' . $key . '" />
 						<textarea name="knewscomment" class="knewscomment" style="width:150px; height:80px" rows="5" cols="20"></textarea>
-						<input class="knewsbutton" type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />
+						<fieldset class="knewsbutton"><input class="knewsbutton" type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>
 						<input type="hidden" name="action" value="knewsAddUser" />
 					</form>
 				</div>';
@@ -1287,7 +1314,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.1');
+		define('KNEWS_VERSION', '1.4.2');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1706,6 +1733,15 @@ if (!function_exists("Knews_plugin_ap")) {
 				echo '<option value="required"' . (($val=="required") ? ' selected="selected"' : '') . '>' . __('Required','knews') . '</option>';
 				echo '</select></p>';
 			}
+
+			$val='outside';
+			if (isset($instance[ 'labelwhere' ])) $val=$instance[ 'labelwhere' ];
+			echo '<p><label for="' . $this->get_field_id('labelwhere') . '">' . __('Label position','knews') . '</label>';
+			echo '<select id="' . $this->get_field_id('labelwhere') . '" name="' . $this->get_field_name('labelwhere') . '" style="float:right;">';
+			echo '<option value="outside"' . (($val=="outside") ? ' selected="selected"' : '') . '>' . __('Outside','knews') . '</option>';
+			echo '<option value="inside"' . (($val=="inside") ? ' selected="selected"' : '') . '>' . __('Inside','knews') . '</option>';
+			echo '<option value="hidden"' . (($val=="hidden") ? ' selected="selected"' : '') . '>' . __('Hidden','knews') . '</option>';
+			echo '</select></p>';
 				
 			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';
 		}
@@ -1713,10 +1749,14 @@ if (!function_exists("Knews_plugin_ap")) {
 	} // class Knews_Widget
 
 	function knews_aj_posts_where( $where ) {
-		global $knews_aj_look_date, $knewsOptions;
-   		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' ";
+		global $knews_aj_look_date, $knewsOptions, $Knews_plugin;
+   		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' "
+					  . " AND post_date <= '" . $Knews_plugin->get_mysql_date() . "' AND post_status='publish'";
 	}
-	
+	function knews_excerpt_length( $length ) {
+		return 40;
+	}
+
 	
 	if (is_admin()) {
 		$knewsOptions = $Knews_plugin->getAdminOptions();

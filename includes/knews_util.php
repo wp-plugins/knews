@@ -30,6 +30,8 @@ function cut_code($start, $end, $code, $delete) {
 	$start_pos = strpos($code, $start);
 	$end_pos = strpos($code, $end, $start_pos+strlen($start));
 
+	if ($start_pos === false || $end_pos === false) return '';
+	
 	if ($delete) {
 		$start_pos = $start_pos + strlen($start);
 	} else {
@@ -44,6 +46,8 @@ function extract_code($start, $end, $code, $delete) {
 
 	$start_pos = strpos($code, $start);
 	$end_pos = strpos($code, $end, $start_pos+strlen($start));
+
+	if ($start_pos === false || $end_pos === false) return $code;
 
 	if (!$delete) {
 		$start_pos = $start_pos + strlen($start);
@@ -81,14 +85,34 @@ function extractAndCut($inic, $end, $theHtml) {
 	$pos = strpos($theHtml, $inic);
 	$pos2 = strpos($theHtml, $end);
 	
-	$module='';
-	if ($pos === false || $pos2 === false) {
-	} else {
-		$module = substr($theHtml, $pos+strlen($inic), $pos2 - ($pos + strlen($inic)));
-	}
+	if ($pos === false || $pos2 === false) return '';
+
+	return substr($theHtml, $pos+strlen($inic), $pos2 - ($pos + strlen($inic)));
 	
-	return $module;
 }
+
+function deleteTag($tag, $search, $theHtml) {
+	$findPos=strpos($theHtml, $search);
+	if ($findPos === false) return $theHtml;
+	
+	$firsthalf = substr($theHtml, 0, $findPos);
+	
+	$pos = strrpos($firsthalf, '<' . $tag);
+	$pos2 = strpos($theHtml, '</' . $tag . '>', $findPos);
+	$pos2 = $pos2+strlen($tag)+3;
+	
+	return substr($theHtml, 0, $pos) . substr($theHtml, $pos2);	
+}
+function iterative_deleteTag($tag, $search, $theHtml) {
+	$pre = $theHtml;
+	$post = deleteTag($tag, $search, $theHtml);
+	while ($pre != $post) {
+		$pre=$post;
+		$post = deleteTag($tag, $search, $post);
+	}
+	return $post;
+}
+
 /*
 function normalize($text) {
 	return utf8tohtml($text, false);

@@ -136,6 +136,13 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.6') < 0) {
 	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
 }
 
+if (version_compare(get_option('knews_version','0.0.0'), '1.4.2') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.3') < 0)) {
+	//Database updates for 1.4.2 Free & 2.0.3 Pro version
+	if (!knews_add_column(KNEWS_AUTOMATED, 'run_yet', "int(1) NOT NULL DEFAULT 1")) return;
+	//if (!knews_add_column(KNEWS_USERS, 'ip', "varchar(32) NOT NULL")) return;
+	//if (!knews_add_column(KNEWS_USERS, 'alive', "datetime NOT NULL")) return;
+}
+
 update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 

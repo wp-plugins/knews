@@ -172,7 +172,7 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 					echo '<td>' . $submit->users_total . '</td>';
 					echo '<td align="center">';
 					if ( $submit->finished==0) {
-						//Progres
+						//Percent
 						$percent = round(($submit->users_ok+$submit->users_error) / $submit->users_total * 100) ;
 						echo $percent . '%';
 						echo '<div style="width:100px; height:11px; border:#fff 1px solid; outline:#bdbdbd 1px solid; background:url(' . KNEWS_URL . '/images/submit.gif) no-repeat ' . (intval($percent) - 100) . 'px 0px; line-height:1px; font-size:1px;">&nbsp;</div>';

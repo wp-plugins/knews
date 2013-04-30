@@ -58,8 +58,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$results = $wpdb->get_results( $query );
 			
 			if (count($results)==0) {
-				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run, emails_at_once) VALUES (";
-				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "', " . $at_once . ")";
+				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run, emails_at_once, run_yet) VALUES (";
+				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "', " . $at_once . ", 0)";
 				
 				if ($wpdb->query($sql)) {
 					echo '<div class="updated"><p>' . __('Automated submit created','knews') . '</p></div>';
@@ -159,7 +159,7 @@ function enfocar() {
 								if ($automated->every_time > 1) echo ' on ' . $dayname[$automated->what_dayweek-1];
 							}
 							echo '</td>';
-							echo '<td>' . $automated->last_run . '</td></tr>';
+							echo '<td>' . (($automated->run_yet==0) ? __('NEVER','knews') : $automated->last_run) . '</td></tr>';
 						}
 						$alt=!$alt;
 						if ($results_counter == $results_per_page * $paged) break;

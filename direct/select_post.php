@@ -38,6 +38,8 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
+	add_filter( 'excerpt_length', 'knews_excerpt_length', 999 );
+
 	require_once( KNEWS_DIR . '/includes/knews_util.php');
 
 	$ajaxid = $Knews_plugin->get_safe('ajaxid', 0, 'int');

@@ -2,7 +2,8 @@
 global $knewsOptions, $Knews_plugin, $wpdb, $knews_aj_look_date;
 
 if ($Knews_plugin) {
-	
+
+	add_filter( 'excerpt_length', 'knews_excerpt_length', 999 );
 	add_filter('posts_where', 'knews_aj_posts_where' );
 	
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
@@ -43,20 +44,20 @@ if ($Knews_plugin) {
 		} else {
 			$time_lapsus = time();
 			if ($aj->every_time == 1) $time_lapsus = $time_lapsus - 24 * 60 * 60; //Daily
-			if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 7 * 24 * 60 * 60; //Weekly
-			if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 14 * 24 * 60 * 60; //2 weeks
+			if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 1 * 24 * 60 * 60; //Weekly
+			if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 8 * 24 * 60 * 60; //2 weeks
 			if ($aj->every_time == 4) $time_lapsus = $time_lapsus - 30 * 24 * 60 * 60; //Monthly
 			if ($aj->every_time == 5) $time_lapsus = $time_lapsus - 60 * 24 * 60 * 60; //2 Monthly
 			if ($aj->every_time == 6) $time_lapsus = $time_lapsus - 90 * 24 * 60 * 60; //3 Monthly
 			
-			if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus) {
+			if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus || ($aj->run_yet==0 && $aj->every_time != 1) ) {
 				if ($aj->every_time == 1) {
 					$doit=true;
 				} else {
 					$daynumber=date('w');
 					if ($daynumber==0) $daynumber=7;
 					if ($daynumber == $aj->what_dayweek) $doit=true;
-					knews_debug('- must submit dayweek number: ' . $daynumber . ' and today is: ' . $aj->what_dayweek . ' dayweek number. ' . "\r\n");
+					knews_debug('- must submit dayweek number: ' . $aj->what_dayweek . ' and today is: ' . $daynumber . ' dayweek number. ' . "\r\n");
 				}
 			}
 			
@@ -77,13 +78,14 @@ if ($Knews_plugin) {
 	
 			if ($rightnews) {
 				knews_debug('- there is a newsletter to build: ' . $news[0]->name . "\r\n");
-				require (KNEWS_DIR . '/includes/knews_util.php');
+				require_once (KNEWS_DIR . '/includes/knews_util.php');
 				
 				if (!$Knews_plugin->im_pro()) $news_id = knews_create_news($aj, $pend_posts, $news, $fp, false, 0);
 			}
 		}
 	}
 	remove_filter('posts_where', 'knews_aj_posts_where' );
+	remove_filter('excerpt_length', 'knews_excerpt_length' );
 	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($save_lang);
 }
 
@@ -192,13 +194,46 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 		if ($s >= count($news_mod_map)) $s=0;
 	}					
 	
-	if ($total_posts == count($pend_posts)) {
+	if ($total_posts >= count($pend_posts)) {
 
 		$most_recent=0;
 		foreach ($pend_posts as $pp) {
 			knews_debug('- including post: ' . $pp->post_title . "\r\n");
-			
-			$content = $pp->post_content;
+
+			global $post;
+			$post = get_post($pp->ID);
+			setup_postdata($post);
+	
+			$excerpt_length = apply_filters('excerpt_length', 55);
+			$excerpt = (string) get_the_excerpt();
+			$content = (string) get_the_content();
+	
+			if ($knewsOptions['apply_filters_on']=='1') $content = apply_filters('the_content', $content);
+	
+			$content = strip_shortcodes($content);
+			$content = iterative_extract_code('<script', '</script>', $content, true);
+			$content = iterative_extract_code('<fb:like', '</fb:like>', $content, true);
+			$content = str_replace(']]>', ']]>', $content);
+			$content = strip_tags($content);
+	
+			if ($excerpt=='') $excerpt = $content;
+	
+			$words = explode(' ', $content, $excerpt_length + 1);
+			if (count($words) > $excerpt_length) {
+				array_pop($words);
+				//array_push($words, '[...]');
+				$excerpt = implode(' ', $words) . '...';
+			}
+			$content = nl2br($content);
+	
+			$words = explode(' ', $excerpt, $excerpt_length + 1);
+			if (count($words) > $excerpt_length) {
+				array_pop($words);
+				//array_push($words, '[...]');
+				$excerpt = implode(' ', $words) . '...';
+			}
+
+			/*$content = $pp->post_content;
 
 			$excerpt = strip_shortcodes( $content );
 			if ($knewsOptions['apply_filters_on']=='1') $excerpt = apply_filters('the_content', $excerpt);
@@ -213,8 +248,9 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				//array_push($words, '[...]');
 				$excerpt = implode(' ', $words);
 			}
-			$excerpt = nl2br($excerpt);
+			//$excerpt = nl2br($excerpt);
 			if ($knewsOptions['apply_filters_on']=='1') $content = apply_filters('the_content', $content);
+			*/
 			
 			$title = $pp->post_title;
 			$permalink = get_permalink($pp->ID);
@@ -247,6 +283,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				$result=$wpdb->query($query);
 			}
 		}
+		
 		if ($most_recent != 0) {
 			$news_mod='';
 			foreach ($news_mod2 as $nm) {
@@ -255,6 +292,16 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			
 			$news_mod=str_replace('<span class="chooser"></span>', '', $news_mod);
 			
+			//Netejem exces
+			for ($n=1; $n<10; $n++) {
+				//$news_mod = str_replace('%the_permalink_' . $n . '%', '#', $news_mod);
+				$news_mod = str_replace('%the_title_' . $n . '%', '', $news_mod);
+				$news_mod = str_replace('%the_excerpt_' . $n . '%', '', $news_mod);
+				$news_mod = str_replace('%the_content_' . $n . '%', '', $news_mod);
+				
+				$news_mod = iterative_deleteTag('a', '%the_permalink_' . $n . '%', $news_mod);
+				$news_mod = iterative_deleteTag('img', 'the_feat_img_' . $n . '%', $news_mod);
+			}
 			knews_debug('- saving the created newsletter' . "\r\n");
 			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($news[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ")";
 			$results = $wpdb->query($sql);				
@@ -263,7 +310,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			$query = "UPDATE " . KNEWS_AUTOMATED_POSTS . " SET id_news=" . $id_newsletter . " WHERE id_news=0";
 			$results = $wpdb->query($query);				
 
-			$query = "UPDATE " . KNEWS_AUTOMATED . " SET last_run='" . $Knews_plugin->get_mysql_date($most_recent) . "' WHERE id=" . $aj->id . " ";
+			$query = "UPDATE " . KNEWS_AUTOMATED . " SET last_run='" . $Knews_plugin->get_mysql_date($most_recent) . "', run_yet=1 WHERE id=" . $aj->id . " ";
 			$results = $wpdb->query($query);				
 			
 			if ($mobile) return $id_newsletter;

@@ -154,6 +154,7 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 		every_posts int(11) NOT NULL,
 		last_run datetime NOT NULL,
 		emails_at_once int(11) NOT NULL DEFAULT 25,
+		run_yet int(1) NOT NULL DEFAULT 1,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 	   
