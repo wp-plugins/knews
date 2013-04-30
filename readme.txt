@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.2 =
+
+* Subscription form layout: Labels outside fields (default), inside or hidden as an option
+* Changes in the subscription form tags structure
+* Better excerpt extraction: without extra BRs and other issues
+* More stable auto creation newsletter
 
 = 1.4.1 =
 
@@ -444,6 +451,13 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.4.2 =
+
+* Subscription form layout: Labels outside fields (default), inside or hidden as an option
+* Changes in the subscription form tags structure
+* Better excerpt extraction: without extra BRs and other issues
+* More stable auto creation newsletter
+
 = 1.4.1 =
 
 * Support for the new Wordpress 3.5 media uploader
@@ -458,26 +472,6 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Solved line height editor bug in font dialog
 * Solved dancing cursor in  Firefox while writing
 
-= 1.3.2 =
-
-* Added HTML edition for the HTML coders inside HTML WYSIWYG Editor
-* Easy SMTP default configuration for 1&1 and GoDaddy hostings (the most asked & confuse hostings). And Gmail and Yahoo external accounts (most used external SMTP).
-* Solved a bug in the Test SMTP config for IsSendmail() configuration: always failed with right config (thanks to Manuel López Riego)
-* Solved PHP Warning in automated_jobs.php for qTranslate users (thanks to Andrija Kokanovic)
-* Solved PHP notice in newsletter creation: notice undefined variable anytemplate (thanks to Hasan Yousef)
-
-= 1.3.1 =
-
-* Cleaner in the WYSIWYG Editor for the font size bug (appears only in some mail clients, most times in some letters inside the link) now solved.
-* More clean and shorter code lines in sent newsletters html: solves rare mail client issues.
-* Support for the new jQuery 1.9: alternatives for the deprecated live() and browser() methods. More performance and support for older jQuery versions.
-* Export subscribers: Now exports the name and surname fields.
-* Post content: insertion now really gets the_excerpt content (if exists, otherwise generates it using the content).
-* Select post pagination() function re-declaration bug solved (some WP themes uses this function name).
-
-= 1.3.0 =
-
-* Solved a bug while saving the newsletter in the WYSIWYG editor
 
 
 
