@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.3 =
+
+* Newsletters shown in a light window over the home page (follow the newsletters can't read link)
+* Confirmation subscription dialog prettyfied
+* Unescaped strings break JavaScript (aphostrophe, some languages only) solved
+* Subscription form extra borders issue solved (1.4.2 bug)
 
 = 1.4.2 =
 
