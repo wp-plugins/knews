@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.2
+Version: 1.4.3
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -70,6 +70,7 @@ if (!class_exists("KnewsPlugin")) {
 				'hide_templates' => '0',
 				'bounce_on' => '0',
 				'is_sendmail' => '0',
+				'bounce_email' => 'bounce@yourdomain.com',
 				'bounce_host' => 'mail.yourdomain.com',
 				'bounce_port' => '110',
 				'bounce_user' => 'bounce@yourdomain.com',
@@ -90,7 +91,10 @@ if (!class_exists("KnewsPlugin")) {
 			} else {
 				update_option($this->adminOptionsName, $KnewsAdminOptions);
 			}
-
+			
+			//Support for older bounce configs
+			if ($KnewsAdminOptions['bounce_email'] == 'bounce@yourdomain.com') $KnewsAdminOptions['bounce_email'] = $KnewsAdminOptions['bounce_user'];
+			
 			return $KnewsAdminOptions;
 		}
 	
@@ -420,6 +424,12 @@ if (!class_exists("KnewsPlugin")) {
 			if ($mode=='unsafe') return $value;
 			if ($mode=='int') return intval($value);
 			if ($mode=='paranoid') return mysql_real_escape_string(htmlspecialchars(strip_tags($value)));
+		}
+
+		function escape_js($txt, $comma='"') {
+			$txt = str_replace($comma, '\\' . $comma, $txt);
+			$txt = str_replace('\\\\' . $comma, '\\' . $comma, $txt);
+			return $txt;
 		}
 	
 		function get_user_lang($email){
@@ -913,6 +923,7 @@ if (!class_exists("KnewsPlugin")) {
 				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
 					div.' . $container . ' textarea.knewscomment {position:absolute; top:-3000px; left:-3000px;}
+					div.' . $container . ' fieldset {border:0;}
 					</style>
 					<form action="' . $this->getAddUserUrl() . '" method="post">';
 
@@ -1020,7 +1031,7 @@ if (!class_exists("KnewsPlugin")) {
 					$mail->CharSet='UTF-8';
 					$mail->Subject=$theSubject;
 
-					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_user'];
+					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_email'];
 					
 					$mail->From = $knewsOptions['from_mail_knews'];
 					$mail->FromName = $knewsOptions['from_name_knews'];
@@ -1314,7 +1325,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.2');
+		define('KNEWS_VERSION', '1.4.3');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1324,8 +1335,9 @@ if (!function_exists("Knews_plugin_ap")) {
 				$Knews_plugin->knews_load_plugin_textdomain();
 			}
 	
-			//Can't see the Knews admin menu? Try to define KNEWS_MENU_POS with another random value in your functions.php theme!!!
-			$menu_order=103.2;
+			//Can't see the Knews admin menu? Try to define KNEWS_MENU_POS with another random value in your wp-config.php or functions.php theme!!!
+			//example: define ('KNEWS_MENU_POS',102);
+			$menu_order=103;
 			if (defined('KNEWS_MENU_POS')) $menu_order=KNEWS_MENU_POS;
 
 			$pro_menus=false;
@@ -1438,10 +1450,17 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('admin_enqueue_scripts', 'knews_admin_enqueue');
 	
 	function knews_popup() {
-		if (isset($_GET['subscription']) || isset($_GET['unsubscribe'])) {
-			global $Knews_plugin;
+		global $Knews_plugin;
+		
+		if ($Knews_plugin->get_safe('subscription')=='ok' || $Knews_plugin->get_safe('subscription')=='error' || $Knews_plugin->get_safe('unsubscribe')=='ok' || $Knews_plugin->get_safe('unsubscribe')=='error') {
+			define ('KNEWS_POP_DIALOG', true);
+		}
+
+		if ($Knews_plugin->get_safe('knewspophome')=='1') define('KNEWS_POP_HOME', true);
+
+		if (defined('KNEWS_POP_HOME') || defined('KNEWS_POP_DIALOG') || defined('KNEWS_POP_NEWS')) {
 			if (! $Knews_plugin->initialized) $Knews_plugin->init();
-			require( KNEWS_DIR . '/includes/dialogs.php');
+			require_once( KNEWS_DIR . '/includes/dialogs.php');
 		}
 	}
 	add_action('wp_footer', 'knews_popup');

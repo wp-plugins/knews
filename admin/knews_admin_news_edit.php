@@ -42,32 +42,32 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo (($parentid==0) ? $Knews_plugin->get_safe('idnews') : $parentid);?>';
 	reload_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $Knews_plugin->get_safe('idnews') ;?>';
 	
-	must_apply_undo = "<?php _e('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews'); ?>";
-	edit_image= "<?php echo __('Edit image','knews'); ?>";
-	sharp_image= "<?php echo __('Apply changes and refresh image','knews'); ?>";
-	undo_image= "<?php echo __('Undo image changes','knews'); ?>";
-	properties_image= "<?php echo __('Properties of image','knews'); ?>";
-	post_handler= "<?php echo __('Insert post/page content','knews'); ?>";
-	free_handler= "<?php echo __('Free text content','knews'); ?>";
-	move_handler= "<?php echo __('Move module','knews'); ?>";
-	delete_handler= "<?php echo __('Delete module','knews'); ?>";
-	unsaved_message= "<?php echo addslashes(__('If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the "Save" button (blue coloured).','knews')); ?>";
+	must_apply_undo = "<?php echo $Knews_plugin->escape_js(__('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews')); ?>";
+	edit_image= "<?php echo $Knews_plugin->escape_js(__('Edit image','knews')); ?>";
+	sharp_image= "<?php echo $Knews_plugin->escape_js(__('Apply changes and refresh image','knews')); ?>";
+	undo_image= "<?php echo $Knews_plugin->escape_js(__('Undo image changes','knews')); ?>";
+	properties_image= "<?php echo $Knews_plugin->escape_js(__('Properties of image','knews')); ?>";
+	post_handler= "<?php echo $Knews_plugin->escape_js(__('Insert post/page content','knews')); ?>";
+	free_handler= "<?php echo $Knews_plugin->escape_js(__('Free text content','knews')); ?>";
+	move_handler= "<?php echo $Knews_plugin->escape_js(__('Move module','knews')); ?>";
+	delete_handler= "<?php echo $Knews_plugin->escape_js(__('Delete module','knews')); ?>";
+	unsaved_message= "<?php echo $Knews_plugin->escape_js(__('If you leave now this page, the Newsletter changes will be lost. Please, cancel and press the "Save" button (blue coloured).','knews')); ?>";
 	url_admin = "<?php echo get_admin_url(); ?>";
-	error_resize = "<?php echo __('Error','knews') . ': ' . __('Check the directory permissions for','knews'); ?> '/wp-content/uploads'";
-	error_save = "<?php  echo __('Error saving','knews'); ?>";
-	ok_save = "<?php  echo __('Newsletter saved','knews'); ?>";
-	button_continue_editing = "<?php  echo __('Continue editing','knews'); ?>";
-	button_submit_newsletter = "<?php  echo __('Submit newsletter','knews'); ?>";
+	error_resize = "<?php echo $Knews_plugin->escape_js(__('Error','knews') . ': ' . __('Check the directory permissions for','knews')); ?> '/wp-content/uploads'";
+	error_save = "<?php  echo $Knews_plugin->escape_js(__('Error saving','knews')); ?>";
+	ok_save = "<?php  echo $Knews_plugin->escape_js(__('Newsletter saved','knews')); ?>";
+	button_continue_editing = "<?php echo $Knews_plugin->escape_js(__('Continue editing','knews')); ?>";
+	button_submit_newsletter = "<?php  echo $Knews_plugin->escape_js(__('Submit newsletter','knews')); ?>";
 
-	confirm_delete = "<?php echo __('Do you really want to delete this module?','knews'); ?>";
-	button_yes = "<?php echo __('Yes','knews'); ?>";
-	button_no = "<?php echo __('No','knews'); ?>";
-	button_continue = "<?php echo __('Continue','knews'); ?>";
+	confirm_delete = "<?php echo $Knews_plugin->escape_js(__('Do you really want to delete this module?','knews')); ?>";
+	button_yes = "<?php echo $Knews_plugin->escape_js(__('Yes','knews')); ?>";
+	button_no = "<?php echo $Knews_plugin->escape_js(__('No','knews')); ?>";
+	button_continue = "<?php echo $Knews_plugin->escape_js(__('Continue','knews')); ?>";
 	
-	opera_no = "<?php echo __("Warning! Opera can't edit newsletters. You must use a modern Firefox, Chrome, Safari or at least Internet Explorer 8.",'knews'); ?>";
+	opera_no = "<?php echo $Knews_plugin->escape_js(__("Warning! Opera can't edit newsletters. You must use a modern Firefox, Chrome, Safari or at least Internet Explorer 8.",'knews')); ?>";
 
 	function sorrypro() {
-		tb_dialog("Knews","<?php echo sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">'); ?></a>", '', '', '');
+		tb_dialog("Knews","<?php echo $Knews_plugin->escape_js(sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">')); ?></a>", '', '', '');
 	}
 </script>
 	<div class="wrap">

@@ -93,11 +93,11 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 	}
 	
 	function see_log(id) {
-		tb_show('<?php  _e('See the complete submit log', 'knews'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php  echo $Knews_plugin->escape_js(__('See the complete submit log', 'knews')); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cronlog_' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	function see_errors(id) {
-		tb_show('<?php   _e('See report fails by SMTP server'); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSeeFails&amp;id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+		tb_show('<?php  echo $Knews_plugin->escape_js(__('See report fails by SMTP server')); ?>', '<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSeeFails&amp;id=' + id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 	}
 
 	</script>

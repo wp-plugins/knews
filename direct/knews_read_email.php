@@ -66,9 +66,27 @@ if ($Knews_plugin) {
 	if ($Knews_plugin->get_safe('preview',0)!=1) $theHtml = extract_code('<!--cant_read_block_start-->','<!--cant_read_block_end-->',$theHtml,true);
 	
 	if ($do_mobile) $theHtml=str_replace('</head>','<meta name="viewport" content="width=480"></head>',$theHtml);
-?>
-<?php echo $theHtml; ?>
-<?php
+
+	if ($Knews_plugin->get_safe('preview',0) != 1 && $Knews_plugin->get_safe('knewsLb',0) != 1) {
+
+		$start = strpos($theHtml,'<body>');
+		$end = strpos($theHtml,'</body>');
+		
+		if ($start !== false && $end !== false) {
+			$start=$start+6;
+			echo substr($theHtml, 0, $start);
+			echo '<div class="knews_pop_bg" style="display:block;">&nbsp;</div><div class="knews_pop_news">';
+			echo substr($theHtml, $start, $end-$start);
+			echo '</div><iframe src="' . get_bloginfo('url') . '?knewspophome=1" class="knews_base_home"></iframe><a href="' . get_bloginfo('url') . '" class="knews_pop_x" title="close" target="_parent" style="display:block;">&nbsp;</a>';
+			require( KNEWS_DIR . '/includes/dialogs.php');
+			echo '</html></body>';
+		} else {
+			echo $theHtml;
+		}
+	} else {
+		echo $theHtml;	
+	}
+	
 } else {
 	echo 'Knews is not active';
 }

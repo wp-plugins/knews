@@ -1,28 +1,69 @@
 <?php
 global $Knews_plugin;
+?>
+	<style type="text/css">
+		#knews_dialog { display:block !important; }
+		#knews_dialog p { margin:0; padding:0 0 20px 0;}
+		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:158px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; box-shadow: 0 0 15px 5px #000000; border-radius:10px;}
+		#knews_dialog_button { display:inline-block; background:#666; color:#fff; font-weight:bold; padding:6px 20px; text-decoration:none; border-radius:5px; }
+		#knews_dialog_button:hover { background:#000; box-shadow: 0 0 5px #666; }
+		
+		a.knews_pop_x {
+			position:absolute;
+			top:10px;
+			z-index:1000;
+			display:none;
+			color:#fff;
+			left:50%;
+			background:url("<?php echo KNEWS_URL; ?>/images/cs-x-close.png") repeat 0 0;
+			width:38px;
+			height:41px;
+			text-decoration:none;
+			margin-left:350px;
+		}
+		div.knews_pop_bg {
+			position:fixed;
+			top:0; left:0; bottom:0; right:0;
+			background:url("<?php echo KNEWS_URL; ?>/images/bg_dialog.png") repeat 0 0;
+			z-index:1000;
+			display:none;
+		}
+		div.knews_pop_news,
+		iframe.knews_pop_news {
+			position:absolute;
+			z-index:1000;
+			top:25px;
+			left:50%;
+			width:730px;
+			margin-left:-365px;
+			background:#fff;
+		    box-shadow: 0 0 15px 5px #000000;
+		}
+		iframe.knews_pop_news {
+			opacity:0.01;filter:alpha(opacity=1);
+		}
+		iframe.knews_base_home {
+			width:100%;
+			height:100%;
+			position:absolute;
+			overflow:hidden;
+			left:0;
+			top:0;
+			
+		}
+	</style>
+<?php
 
-if ($Knews_plugin->get_safe('subscription')=='ok' || $Knews_plugin->get_safe('subscription')=='error' || $Knews_plugin->get_safe('unsubscribe')=='ok' ||$Knews_plugin->get_safe('unsubscribe')=='error') {
-	?>
+if (defined('KNEWS_POP_DIALOG')) {
+?>
 	<script type="text/javascript">
 	function knews_deleteLayer(id) {
-		if (document.getElementById && document.getElementById(id)) {
-			var theNode = document.getElementById(id);
-			theNode.parentNode.removeChild(theNode);
-		}
-		else if (document.all && document.all[id]) {
-			document.all[id].innerHTML='';
-			document.all[id].outerHTML='';
-		}
+		jQuery("div.knews_pop_bg").fadeOut("slow", function() {
+			jQuery("div.knews_pop_bg").remove();
+		});
 	}
 	</script>
-	<style type="text/css">
-		#knews_dialog p { margin:0; padding:0 0 20px 0;}
-		#knews_dialog { position:fixed; left:0; top:0; width:100%; height:100%; z-index:10000; background:url(<?php echo KNEWS_URL; ?>/images/bg_dialog.png) repeat 0 0; }
-		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:158px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; }
-		#knews_dialog_button { display:inline-block; background:#333; color:#fff; font-weight:bold; padding:6px 20px; text-decoration:none; }
-		#knews_dialog_button:hover { background:#aaa; color:#000; }
-	</style>
-	<div id="knews_dialog">
+	<div id="knews_dialog" class="knews_pop_bg">
 		<div id="knews_dialog_bg">
 			<?php 
 			$lang_locale = $Knews_plugin->localize_lang($Knews_plugin->getLangs(true), $Knews_plugin->get_safe('lang', substr(get_bloginfo('language'), 0, 2)), get_bloginfo('language'));
@@ -55,6 +96,77 @@ if ($Knews_plugin->get_safe('subscription')=='ok' || $Knews_plugin->get_safe('su
 			?>
 		</div>
 	</div>
-	<?php
-	}
+<?php
+}
+
+if (defined('KNEWS_POP_HOME')) {
+
+?>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			max_width=0;
+			jQuery('div.knews_pop_news *', window.parent.document).each(function() {
+				m=parseInt(jQuery(this).attr('width'), 10);
+				if (m > max_width) max_width=m;
+			});
+			max_width=max_width+20;
+			jQuery("div.knews_pop_news", window.parent.document).css("width", max_width).css("marginLeft", -1 * Math.floor(max_width/2));
+			jQuery("a.knews_pop_x", window.parent.document).css("marginLeft", Math.floor(max_width/2)-15);
+
+			jQuery(window.parent.document).keyup(function(e) {
+				if (e.keyCode == 27) { close_popup() }
+			});
+			jQuery('div.knews_pop_bg', window.parent.document).click(function() {
+				close_popup();
+			});
+			function close_popup() {
+				window.parent.document.location.href='<?php echo get_bloginfo('url'); ?>';
+			}
+		});
+	</script>
+<?php
+}
+
+if (defined('KNEWS_POP_NEWS')) {
+?>
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery("a.knews_lightbox").click(function() {
+				jQuery("body").append('<div class="knews_pop_bg">&nbsp;</div><iframe class="knews_pop_news" src="' + jQuery(this).attr("href") + '&knewsLb=1"></iframe><a href="#" class="knews_pop_x" title="close">&nbsp;</a>');
+				jQuery("div.knews_pop_bg").fadeIn();
+				jQuery("iframe.knews_pop_news").load(function (){
+					y = this.contentWindow.document.body.offsetHeight;
+					//x = this.contentWindow.document.body.offsetWidth + 20;
+					max_width=0;
+					parent.jQuery('body', this.contentWindow.document).css('padding','0').css('margin','0');
+					parent.jQuery('*', this.contentWindow.document).each(function() {
+						m=parseInt(jQuery(this).attr('width'), 10);
+						if (m > max_width) max_width=m;
+					});
+					max_width=max_width+20;
+					parent.jQuery("iframe.knews_pop_news").animate({opacity:1}).css("height", y).css("width", max_width).css("marginLeft", -1 * Math.floor(max_width/2));
+					parent.jQuery("a.knews_pop_x").css("marginLeft", Math.floor(max_width/2)-15).css("display","block");
+					parent.jQuery("a.knews_pop_x, div.knews_pop_bg").click(function() {close_popup()});
+					parent.jQuery("a", this.contentWindow.document).each(function() {parent.jQuery(this).attr("target","_parent")});
+					parent.jQuery(this.contentWindow.document).keyup(function(e) {
+						if (e.keyCode == 27) { close_popup() }
+					});
+				});
+				return false;
+			});
+			function knewsLookForEsc(e) {
+				if (e.keyCode == 27) close_popup();
+			}
+			jQuery(document).keyup(knewsLookForEsc);
+			function close_popup() {
+				jQuery("a.knews_pop_x, iframe.knews_pop_news").remove();
+				jQuery("div.knews_pop_bg").fadeOut("slow", function() {
+					jQuery("div.knews_pop_bg").remove();
+					jQuery(document).unbind("keyup", knewsLookForEsc);
+				});
+			}
+		});
+	</script>
+<?php
+}
 ?>
