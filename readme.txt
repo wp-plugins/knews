@@ -104,9 +104,9 @@ A WYSIWYG Editor Demo:
 
 11. a) Drag the Knews **widget** to the sidebar.
 
-12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW:** Now you can specify a mailing list id, name, surname and/or stylize it: [knews_form id=1 name=ask surname=required stylize=1]
+12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW Options:** [knews_form id=1 name=ask surname=required stylize=1 labelwhere=outside|inside|none subtitle=0|1 requiredtxt=1|0 terms=0|1 script=1|0]
 
-13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( array('id'=>1, 'name'=>'ask', 'surname'=>'required', 'stylize'=>1) ); ?>`
+13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( 0[or mailing list id], '', array('name'=>'ask', 'surname'=>'required', 'stylize'=>[0|1], 'labelwhere'=>'outside|inside|none', 'subtitle'=>[0|1], 'requiredtxt'=>[0|1], 'terms'=>[0|1], 'script'=>[0|1]) ); ?>`
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
@@ -182,6 +182,28 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.4 =
+
+* **SUBSCRIPTION FORM WIDGET IMPROVEMENTS:**
+* Subtitle added (optional)
+* Show required fields text (optional)
+* More specific message error for required fields
+* Accept terms checkbox (optional)
+* **BETTER IMPORT TOOL:**
+* Import multiple step (every 500 users, in order to avoid memory issues)
+* Mailing lists creation (supports multiple, comma separated)
+* Import error log (see which and why emails reports issues)
+* **IP saving in subscription time**
+* **GENERAL IMPROVEMENTS:**
+* Manual user creation with one step name and surname introduction and options remembering
+* Test SMTP: added from, from name and debug info
+* Saving which link was clicked inside a newsletter
+* Cron call overlap prevented
+* **BUGS SOLVED:**
+* The resize IMG bug in editor (forbidden) solved for some users
+* The retry submission for the errors now works
+* The aphostrophe JS bug in the "see log" option (on submits) in some languages solved.
 
 = 1.4.3 =
 
@@ -458,27 +480,25 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
-= 1.4.2 =
+= 1.4.4 =
 
-* Subscription form layout: Labels outside fields (default), inside or hidden as an option
-* Changes in the subscription form tags structure
-* Better excerpt extraction: without extra BRs and other issues
-* More stable auto creation newsletter
-
-= 1.4.1 =
-
-* Support for the new Wordpress 3.5 media uploader
-* Greek language added
-* Emails with spaces behind or before now supported (in subscription form, CSV import and user search)
-
-= 1.4.0 =
-
-* Automated update to premium version
-* Hungarian special chars support added
-* Subscription form IDs removed (now code validates W3C rules)
-* Solved line height editor bug in font dialog
-* Solved dancing cursor in  Firefox while writing
-
-
-
+* **SUBSCRIPTION FORM WIDGET IMPROVEMENTS:**
+* Subtitle added (optional)
+* Show required fields text (optional)
+* More specific message error for required fields
+* Accept terms checkbox (optional)
+* **BETTER IMPORT TOOL:**
+* Import multiple step (every 500 users, in order to avoid memory issues)
+* Mailing lists creation (supports multiple, comma separated)
+* Import error log (see which and why emails reports issues)
+* **IP saving in subscription time**
+* **GENERAL IMPROVEMENTS:**
+* Manual user creation with one step name and surname introduction and options remembering
+* Test SMTP: added from, from name and debug info
+* Saving which link was clicked inside a newsletter
+* Cron call overlap prevented
+* **BUGS SOLVED:**
+* The resize IMG bug in editor (forbidden) solved for some users
+* The retry submission for the errors now works
+* The aphostrophe JS bug in the "see log" option (on submits) in some languages solved.
 
