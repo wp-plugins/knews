@@ -2567,3 +2567,15 @@ msgstr "Utiliser en mode post-sélection manuelle"
 msgid "Use it for automate newsletters"
 msgstr "L’utiliser pour les newsletters automatiques"
 
+msgid "widget_required"
+msgstr "* Ce champs est obligatoire"
+
+msgid "widget_label_terms"
+msgstr "J'accepte les conditions d'utilisation"
+
+msgid "widget_subtitle"
+msgstr "Souscrivez à notre newsletter pour être tenus au courant :"
+
+msgid "ajax_wrong_fields"
+msgstr "Veuillez vérifier les champs obligatoires"
+

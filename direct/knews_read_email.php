@@ -29,7 +29,7 @@ if ($Knews_plugin) {
 			$what=2;
 			if ($Knews_plugin->get_safe('m')=='mbl') $what=4;
 			
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date) VALUES (" . $what . ", " . $user_id . ", " . $id_newsletter . ", '" . $mysqldate . "')";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (" . $what . ", " . $user_id . ", " . $id_newsletter . ", '" . $mysqldate . "', 0)";
 			$result=$wpdb->query( $query );
 
 		}

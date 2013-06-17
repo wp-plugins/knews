@@ -2208,7 +2208,7 @@ msgid "This template requires Knews version %s you must update Knews before use 
 msgstr "Diese Vorlage erfordert die Knews Version %s Sie müssen Knews aktualisieren, bevor Sie diese Vorlage verwenden können."
 
 msgid "This template requires the professional version of Knews. You can get it %s here"
-msgstr "Diese Vorlage erfordert die Knews Pro-Version %s Diese können Sie %s herunterladen."
+msgstr "Diese Vorlage erfordert die Knews Pro-Version. Diese können Sie %s hier herunterladen."
 
 msgid "Compatibility options"
 msgstr "Kompatibilitäts-Optionen"
@@ -2220,7 +2220,7 @@ msgid "Knews runs every hour the automated newsletter creation jobs."
 msgstr "Knews überprüft automatisch jede Stunde alle automatisierten Newsletter-Aufträge."
 
 msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
-msgstr "Sie können jetzt diese Aufgabe manuell auslösen. (nur für Testzwecke empfohlen)%s Automatische Erstellung jetzt starten."
+msgstr "Sie können jetzt diese Aufgabe manuell auslösen. (nur für Testzwecke empfohlen) %s Automatische Erstellung jetzt starten."
 
 msgid "Knews submit runs every 10 minutes and sends a portion of the list."
 msgstr "Knews wird alle 10 Minuten einen Teil der Liste senden/abschicken."
@@ -2566,4 +2566,16 @@ msgstr "Verwenden in manueller Beitrags-Auswahl"
 
 msgid "Use it for automate newsletters"
 msgstr "Für Automatische Newsletter verwenden"
+
+msgid "widget_required"
+msgstr "*Pflichtfeld"
+
+msgid "widget_label_terms"
+msgstr "Ich akzeptiere die AGBs und Datenschutzbedingungen."
+
+msgid "widget_subtitle"
+msgstr "Abonieren Sie unseren kostenlosen Newsletter und Sie erhalten die aktuellsten Infos."
+
+msgid "ajax_wrong_fields"
+msgstr "Bitte überprüfen Sie die Pflichtfelder!"
 

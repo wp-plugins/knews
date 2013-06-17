@@ -2567,3 +2567,15 @@ msgstr "Использовать в ручном выборе записей"
 msgid "Use it for automate newsletters"
 msgstr "Использовать для автоматических рассылок"
 
+msgid "widget_required"
+msgstr "* Это поле обязательно"
+
+msgid "widget_label_terms"
+msgstr "Я принимаю условия."
+
+msgid "widget_subtitle"
+msgstr "Подпишитесь на нашу рассылку мы будем держать вас в Дата размещения:"
+
+msgid "ajax_wrong_fields"
+msgstr "Пожалуйста, проверьте требуемые поля"
+

@@ -90,6 +90,11 @@ div.knews_stats table td {
 	font-size:16px;
 	color:#21759b;
 }
+div.knews_stats table tr.sub td {
+	color:#666;
+	font-size:14px;
+	padding-left:15px;
+}
 div.knews_stats table tr.alt td {
 	background:#ebf3f7;
 }

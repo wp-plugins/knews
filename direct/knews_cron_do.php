@@ -6,7 +6,7 @@ if ($Knews_plugin) {
 	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) {
 		die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 	}
-	
+		
 	$js=$Knews_plugin->get_safe('js', 0, 'int');
 
 	$mysqldate = $Knews_plugin->get_mysql_date();
@@ -24,12 +24,49 @@ if ($Knews_plugin) {
 			$Knews_plugin->init();
 		}
 
+		if ($knewsOptions['write_logs']=='yes') {
+			@$fp = fopen(KNEWS_DIR . '/tmp/cronlog_' . $submit_pend[0]->id, 'a');
+		} else {
+			$fp=false;
+		}
+
 		$id_newsletter = $submit_pend[0]->newsletter;
 		
 		if ($submit_pend[0]->special == '') {
 			require( KNEWS_DIR . "/includes/knews_compose_email.php");
 		} else {
 			$langs_array=$Knews_plugin->getLangs(true);
+		}
+
+		//Evitem doble execucio
+		@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'x');
+		if (!$filelock) {
+			//Existeix?
+			if (is_file(KNEWS_DIR . '/tmp/lockfile.txt')) {
+				@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'r');
+				$timelock = intval(fread($filelock, filesize(KNEWS_DIR . '/tmp/lockfile.txt')));
+				fclose($filelock);
+				if (intval(time()) - $timelock > 3500) {
+					//Posem la nova data
+					if ($fp) fwrite($fp, '* Previous submit process terminated suddenly, continuing...' . "<br>\r\n");
+					@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'r');
+					if (!$filelock) die();
+					fwrite($filelock, time() );
+					fclose($filelock);
+
+				} else {
+					if ($fp) {
+						fwrite($fp, '* Submit process overlapped, terminating this one...' . "<br>\r\n");
+						fclose($fp);
+					}
+					if ($js != 0) echo 'Submit process overlapped, wait some minutes and refresh...';
+					die();
+				}
+			}
+		} else {
+			//Escribim fitxer
+			fwrite($filelock, time() );
+			fclose($filelock);
 		}
 
 		//Estadistiques
@@ -49,12 +86,6 @@ if ($Knews_plugin) {
 		
 		$ok_count = $submit_pend[0]->users_ok;
 		$error_count = $submit_pend[0]->users_error;
-
-		if ($knewsOptions['write_logs']=='yes') {
-			@$fp = fopen(KNEWS_DIR . '/tmp/cronlog_' . $submit_pend[0]->id, 'a');
-		} else {
-			$fp=false;
-		}
 
 		if (count($submits)>0) {
 			if ($fp) {
@@ -159,7 +190,8 @@ if ($Knews_plugin) {
 
 		$result = $wpdb->query( $query );
 
-
+		unlink(KNEWS_DIR . '/tmp/lockfile.txt');
+		fclose($fp);
 		
 		$pend=true;
 	} else {
@@ -221,6 +253,8 @@ if ($js != 0) {
 	</body>
 	</html>
 <?php
+
 }
+
 die();
 ?>

@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.3
+Version: 1.4.4
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -117,9 +117,13 @@ if (!class_exists("KnewsPlugin")) {
 			}
 
 			$KnewsDefaultMessages2 = array (
+				array ( 'label'=>__('Widget subtitle text','knews'), 'name'=>'widget_subtitle'),
 				array ( 'label'=> sprintf(__('Widget "%s" label form','knews'), 'email'), 'name'=>'widget_label_email'),
+				array ( 'label'=>__('Widget accept terms','knews'), 'name'=>'widget_label_terms'),
+				array ( 'label'=>__('Widget required text fields','knews'), 'name'=>'widget_required'),
 				array ( 'label'=>__('Widget submit button','knews'), 'name'=>'widget_button'),
 				array ( 'label'=>__('Wrong e-mail address, please check (AJAX message)','knews'), 'name'=>'ajax_wrong_email'),
+				array ( 'label'=>__('Empty required field, please check (AJAX message)','knews'), 'name'=>'ajax_wrong_fields'),
 				array ( 'label'=>__('We have sent you a confirmation e-mail (AJAX message)','knews'), 'name'=>'ajax_subscription'),
 				array ( 'label'=>__('Subscription done, you were already subscribed (AJAX message)','knews'), 'name'=>'ajax_subscription_direct'),
 				array ( 'label'=>__('You were already a subscriber (AJAX message)','knews'), 'name'=>'ajax_subscription_oops'),
@@ -468,6 +472,8 @@ if (!class_exists("KnewsPlugin")) {
 					if ($this->post_safe('required_' . $field->name) == '1') $custom_fields_ok=false;
 				}
 			}
+			
+			if ($this->post_safe('required_knewsterms') == '1' && $this->post_safe('knewsterms') != '1') $custom_fields_ok=false;
 
 			$stupid_bot = false;
 			if (intval($knewsOptions['check_bot'])==1) {
@@ -482,10 +488,14 @@ if (!class_exists("KnewsPlugin")) {
 
 			echo '<div class="response"><p>';
 
-			if (!$this->validEmail($email) || $stupid_bot || !$custom_fields_ok) {
+			if (!$this->validEmail($email) || $stupid_bot) {
 				echo	$this->get_custom_text('ajax_wrong_email', $lang_locale) . ' <a href="#" class="knews_back">' 
 						. $this->get_custom_text('dialogs_close_button', $lang_locale) . '</a>';
 
+			} elseif (!$custom_fields_ok) {
+				echo	$this->get_custom_text('ajax_wrong_fields', $lang_locale) . ' <a href="#" class="knews_back">' 
+						. $this->get_custom_text('dialogs_close_button', $lang_locale) . '</a>';
+				
 			} else {
 				$response = $this->add_user($email, $id_list_news, $lang, $lang_locale, $custom_fields);
 				
@@ -530,7 +540,8 @@ if (!class_exists("KnewsPlugin")) {
 			$submit_mail=true;
 
 			if (count($user_found)==0) {
-				$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . $email . "','" . $lang . "', " . ($bypass_confirmation ? '2' : '1') . ", '" . $date . "','" . $confkey . "');";
+				$ip = $_SERVER['REMOTE_ADDR'];
+				$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey, ip) VALUES ('" . $email . "','" . $lang . "', " . ($bypass_confirmation ? '2' : '1') . ", '" . $date . "','" . $confkey . "','" . $ip . "');";
 				$results = $wpdb->query( $query );
 				$user_id=$wpdb->insert_id; $user_id2=mysql_insert_id(); if ($user_id==0) $user_id=$user_id2;
 
@@ -679,7 +690,7 @@ if (!class_exists("KnewsPlugin")) {
 			
 			if (count($find_user) != 1) return false;
 	
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date) VALUES (3, " . $find_user[0]->id . ", " . $id_newsletter . ", '" . $date . "')";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (3, " . $find_user[0]->id . ", " . $id_newsletter . ", '" . $date . "', 0)";
 			$result=$wpdb->query( $query );
 
 			$query = "UPDATE ".KNEWS_USERS." SET state='3' WHERE id=" . $find_user[0]->id;
@@ -868,6 +879,11 @@ if (!class_exists("KnewsPlugin")) {
 						if (jQuery(this).attr(\'submitted\') !== "true") {
 							save_knews_form = jQuery(\'#knewsform_' . $this->knews_form_n . '\').html();
 							jQuery(this).attr(\'submitted\', "true");
+							jQuery("input:text", this).each(function() {
+								if (jQuery(this).attr("title") !== undefined) {
+									if (jQuery(this).val() == jQuery(this).attr("title")) jQuery(this).val("");
+								}
+							});
 							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
 								jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(data);
 								jQuery(\'#knewsform_' . $this->knews_form_n . ' a.knews_back\').click( function () {
@@ -919,7 +935,7 @@ if (!class_exists("KnewsPlugin")) {
 				if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
 
 				if (is_array($args)) $response .= $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
-
+				
 				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
 					div.' . $container . ' textarea.knewscomment {position:absolute; top:-3000px; left:-3000px;}
@@ -927,14 +943,24 @@ if (!class_exists("KnewsPlugin")) {
 					</style>
 					<form action="' . $this->getAddUserUrl() . '" method="post">';
 
+
+				$subtitle = ''; if (isset($instance['subtitle']) && $instance['subtitle']=='1') 
+				$response .= '<p>' . $this->get_custom_text('widget_subtitle', $lang['localized_code']) . '</p>';
+				
+				$requiredtxt = '1'; if (isset($instance['requiredtext'])) $requiredtxt = $instance['requiredtext'];
+
 				foreach ($extra_fields as $field) {
 					if (isset($instance[$field->name]) && ($instance[$field->name]=='ask' || $instance[$field->name]=='required')) {
 						$response .= '<fieldset class="' . $field->name . '">';
-
-						if ($labelwhere == 'outside') $response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '</label>';
+						
+						$label = $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']);
+						if ($label=='') $label=$field->name;
+						if ($instance[$field->name]=='required' && $requiredtxt=='1') $label .= '*';
+						
+						if ($labelwhere == 'outside') $response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $label . '</label>';
 
 						$response .= '<input type="text" name="' . $field->name . '" value="';
-						if ($labelwhere == 'inside') $response .= $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']) . '" title="' . $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']);
+						if ($labelwhere == 'inside') $response .= strip_tags($label) . '" title="' . strip_tags($label);
 						$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
 						
 						if ($instance[$field->name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" />';
@@ -944,23 +970,43 @@ if (!class_exists("KnewsPlugin")) {
 
 				$response .= '<fieldset class="knewsemail">';
 				
-				if ($labelwhere == 'outside') $response .= '<label for="knewsemail"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . '</label>';
+				if ($labelwhere == 'outside') $response .= '<label for="knewsemail"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $this->get_custom_text('widget_label_email', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : '') . '</label>';
 				
 				$response .= '<input type="text" name="knewsemail" value="';
 				
-				if ($labelwhere == 'inside') $response .= $this->get_custom_text('widget_label_email', $lang['localized_code']) . '" title="' . $this->get_custom_text('widget_label_email', $lang['localized_code']);
-
-				$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>' . $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
+				if ($labelwhere == 'inside') $response .= strip_tags($this->get_custom_text('widget_label_email', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : '')) . '" title="' . strip_tags($this->get_custom_text('widget_label_email', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : ''));
+				$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>';
+				
+				if (isset($instance['terms']) && $instance['terms']=='1') {
+					$response .= '<fieldset class="knewsterms">';
+					if ($stylize) $response .='<span style="display:block; margin-bottom:10px;">';
+					$response .= '<input type="checkbox" name="knewsterms" value="1" title="' . strip_tags($this->get_custom_text('widget_label_terms', $lang['localized_code'])) . '" />';
+					$response .= '<label for="knewsterms"><small>' . $this->get_custom_text('widget_label_terms', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : '') . '</small></label>';
+					$response .= '<input type="hidden" value="1" name="required_knewsterms" />';
+					if ($stylize) $response .='</span>';
+					$response .= '</fieldset>';
+				}
+				
+				$response .= $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
 				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
 				$response .= '<input type="hidden" name="knewskey" value="' . $key . '" />
-						<textarea name="knewscomment" class="knewscomment" style="width:150px; height:80px" rows="5" cols="20"></textarea>
-						<fieldset class="knewsbutton"><input class="knewsbutton" type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>
+						<textarea name="knewscomment" class="knewscomment" style="width:150px; height:80px" rows="5" cols="20"></textarea>';
+
+				if ($requiredtxt=='1') {
+					$response .= '<fieldset class="requiredtext">';
+					if ($stylize) $response .='<span style="display:block; margin-bottom:10px;">';
+					$response .= '<small>' . $this->get_custom_text('widget_required', $lang['localized_code']) . '</small>';
+					if ($stylize) $response .='</span>';
+					$response .= '</fieldset>';
+				}
+
+				$response .= '<fieldset class="knewsbutton"><input class="knewsbutton" type="submit" value="' . $this->get_custom_text('widget_button', $lang['localized_code']) . '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>
 						<input type="hidden" name="action" value="knewsAddUser" />
 					</form>
 				</div>';
 
 				if (is_array($args)) $response .=  $args['after_widget'];
-				$response .= $this->getAjaxScript('div.' . $container);
+				$js = 1; if (isset($instance['script'])) $js = $instance['script']; if ($js != '0') $response .= $this->getAjaxScript('div.' . $container);
 			}
 			$this->knews_form_n++;
 			return $response;
@@ -1059,13 +1105,16 @@ if (!class_exists("KnewsPlugin")) {
 					$mail->CharSet='UTF-8';
 					$mail->Subject=$theSubject;
 
-					$mail->From = $knewsOptions['from_mail_knews'];
-					$mail->FromName = $knewsOptions['from_name_knews'];
+					//$mail->From = $knewsOptions['from_mail_knews'];
+					//$mail->FromName = $knewsOptions['from_name_knews'];
+					$mail->From = $test_array['from_mail_knews'];
+					$mail->FromName = $test_array['from_name_knews'];
 
 					$mail->Host = $test_array['smtp_host_knews'];
 					$mail->Port = $test_array['smtp_port_knews'];
 					$mail->Timeout = 30;
-	
+					$mail->SMTPDebug=1;
+					
 					if ($test_array['smtp_user_knews']!='' || $test_array['smtp_pass_knews'] != '') {
 		
 						$mail->SMTPAuth=true;
@@ -1325,7 +1374,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.3');
+		define('KNEWS_VERSION', '1.4.4');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1629,9 +1678,9 @@ if (!function_exists("Knews_plugin_ap")) {
 	
 		if (! $Knews_plugin->initialized) $Knews_plugin->init();
 	
-		$url_img= $Knews_plugin->get_safe('urlimg');
-		$width= intval($Knews_plugin->get_safe('width'));
-		$height= intval($Knews_plugin->get_safe('height'));
+		$url_img= $Knews_plugin->post_safe('urlimg');
+		$width= intval($Knews_plugin->post_safe('width'));
+		$height= intval($Knews_plugin->post_safe('height'));
 	
 		require( dirname(__FILE__) . "/includes/resize_img.php");
 
@@ -1741,6 +1790,14 @@ if (!function_exists("Knews_plugin_ap")) {
 			if (! $Knews_plugin->initialized) $Knews_plugin->init();			
 			$extra_fields = $Knews_plugin->get_extra_fields();
 			
+			$val='0';
+			if (isset($instance[ 'subtitle' ])) $val=$instance[ 'subtitle' ];
+			echo '<p><label for="' . $this->get_field_id('subtitle') . '">' . __('Show subtitle','knews') . '</label>';
+			echo '<select id="' . $this->get_field_id('subtitle') . '" name="' . $this->get_field_name('subtitle') . '" style="float:right;">';
+			echo '<option value="0"' . (($val=="0" || $val=="") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
+			echo '<option value="1"' . (($val=="1") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
+			echo '</select></p>';
+
 			foreach ($extra_fields as $field) {
 				$val=1;
 				if (isset($instance[ $field->name ])) $val=$instance[ $field->name ];
@@ -1760,6 +1817,22 @@ if (!function_exists("Knews_plugin_ap")) {
 			echo '<option value="outside"' . (($val=="outside") ? ' selected="selected"' : '') . '>' . __('Outside','knews') . '</option>';
 			echo '<option value="inside"' . (($val=="inside") ? ' selected="selected"' : '') . '>' . __('Inside','knews') . '</option>';
 			echo '<option value="hidden"' . (($val=="hidden") ? ' selected="selected"' : '') . '>' . __('Hidden','knews') . '</option>';
+			echo '</select></p>';
+
+			$val='0';
+			if (isset($instance[ 'terms' ])) $val=$instance[ 'terms' ];
+			echo '<p><label for="' . $this->get_field_id('terms') . '">' . __('Terms checkbox','knews') . '</label>';
+			echo '<select id="' . $this->get_field_id('terms') . '" name="' . $this->get_field_name('terms') . '" style="float:right;">';
+			echo '<option value="0"' . (($val=="0" || $val=="") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
+			echo '<option value="1"' . (($val=="1") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
+			echo '</select></p>';
+
+			$val='1';
+			if (isset($instance[ 'requiredtext' ])) $val=$instance[ 'requiredtext' ];
+			echo '<p><label for="' . $this->get_field_id('requiredtext') . '">' . __('Show required text fields','knews') . '</label>';
+			echo '<select id="' . $this->get_field_id('requiredtext') . '" name="' . $this->get_field_name('requiredtext') . '" style="float:right;">';
+			echo '<option value="1"' . (($val=="1" || $val=="") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
+			echo '<option value="0"' . (($val=="0") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
 			echo '</select></p>';
 				
 			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';

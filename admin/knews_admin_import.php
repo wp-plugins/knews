@@ -1,4 +1,5 @@
 <?php
+
 //Security for CSRF attacks
 $knews_nonce_action='kn-adm-import';
 $knews_nonce_name='_importadm';
@@ -9,6 +10,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	
 	global $wpdb, $Knews_plugin;
 	global $knews_delimiters, $knews_enclosure, $knews_encode, $knews_line_endings, $knews_import_errors, $knews_import_users_error, $col_options, $submit_confirmation_id, $confirmation_sql_count;
+	
+	$update_lists=false; $update_fields=false; $send_notify=false;
+	$kpaged=$Knews_plugin->post_safe('kpaged', 0, 'int');
+
+	if ($kpaged==0 && is_file(KNEWS_DIR . '/tmp/import_errors')) unlink(KNEWS_DIR . '/tmp/import_errors');
 	
     // specify allowed field delimiters
     $knews_delimiters = array(
@@ -41,7 +47,6 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
     );*/
 
 	$submit_confirmation_id=0;
-	$confirmation_sql_count=0;
 
 	$step = $Knews_plugin->post_safe('step', 1);
 	$filename = $Knews_plugin->post_safe('filename', '', 'unsafe');
@@ -195,12 +200,7 @@ p.knews_progress span.on {
 					alert("E-mail");
 					return false;
 				}
-				somelist=false;
-				jQuery('input.check_list').each(function(n, obj) {
-					if (jQuery(obj).attr("checked")) somelist=true;
-				});
-	
-				if (!somelist) {
+				if (jQuery('#list_col_val').children("option").filter(":selected").val()=='') {
 					/* Traduction pending */
 					if (!confirm('<?php _e('Warning! You arent selected any mailing list, do you want to continue?','knews'); ?>')) return false;
 				}
@@ -381,7 +381,9 @@ function print_state($step, $where) {
 			<p><strong><?php _e('State','knews'); ?></strong>: <select name="state_col_val" id="state_col_val">
 			<option value="val_1"<?php if ($Knews_plugin->post_safe('state_col_val')=='val_1') echo ' selected="selected"'; ?>><?php echo __('All','knews') . ': ' . __('not confirmed','knews');?></option>
 			<option value="val_2"<?php if ($Knews_plugin->post_safe('state_col_val')=='val_2') echo ' selected="selected"'; ?>><?php echo __('All','knews') . ': ' . __('confirmed','knews');?></option>
-			<option value="val_3"<?php if ($Knews_plugin->post_safe('state_col_val')=='val_3') echo ' selected="selected"'; ?>><?php echo __('All','knews') . ': ' . __('blocked','knews');?></option><?php print_col_options('state_col_val'); ?></select><br /><span class="help"><?php _e('If you choose a column, allowed values ​​are:','knews') . ' <strong>1</strong>: ' . __('Not confirmed','knews') . ', <strong>2</strong>: ' . __('Confirmed','knews') . ', <strong>3</strong>: ' . __('Blocked','knews');?></span></p>
+			<option value="val_3"<?php if ($Knews_plugin->post_safe('state_col_val')=='val_3') echo ' selected="selected"'; ?>><?php echo __('All','knews') . ': ' . __('blocked','knews');?></option>
+			<option value="val_4"<?php if ($Knews_plugin->post_safe('state_col_val')=='val_4') echo ' selected="selected"'; ?>><?php echo __('All','knews') . ': ' . __('bounced','knews');?></option>
+			<?php print_col_options('state_col_val'); ?></select><br /><span class="help"><?php _e('If you choose a column, allowed values ​​are:','knews') . ' <strong>1</strong>: ' . __('Not confirmed','knews') . ', <strong>2</strong>: ' . __('Confirmed','knews') . ', <strong>3</strong>: ' . __('Blocked','knews');?></span></p>
 			<p><strong><?php _e('Permission','knews');?></strong>: <input type="checkbox" name="confirm" value="1" id="confirm" <?php if ($Knews_plugin->post_safe('confirm')=='1') echo ' checked="checked"'; ?> /> <?php _e('Send a confirmation e-mail to the unconfirmed users (not to the locked ones)','knews');?></p>
 			<p><strong><?php _e('Language','knews');?></strong>: <select name="lang_col_val" id="lang_col_val"><?php print_col_options('lang_col_val');
 			$languages = $Knews_plugin->getLangs();
@@ -395,7 +397,7 @@ function print_state($step, $where) {
 			<option value="dd-mm-yy"<?php if ($Knews_plugin->post_safe('date_order') == 'dd-mm-yy') echo ' selected="selected"'; ?>><?php _e('day-month-year','knews'); ?></option>
 			<option value="mm-dd-yy"<?php if ($Knews_plugin->post_safe('date_order') == 'mm-dd-yy') echo ' selected="selected"'; ?>><?php _e('month-day-year','knews'); ?></option>
 			<option value="yy-mm-dd"<?php if ($Knews_plugin->post_safe('date_order') == 'yy-mm-dd') echo ' selected="selected"'; ?>><?php _e('year-month-day','knews'); ?></option></select>
-			<input type="button" value="<?php _e('Check dates','knews'); ?>" id="date_test" />
+			<input type="button" value="<?php _e('Check dates','knews'); ?>" id="date_test" class="button" />
 			</span>
 			</p>
 			<?php
@@ -408,22 +410,23 @@ function print_state($step, $where) {
 				 <span class="help">' . __('If you enter a value manually, this will be the same for all users imported','knews') . '</span></p>';
 			}
 			?>
-			<p><strong><?php _e('Subscribe all users to the following mailing lists:','knews'); ?></strong><br />
+			<p><strong><?php _e('Subscribe all users to the following mailing list:','knews'); ?></strong> <select name="list_col_val" id="list_col_val"><option value=""><?php _e('Select one'); ?></option>
 			<?php
 			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$lists = $wpdb->get_results( $query );
 			foreach ($lists as $ln) {
-				echo '<input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="check_list"';
-				if ($Knews_plugin->post_safe('list_' . $ln->id, 0, 'int') == 1) echo ' checked="checked"';
-				echo '>' . $ln->name . '<br>';
+
+				echo '<option value="val_' . $ln->id . '"' . (($Knews_plugin->post_safe('list_col_val')=='val_' . $ln->id) ? ' selected="selected"' : '') . '>' . $ln->name . '</option>';
 			}
+			print_col_options('list_col_val');
 			?>
+			</select></p>
 			<p><strong><?php _e('If a user already exists (matches e-mail)','knews'); ?></strong>: <select name="overwrite" id="overwrite">
 			<option value="no"<?php if ($Knews_plugin->post_safe('overwrite') == 'no') echo ' selected="selected"'; ?>><?php _e('Maintain current data','knews'); ?></option>
 			<option value="yes"<?php if ($Knews_plugin->post_safe('overwrite') == 'yes') echo ' selected="selected"'; ?>><?php _e('Overwrite','knews'); ?></option>
 			<option value="add"<?php if ($Knews_plugin->post_safe('overwrite') == 'add') echo ' selected="selected"'; ?>><?php _e('Mantain current data and add new mailing lists','knews'); ?></option></select>
 			<div class="submit">
-				<input type="button" value="<?php _e('Go back','knews'); ?>" id="back_import" />
+				<input type="button" value="<?php _e('Go back','knews'); ?>" id="back_import" class="button" />
 				<input type="submit" value="<?php _e('Make preview','knews'); ?>" class="button-primary" />
 			</div>
 			<?php 
@@ -433,324 +436,395 @@ function print_state($step, $where) {
 			</form>
 		<?php
 		} elseif ($step=='4' || $step=='5') {
-			if ($step=='4') {
-			?>
-				<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" >
-				<input type="hidden" name="step" id="step" value="5" />
-				<input type="hidden" name="next_step" id="next_step" value="5" />
-				<input type="hidden" name="filename" id="filename" value="<?php echo $filename ?>" />
-				<input type="hidden" name="knews_delimiters" id="knews_delimiters" value="<?php echo $Knews_plugin->post_safe('knews_delimiters'); ?>" />
-				<input type="hidden" name="knews_enclosure" id="knews_enclosure" value="<?php echo $Knews_plugin->post_safe('knews_enclosure'); ?>" />
-				<input type="hidden" name="knews_encode" id="knews_encode" value="<?php echo $Knews_plugin->post_safe('knews_encode'); ?>" />
-				<input type="hidden" name="knews_has_header" id="knews_has_header" value="<?php echo $Knews_plugin->post_safe('knews_has_header'); ?>" />
-				<input type="hidden" name="email_col" id="email_col" value="<?php echo $Knews_plugin->post_safe('email_col'); ?>" />
-				<input type="hidden" name="state_col_val" id="state_col_val" value="<?php echo $Knews_plugin->post_safe('state_col_val'); ?>" />
-				<input type="hidden" name="confirm" id="confirm" value="<?php echo $Knews_plugin->post_safe('confirm'); ?>" />
-				<input type="hidden" name="lang_col_val" id="lang_col_val" value="<?php echo $Knews_plugin->post_safe('lang_col_val'); ?>" />
-				<input type="hidden" name="joined_col_val" id="joined_col_val" value="<?php echo $Knews_plugin->post_safe('joined_col_val'); ?>" />
-				<input type="hidden" name="date_order" id="date_order" value="<?php echo $Knews_plugin->post_safe('date_order'); ?>" />
-				
-				<?php
-				//Security for CSRF attacks
-				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 
-				$extra_fields = $Knews_plugin->get_extra_fields();
-				foreach ($extra_fields as $ef) {
-					echo '<input type="hidden" name="ef_' . $ef->name . '" id="ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('ef_' . $ef->name) . '">';
-					echo '<input type="hidden" name="c_ef_' . $ef->name . '" id="c_ef_' . $ef->name . '" value="' . $Knews_plugin->post_safe('c_ef_' . $ef->name) . '">';
-				}
-				
-				$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
-				$lists = $wpdb->get_results( $query );
-				foreach ($lists as $ln) {
-					echo '<input type="hidden" name="list_' . $ln->id . '" id="list_' . $ln->id . '" value="' . $Knews_plugin->post_safe('list_' . $ln->id) . '">';
-				}
-				?>
-				<input type="hidden" name="overwrite" id="overwrite" value="<?php echo $Knews_plugin->post_safe('overwrite'); ?>" />
-			<?php
-			}
-			$knews_import_errors=array();
-			$import_users_total=0;
-			$import_users_ok=0;
-			$knews_import_users_error=0;
-
-			$import_users_new=0;
-			$import_users_overwrite=0;
-
-			$import_users_confirm=0;
-			$import_users_blocked=0;
+			echo '<form method="post" id="knews_import_process" action="admin.php?page=knews_import&step=' . $step . '&kpaged=' . ($kpaged + 1) . '" >';
 			
-			$max_fields=0;
+			pass_var('filename', $filename);
+			pass_var('knews_delimiters', '__post');
+			pass_var('knews_enclosure', '__post');
+			pass_var('knews_encode', '__post');
+			pass_var('knews_has_header', '__post');
+			pass_var('email_col', '__post');
+			pass_var('state_col_val', '__post');
+			pass_var('confirm', '__post');
+			pass_var('lang_col_val', '__post');
+			pass_var('joined_col_val', '__post');
+			pass_var('date_order', '__post');
+
+			//Security for CSRF attacks
+			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+
+			$extra_fields = $Knews_plugin->get_extra_fields();
+			foreach ($extra_fields as $ef) {
+
+				pass_var('ef_' . $ef->name, '__post');
+				pass_var('c_ef_' . $ef->name, '__post');
+
+			}
+			
+			/*$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
+			$lists = $wpdb->get_results( $query );
+			foreach ($lists as $ln) {
+				echo '<input type="hidden" name="list_' . $ln->id . '" id="list_' . $ln->id . '" value="' . $Knews_plugin->post_safe('list_' . $ln->id) . '">';
+			}*/
+
+			pass_var('list_col_val', '__post');
+			pass_var('overwrite', '__post');
+
+			if ($kpaged==0) {
+				$knews_import_errors=array();
+				$import_users_total=0;
+				$import_users_ok=0;
+				$knews_import_users_error=0;
+				$confirmation_sql_count=0;
+				$submit_confirmation_id=0;
+	
+				$import_users_new=0;
+				$import_users_overwrite=0;
+	
+				$import_users_confirm=0;
+				$import_users_blocked=0;
+				$max_fields=0;
+				
+			} else {
+
+				$knews_import_errors = array();
+				$knews_import_errors_count = $Knews_plugin->post_safe('knews_import_errors_count', 0, 'int');
+				for ($x=0; $x<$knews_import_errors_count; $x++) {
+					$knews_import_errors[$Knews_plugin->post_safe('knews_import_errors_index_'.$x)] = $Knews_plugin->post_safe('knews_import_errors_val_'.$x);
+				}
+				
+				$import_users_total = $Knews_plugin->post_safe('import_users_total', 0, 'int');
+				$import_users_ok = $Knews_plugin->post_safe('import_users_ok', 0, 'int');
+				$knews_import_users_error = $Knews_plugin->post_safe('knews_import_users_error', 0, 'int');
+				$confirmation_sql_count = $Knews_plugin->post_safe('confirmation_sql_count', 0, 'int');
+				$submit_confirmation_id = $Knews_plugin->post_safe('submit_confirmation_id', 0, 'int');
+	
+				$import_users_new = $Knews_plugin->post_safe('import_users_new', 0, 'int');
+				$import_users_overwrite = $Knews_plugin->post_safe('import_users_overwrite', 0, 'int');
+	
+				$import_users_confirm = $Knews_plugin->post_safe('import_users_confirm', 0, 'int');
+				$import_users_blocked = $Knews_plugin->post_safe('import_users_blocked', 0, 'int');
+				$max_fields = $Knews_plugin->post_safe('max_fields', 0, 'int');	
+			}
+			
+			$what_row = 0;
+			$breaked=false;
 			
 			if (($handle = fopen($filename, "r")) !== FALSE) {
-				$what_row = 0;
 
 				$query = "SELECT id FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 				$lists_name = $wpdb->get_results( $query );
 				$extra_fields = $Knews_plugin->get_extra_fields();
+				
+				$user_import_pagination=500; if (defined('KNEWS_IMPORT_PAGINATION')) $user_import_pagination = KNEWS_IMPORT_PAGINATION;
 
 				while (($csv_data = fgetcsv($handle, 10000, $knews_delimiters[$_POST['knews_delimiters']], $knews_enclosure[$_POST['knews_enclosure']])) !== FALSE) {
 					
-					if ($max_fields < count($csv_data)) $max_fields = count($csv_data);
+					if ($breaked) break;
 					
 					$what_row++;
-					$user_csv=array();
-					if (($what_row != 1 || $Knews_plugin->post_safe('knews_has_header', 0, 'int')==0)) {
-					//if (($what_row != 1 || intval($Knews_plugin->post_safe('knews_has_header'))==0) && count($csv_data)==$max_fields) {
-						$import_users_total++;
-						foreach ($csv_data as $my_col) {
-							$user_csv[] = re_de_encode($my_col);
-						}
-
-						$confkey = $Knews_plugin->get_unique_id();
-						$email=$user_csv[$Knews_plugin->post_safe('email_col', 0, 'int')-1];
-
-						if (substr($_POST['state_col_val'],0,4)=='val_') {
-							$state=intval(substr($_POST['state_col_val'],4));
-						} else {
-							$state=intval($user_csv[$Knews_plugin->post_safe('state_col_val', 0, 'int')-1]);
-						}
-						if ($Knews_plugin->post_safe('lang_col_val', 0, 'int') > 0) {
-							$lang=$user_csv[$Knews_plugin->post_safe('lang_col_val', 0, 'int')-1];
-						} else {
-							$lang=$Knews_plugin->post_safe('lang_col_val');
-						}
-						if ($Knews_plugin->post_safe('joined_col_val') == 'now') {
-							$date = $Knews_plugin->get_mysql_date();
-						} else {
-							if ($step=='4') {
-								$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1], true);
-								if ($date=='#error#') addError (__('Sign up date user cant be understood','knews'), false); 
-							} else {
-								$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1]);
+					
+					if ($what_row > $kpaged * $user_import_pagination) {
+						
+						if ($what_row == ($kpaged+1)*$user_import_pagination) $breaked=true;
+					
+						if ($max_fields < count($csv_data)) $max_fields = count($csv_data);
+						
+						$user_csv=array();
+						if (($what_row != 1 || $Knews_plugin->post_safe('knews_has_header', 0, 'int')==0)) {
+						//if (($what_row != 1 || intval($Knews_plugin->post_safe('knews_has_header'))==0) && count($csv_data)==$max_fields) {
+							$import_users_total++;
+							//print_r ($csv_data);
+							foreach ($csv_data as $my_col) {
+								$user_csv[] = re_de_encode($my_col);
 							}
-						}
-
-						if ($Knews_plugin->validEmail($email)) {
-							if ($state == 1 || $state == 2 || $state ==3) {
-								$languages = $Knews_plugin->getLangs(true);
-								
-								if ( $Knews_plugin->localize_lang($languages, $lang, '') != '' ) {
 	
-									$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
-									$user_found = $wpdb->get_results( $query );
+							$confkey = $Knews_plugin->get_unique_id();
+							$email=$user_csv[$Knews_plugin->post_safe('email_col', 0, 'int')-1];
+	
+							if (substr($_POST['state_col_val'],0,4)=='val_') {
+								$state=intval(substr($_POST['state_col_val'],4));
+							} else {
+								$state=intval($user_csv[$Knews_plugin->post_safe('state_col_val', 0, 'int')-1]);
+							}
+							if ($Knews_plugin->post_safe('lang_col_val', 0, 'int') > 0) {
+								$lang=$user_csv[$Knews_plugin->post_safe('lang_col_val', 0, 'int')-1];
+							} else {
+								$lang=$Knews_plugin->post_safe('lang_col_val');
+							}
+							if ($Knews_plugin->post_safe('joined_col_val') == 'now') {
+								$date = $Knews_plugin->get_mysql_date();
+							} else {
+								if ($step=='4') {
+									$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1], true);
+									if ($date=='#error#') addError (__('Sign up date user cant be understood', 'knews'), $email, false); 
+								} else {
+									$date=data_process($user_csv[$Knews_plugin->post_safe('joined_col_val', 0, 'int')-1]);
+								}
+							}
+	
+							if ($Knews_plugin->validEmail($email)) {
+								if ($state == 1 || $state == 2 || $state ==3 || $state ==4) {
+									$languages = $Knews_plugin->getLangs(true);
 									
-									if (count($user_found)==0 || $Knews_plugin->post_safe('overwrite')=='yes' || $Knews_plugin->post_safe('overwrite')=='add') {
-
-										$import_users_ok++;
-
-										if (count($user_found)==0) {
-											$import_users_new++;
-											if ($step=='5') {
-												//Add new user
-												$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . 
-															$email . "','" . $lang . "', $state, '" . $date . "','" . $confkey . "');";
-												$results = $wpdb->query( $query );
-												$id_new_user=$wpdb->insert_id; $id_new_user2=mysql_insert_id(); if ($id_new_user==0) $id_new_user=$id_new_user2;
-
-
-												if ($results) {
-
-													//The lists
-													foreach ($lists_name as $ln) {
-														if (isset($_POST['list_'.$ln->id])) {
-															if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
-										
-																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_new_user . ", " . $ln->id . ")";
-																$results = $wpdb->query( $query );
-																
-															}
-														}
-													}
-													
-													foreach ($extra_fields as $ef) {
-										
-														//Insert fields
-														$cf=$Knews_plugin->post_safe('ef_' . $ef->name);
-														if ($cf != '') {
-															if ($cf=='custom') {
-																$cf=$Knews_plugin->post_safe('c_ef_' . $ef->name);
-															} elseif ($cf=='empty') {
-																$cf='';
-															} else {
-																$cf=$user_csv[intval($cf)-1];
-															}
-															$Knews_plugin->set_user_field ($id_new_user, $ef->id, mysql_real_escape_string($cf));
-														}
-													}
-													
-													//Confirm
-													if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
-														add_confirm($id_new_user);
-													}
-												} else {
-													$import_users_ok--;
-													$import_users_new--;
-													addError (__('SQL Error while inserting user','knews'));
-												}
-											}
-										} else {
-											if ($Knews_plugin->post_safe('overwrite') == 'yes') {
-
-												$import_users_overwrite++;
-												if ($step=='5') {
-													//Update user
-													$id_updated_user=$user_found[0]->id;
-													$query = "UPDATE " . KNEWS_USERS . " SET lang='" . $lang . "', state=" . $state . ", joined='" . $date . "' WHERE id=" . $id_updated_user;
-													$results = $wpdb->query( $query );
-													if ($results) {
-	
-														$query="DELETE FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $id_updated_user;
-														$results = $wpdb->query( $query );
-	
-														//The lists
-														foreach ($lists_name as $ln) {
-															if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
-											
-																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_updated_user . ", " . $ln->id . ")";
-																$results = $wpdb->query( $query );
-															}
-														}
+									if ( $Knews_plugin->localize_lang($languages, $lang, '') != '' ) {
 		
-														foreach ($extra_fields as $ef) {
+										$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
+										$user_found = $wpdb->get_row( $query );
+										
+										if (!isset($user_found->id) || $Knews_plugin->post_safe('overwrite')=='yes' || $Knews_plugin->post_safe('overwrite')=='add') {
+	
+											$import_users_ok++;
 											
-															//Insert fields
-															$cf=$Knews_plugin->post_safe('ef_' . $ef->name);
-															if ($cf=='custom') {
-																$cf=$Knews_plugin->post_safe('c_ef_' . $ef->name);
-															} elseif ($cf=='empty') {
-																$cf='';
-															} else {
-																$cf=$user_csv[intval($cf)-1];
-															}
-															$Knews_plugin->set_user_field ($id_updated_user, $ef->id, mysql_real_escape_string($cf));
-														}
-																												
-														//Confirm
-														if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
-															add_confirm($id_updated_user);
-														}
+											$update_lists=false; $update_ef=false; $allow_confirm=false;
+	
+											if (!isset($user_found->id)) {
+												$import_users_new++;
+												if ($step=='5') {
+													//Add new user
+													$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey, ip) VALUES ('" . 
+																$email . "','" . $lang . "', $state, '" . $date . "','" . $confkey . "','');";
+													$results = $wpdb->query( $query );
+													$id_user=$wpdb->insert_id; $id_new_user2=mysql_insert_id(); if ($id_user==0) $id_user=$id_new_user2;
+	
+													if ($results) {
+														$update_lists=true; $update_ef=true; $allow_confirm=true;
 													} else {
 														$import_users_ok--;
-														$import_users_overwrite--;
-														addError (__('SQL Error while updating user','knews'));
+														$import_users_new--;
+														addError (__('SQL Error while inserting user', 'knews'), $email);
 													}
 												}
-											} elseif ($Knews_plugin->post_safe('overwrite') == 'add') {
-
-												$import_users_overwrite++;
-												if ($step=='5') {
-													$id_updated_user=$user_found[0]->id;
+											} else {
+												if ($Knews_plugin->post_safe('overwrite') == 'yes') {
 	
-													//The lists
-													foreach ($lists_name as $ln) {
-														if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
-										
-															$query="SELECT * FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $id_updated_user . " AND id_list=" . $ln->id;
-															$results = $wpdb->get_results( $query );
-
-															if ( count($results) == 0 ) {
-
-																$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_updated_user . ", " . $ln->id . ")";
-																$results = $wpdb->query( $query );
-															}
+													$import_users_overwrite++;
+													if ($step=='5') {
+														//Update user
+														$id_user=$user_found->id;
+														$query = "UPDATE " . KNEWS_USERS . " SET lang='" . $lang . "', state=" . $state . ", joined='" . $date . "' WHERE id=" . $id_user;
+														$results = $wpdb->query( $query );
+														if ($results) {
+		
+															$query="DELETE FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $id_updated_user;
+															$results = $wpdb->query( $query );
+		
+															$update_lists=true; $update_ef=true; $allow_confirm=true;
+		
+														} else {
+															$import_users_ok--;
+															$import_users_overwrite--;
+															addError (__('SQL Error while updating user', 'knews'), $email);
 														}
 													}
+												} elseif ($Knews_plugin->post_safe('overwrite') == 'add') {
 	
-													
-													//Confirm
-													if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1) {
-														add_confirm($id_updated_user);
+													$import_users_overwrite++;
+													if ($step=='5') {
+														$id_user=$user_found->id;
+		
+														$update_lists=true; $update_ef=false; $allow_confirm=true;
 													}
 												}
 											}
+											if ($state==3) $import_users_blocked++;
+											if ($state==1) $import_users_confirm++;
+	
+	
+											if ($update_lists) {
+												//The lists
+												$insert_into_list=0;
+												foreach ($lists_name as $ln) {
+													if ($Knews_plugin->post_safe('list_col_val')=='val_'.$ln->id) {
+														//if ($Knews_plugin->post_safe('list_'.$ln->id)=='1') {
+														$insert_into_list = $ln->id;
+														break;															
+													}
+												}
+												if ($insert_into_list == 0) {
+													$names = explode(',',$user_csv[$Knews_plugin->post_safe('list_col_val', 0, 'int')-1]);
+													foreach ($names as $name) {
+														$name=trim($name);
+														$query = "SELECT * FROM " . KNEWS_LISTS . " WHERE name='" . $name . "'";
+														$results = $wpdb->get_row( $query );
+														
+														if (isset($results->id)) {
+															$insert_into_list = $results->id;
+														} else {
+															//Add new mailing list
+															$query = "INSERT INTO " . KNEWS_LISTS . " (name, open, open_registered, langs, orderlist) VALUES ('" . $name . "', 0, 0, '', 99);";
+															$results = $wpdb->query( $query );
+															$insert_into_list=$wpdb->insert_id; $insert_into_list2=mysql_insert_id(); if ($insert_into_list==0) $insert_into_list=$insert_into_list2;
+														}
+														$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_user . ", " . $insert_into_list . ")";
+														$results = $wpdb->query( $query );
+													}
+													$insert_into_list=0;
+												} else {
+													$query="INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $id_user . ", " . $insert_into_list . ")";
+													$results = $wpdb->query( $query );
+												}
+												
+											}
+											if ($update_ef) {
+												foreach ($extra_fields as $ef) {
+									
+													//Insert fields
+													$cf=$Knews_plugin->post_safe('ef_' . $ef->name);
+													if ($cf != '') {
+														if ($cf=='custom') {
+															$cf=$Knews_plugin->post_safe('c_ef_' . $ef->name);
+														} elseif ($cf=='empty') {
+															$cf='';
+														} else {
+															$cf=$user_csv[intval($cf)-1];
+														}
+														$Knews_plugin->set_user_field ($id_user, $ef->id, mysql_real_escape_string($cf));
+													}
+												}
+											}
+														
+											//Confirm
+											if ($state==1 && $Knews_plugin->post_safe('confirm', 0, 'int')==1 && $allow_confirm) {
+												add_confirm($id_user);
+											}
+	
+	
+											//Alta usuari
+										} else {
+											addError(__('The user already exists', 'knews'), $email);
 										}
-										if ($state==3) $import_users_blocked++;
-										if ($state==1) $import_users_confirm++;
-										
-										//Alta usuari
 									} else {
-										addError(__('The user already exists','knews'));
+										addError(__('Unknown language', 'knews'), $email);
 									}
 								} else {
-									addError(__('Unknown language','knews'));
+									addError(__('Wrong state', 'knews'), $email);
 								}
 							} else {
-								addError(__('Wrong state','knews'));
+								addError(__('Wrong e-mail', 'knews'), $email);
 							}
-						} else {
-							addError(__('Wrong e-mail','knews'));
+						}
+					} // end if pagination
+				}
+				
+				if ($breaked) {
+				
+					if (count($knews_import_errors) > 0) {
+						$mykeys = array_keys($knews_import_errors);
+						$x=0;
+						foreach ($mykeys as $mk) {
+							pass_var('knews_import_errors_index_' . $x, $mk);
+							pass_var('knews_import_errors_val_' . $x, $knews_import_errors[$mk]);
+							$x++;
 						}
 					}
-				}
+					pass_var('knews_import_errors_count', count($knews_import_errors));
 
-				if ($step=='5' && $confirmation_sql_count!=0) {
-					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS . " SET paused=0, users_total=" . $confirmation_sql_count . " WHERE id=" . $submit_confirmation_id;
-					$results = $wpdb->query( $query );
-				}
+					pass_var('import_users_total', $import_users_total);
+					pass_var('import_users_ok', $import_users_ok);
+					pass_var('knews_import_users_error', $knews_import_users_error);
+					pass_var('confirmation_sql_count', $confirmation_sql_count);
+					pass_var('submit_confirmation_id', $submit_confirmation_id);
+	
+					pass_var('import_users_new', $import_users_new);
+					pass_var('import_users_overwrite', $import_users_overwrite);
+	
+					pass_var('import_users_confirm', $import_users_confirm);
+					pass_var('import_users_blocked', $import_users_blocked);
+					pass_var('max_fields', $max_fields);
+					
+					pass_var('kpaged', $kpaged + 1);
+					pass_var('step', $step);
+					pass_var('next_step', $step);
 
-				//Informe
-				if ($step=='4') {
-					echo '<p>' . __('Import preview (we have not made ​​any changes yet:','knews') . '</p>';
-				} else {
-					echo '<p>' . __('Import results','knews') . '</p>';
-				}
-				?>
-				<table border="0" cellpadding="0" cellspacing="0" id="informimport">
-				<tr class="alt"><td>&nbsp;</td><td><?php _e('CSV total:','knews');?></td><td><?php echo $import_users_total; ?> <?php _e('users','knews');?></td></tr>
-				<?php if ($import_users_ok != 0) { ?>
-				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/green_led.gif" width="20" height="20" alt="OK" /></td><td><?php _e('Of which have been successfully imported:','knews');?></td><td><?php echo $import_users_ok; ?> <?php _e('users','knews');?></td></tr>
-				<?php } ?>
-				<?php if ($knews_import_users_error != 0) { ?>
-				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td><?php _e('And there have not been imported:','knews')?></td><td><?php echo $knews_import_users_error; ?> <?php _e('users','knews');?></td></tr>
-				<?php } ?>
-				<tr><td>&nbsp;</td><td><?php _e('There have been created:','knews'); ?></td><td><?php echo $import_users_new; ?> <?php _e('users','knews');?></td></tr>
-				<?php if ($import_users_overwrite != 0) { ?>
-				<tr><td>&nbsp;</td><td><?php _e('There have been updated:','knews'); ?></td><td><?php echo $import_users_overwrite; ?> <?php _e('users','knews');?></td></tr>
-				<?php } ?>
-				<?php if ($import_users_confirm != 0) { ?>
-				<tr>
-					<td><img src="<?php echo KNEWS_URL; ?>/images/yellow_led.gif" width="20" height="20" alt="WARNING" /></td><td>
+					echo '</form>';
+					echo '<p>Please, wait... step #' . ($kpaged + 1) . '</p>';
+					?>
+					<script type="text/javascript">
+						function jump() {
+							document.forms["knews_import_process"].submit();
+						}
+						setTimeout ('jump()', 1000); 
+					</script>
 					<?php
-					if ($Knews_plugin->post_safe('confirm', 0, 'int')==1) {
-						_e('Automatically send confirmation e-mails:','knews');
+
+				} else {
+					
+					pass_var('step', 5);
+					pass_var('next_step', 5);
+					
+					if ($step=='5' && $confirmation_sql_count!=0) {
+						$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS . " SET paused=0, users_total=" . $confirmation_sql_count . " WHERE id=" . $submit_confirmation_id;
+						$results = $wpdb->query( $query );
+					}
+	
+					//Informe
+					if ($step=='4') {
+						echo '<h3>' . __('Import preview (we have not made ​​any changes yet:','knews') . '</h3>';
 					} else {
-						_e('Users unconfirmed (You should do confirmation manually):','knews');
+						echo '<h3>' . __('Import results','knews') . '</h3>';
 					}
 					?>
-				</td><td><?php echo $import_users_confirm; ?> <?php _e('users','knews');?></td></tr>
-				<?php } ?>
-				<?php if ($import_users_blocked != 0) { ?>
-				<tr><td><img src="<?php echo KNEWS_URL; ?>/images/yellow_led.gif" width="20" height="20" alt="WARNING" /></td><td><?php _e('And have been blocked in this import:','knews');?></td><td><?php echo $import_users_blocked; ?> <?php _e('users','knews');?></td></tr>
-				<?php }
-				if (count($knews_import_errors)!=0) {
-					echo '<tr class="alt"><td>&nbsp;</td><td>' . __('Total errors:','knews') . '</td><td>&nbsp;</td></tr>';
-					$mykeys = array_keys($knews_import_errors);
-					foreach ($mykeys as $mk) {
-						echo '<tr><td><img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td>' . $mk . '</td><td>' . $knews_import_errors[$mk] . ' ' . __('users','knews') . '</td></tr>';
+					<table border="0" cellpadding="0" cellspacing="0" id="informimport">
+					<tr class="alt"><td>&nbsp;</td><td><?php _e('CSV total:','knews');?></td><td><?php echo $import_users_total; ?> <?php _e('users','knews');?></td></tr>
+					<?php if ($import_users_ok != 0) { ?>
+					<tr><td><img src="<?php echo KNEWS_URL; ?>/images/green_led.gif" width="20" height="20" alt="OK" /></td><td><?php _e('Of which have been successfully imported:','knews');?></td><td><?php echo $import_users_ok; ?> <?php _e('users','knews');?></td></tr>
+					<?php } ?>
+					<?php if ($knews_import_users_error != 0) { ?>
+					<tr><td><img src="<?php echo KNEWS_URL; ?>/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td><?php _e('And there have not been imported:','knews')?></td><td><?php echo $knews_import_users_error; ?> <?php _e('users','knews');?></td></tr>
+					<?php } ?>
+					<tr><td>&nbsp;</td><td><?php _e('There have been created:','knews'); ?></td><td><?php echo $import_users_new; ?> <?php _e('users','knews');?></td></tr>
+					<?php if ($import_users_overwrite != 0) { ?>
+					<tr><td>&nbsp;</td><td><?php _e('There have been updated:','knews'); ?></td><td><?php echo $import_users_overwrite; ?> <?php _e('users','knews');?></td></tr>
+					<?php } ?>
+					<?php if ($import_users_confirm != 0) { ?>
+					<tr>
+						<td><img src="<?php echo KNEWS_URL; ?>/images/yellow_led.gif" width="20" height="20" alt="WARNING" /></td><td>
+						<?php
+						if ($Knews_plugin->post_safe('confirm', 0, 'int')==1) {
+							_e('Automatically send confirmation e-mails:','knews');
+						} else {
+							_e('Users unconfirmed (You should do confirmation manually):','knews');
+						}
+						?>
+					</td><td><?php echo $import_users_confirm; ?> <?php _e('users','knews');?></td></tr>
+					<?php } ?>
+					<?php if ($import_users_blocked != 0) { ?>
+					<tr><td><img src="<?php echo KNEWS_URL; ?>/images/yellow_led.gif" width="20" height="20" alt="WARNING" /></td><td><?php _e('And have been blocked in this import:','knews');?></td><td><?php echo $import_users_blocked; ?> <?php _e('users','knews');?></td></tr>
+					<?php }
+					if (count($knews_import_errors)!=0) {
+						echo '<tr class="alt"><td>&nbsp;</td><td>' . __('Total errors:','knews') . '</td><td>&nbsp;</td></tr>';
+						$mykeys = array_keys($knews_import_errors);
+						foreach ($mykeys as $mk) {
+							echo '<tr><td><img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" alt="ERROR" /></td><td>' . $mk . '</td><td>' . $knews_import_errors[$mk] . ' ' . __('users','knews') . '</td></tr>';
+						}
 					}
+					?>
+					</table>
+					<?php
+					if (is_file(KNEWS_DIR . '/tmp/import_errors')) echo '<p>' . sprintf(__('To see the error details click %s here %s','knews'), '<a href="' . admin_url() . '/admin-ajax.php?action=knewsSafeDownload&file=import_errors" target="_blank">' , '</a>') . '</p>';
 				}
-				?>
-				</table>
-				<?php
 			} else {
 				echo '<p>' . __("Error: can't open the file",'knews') . '</p>';
 			}
 
-			if ($step=='4') {
-				?>
-				<div class="submit">
-					<input type="button" value="<?php _e('Go back','knews');?>" id="back_import" /> <input type="submit" value="<?php _e('Do the import','knews');?>" class="button-primary" />
-				</div>
-				<?php
-			} else {
-				?>
-				<p><?php _e('Import finished','knews');?></p>
-				<?php
+			if (!$breaked) {
+				if ($step=='4') {
+					?>
+					<div class="submit">
+						<input type="button" value="<?php _e('Go back','knews');?>" id="back_import" class="button" /> <input type="submit" value="<?php _e('Do the import','knews');?>" class="button-primary" />
+					</div>
+					<?php
+				} else {
+					?>
+					<h1 style="color:#090"><?php _e('Import finished','knews');?></h1>
+					<?php
+				}
 			}
 		}
 		
-function addError($txt, $fatal=true) {
+function addError($txt, $email, $fatal=true) {
 	global $knews_import_errors, $knews_import_users_error;
 	
 	if (isset($knews_import_errors[$txt])) {
@@ -759,6 +833,12 @@ function addError($txt, $fatal=true) {
 		$knews_import_errors[$txt]=1;
 	}
 	if ($fatal) $knews_import_users_error++;
+	
+	@$fp = fopen(KNEWS_DIR . '/tmp/import_errors', 'a');
+	if ($fp) {
+		fwrite($fp, $email . "\t - Error: " . $txt . "<br />\r\n");
+		fclose($fp);
+	}
 }
 
 function re_de_encode($text) {
@@ -897,6 +977,13 @@ function data_process($txt, $human=false) {
 	}
 	
 	return $date;
+}
+
+function pass_var ($name, $value) {
+
+	global $Knews_plugin; if ($value == '__post') $value = $Knews_plugin->post_safe($name);
+	
+	echo '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $value . '" />';
 }
 
 function add_confirm($id_user) {

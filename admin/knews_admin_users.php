@@ -8,6 +8,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	global $wpdb;
 	global $Knews_plugin;
 	
+	if ($Knews_plugin->get_safe('msg')=='selectuser') echo '<div class="updated"><p>' . __('Please, choose one user to get his stats (right link).','knews') . '</p></div>';
+	
 	$languages = $Knews_plugin->getLangs(true);
 	$extra_fields = $Knews_plugin->get_extra_fields();
 	$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
@@ -207,6 +209,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$id_list_news = $Knews_plugin->post_safe('id_list_news', 0, 'int');
 			$submit_confirm = $Knews_plugin->post_safe('submit_confirm', 0, 'int');
 			
+			$SESSION['knews_id_list_news']=$id_list_news; $SESSION['knews_submit_confirm']=$submit_confirm; $SESSION['knews_lang']=$lang; 
+			
 			if ($submit_confirm==1) {
 				$state='1';
 			} else {
@@ -224,7 +228,14 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					$results = $wpdb->query( $query );
 	
 					if ($results) {
-						$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (LAST_INSERT_ID(), " . $id_list_news . ");";
+						
+						$user_id=$wpdb->insert_id; $user_id2=mysql_insert_id(); if ($user_id==0) $user_id=$user_id2;
+						
+						foreach ($extra_fields as $ef) {
+							$Knews_plugin->set_user_field ($user_id, $ef->id, $Knews_plugin->post_safe('cf_' . $ef->id));
+						}
+
+						$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $user_id . ", " . $id_list_news . ");";
 						$results = $wpdb->query( $query );
 
 						if ($submit_confirm) {
@@ -252,16 +263,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	}
 ?>
 	<div class=wrap>
+
+
+	<div class=wrap>
+		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper"><a href="admin.php?page=knews_users" class="nav-tab nav-tab-active"><?php _e('Subscribers','knews'); ?></a><a href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_users&tab=extra_fields' : 'page=knews_config&tab=pro'); ?>" class="nav-tab"><?php _e('Extra fields','knews'); ?></a><a href="#newuser" class="add-new-h2"><?php _e('Create a subscriber manually','knews'); ?></a></h2>
 <?php 
-	if ($Knews_plugin->im_pro()) {
-?>
-		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper"><a href="admin.php?page=knews_users" class="nav-tab nav-tab-active"><?php _e('Subscribers','knews'); ?></a><a href="admin.php?page=knews_users&tab=extra_fields" class="nav-tab"><?php _e('Extra fields','knews'); ?></a></h2>
-<?php 
-	} else {
-?>
-		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Subscribers','knews'); ?></h2>
-<?php
-	}
 			$edit_user = $Knews_plugin->get_safe('edit_user', 0, 'int');
 			
 			if ($edit_user!=0) {
@@ -514,17 +520,23 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		<br />
 		<hr />
 		<h2><?php _e('Create a subscriber manually','knews'); ?></h2>
+		<a id="newuser" name="newuser"></a>
 		<form action="admin.php?page=knews_users" method="post">
 		<input type="hidden" name="action" id="action" value="add_user" />
-		<p>E-mail: <input type="text" name="email" id="email" class="regular-text" /></p>
+		<table border="0" cellpadding="0" cellspacing="0">
+		<tr><td>E-mail:</td><td><input type="text" name="email" id="email" class="regular-text" /></td></tr>
 		<?php
+			foreach ($extra_fields as $ef) {
+				echo '<tr><td>' . $ef->name . ':</td><td><input type="text" name="cf_' . $ef->id . '" id="cf_' . $ef->id . '" value="" class="regular-text" ></td></tr>';
+			}			 
+
 			if (count($languages) > 1) {
 				
-				echo '<p>' . __('Language','knews') . ': <select name="lang" id="lang">';
+				echo '<tr><td>' . __('Language','knews') . ':</td><td><select name="lang" id="lang">';
 				foreach($languages as $l){
-					echo '<option value="' . $l['language_code'] . '">' . $l['translated_name'] . '</option>';
+					echo '<option value="' . $l['language_code'] . '"' . ((isset ($SESSION['knews_lang']) && $SESSION['knews_lang'] == $l['language_code']) ? ' selected="selected" ' : '') . '>' . $l['translated_name'] . '</option>';
 				}
-				echo '</select></p>';
+				echo '</select></td></tr>';
 
 			} else if (count($languages) == 1) {
 				foreach ($languages as $l) {
@@ -533,21 +545,24 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			} else {
 				echo "<p>" . __('Error','knews') . ": " . __('Language not detected!','knews') . "</p>";
 			}
-
+			echo '</table>';
 			$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 			$results = $wpdb->get_results( $query );
 
 			if (count($results) > 1) {
 				echo '<p>' . __('Mailing list','knews') . ': <select name="id_list_news" id="id_list_news">';
 				foreach ($results as $list) {
-					echo '<option value="' . $list->id . '">' . $list->name . '</option>';
+					echo '<option value="' . $list->id . '"' . ((isset ($SESSION['knews_id_list_news']) && $SESSION['knews_id_list_news'] == $list->id) ? ' selected="selected" ' : '') . '>' . $list->name . '</option>';
 				}
 				echo '</select></p>';
 			} else if (count($results) == 1) {
 				echo '<input type="hidden" name="id_list_news" id="id_list_news" value="' . $results[0]->id . '">';
 			}
 		?>
-		<p><input type="radio" name="submit_confirm" id="submit_confirm_yes" value="1" checked="checked" /><?php _e('Send e-mail confirmation','knews');?> | <input type="radio" name="submit_confirm" id="submit_confirm_no" value="0" /><?php _e("Activate user directly (don't send e-mail confirmation)",'knews');?></p>
+		<p><input type="radio" name="submit_confirm" id="submit_confirm_yes" value="1" <?php if (!isset ($SESSION['knews_submit_confirm']) || $SESSION['knews_submit_confirm'] != 0) echo ' checked="checked" '; ?> />
+		<?php _e('Send e-mail confirmation','knews');?> | 
+		<input type="radio" name="submit_confirm" id="submit_confirm_no" value="0" <?php if (isset ($SESSION['knews_submit_confirm']) && $SESSION['knews_submit_confirm'] == 0) echo ' checked="checked" '; ?> />
+		<?php _e("Activate user directly (don't send e-mail confirmation)",'knews');?></p>
 		<div class="submit">
 			<input type="submit" value="<?php _e('Create a user','knews'); ?>" class="button-primary" />
 		</div>

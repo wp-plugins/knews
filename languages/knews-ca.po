@@ -2115,7 +2115,7 @@ msgid "You must first create a newsletter with insertable info (leave the %the_c
 msgstr "Has de crear primer una newsletter amb informació insertable (deixa els %the_content%, %the_title% etc.)"
 
 msgid "Create a newsletter every %s posts"
-msgstr "Crear una newsletter cada %s posts"
+msgstr "Crear una newsletter cada % posts"
 
 msgid "Error: there are no mailing lists"
 msgstr "Error: no hi ha llistes de correu"
@@ -2566,4 +2566,16 @@ msgstr "Usar a la selecció manual de post"
 
 msgid "Use it for automate newsletters"
 msgstr "Usar per a la automatització de newsletters"
+
+msgid "widget_required"
+msgstr "* Aquest camp és obligatori"
+
+msgid "widget_label_terms"
+msgstr "Accepto els termes i condicions."
+
+msgid "widget_subtitle"
+msgstr "Subscriu-te a la nostra newsletter i et mantindrem informat:"
+
+msgid "ajax_wrong_fields"
+msgstr "Siusplau, comprova els camps obligatoris"
 

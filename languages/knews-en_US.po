@@ -2567,3 +2567,15 @@ msgstr "Use in manual post selection"
 msgid "Use it for automate newsletters"
 msgstr "Use it for automate newsletters"
 
+msgid "widget_required"
+msgstr "* This field is required"
+
+msgid "widget_label_terms"
+msgstr "I accept the terms and conditions."
+
+msgid "widget_subtitle"
+msgstr "Subscribe to our newsletter we will keep you up-to-date:"
+
+msgid "ajax_wrong_fields"
+msgstr "Please, check the required fields"
+

@@ -1,4 +1,6 @@
 <?php
+global $Knews_plugin, $wpdb;
+
 //Security for CSRF attacks
 $knews_nonce_action='kn-admin-stats';
 $knews_nonce_name='_statsadm';
@@ -7,9 +9,16 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 ?>
 <link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <div class="wrap knews_stats">
-	<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
-	<h2><?php _e('Stats','knews'); ?></h2>
-<?php 
+<?php
+$tab = $Knews_plugin->get_safe('tab', $Knews_plugin->post_safe('tab') );
+?>
+<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
+	<a class="nav-tab <?php if ($tab=='') echo 'nav-tab-active'; ?>" href="admin.php?page=knews_stats"><?php _e('Global Stats','knews'); ?></a>
+	<a class="nav-tab <?php if ($tab=='news') echo 'nav-tab-active'; ?>" href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_stats&tab=news' : 'page=knews_config&tab=pro'); ?>"><?php _e('One News Stats','knews'); ?></a>
+	<a class="nav-tab <?php if ($tab=='user') echo 'nav-tab-active'; ?>" href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_users&msg=selectuser' : 'page=knews_config&tab=pro'); ?>"><?php _e('One User Stats','knews'); ?></a>
+</h2>
+<?php
+
 function drawPie($values, $captions, $filename, $palette="softtones.txt", $background=true, $legend=true) {
 
 	// Dataset definition
@@ -103,8 +112,6 @@ function safe_percent($p1, $p2) {
 @$fp = fopen(KNEWS_DIR . '/tmp/testwrite.txt', 'w');
 if ($fp) {
 
-	global $Knews_plugin, $wpdb;
-
 	// Standard inclusions pChart
 	include(KNEWS_DIR . "/includes/pChart/pData.class");  
 	include(KNEWS_DIR . "/includes/pChart/pChart.class");  
@@ -113,6 +120,15 @@ if ($fp) {
 
 	$today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 	$yesterday = strtotime ('-1 day', $today);
+	
+	if ($tab == 'news') {
+		require ('knews_admin_stats_news.php');
+		die();
+	}
+	if ($tab == 'user') {
+		require ('knews_admin_stats_user.php');
+		die();
+	}
 
 	// Min & max user date
 	$query='SELECT MIN(joined) AS min_joined FROM ' . KNEWS_USERS;

@@ -2469,7 +2469,7 @@ msgid "Knews Pro is currently installed."
 msgstr "Knews Pro is al geïnstalleerd."
 
 msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
-msgstr "Knews updates kunnen alleen van de %s dashboard worden beheerd. Soms kan alleen de beheerder dat."
+msgstr "De Knews upgrades kunnen alleen vanaf het %s algemene dashboard %s worden beheerd. Soms heeft alleen de beheerder daar toegang toe."
 
 msgid "Warning: if you haven't any mailing list opened, the subscription widget will not shown"
 msgstr "Let op: Als er geen mailing lijsten zijn wordt de aanmeldingswidget niet getoond."
@@ -2567,4 +2567,16 @@ msgstr "Gebruik in handmatige bericht selectie"
 
 msgid "Use it for automate newsletters"
 msgstr "Gebruik in automatische nieuwsbrieven"
+
+msgid "widget_required"
+msgstr "* Dit veld is verplicht"
+
+msgid "widget_label_terms"
+msgstr "Ik accepteer de voorwaarden"
+
+msgid "widget_subtitle"
+msgstr "Abonneer je op onze nieuwsbrief, zo blijf je up-to-date:"
+
+msgid "ajax_wrong_fields"
+msgstr "Controleer a.u.b. the verplichte velden"
 

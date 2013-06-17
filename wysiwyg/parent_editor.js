@@ -986,7 +986,7 @@ function callback_img(html, a, b, hs, vs, align) {
 
 	jQuery.ajax({
 		data: "action=knewsResizeImg&urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
-		type: "GET",
+		type: "POST",
 		dataType: "json",
 		url: url_admin + 'admin-ajax.php',
 		cache: false,

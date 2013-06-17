@@ -1914,7 +1914,7 @@ msgid "cant_read_text_link"
 msgstr "t&auml;st&auml;"
 
 msgid "cant_read_text_2"
-msgstr ""
+msgstr " "
 
 msgid "unsubscribe_text_1"
 msgstr "Peruuta tilaus"
@@ -1923,7 +1923,7 @@ msgid "unsubscribe_text_link"
 msgstr "t&auml;st&auml; "
 
 msgid "unsubscribe_text_2"
-msgstr ""
+msgstr " "
 
 msgid "Sign Ups & Blocks"
 msgstr "Tilaukset ja estot"
@@ -2469,7 +2469,7 @@ msgid "Knews Pro is currently installed."
 msgstr "Knes Pro on asennettu."
 
 msgid "Only from the %s main blog dashboard %s the Knews upgrades can be managed. Maybe only the network administrator can do it."
-msgstr "Knewsin p&auml;ivityksi&auml; voidaan tehd&auml; vain Verkon hallinnan kautta.  Verkon j&auml;rjestelm&auml;nvalvojan oikeudet tarvitaan."
+msgstr "Knewsin p&auml;ivityksi&auml; voidaan tehd&auml; vain %s Verkon hallinnan %s kautta.  Verkon j&auml;rjestelm&auml;nvalvojan oikeudet tarvitaan."
 
 msgid "Warning: if you haven't any mailing list opened, the subscription widget will not shown"
 msgstr "Varoitus: jos yksikään postituslista ei ole avoin, Tilaa-vimpainta ei näytetä"
@@ -2566,4 +2566,16 @@ msgstr "Käytä manuaalisessa uutiskirjeessä"
 
 msgid "Use it for automate newsletters"
 msgstr "Käytä automaattisessa uutiskirjeessä"
+
+msgid "widget_required"
+msgstr "Pakollinen tieto"
+
+msgid "widget_label_terms"
+msgstr "Hyväksyn käyttöehdot"
+
+msgid "widget_subtitle"
+msgstr "Tilaa uutiskirjeemme ja pysy ajan tasalla"
+
+msgid "ajax_wrong_fields"
+msgstr "Täytä pakolliset tiedot"
 

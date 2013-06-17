@@ -36,7 +36,7 @@ if ($Knews_plugin) {
 		if (count($user) ==1) $user_id=$user[0]->id;
 		
 		if ($key_track[0]->type==1) {
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date) VALUES (1, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "')";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (1, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "', " . $key_track[0]->id . ")";
 			$result=$wpdb->query( $query );
 		}
 		

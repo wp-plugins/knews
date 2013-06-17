@@ -973,7 +973,7 @@ msgstr "تم إنشاء النشرة بنجاح"
 #: Text in echo
 #: admin/knews_admin_users.php:176
 msgid "A token is used to insert a field in the newsletter. Should be located between %, with no spaces, for example: %name%"
-msgstr "يتم استخدام رمز لإدراج حقل في النشرة الإخبارية,  يجب أن يكون موجودا بين ٪، مع عدم وجود مسافات، على سبيل المثال: ٪اسم٪"
+msgstr "يتم استخدام رمز لإدراج قيمة حقل في النشرة الإخبارية, و يجب أن يكون موجودا بين ٪، مع عدم وجود مسافات، على سبيل المثال: ٪name٪"
 
 #: Text in function
 #: admin/knews_admin_users.php:464
@@ -983,7 +983,7 @@ msgstr "تمت إضافة المستخدم ولقد تم إرسال رسالة �
 #: Text in function
 #: admin/knews_admin_users.php:464
 msgid "The user has been added and from now on he will receive the newsletters"
-msgstr "تمت إضافة المستخدم وانه من الآن فصاعدا سوف يتلقى الرسائل الإخبارية"
+msgstr "تمت إضافة المستخدم و سوف يتلقى الرسائل الإخبارية من الآن فصاعدا !"
 
 #: Text in function
 #: admin/knews_admin_users.php:464
@@ -1644,7 +1644,7 @@ msgstr "اختر ما لا يقل عن لائحة واحدة ولغة واحدة
 #: Text in function
 #: knews_admin_export.php:142
 msgid "To download the .CSV, click %s here"
-msgstr "لتحميل ملف CSV.، انقر هنا %s"
+msgstr "لتحميل ملف CSV.، انقر %s هنا "
 
 msgid "Export CSV"
 msgstr "تصدير ملف CSV"
@@ -1656,7 +1656,7 @@ msgid "...or all lists and all languages to export all users."
 msgstr "... أو كافة القوائم وجميع اللغات لتصدير جميع المستخدمين."
 
 msgid "%s users have been exported."
-msgstr "%s تم تصديرهم من المستخدمين"
+msgstr "%s تم تصديرهم من المستخدمين"
 
 msgid "Lists"
 msgstr "قوائم"
@@ -1884,7 +1884,7 @@ msgid "Error: there is no image selected"
 msgstr "خطأ: لم تختر اى صورة"
 
 msgid "Knews updated the database successfully. Welcome to %s version."
-msgstr "ك-نيوز قام بتحديث قاعدة البيانات بنجاح. مرحبا بكم في الإصدار %s"
+msgstr "ك-نيوز قام بتحديث قاعدة البيانات بنجاح. مرحبا بكم في الإصدار %s ."
 
 msgid "Customize widget messages"
 msgstr "تعديل رسائل الويدجت"
@@ -2208,25 +2208,25 @@ msgid "This template requires Knews version %s you must update Knews before use 
 msgstr "هذا النموذج يتطلب إصدار ك-نيوز ال %s , يجب عليك تحديث  ك-نيوز قبل استخدام هذا النموذج"
 
 msgid "This template requires the professional version of Knews. You can get it %s here"
-msgstr "هذا النموذج يتطلب نسخه ك-نيوز المتميزه , يمكنك الحصول عليها هنا %s "
+msgstr "هذا النموذج يتطلب نسخه ك-نيوز المتميزه , يمكنك الحصول عليها %s هنا"
 
 msgid "Compatibility options"
 msgstr "خيارات التوافق"
 
 msgid "<strong>Knews is now registered</strong>. Go to %s plugins administration %s and click on Knews 'Check for updates' link for upgrade. Thank you very much."
-msgstr "<strong>تم تسجيل ك-نيوز </strong>   اذهب الى  %s صفحه الاضافات%s واضغط على رابط  \"تحديث\" الخاص ب ك-نيوز. لك منا جزيل الشكر."
+msgstr "<strong>تم تسجيل ك-نيوز </strong>   اذهب الى  %s  صفحه الاضافات %s واضغط على رابط  \"تحديث\" الخاص ب ك-نيوز. لك منا جزيل الشكر."
 
 msgid "Knews runs every hour the automated newsletter creation jobs."
 msgstr "ك-نيوز  يدير كل فتره ساعة عمليه الإنشاء الآلي للنشرات"
 
 msgid "You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now"
-msgstr "يمكنك تحريك هذه المهمة يدويا الآن (مستحسن فقط لأغراض الاختبار) %s تفعيل  الإنشاء  الآلي الآن"
+msgstr "يمكنك تحريك هذه المهمة يدويا الآن (مستحسن فقط لأغراض الاختبار) %s تفعيل  الإنشاء  الآلي الآن؟"
 
 msgid "Knews submit runs every 10 minutes and sends a portion of the list."
 msgstr "ك-نيوز  يدير الارسال كل فتره 10 دقائق ويرسل لجزء من القائمة."
 
 msgid "You can manually trigger the JavaScript CRON if your newsletter is not being sent for any reason: %s Run JS-Cron Now"
-msgstr "يمكنك تحريك جافاسكريبت كرون  يدويا إذا لم يتم إرسال الرسائل الإخبارية الخاصة بك لأي سبب من الأسباب:  %s  - تشغيل كرون JS الآن."
+msgstr "يمكنك تحريك جافاسكريبت كرون  يدويا إذا لم يتم إرسال الرسائل الإخبارية الخاصة بك لأي سبب من الأسباب:  %s  - تشغيل كرون JS الآن؟"
 
 msgid "Widget subscription form title"
 msgstr "عنوان ويدجت نموذج الاشتراك"
@@ -2241,7 +2241,9 @@ msgid "Desktop version text link"
 msgstr "نص رابط نسخه اجهزه الحاسب"
 
 msgid "You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here"
-msgstr "%s يمكنك الحصول على النسخه المتقدمه هنا لقد قمت بالرجوع الى الاصدار المجانى من  ك - نيوز، يمكنك أن تفقد البيانات، يرجى التحديث بسرعة!"
+msgstr ""
+"لقد قمت بالرجوع الى الاصدار المجانى من  ك - نيوز، من الممكن أن تفقد البيانات، يرجى التحديث بسرعة!\n"
+"يمكنك الحصول على النسخه المتقدمه  %s  هنا"
 
 msgid "Max number of newsletters: <br />(-1 for infinite):"
 msgstr "اقصى عدد من النشرات الإخبارية:  <br/> (-1 لانهائي):"
@@ -2319,10 +2321,10 @@ msgid "Apply filter the_content in the newsletter post insertion (Deactivate for
 msgstr "تطبيق فيلتر the_content  خلال ادراج التدوينة فى النشرة الإخبارية (لا تقم بالتفعيل فى حال وجود مشاكل توافق مع بعض الإضافات مثل NextGen Gallery)"
 
 msgid "<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages."
-msgstr "<strong> ملاحظة</strong>:  إذا كنت تستخدم  <strong>qTranslate</strong> لايمكنك تعطيل هذا الخيار، لأنه يستخدم هذا الفلتر لتقسيم محتويات آخر إلى لغات مختلفة ."
+msgstr "<strong> ملاحظة</strong>:  إذا كنت تستخدم  <strong>qTranslate</strong> لايمكنك تعطيل هذا الخيار، لأنه يستخدم هذا الفلتر لتقسيم محتويات التدوينة إلى لغات مختلفة ."
 
 msgid "Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
-msgstr " منع تسجيل العضويات غير الرغوب فيها (Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
+msgstr " منع تسجيل العضويات غير المرغوب فيها (Some Cache Plugins can need deactivate this option (Subscribe always fails \"wrong e-mail adress\" message)."
 
 msgid "Premium options"
 msgstr "خيارات النسخه المميزه"
@@ -2334,7 +2336,7 @@ msgid "Hide Knews Shop Products offers"
 msgstr "إخفاء قائمه عروض منتجات متجر ك-نيوز"
 
 msgid "WordPress user syncronization"
-msgstr "تزامن مستخدمى ووردبريس"
+msgstr "تزامن تسجيل اشتراك مستخدمى ووردبريس"
 
 msgid "Subscribe new WordPress users to:"
 msgstr "اشتراك  مستخدمى ووردبريس الجدد إلى:"
@@ -2397,7 +2399,7 @@ msgid "SSL"
 msgstr "SSL"
 
 msgid "Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features."
-msgstr "نآسف، هذه تكون احدى الخواص المتميزه. من فضلك، %s  انقر هنا لترى كل مميزات ك-نيوز النسخه المميزه"
+msgstr "نآسف، هذه احدى خواص النسخه المتميزه. من فضلك، %s  انقر هنا لترى كل مميزات ك-نيوز النسخه المميزه"
 
 msgid "Warning! You arent selected any mailing list, do you want to continue?"
 msgstr "تحذير! لم تقم باختيار أي قائمة بريدية، هل تريد الاستمرار؟"
@@ -2448,7 +2450,7 @@ msgid "Import WP users into Knews"
 msgstr " قم بعمليه استيراد مستخدمى ووردبريس الى ك-نيوز"
 
 msgid "Users imported: %s. Users found before (not re-imported): %s."
-msgstr "المستخدمين الذى تم استيرادهم : %s . المستخدمين الموجودين من قبل( لم يتم استيرادهم) : %s"
+msgstr "المستخدمين الذى تم استيرادهم : %s . المستخدمين الموجودين من قبل( لم يتم استيرادهم) : %s ."
 
 msgid "Errors submitting confirmation: %s"
 msgstr "أخطاء عمليه  تأكيد الارسال:%s"
@@ -2566,4 +2568,16 @@ msgstr "استخدام فى عمليه الاختيار اليدوى للتدو�
 
 msgid "Use it for automate newsletters"
 msgstr "استخدامه للرسائل الإخبارية الآلي"
+
+msgid "widget_required"
+msgstr "هذا الحقل مطلوب."
+
+msgid "widget_label_terms"
+msgstr "أوافق على البنود والشروط"
+
+msgid "widget_subtitle"
+msgstr "اشترك في النشرة الإخبارية كي تبقي علي اطلاع بجديد المواضيع"
+
+msgid "ajax_wrong_fields"
+msgstr "من فضلك، تحقق من الحقول المطلوبة"
 

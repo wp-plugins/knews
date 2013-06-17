@@ -9,6 +9,7 @@ $sql =	"CREATE TABLE " .KNEWS_USERS . " (
 		joined datetime NOT NULL,
 		confkey varchar(32),
 		lang varchar(12) NOT NULL,
+		ip varchar(45) NOT NULL,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 
@@ -123,6 +124,7 @@ $sql =	"CREATE TABLE " .KNEWS_STATS . " (
 		submit_id bigint(20) UNSIGNED NOT NULL,
 		what int(2) NOT NULL,
 		date datetime NOT NULL,
+		statkey bigint(20) UNSIGNED NOT NULL DEFAULT 0,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 

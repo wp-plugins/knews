@@ -17,7 +17,7 @@ if ($Knews_plugin->get_safe('da')=='startnow') {
 }
 
 if ($Knews_plugin->get_safe('da')=='retry') {
-	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE blog_id=" . get_current_blog_id() . " AND status=2 AND submit=" . $Knews_plugin->get_safe('rid', 0, 'int');
+	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS_DETAILS." SET status=0 WHERE status=2 AND submit=" . $Knews_plugin->get_safe('rid', 0, 'int');
 	$result=$wpdb->query( $query );
 	
 	if ($result > 0) {

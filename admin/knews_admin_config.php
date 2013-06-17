@@ -33,6 +33,8 @@ function knews_save_prefs() {
 
 	} elseif (isset($_POST['update_KnewsAdminSettingsAdv'])) {
 		
+		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews');
+		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews');
 		$knewsOptions['knews_cron'] = $Knews_plugin->post_safe('knews_cron');
 		$knewsOptions['smtp_knews'] = $Knews_plugin->post_safe('smtp_knews');
 		$knewsOptions['smtp_host_knews'] = $Knews_plugin->post_safe('smtp_host_knews');
@@ -265,6 +267,8 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('http://www.knewsplugin.com/configure-smtp-submits/','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
 			<div style="width:420px; float:left; padding-left:30px;">
 				<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
+				<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" value="<?php echo $knewsOptions['from_name_knews']; ?>" /></td></tr>
+				<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" value="<?php echo $knewsOptions['from_mail_knews']; ?>" /></td></tr>
 				<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_host_knews']; ?>" /></td></tr>
 				<tr><td><?php _e('Port SMTP','knews');?>:</td><td><input type="text" name="smtp_port_knews" id="smtp_port_knews" style="width:100px" autocomplete="off" value="<?php echo $knewsOptions['smtp_port_knews']; ?>" /></td></tr>
 				<tr><td><?php _e('SMTP User','knews');?>: *</td><td><input type="text" name="smtp_user_knews" id="smtp_user_knews" class="regular-text" autocomplete="off" value="<?php echo $knewsOptions['smtp_user_knews']; ?>" /></td></tr>
@@ -459,8 +463,9 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<hr />
 			<h3><?php _e('Sender','knews');?></h3>
 			<table cellpadding="0" cellspacing="0" border="0">
+			<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" value="<?php echo $knewsOptions['from_name_knews']; ?>" /></td></tr>
 			<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" value="<?php echo $knewsOptions['from_mail_knews']; ?>" /></td></tr>
-			<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" value="<?php echo $knewsOptions['from_name_knews']; ?>" /></td></tr></table>
+			</table>
 			<hr />
 			<h3><?php _e('Alerts and logs','knews'); ?></h3>
 			<p><input type="checkbox" name="reset_alerts_knews" value="1" id="reset_alerts_knews" /> <?php _e('Reset all alerts','knews'); ?></p>

@@ -89,7 +89,6 @@ msgstr "Ολα σε"
 msgid "And have been blocked in this import:"
 msgstr "Και έχουν μπλοκαριστεί σε αυτή την εισαγωγή:"
 
-#. This sentence sounds wrong in English, what is its context?
 #: Text in echo
 #: admin/knews_admin_import.php:649
 msgid "And there have not been imported:"
@@ -375,7 +374,6 @@ msgstr "Ολοκληρώθηκε"
 msgid "Formatting"
 msgstr "Μορφοποίηση"
 
-#. Pode ser Cancelar, porque o botão é para voltar para trás sem efetuar alterações.
 #: Text in echo
 #: admin/knews_admin_import.php:401
 #: admin/knews_admin_import.php:686
@@ -407,7 +405,6 @@ msgstr "Πήγαινε στην επόμενη σελίδα"
 msgid "Go to previous page"
 msgstr "Πήγαινε στην προηγούμενη σελίδα"
 
-#. Rever
 #: Text in echo
 #: admin/knews_admin_config.php:212
 msgid "Host SMTP"
@@ -1092,7 +1089,7 @@ msgid "Welcome to Knews."
 msgstr "Καλώς ήρθατε στο Knews."
 
 msgid "Please, go to %s configuration page"
-msgstr "Παρακαλώ, %s μεταβείτε στη σελίδα διαμόρφωσης %s"
+msgstr "Παρακαλώ, μεταβείτε στη %s σελίδα διαμόρφωσης "
 
 msgid "Don't show this message again [x]"
 msgstr "Να μην εμφανιστεί ξανά αυτό το μήνυμα [x]"
@@ -1659,7 +1656,7 @@ msgid "...or all lists and all languages to export all users."
 msgstr "... ή όλες τις λίστες και όλες τις γλώσσες να εξαγωγή όλως των χρηστών."
 
 msgid "%s users have been exported."
-msgstr "s% χρήστες έχουν εξαχθεί."
+msgstr "%s χρήστες έχουν εξαχθεί."
 
 msgid "Lists"
 msgstr "Λίστες"
@@ -1889,7 +1886,7 @@ msgid "Error: there is no image selected"
 msgstr "Σφάλμα: δεν υπάρχει επιλεγμένη εικόνα"
 
 msgid "Knews updated the database successfully. Welcome to %s version."
-msgstr "To Knews ενημέρωσε τη βάση δεδομένων με επιτυχία. Καλώς ήλθατε στην έκδοση %s."
+msgstr "To Knews ενημέρωσε τη βάση δεδομένων με επιτυχία. Καλώς ήλθατε στην %s έκδοση ."
 
 msgid "Customize widget messages"
 msgstr "Προσαρμογή μηνυμάτων γραφικών στοιχείων"
@@ -1904,7 +1901,7 @@ msgid "SQL Error while updating user"
 msgstr "Σφάλμα SQL κατά την ενημέρωση του χρήστη"
 
 msgid "Warning: the email has no subject! %s Edit it again before submit!"
-msgstr "Προσοχή: Η αλληλογραφία δεν έχει θέμα! %s. Διορθώστε πάλι πριν την υποβολή!"
+msgstr "Προσοχή: Η αλληλογραφία δεν έχει θέμα! %s Διορθώστε πάλι πριν την υποβολή!"
 
 msgid "Warning: %sConfigure sender name before submit!"
 msgstr "Προειδοποίηση: %s Ρυθμίστε το όνομα του αποστολές πριν την υποβολή!"
@@ -2003,13 +2000,13 @@ msgid "http://www.knewsplugin.com/configure-webserver-cron/"
 msgstr "http://www.knewsplugin.com/configure-webserver-cron/"
 
 msgid "Multisite detected. Only one instance of %s must be called for all websites."
-msgstr "Πολυκεντρική ανιχνευθεί. Μόνο ένα παράδειγμα του% s πρέπει να καλείται για όλες τις ιστοσελίδες."
+msgstr "Πολυκεντρική ανιχνευθεί. Μόνο ένα παράδειγμα του %s πρέπει να καλείται για όλες τις ιστοσελίδες."
 
 msgid "Cant create the automated submit"
 msgstr "Δεν μπορώ να δημιουργήσω την αυτόματη υποβολή "
 
 msgid "Widget \"%s\" label form"
-msgstr "Ετικέτα γραφικού στοιχείου \"%s\" φόρμας "
+msgstr "Ετικέτα γραφικού στοιχείου \"%s\" φόρμας"
 
 msgid "Auto-create"
 msgstr "Αυτόματη δημιουργία"
@@ -2210,7 +2207,7 @@ msgid "Submit automatic"
 msgstr "Αυτόματη υποβολή"
 
 msgid "This template requires Knews version %s you must update Knews before use this template"
-msgstr "Αυτό το πρότυπο απαιτεί την έκδοση Knews %s. Πρέπει να ενημερώσετε το Knews πριν χρησιμοποιήσετε αυτό το πρότυπο"
+msgstr "Αυτό το πρότυπο απαιτεί την έκδοση Knews %s πρέπει να ενημερώσετε το Knews πριν χρησιμοποιήσετε αυτό το πρότυπο"
 
 msgid "This template requires the professional version of Knews. You can get it %s here"
 msgstr "Αυτό το πρότυπο απαιτεί την επαγγελματική έκδοση του Knews. Μπορείτε να την πάρετε %s εδώ"
@@ -2571,4 +2568,16 @@ msgstr "Χρήση στην χειροκίνητη επιλογή ανάρτησ
 
 msgid "Use it for automate newsletters"
 msgstr "Χρησιμοποιήστε το για αυτοματοποιημένα ενημερωτικά δελτία"
+
+msgid "widget_required"
+msgstr "* Αυτό το πεδίο είναι απαραίτητο"
+
+msgid "widget_label_terms"
+msgstr "Αποδέχομαι τους όρους και τις προϋποθέσεις"
+
+msgid "widget_subtitle"
+msgstr "Εγγραφείτε στο ενημερωτικό δελτίο μας, θα σας κρατήσει ενήμερους:"
+
+msgid "ajax_wrong_fields"
+msgstr "Παρακαλώ, ελέγξτε τα απαραίτητα πεδία"
 
