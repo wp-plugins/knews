@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.5 =
+
+* Solved the "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)" error (only in 1.4.4, we're sorry)
 
 = 1.4.4 =
 
@@ -479,6 +483,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.4.5 =
+
+* Solved the "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)" error (only in 1.4.4, we're sorry)
 
 = 1.4.4 =
 
