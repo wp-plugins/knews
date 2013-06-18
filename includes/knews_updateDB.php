@@ -145,7 +145,7 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.4.2') < 0 || ( $this
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.4.4') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.6') < 0)) {
 	if (!knews_add_column(KNEWS_STATS, 'statkey', "bigint(20) UNSIGNED NOT NULL DEFAULT 0")) return;
-	if (!knews_add_column(KNEWS_USERS, 'ip', "varchar(45) UNSIGNED NOT NULL")) return;
+	if (!knews_add_column(KNEWS_USERS, 'ip', "varchar(45) NOT NULL")) return;
 }
 
 update_option('knews_version', KNEWS_VERSION);
