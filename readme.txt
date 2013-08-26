@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
-Tested up to: 3.5.1
-Stable tag: 1.4.5
+Tested up to: 3.6
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,14 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.6 =
+
+* Solved blank color picker window under WordPress 3.6
+* Suport for WPML 2.9
+* Import CSV multistep filename error solved
+* Automated newsletters stability
+* Solved some interferences with another plugins
 
 = 1.4.5 =
 
@@ -483,6 +491,14 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.4.6 =
+
+* Solved blank color picker window under WordPress 3.6
+* Suport for WPML 2.9
+* Import CSV multistep filename error solved
+* Automated newsletters stability
+* Solved some interferences with another plugins
 
 = 1.4.5 =
 
