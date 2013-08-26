@@ -23,7 +23,7 @@ if ($Knews_plugin) {
 	$code=str_replace('#@!', '<', $code);
 	
 	//WYSIWYG editor issues
-	$code=rgb2hex($code);
+	$code=knews_rgb2hex($code);
 	if (!is_utf8($code)) $codeModule=utf8_encode($code);
 	$code=$Knews_plugin->htmlentities_corrected($code);
 	//$title=$Knews_plugin->htmlentities_corrected($title);

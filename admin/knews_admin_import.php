@@ -49,7 +49,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$submit_confirmation_id=0;
 
 	$step = $Knews_plugin->post_safe('step', 1);
-	$filename = $Knews_plugin->post_safe('filename', '', 'unsafe');
+
+	$filename = str_replace('\\\\', '\\', $Knews_plugin->post_safe('filename', '', 'unsafe'));
+	$filename = str_replace('//', '/', $filename);
 	
 	if (isset($_FILES['file_csv']['tmp_name'])) {
 		$filename = KNEWS_DIR . '/tmp/' . pathinfo($_FILES['file_csv']['tmp_name'], PATHINFO_FILENAME);

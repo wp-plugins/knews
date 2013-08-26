@@ -158,7 +158,7 @@ function utf8tohtml($utf8, $encodeTags) {
     return $result;
 }*/
 
-function rgb2hex($code) {
+function knews_rgb2hex($code) {
 	for ($pos_char = 0; $pos_char < strlen($code); $pos_char++) {
 
 		if (substr($code, $pos_char, 3)=='rgb') {

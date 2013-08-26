@@ -44,13 +44,13 @@ if ($Knews_plugin) {
 		} else {
 			$time_lapsus = time();
 			if ($aj->every_time == 1) $time_lapsus = $time_lapsus - 24 * 60 * 60; //Daily
-			if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 1 * 24 * 60 * 60; //Weekly
-			if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 8 * 24 * 60 * 60; //2 weeks
+			if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 6 * 24 * 60 * 60; //Weekly
+			if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 13 * 24 * 60 * 60; //2 weeks
 			if ($aj->every_time == 4) $time_lapsus = $time_lapsus - 30 * 24 * 60 * 60; //Monthly
 			if ($aj->every_time == 5) $time_lapsus = $time_lapsus - 60 * 24 * 60 * 60; //2 Monthly
 			if ($aj->every_time == 6) $time_lapsus = $time_lapsus - 90 * 24 * 60 * 60; //3 Monthly
 			
-			if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus || ($aj->run_yet==0 && $aj->every_time != 1) ) {
+			if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus || $aj->run_yet==0 ) {
 				if ($aj->every_time == 1) {
 					$doit=true;
 				} else {
@@ -310,7 +310,13 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			$query = "UPDATE " . KNEWS_AUTOMATED_POSTS . " SET id_news=" . $id_newsletter . " WHERE id_news=0";
 			$results = $wpdb->query($query);				
 
-			$query = "UPDATE " . KNEWS_AUTOMATED . " SET last_run='" . $Knews_plugin->get_mysql_date($most_recent) . "', run_yet=1 WHERE id=" . $aj->id . " ";
+			if ($aj->every_mode == 1) {
+				$last_run = "'" . $Knews_plugin->get_mysql_date($most_recent) . "'";
+			} else {
+				$last_run = "'" . $Knews_plugin->get_mysql_date() . "'";
+			}
+	
+			$query = "UPDATE " . KNEWS_AUTOMATED . " SET last_run=" . $last_run . ", run_yet=1 WHERE id=" . $aj->id . " ";
 			$results = $wpdb->query($query);				
 			
 			if ($mobile) return $id_newsletter;

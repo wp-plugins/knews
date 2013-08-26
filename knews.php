@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.5
+Version: 1.4.6
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -37,6 +37,7 @@ if (!class_exists("KnewsPlugin")) {
 		var $KNEWS_MAIN_BLOG_ID = 1;
 		var $knews_admin_messages = '';
 		var $knews_form_n = 1;
+		var $polylang_options = '';
 						
 		/******************************************************************************************
 		/*                                   INICIALITZAR
@@ -222,8 +223,10 @@ if (!class_exists("KnewsPlugin")) {
 					global $sitepress_settings;
 					if (isset($sitepress_settings['language_negotiation_type']) && $sitepress_settings['language_negotiation_type']==2) {
 					
-						$l = $this->pageLang();
-						$knews_localized_url = $l['url'];
+						//$l = $this->pageLang();
+						//$knews_localized_url = $l['url'];
+						$knews_localized_url = icl_get_home_url();
+
 						if (substr($knews_localized_url, -1) != '/') $knews_localized_url .= '/';
 						$knews_localized_admin = $knews_localized_url . 'wp-admin/';
 						$knews_localized_url .= 'wp-content/plugins/knews';
@@ -272,6 +275,57 @@ if (!class_exists("KnewsPlugin")) {
 			
 			return $url;
 		}
+		
+		function get_localized_home($user_lang, $extra_params='') {
+			global $knewsOptions;
+			if (! $this->initialized) $this->init();
+		
+			$url_home = get_bloginfo('url');
+			
+			if (KNEWS_MULTILANGUAGE && $user_lang != '') {
+				if ($knewsOptions['multilanguage_knews']=='wpml') {
+					global $sitepress;
+					if (method_exists($sitepress, 'language_url')) {
+						//$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
+						$url_home = $sitepress->language_url($user_lang);
+					}
+				}
+				if ($knewsOptions['multilanguage_knews']=='qt') {
+					if (function_exists('qtrans_convertURL')) {
+						//$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
+						$url_home = qtrans_convertURL(get_bloginfo('url'), $user_lang);
+					}
+				}
+				if ($knewsOptions['multilanguage_knews']=='pll') {
+					global $polylang, $polylang_options;
+
+					if (isset($polylang)) {
+						
+						if ($polylang_options=='') {
+							$polylang_options = get_option('polylang');
+							$polylang_options['wp_permalink_structure'] = get_option('permalink_structure','');
+						}
+
+						//$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
+						if ($user_lang != pll_default_language('slug') || $polylang_options['hide_default'] != 1) {
+							if ( $polylang_options['wp_permalink_structure'] != '' )
+								$url_home .= '/'. $user_lang . '/';
+							else
+								$url_home .= '/?lang='. $user_lang;
+						}
+					}
+				}
+
+			}
+			if ($extra_params != '') {
+				if (strpos($url_home, '?')===false) {
+					$url_home .= '?' . $extra_params;
+				} else {
+					$url_home .= '&' . $extra_params;
+				}
+			}
+			return $url_home;
+		}
 
 		function knews_load_plugin_textdomain() {
 			global $initialized_textdomain;
@@ -289,6 +343,7 @@ if (!class_exists("KnewsPlugin")) {
 			$multilanguage_plugin = false;
 			if ($plugin == 'wpml') $multilanguage_plugin = $this->have_wpml();
 			if ($plugin == 'qt') $multilanguage_plugin = $this->have_qtranslate();
+			if ($plugin == 'pll') $multilanguage_plugin = $this->have_polylang();
 
 			return $multilanguage_plugin;
 		}
@@ -581,7 +636,7 @@ if (!class_exists("KnewsPlugin")) {
 					
 					if ($bypass_confirmation) return 1;
 										
-					if ($this->submit_confirmation ($email, $confkey, $lang_locale)) {
+					if ($this->submit_confirmation ($email, $confkey, $lang_locale, $lang)) {
 						return 1; //Confirmation sent
 					} else {
 						return 2; //Submit confirmation error
@@ -600,13 +655,15 @@ if (!class_exists("KnewsPlugin")) {
 			
 		}
 		
-		function submit_confirmation ($email, $confkey, $lang_locale) {
+		function submit_confirmation ($email, $confkey, $lang_locale='en_US', $lang='en') {
 
 			global $knewsOptions;
 
 			$mailHtml = $this->get_custom_text('email_subscription_body', $lang_locale);
 			
-			$url_confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $confkey . '&e=' . urlencode($email);
+			//$url_confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $confkey . '&e=' . urlencode($email);
+			$url_confirm = $this->get_localized_home($lang, 'knews=confirmUser&k=' . $confkey . '&e=' . urlencode($email) );
+
 			$mailHtml = str_replace('#url_confirm#', $url_confirm, $mailHtml);
 
 			$mailText = str_replace('</p>', '</p>\r\n\r\n', $mailHtml);
@@ -641,12 +698,20 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 		function have_wpml() {
-			return (function_exists('icl_get_languages'));
+			//return (function_exists('icl_get_languages'));
+			global $sitepress;
+			return isset($sitepress);
 		}
 		
 		function have_qtranslate() {
 			return (function_exists( 'qtrans_init'));
 		}
+		
+        function have_polylang() {
+			global $polylang;
+			return isset($polylang);
+            //return (get_option('polylang','') != '');
+        }
 
 		/******************************************************************************************
 		/*                                FUNCIONS FRONT END
@@ -751,6 +816,26 @@ if (!class_exists("KnewsPlugin")) {
 					}
 				}
 			}
+
+            if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='pll') {
+                global $polylang;
+                if (isset($polylang)) {
+                    //$pll_options = get_option('polylang','');        
+                    $active_langs = $polylang->get_languages_list();
+					$pll_active = pll_current_language();
+
+                    foreach ($active_langs as $lang) {
+                        $wpml_style_langs[$lang->slug] = array (
+                                'active'            => (($pll_active == $lang->slug) ? 1 : 0),
+                                'native_name'       => $lang->name,
+                                'translated_name'   => $lang->name,
+                                'language_code'     => $lang->slug,
+                                'localized_code'    => $lang->description
+                            );
+                    }
+                    if (count($wpml_style_langs) > 0) return $wpml_style_langs;
+                }
+            }
 			
 			$short_lang = substr(get_bloginfo('language'), 0, 2);
 			return array (
@@ -1374,7 +1459,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.5');
+		define('KNEWS_VERSION', '1.4.6');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1501,12 +1586,31 @@ if (!function_exists("Knews_plugin_ap")) {
 	function knews_popup() {
 		global $Knews_plugin;
 		
+		//Deprecated, start:
 		if ($Knews_plugin->get_safe('subscription')=='ok' || $Knews_plugin->get_safe('subscription')=='error' || $Knews_plugin->get_safe('unsubscribe')=='ok' || $Knews_plugin->get_safe('unsubscribe')=='error') {
 			define ('KNEWS_POP_DIALOG', true);
 		}
+		//Deprecated, end.
+		if ($Knews_plugin->get_safe('knews')=='confirmUser') {
+			$knews_subscription_result = $Knews_plugin->confirm_user_self();
+			define ('KNEWS_POP_DIALOG', true);
+		}
+		if ($Knews_plugin->get_safe('knews')=='unsubscribe') {
+			$knews_block_result = $Knews_plugin->block_user_self();
+			define ('KNEWS_POP_DIALOG', true);
+		}
 
-		if ($Knews_plugin->get_safe('knewspophome')=='1') define('KNEWS_POP_HOME', true);
-
+		//if ($Knews_plugin->get_safe('knewspophome')=='1'
+		if ( $Knews_plugin->get_safe('knews')=='readEmail') {
+			define('KNEWS_POP_NEWS', true);
+			?>
+			<script type="text/javascript">
+			jQuery(document).ready(function() {
+				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>/admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e'); ?>');
+			});
+			</script>
+			<?php
+		}
 		if (defined('KNEWS_POP_HOME') || defined('KNEWS_POP_DIALOG') || defined('KNEWS_POP_NEWS')) {
 			if (! $Knews_plugin->initialized) $Knews_plugin->init();
 			require_once( KNEWS_DIR . '/includes/dialogs.php');
@@ -1849,7 +1953,18 @@ if (!function_exists("Knews_plugin_ap")) {
 		return 40;
 	}
 
-	
+	function knews_queryvars( $qvars ) {
+		if (isset($_GET['knews'])) {
+			if (!is_array($qvars)) $qvars=array();
+			if (!in_array('knews', $qvars)) $qvars[] = 'knews';
+			if (!in_array('k', $qvars)) $qvars[] = 'k';
+			if (!in_array('e', $qvars)) $qvars[] = 'e';
+			if (!in_array('n', $qvars)) $qvars[] = 'n';
+		}
+		return $qvars;
+	}
+	add_filter('query_vars', 'knews_queryvars' );
+
 	if (is_admin()) {
 		$knewsOptions = $Knews_plugin->getAdminOptions();
 		if ($Knews_plugin->im_pro() || ($knewsOptions['registration_email'] != '' && $knewsOptions['registration_serial'] != '')) {

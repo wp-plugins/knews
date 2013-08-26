@@ -2,15 +2,22 @@
 global $Knews_plugin;
 
 if ($Knews_plugin) {
-
-
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
-
 ?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+	<?php
+	if ( get_bloginfo( 'version' ) >= '3.6') {
+	?>
+	<script type='text/javascript' src='<?php echo get_admin_url(); ?>load-scripts.php?c=1&amp;load=jquery-core'></script>
+	<?php
+	} else {
+	?>
 	<script type='text/javascript' src='<?php echo get_admin_url(); ?>load-scripts.php?c=1&amp;load=jquery'></script>
+	<?php
+	}
+	?>
 	<link rel="Stylesheet" type="text/css" href="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/css/jPicker-1.1.6.min.css" />
 	<link rel="Stylesheet" type="text/css" href="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/jPicker.css" />
 	<script src="<?php echo KNEWS_URL; ?>/wysiwyg/jpicker/jpicker-1.1.6.min.js" type="text/javascript"></script>
