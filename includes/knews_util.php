@@ -1,6 +1,6 @@
 <?php
 // Returns true if $string is valid UTF-8 and false otherwise.
-function is_utf8($str) {
+function knews_is_utf8($str) {
     $c=0; $b=0;
     $bits=0;
     $len=strlen($str);
@@ -26,11 +26,11 @@ function is_utf8($str) {
     return true;
 }
 
-function cut_code($start, $end, $code, $delete) {
-	$start_pos = strpos($code, $start);
-	$end_pos = strpos($code, $end, $start_pos+strlen($start));
-
-	if ($start_pos === false || $end_pos === false) return '';
+function knews_cut_code($start, $end, $code, $delete) {
+	
+	$start_pos = strpos($code, $start); if ($start_pos === false) return '';
+	
+	$end_pos = strpos($code, $end, $start_pos+strlen($start)); if ($end_pos === false) return '';
 	
 	if ($delete) {
 		$start_pos = $start_pos + strlen($start);
@@ -42,12 +42,11 @@ function cut_code($start, $end, $code, $delete) {
 	return substr($code, $start_pos, $end_pos-$start_pos);	
 }
 
-function extract_code($start, $end, $code, $delete) {
+function knews_extract_code($start, $end, $code, $delete) {
 
-	$start_pos = strpos($code, $start);
-	$end_pos = strpos($code, $end, $start_pos+strlen($start));
-
-	if ($start_pos === false || $end_pos === false) return $code;
+	$start_pos = strpos($code, $start); if ($start_pos === false) return $code;
+	
+	$end_pos = strpos($code, $end, $start_pos+strlen($start)); if ($end_pos === false) return $code;
 
 	if (!$delete) {
 		$start_pos = $start_pos + strlen($start);
@@ -59,39 +58,17 @@ function extract_code($start, $end, $code, $delete) {
 	return substr($code, 0, $start_pos) . substr($code, $end_pos);	
 }
 
-function iterative_extract_code($start, $end, $code, $delete) {
+function knews_iterative_extract_code($start, $end, $code, $delete) {
 	$pre = $code;
-	$post = extract_code($start, $end, $code, $delete);
+	$post = knews_extract_code($start, $end, $code, $delete);
 	while ($pre != $post) {
 		$pre=$post;
-		$post = extract_code($start, $end, $post, $delete);
+		$post = knews_extract_code($start, $end, $post, $delete);
 	}
 	return $post;
 }
 
-function prettyCut($text, $amountChars, $termination) {
-	$text = strip_tags($text);
-	$text = trim(str_replace("  ", " ", $text));
-
-	if (strlen($text) > $amountChars) {
-		$subChain = substr($text, 0, $amountChars);
-		$indexLastSpace = strrpos($subChain," ");
-		$text = substr($text,0, $indexLastSpace) . $termination;	
-	}
-	return $text;
-}
-
-function extractAndCut($inic, $end, $theHtml) {
-	$pos = strpos($theHtml, $inic);
-	$pos2 = strpos($theHtml, $end);
-	
-	if ($pos === false || $pos2 === false) return '';
-
-	return substr($theHtml, $pos+strlen($inic), $pos2 - ($pos + strlen($inic)));
-	
-}
-
-function deleteTag($tag, $search, $theHtml) {
+function knews_deleteTag($tag, $search, $theHtml) {
 	$findPos=strpos($theHtml, $search);
 	if ($findPos === false) return $theHtml;
 	
@@ -101,62 +78,19 @@ function deleteTag($tag, $search, $theHtml) {
 	$pos2 = strpos($theHtml, '</' . $tag . '>', $findPos);
 	$pos2 = $pos2+strlen($tag)+3;
 	
+	if ($pos === false || $pos2 === false) return $theHtml;
+
 	return substr($theHtml, 0, $pos) . substr($theHtml, $pos2);	
 }
-function iterative_deleteTag($tag, $search, $theHtml) {
+function knews_iterative_deleteTag($tag, $search, $theHtml) {
 	$pre = $theHtml;
-	$post = deleteTag($tag, $search, $theHtml);
+	$post = knews_deleteTag($tag, $search, $theHtml);
 	while ($pre != $post) {
 		$pre=$post;
-		$post = deleteTag($tag, $search, $post);
+		$post = knews_deleteTag($tag, $search, $post);
 	}
 	return $post;
 }
-
-/*
-function normalize($text) {
-	return utf8tohtml($text, false);
-}
-
-// Thanks to silverbeat -eat- gmx -hot- at
-function utf8tohtml($utf8, $encodeTags) {
-    $result = '';
-    for ($i = 0; $i < strlen($utf8); $i++) {
-        $char = $utf8[$i];
-        $ascii = ord($char);
-        if ($ascii < 128) {
-            // one-byte character
-            $result .= ($encodeTags) ? htmlentities($char) : $char;
-        } else if ($ascii < 192) {
-            // non-utf8 character or not a start byte
-        } else if ($ascii < 224) {
-            // two-byte character
-            $result .= htmlentities(substr($utf8, $i, 2), ENT_QUOTES, 'UTF-8');
-            $i++;
-        } else if ($ascii < 240) {
-            // three-byte character
-            $ascii1 = ord($utf8[$i+1]);
-            $ascii2 = ord($utf8[$i+2]);
-            $unicode = (15 & $ascii) * 4096 +
-                       (63 & $ascii1) * 64 +
-                       (63 & $ascii2);
-            $result .= "&#$unicode;";
-            $i += 2;
-        } else if ($ascii < 248) {
-            // four-byte character
-            $ascii1 = ord($utf8[$i+1]);
-            $ascii2 = ord($utf8[$i+2]);
-            $ascii3 = ord($utf8[$i+3]);
-            $unicode = (15 & $ascii) * 262144 +
-                       (63 & $ascii1) * 4096 +
-                       (63 & $ascii2) * 64 +
-                       (63 & $ascii3);
-            $result .= "&#$unicode;";
-            $i += 3;
-        }
-    }
-    return $result;
-}*/
 
 function knews_rgb2hex($code) {
 	for ($pos_char = 0; $pos_char < strlen($code); $pos_char++) {
@@ -193,7 +127,7 @@ function knews_rgb2hex($code) {
 	}
 	return $code;
 }
-function examine_template($folder, $templates_path, $templates_url, $popup=false) {
+function knews_examine_template($folder, $templates_path, $templates_url, $popup=false) {
 	$xml_info = array (
 		'shortname' => $folder,
 		'fullname' => 'Not defined',
@@ -288,7 +222,7 @@ function knews_display_templates($popup=false) {
 		$folders = scandir( '.' );
 		foreach ($folders as $folder) {
 			if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html')) {
-				if (examine_template($folder, $wp_dirs['basedir'] . '/knewstemplates/', $wp_dirs['baseurl'] . '/knewstemplates/', $popup)) $anytemplate=true;
+				if (knews_examine_template($folder, $wp_dirs['basedir'] . '/knewstemplates/', $wp_dirs['baseurl'] . '/knewstemplates/', $popup)) $anytemplate=true;
 			}
 		}
 	}
@@ -299,11 +233,46 @@ function knews_display_templates($popup=false) {
 	$folders = scandir( '.' );
 	foreach ($folders as $folder) {
 		if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file(KNEWS_DIR . '/templates/' . $folder . '/info.xml') && is_file(KNEWS_DIR . '/templates/' . $folder . '/template.html')) {
-			if (examine_template($folder, KNEWS_DIR . '/templates/', KNEWS_URL . '/templates/', $popup)) $anytemplate=true;
+			if (knews_examine_template($folder, KNEWS_DIR . '/templates/', KNEWS_URL . '/templates/', $popup)) $anytemplate=true;
 		}
 	}
 	
 	if (!$anytemplate && $popup) echo '<p>' . _e('You dont have any mobile template!','knews') . '</p>';
 }
 
+function knews_pagination($paged, $maxPage, $items) {
+	//$link_params .= '&paged=';
+	//$maxPage=ceil(count($users) / $results_per_page);
+	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	$link_params = remove_query_arg('paged', $link_params) . '&paged=';
+
+		
+?>		
+		<div class="tablenav-pages">
+			<span class="displaying-num"><?php echo $items; ?> items</span>
+<?php
+	if ($maxPage > 1) {
+		 /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
+		<?php if ($paged > 1) { ?>
+		<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+		<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
+		<?php } else { ?>
+		<a href="#" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+		<a href="#" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
+		<?php } ?>
+		<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
+		<?php if ($maxPage > $paged) { ?>
+		<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+		<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
+		<?php } else { ?>
+		<a href="#" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+		<a href="#" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
+<?php 
+		}
+	}
+?>
+		</div>
+	<br class="clear">
+<?php
+}
 ?>

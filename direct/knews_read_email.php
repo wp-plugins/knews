@@ -21,7 +21,7 @@ if ($Knews_plugin) {
 	$user_id=0;
 	
 	if ($email != '') {
-		$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . $email . "'");
+		$user=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'");
 
 		if (count($user)==1) {
 			$user_id=$user->id;
@@ -48,9 +48,9 @@ if ($Knews_plugin) {
 			$theHtml = str_replace($token['token'], $Knews_plugin->get_user_field($user->id, $token['id']), $theHtml);
 			//$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($user->id, $token['id'], $token['defaultval']) );
 		}
-		$theHtml = str_replace('%unsubscribe_href%', get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey, $theHtml);
+		$theHtml = str_replace('%unsubscribe_href%', $Knews_plugin->get_localized_home($user->lang, 'knews=unsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey), $theHtml);
 
-		$theHtml = str_replace('%mobile_version_href%', get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email) . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk'), $theHtml);
+		$theHtml = str_replace('%mobile_version_href%', $Knews_plugin->get_localized_home($user->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email) . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk')), $theHtml);
 
 	} else {
 		foreach ($used_tokens as $token) {
@@ -59,14 +59,15 @@ if ($Knews_plugin) {
 
 		$theHtml = str_replace('%unsubscribe_href%', '#', $theHtml);
 
-		$theHtml = str_replace('%mobile_version_href%', get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk'), $theHtml);
+		$theHtml = str_replace('%mobile_version_href%', $Knews_plugin->get_localized_home('', 'knews=ReadEmail&id=' . $id_newsletter . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk')), $theHtml);
 	}
 	$theHtml = str_replace('%cant_read_href%', '#' , $theHtml);
 
-	if ($Knews_plugin->get_safe('preview',0)!=1) $theHtml = extract_code('<!--cant_read_block_start-->','<!--cant_read_block_end-->',$theHtml,true);
+	if ($Knews_plugin->get_safe('preview',0)!=1) $theHtml = knews_extract_code('<!--cant_read_block_start-->','<!--cant_read_block_end-->',$theHtml,true);
 	
 	if ($do_mobile) $theHtml=str_replace('</head>','<meta name="viewport" content="width=480"></head>',$theHtml);
 
+	/*
 	if ($Knews_plugin->get_safe('preview',0) != 1 && $Knews_plugin->get_safe('knewsLb',0) != 1) {
 
 		$start = strpos($theHtml,'<body>');
@@ -83,12 +84,12 @@ if ($Knews_plugin) {
 		} else {
 			echo $theHtml;
 		}
-	} else {
+	} else {*/
 		echo $theHtml;	
-	}
+	//}
 	
 } else {
 	echo 'Knews is not active';
 }
-die();
+if (!defined('KNEWS_POP_HOME')) die();
 ?>

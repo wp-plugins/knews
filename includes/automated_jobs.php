@@ -211,8 +211,8 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			if ($knewsOptions['apply_filters_on']=='1') $content = apply_filters('the_content', $content);
 	
 			$content = strip_shortcodes($content);
-			$content = iterative_extract_code('<script', '</script>', $content, true);
-			$content = iterative_extract_code('<fb:like', '</fb:like>', $content, true);
+			$content = knews_iterative_extract_code('<script', '</script>', $content, true);
+			$content = knews_iterative_extract_code('<fb:like', '</fb:like>', $content, true);
 			$content = str_replace(']]>', ']]>', $content);
 			$content = strip_tags($content);
 	
@@ -237,8 +237,8 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 
 			$excerpt = strip_shortcodes( $content );
 			if ($knewsOptions['apply_filters_on']=='1') $excerpt = apply_filters('the_content', $excerpt);
-			$excerpt = iterative_extract_code('<script', '</script>', $excerpt, true);
-			$excerpt = iterative_extract_code('<fb:like', '</fb:like>', $excerpt, true);
+			$excerpt = knews_iterative_extract_code('<script', '</script>', $excerpt, true);
+			$excerpt = knews_iterative_extract_code('<fb:like', '</fb:like>', $excerpt, true);
 			$excerpt = str_replace(']]>', ']]>', $excerpt);
 			$excerpt = strip_tags($excerpt);
 			$excerpt_length = apply_filters('excerpt_length', 55);
@@ -299,8 +299,8 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				$news_mod = str_replace('%the_excerpt_' . $n . '%', '', $news_mod);
 				$news_mod = str_replace('%the_content_' . $n . '%', '', $news_mod);
 				
-				$news_mod = iterative_deleteTag('a', '%the_permalink_' . $n . '%', $news_mod);
-				$news_mod = iterative_deleteTag('img', 'the_feat_img_' . $n . '%', $news_mod);
+				$news_mod = knews_iterative_deleteTag('a', '%the_permalink_' . $n . '%', $news_mod);
+				$news_mod = knews_iterative_deleteTag('img', 'the_feat_img_' . $n . '%', $news_mod);
 			}
 			knews_debug('- saving the created newsletter' . "\r\n");
 			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($news[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ")";

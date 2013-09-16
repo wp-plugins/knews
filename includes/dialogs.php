@@ -68,25 +68,25 @@ if (defined('KNEWS_POP_DIALOG')) {
 			<?php 
 			$lang_locale = $Knews_plugin->localize_lang($Knews_plugin->getLangs(true), $Knews_plugin->get_safe('lang', substr(get_bloginfo('language'), 0, 2)), get_bloginfo('language'));
 
-			if ($Knews_plugin->get_safe('subscription')=='ok') {
+			if ($Knews_plugin->get_safe('subscription')=='ok' || ( $Knews_plugin->get_safe('knews')=='confirmUser' && $knews_subscription_result ) ) {
 			?>
 				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_ok_title', $lang_locale); ?></strong></p>
 				<p><?php echo $Knews_plugin->get_custom_text('subscription_ok_message', $lang_locale); ?></p>
 				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
 			<?php 
-			} else if ($Knews_plugin->get_safe('subscription')=='error') {
+			} else if ($Knews_plugin->get_safe('subscription')=='error' || ( $Knews_plugin->get_safe('knews')=='confirmUser' && !$knews_subscription_result )) {
 			?>
 				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_error_title', $lang_locale); ?></strong></p>
 				<p><?php echo $Knews_plugin->get_custom_text('subscription_error_message', $lang_locale); ?></p>
 				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
 			<?php 
-			} else if ($Knews_plugin->get_safe('unsubscribe')=='ok') {
+			} else if ($Knews_plugin->get_safe('unsubscribe')=='ok' || ( $Knews_plugin->get_safe('knews')=='unsubscribe' && $knews_block_result )) {
 			?>
 				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_stop_ok_title', $lang_locale); ?></strong></p>
 				<p><?php echo $Knews_plugin->get_custom_text('subscription_stop_ok_message', $lang_locale); ?></p>
 				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
 			<?php 
-			} else if ($Knews_plugin->get_safe('unsubscribe')=='error') {
+			} else if ($Knews_plugin->get_safe('unsubscribe')=='error' || ( $Knews_plugin->get_safe('knews')=='unsubscribe' && !$knews_block_result )) {
 			?>
 				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_stop_error_title', $lang_locale); ?></strong></p>
 				<p><?php echo $Knews_plugin->get_custom_text('subscription_stop_error_message', $lang_locale); ?></p>
@@ -132,27 +132,32 @@ if (defined('KNEWS_POP_NEWS')) {
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			jQuery("a.knews_lightbox").click(function() {
-				jQuery("body").append('<div class="knews_pop_bg">&nbsp;</div><iframe class="knews_pop_news" src="' + jQuery(this).attr("href") + '&knewsLb=1"></iframe><a href="#" class="knews_pop_x" title="close">&nbsp;</a>');
-				jQuery("div.knews_pop_bg").fadeIn();
-				jQuery("iframe.knews_pop_news").load(function (){
-					y = this.contentWindow.document.body.offsetHeight;
-					//x = this.contentWindow.document.body.offsetWidth + 20;
-					max_width=0;
-					parent.jQuery('body', this.contentWindow.document).css('padding','0').css('margin','0');
-					parent.jQuery('*', this.contentWindow.document).each(function() {
-						m=parseInt(jQuery(this).attr('width'), 10);
-						if (m > max_width) max_width=m;
-					});
-					max_width=max_width+20;
-					parent.jQuery("iframe.knews_pop_news").animate({opacity:1}).css("height", y).css("width", max_width).css("marginLeft", -1 * Math.floor(max_width/2));
-					parent.jQuery("a.knews_pop_x").css("marginLeft", Math.floor(max_width/2)-15).css("display","block");
-					parent.jQuery("a.knews_pop_x, div.knews_pop_bg").click(function() {close_popup()});
-					parent.jQuery("a", this.contentWindow.document).each(function() {parent.jQuery(this).attr("target","_parent")});
-					parent.jQuery(this.contentWindow.document).keyup(function(e) {
-						if (e.keyCode == 27) { close_popup() }
-					});
-				});
+				knews_launch_iframe(jQuery(this).attr("href"));
 				return false;
+			});
+		});
+		
+		function knews_launch_iframe(iframe_url) {
+				
+			jQuery("body").append('<div class="knews_pop_bg">&nbsp;</div><iframe class="knews_pop_news" src="' + iframe_url + '&knewsLb=1"></iframe><a href="#" class="knews_pop_x" title="close">&nbsp;</a>');
+			jQuery("div.knews_pop_bg").fadeIn();
+			jQuery("iframe.knews_pop_news").load(function (){
+				y = this.contentWindow.document.body.offsetHeight;
+				//x = this.contentWindow.document.body.offsetWidth + 20;
+				max_width=0;
+				parent.jQuery('body', this.contentWindow.document).css('padding','0').css('margin','0');
+				parent.jQuery('*', this.contentWindow.document).each(function() {
+					m=parseInt(jQuery(this).attr('width'), 10);
+					if (m > max_width) max_width=m;
+				});
+				max_width=max_width+20;
+				parent.jQuery("iframe.knews_pop_news").animate({opacity:1}).css("height", y).css("width", max_width).css("marginLeft", -1 * Math.floor(max_width/2));
+				parent.jQuery("a.knews_pop_x").css("marginLeft", Math.floor(max_width/2)-15).css("display","block");
+				parent.jQuery("a.knews_pop_x, div.knews_pop_bg").click(function() {close_popup()});
+				parent.jQuery("a", this.contentWindow.document).each(function() {parent.jQuery(this).attr("target","_parent")});
+				parent.jQuery(this.contentWindow.document).keyup(function(e) {
+					if (e.keyCode == 27) { close_popup() }
+				});
 			});
 			function knewsLookForEsc(e) {
 				if (e.keyCode == 27) close_popup();
@@ -165,7 +170,7 @@ if (defined('KNEWS_POP_NEWS')) {
 					jQuery(document).unbind("keyup", knewsLookForEsc);
 				});
 			}
-		});
+		}
 	</script>
 <?php
 }

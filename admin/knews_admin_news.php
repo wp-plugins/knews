@@ -68,7 +68,7 @@
 						$codeTemplate = str_replace('<!--[ ', '<!--[', $codeTemplate);
 						$codeTemplate = str_replace(' ]-->', ']-->', $codeTemplate);
 						
-						if (!$Knews_plugin->im_pro()) $codeTemplate = extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $codeTemplate, true);
+						if (!$Knews_plugin->im_pro()) $codeTemplate = knews_extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $codeTemplate, true);
 						
 						if ($lang_localized =='' ) $lang_localized='en_US';
 						$codeTemplate = str_replace('%cant_read_text_1%', $Knews_plugin->get_custom_text('cant_read_text_1', $lang_localized), $codeTemplate);
@@ -104,7 +104,7 @@
 		
 						$headTemplate = substr($codeTemplate, 0, strpos($codeTemplate, '</head>')+7);
 	
-						$bodyTemplate = cut_code('<body>', '</body>', $codeTemplate, true);
+						$bodyTemplate = knews_cut_code('<body>', '</body>', $codeTemplate, true);
 	
 						$bodyTemplate = str_replace('"images/', '"' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
 						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
@@ -118,28 +118,28 @@
 	
 								$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/' . ($mobile ? 'm_' : '') . 'module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
 								
-								$extracted_module = cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
+								$extracted_module = knews_cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								$codeModule .= $extracted_module . '</div></div>';
 								
 								if (strpos($extracted_module, 'dont_cut_module') === false) {
-									$bodyTemplate = extract_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
+									$bodyTemplate = knews_extract_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								}
 								$count_modules++;
 							}
 						}
 						
-						$containerModulesTemplate =	cut_code('<!--[open_insertion_container_start]-->', '<!--[close_insertion_container_start]-->', $bodyTemplate, true) .
-													cut_code('<!--[open_insertion_container_end]-->', '<!--[close_insertion_container_end]-->', $bodyTemplate, true);
+						$containerModulesTemplate =	knews_cut_code('<!--[open_insertion_container_start]-->', '<!--[close_insertion_container_start]-->', $bodyTemplate, true) .
+													knews_cut_code('<!--[open_insertion_container_end]-->', '<!--[close_insertion_container_end]-->', $bodyTemplate, true);
 						
-						$bodyTemplate = iterative_extract_code('<!--[open_ignore_code]-->', '<!--[close_ignore_code]-->', $bodyTemplate, true);
-						$bodyTemplate = iterative_extract_code('<!--[', ']-->', $bodyTemplate, true);
+						$bodyTemplate = knews_iterative_extract_code('<!--[open_ignore_code]-->', '<!--[close_ignore_code]-->', $bodyTemplate, true);
+						$bodyTemplate = knews_iterative_extract_code('<!--[', ']-->', $bodyTemplate, true);
 						$codeTemplate = str_replace('  ', ' ', $codeTemplate);
 		
 						$date = $Knews_plugin->get_mysql_date();
 						
-						if (!is_utf8($bodyTemplate)) $bodyTemplate=utf8_encode($bodyTemplate);
-						if (!is_utf8($headTemplate)) $headTemplate=utf8_encode($headTemplate);
-						if (!is_utf8($codeModule)) $codeModule=utf8_encode($codeModule);
+						if (!knews_is_utf8($bodyTemplate)) $bodyTemplate=utf8_encode($bodyTemplate);
+						if (!knews_is_utf8($headTemplate)) $headTemplate=utf8_encode($headTemplate);
+						if (!knews_is_utf8($codeModule)) $codeModule=utf8_encode($codeModule);
 	
 						$bodyTemplate = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($bodyTemplate));
 						$headTemplate = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($headTemplate));

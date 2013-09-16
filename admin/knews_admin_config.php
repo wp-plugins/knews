@@ -436,12 +436,13 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				</div>
 			<?php
 				} else {
-					if (!$Knews_plugin->have_wpml() && !$Knews_plugin->have_qtranslate()) {
+					if (!$Knews_plugin->have_wpml() && !$Knews_plugin->have_qtranslate() && !$Knews_plugin->have_polylang()) {
 			?>				
 				<div class="updated">
 					<p><?php _e('No mulilanguage plugins detected. Knews works with qTranslate and WPML plugins','knews'); ?></p>
 					<p><a href="http://www.qianqin.de/qtranslate/" target="_blank"><?php _e('qTranslate: free plugin','knews'); ?></a></p>
 					<p><a href="http://wpml.org/" target="_blank"><?php _e('WPML: commercial plugin','knews'); ?></a></p>
+					<p><a href="http://polylang.wordpress.com/" target="_blank"><?php _e('Polylang: free plugin','knews'); ?></a></p>
 					<p><?php _e('Note: Knews authors have no relationship with qTranslate or WMPL authors.','knews'); ?></p>
 				</div>
 			<?php 
@@ -457,6 +458,11 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					<p><input type="radio" name="multilanguage_knews" value="qt" id="multilanguage_knews_qt"<?php if ($knewsOptions['multilanguage_knews']=='qt') echo ' checked="checked"'; ?> /> <?php _e('Use the qTranslate defined languages to operate Knews in multilanguage mode','knews'); ?></p>
 			<?php
 				}
+                if ($Knews_plugin->have_polylang()) {
+			?>
+					<p><input type="radio" name="multilanguage_knews" value="pll" id="multilanguage_knews_pll"<?php if ($knewsOptions['multilanguage_knews']=='pll') echo ' checked="checked"'; ?> /> <?php _e('Use the Polylang defined languages to operate Knews in multilanguage mode','knews'); ?></p>
+            <?php
+                }
 			?>
 				<p><input type="radio" name="multilanguage_knews" value="off" id="multilanguage_knews_off"<?php if ($knewsOptions['multilanguage_knews']=='off') echo ' checked="checked"'; ?> /> <?php _e('Operate Knews as monolingual','knews'); ?></p>
 

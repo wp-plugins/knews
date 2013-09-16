@@ -55,8 +55,8 @@ if ($Knews_plugin) {
 		if ($knewsOptions['apply_filters_on']=='1') $content = apply_filters('the_content', $content);
 
 		$content = strip_shortcodes($content);
-		$content = iterative_extract_code('<script', '</script>', $content, true);
-		$content = iterative_extract_code('<fb:like', '</fb:like>', $content, true);
+		$content = knews_iterative_extract_code('<script', '</script>', $content, true);
+		$content = knews_iterative_extract_code('<fb:like', '</fb:like>', $content, true);
 		$content = str_replace(']]>', ']]>', $content);
 		$content = strip_tags($content);
 
@@ -82,8 +82,8 @@ if ($Knews_plugin) {
 		$text1 = get_the_content();
 		$text = strip_shortcodes( $text1 );
 		if ($knewsOptions['apply_filters_on']=='1') $text = apply_filters('the_content', $text);
-		$text = iterative_extract_code('<script', '</script>', $text, true);
-		$text = iterative_extract_code('<fb:like', '</fb:like>', $text, true);
+		$text = knews_iterative_extract_code('<script', '</script>', $text, true);
+		$text = knews_iterative_extract_code('<fb:like', '</fb:like>', $text, true);
 		$text = str_replace(']]>', ']]>', $text);
 		$text = strip_tags($text);
 		$excerpt_length = apply_filters('excerpt_length', 55);
@@ -99,8 +99,8 @@ if ($Knews_plugin) {
  	    $jsondata['title'] = get_the_title();
  	    $jsondata['excerpt'] = $excerpt;
 		/*if ($knewsOptions['apply_filters_on']=='1') $text1 = apply_filters( 'the_content', $text1 );
-		$text1 = iterative_extract_code('<script', '</ script>', $text1, true);
-		$text1 = iterative_extract_code('<fb:like', '</fb:like>', $text1, true);*/
+		$text1 = knews_iterative_extract_code('<script', '</ script>', $text1, true);
+		$text1 = knews_iterative_extract_code('<fb:like', '</fb:like>', $text1, true);*/
  	    $jsondata['content'] = $content;
 
 
@@ -279,14 +279,6 @@ function select_post(n, lang) {
 		echo '<div class="pestanyes">';
 		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
 		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
-		
-		if ($Knews_plugin->im_pro()) {
-			$post_types = $Knews_plugin->getCustomPostTypes();
-			foreach ($post_types as $pt) {
-				if ($pt['manual']==1) echo (($type==$pt['name']) ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=' . urlencode($pt['name']) . '&lang=' . $lang . '">' . $pt['label'] . '</a>';		
-			}
-		}
-		echo '</div>';
 		
 		echo '<div class="filters">';
 		//Filters

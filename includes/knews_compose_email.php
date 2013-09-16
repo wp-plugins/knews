@@ -13,7 +13,7 @@ if ($Knews_plugin) {
 	$theSubject = $results[0]->subject;
 	$theHtml = $results[0]->html_head . '<body>' . $results[0]->html_mailing . '</body></html>';
 
-	$title = cut_code('<title>', '</title>', $theHtml, false);
+	$title = knews_cut_code('<title>', '</title>', $theHtml, false);
 	$theHtml = str_replace($title, '<title>' . $theSubject . ' - ' . get_bloginfo('title') . '</title>', $theHtml);
 	
 	//Remove some shit from WYSIWYG editor
@@ -30,7 +30,7 @@ if ($Knews_plugin) {
 	$theHtml = str_replace( "\r\n\r\n", "\r\n", $theHtml);
 	$theHtml = preg_replace('/(?:(?:\r\n|\r|\n)\s*){2}/s', "\n\n", $theHtml);
 	
-	$cut_lines=split("\n",$theHtml);
+	$cut_lines=explode("\n",$theHtml);
 	$theHtml='';
 	foreach ($cut_lines as $cl) {
 		if (strlen($cl) > 250) {
@@ -67,7 +67,7 @@ if ($Knews_plugin) {
 	}
 	
 	if ($results[0]->mobile==0 && $results[0]->id_mobile==0) {
-		$theHtml = iterative_extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $theHtml, true);
+		$theHtml = knews_iterative_extract_code('<!--mobile_block_start-->', '<!--mobile_block_end-->', $theHtml, true);
 	}
 }
 ?>

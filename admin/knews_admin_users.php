@@ -8,6 +8,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	global $wpdb;
 	global $Knews_plugin;
 	
+	require_once( KNEWS_DIR . '/includes/knews_util.php');
+
 	if ($Knews_plugin->get_safe('msg')=='selectuser') echo '<div class="updated"><p>' . __('Please, choose one user to get his stats (right link).','knews') . '</p></div>';
 	
 	$languages = $Knews_plugin->getLangs(true);
@@ -37,16 +39,16 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			}
 			if ($ok_cf==0) {
 				$query = str_replace('%s', $u->id, $full_insertion);
-				$wpdb->get_results($query);
+				$wpdb->query($query);
 			} elseif ($ok_cf != count($extra_fields)) {
 				$incomplete_users[]=$u->id;
 			}
 		}
 		foreach ($incomplete_users as $iu) {
 			foreach ($extra_fields as $ef) {
-				$look = $wpdb->get_results('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
-				if (count($look) == 0) {
-					$wpdb->get_results( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
+				$look = $wpdb->get_row('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
+				if ($look != null) {
+					$wpdb->query( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
 				}
 			}
 		}
@@ -595,42 +597,6 @@ function knews_th_orderable ($label, $orderby, $order) {
 	$current_url = add_query_arg( 'order', $order, $current_url );
 	
 	echo '<th class="manage-column ' . $sortable . ' ' . $sorted . '"><a href="' . esc_url( $current_url ) . '"><span>' . $label . '</span><span class="sorting-indicator"></span></a></th>';
-}
-
-function knews_pagination($paged, $maxPage, $items) {
-	//$link_params .= '&paged=';
-	//$maxPage=ceil(count($users) / $results_per_page);
-	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	$link_params = remove_query_arg('paged', $link_params) . '&paged=';
-
-		
-?>		
-		<div class="tablenav-pages">
-			<span class="displaying-num"><?php echo $items; ?> items</span>
-<?php
-	if ($maxPage > 1) {
-		 /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
-		<?php if ($paged > 1) { ?>
-		<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
-		<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
-		<?php } else { ?>
-		<a href="#" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
-		<a href="#" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
-		<?php } ?>
-		<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
-		<?php if ($maxPage > $paged) { ?>
-		<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
-		<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
-		<?php } else { ?>
-		<a href="#" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
-		<a href="#" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
-<?php 
-		}
-	}
-?>
-		</div>
-	<br class="clear">
-<?php
 }
 
 ?>

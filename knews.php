@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.6
+Version: 1.4.7
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -32,6 +32,7 @@ if (!class_exists("KnewsPlugin")) {
 		var $knewsOptions = array();
 		var $knewsLangs = array();
 		var $initialized = false;
+		var $basic_initialized = false;
 		var $initialized_textdomain = false;
 		var $advice='';
 		var $KNEWS_MAIN_BLOG_ID = 1;
@@ -58,6 +59,7 @@ if (!class_exists("KnewsPlugin")) {
 				'multilanguage_knews' => 'off',
 				'no_warn_ml_knews' => 'no',
 				'no_warn_cron_knews' => 'no',
+				'cron_callme' => '0',
 				'config_knews' => 'no',
 				'update_knews' => 'no',
 				'write_logs' => 'no',
@@ -77,6 +79,7 @@ if (!class_exists("KnewsPlugin")) {
 				'bounce_user' => 'bounce@yourdomain.com',
 				'bounce_pass' => '',
 				'bounce_ssl' => 'no',
+				'bounce_mode' => '0',
 				'new_users_list' => '0',
 				'registration_email' => '',
 				'registration_serial' => '',
@@ -177,11 +180,11 @@ if (!class_exists("KnewsPlugin")) {
 			return $custom;
 		}
 		
-		function init($blog_id=0) {
+		function basic_init($blog_id=0) {
 			global $knewsOptions, $wpdb;
-			
+
 			if ($blog_id != 0 && is_multisite()) switch_to_blog($blog_id);
-			
+
 			define('KNEWS_USERS', $wpdb->prefix . 'knewsusers');	
 			define('KNEWS_USERS_EXTRA', $wpdb->prefix . 'knewsusersextra');	
 			define('KNEWS_EXTRA_FIELDS', $wpdb->prefix . 'knewsextrafields');	
@@ -196,16 +199,22 @@ if (!class_exists("KnewsPlugin")) {
 			define('KNEWS_AUTOMATED_SELECTION', $wpdb->prefix . 'knewsautomatedsel');
 
 			define('KNEWS_NEWSLETTERS_SUBMITS', $wpdb->base_prefix . 'knewsubmits');
-
 			define('KNEWS_DIR', dirname(__FILE__));
-			
 			$url = plugins_url();
 			if ($blog_id != 0) $url = $this->get_right_blog_path($blog_id) . 'wp-content/plugins';
 			define('KNEWS_URL', $url . '/knews');
-
 			$this->knews_load_plugin_textdomain();
-
 			$knewsOptions = $this->getAdminOptions();
+		
+			$this->basic_initialized=true;
+		}
+		
+		function init($blog_id=0) {
+			global $knewsOptions, $wpdb;
+			
+			if ($blog_id != 0 && is_multisite()) switch_to_blog($blog_id);
+			
+			if (!$this->basic_initialized) $this->basic_init($blog_id);
 
 			global $KnewsAdminOptions;
 			define('KNEWS_MULTILANGUAGE', $this->check_multilanguage_plugin($KnewsAdminOptions['multilanguage_knews']));
@@ -1459,7 +1468,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.6');
+		define('KNEWS_VERSION', '1.4.7');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1960,6 +1969,8 @@ if (!function_exists("Knews_plugin_ap")) {
 			if (!in_array('k', $qvars)) $qvars[] = 'k';
 			if (!in_array('e', $qvars)) $qvars[] = 'e';
 			if (!in_array('n', $qvars)) $qvars[] = 'n';
+			if (!in_array('id', $qvars)) $qvars[] = 'id';
+			if (!in_array('m', $qvars)) $qvars[] = 'm';
 		}
 		return $qvars;
 	}

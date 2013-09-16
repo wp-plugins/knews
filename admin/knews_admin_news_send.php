@@ -37,7 +37,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 */
 
 
-			$user=$wpdb->get_row("SELECT id, email, confkey FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
+			$user=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
 			
 			if (count($user)==1) {
 				$aux_array=array();
@@ -47,14 +47,14 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($user->id, $token['id'], $token['defaultval']) );
 				}
 				$user->tokens = $aux_array;
-				$user->unsubscribe = get_admin_url() . 'admin-ajax.php?action=knewsUnsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey;
-				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email);
+				$user->unsubscribe = $Knews_plugin->get_localized_home($user->lang, 'knews=unsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey);
+				$user->cant_read = $Knews_plugin->get_localized_home($user->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email));
 
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			} else {
 				$user = new stdClass;
 				$user->unsubscribe = '#';
-				$user->cant_read = get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $id_newsletter;
+				$user->cant_read = $Knews_plugin->get_localized_home('', 'knews=readEmail&id=' . $id_newsletter );
 				$user->email = $Knews_plugin->post_safe('email');
 				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
 			}

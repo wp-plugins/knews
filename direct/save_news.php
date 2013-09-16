@@ -24,10 +24,10 @@ if ($Knews_plugin) {
 	
 	//WYSIWYG editor issues
 	$code=knews_rgb2hex($code);
-	if (!is_utf8($code)) $codeModule=utf8_encode($code);
+	if (!knews_is_utf8($code)) $codeModule=utf8_encode($code);
 	$code=$Knews_plugin->htmlentities_corrected($code);
 	//$title=$Knews_plugin->htmlentities_corrected($title);
-	// (opcio beta) if (!is_utf8($title)) $title=utf8_encode($title);
+	// (opcio beta) if (!knews_is_utf8($title)) $title=utf8_encode($title);
 
 	
 	if (strlen($Knews_plugin->post_safe('testslash', '', 'unsafe'))==5) {
