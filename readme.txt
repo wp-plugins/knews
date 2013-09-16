@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
-Tested up to: 3.6
-Stable tag: 1.4.6
+Tested up to: 3.6.1
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,8 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* **PREMIUM VERSION RELEASED:** Knews still free and unlimited... but there is a Premim Version also (see below)
+* **SUPPORT FOR POLYLANG**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
+* PREMIUM VERSION RELEASED: Knews still free and unlimited... but there is a Premim Version also (see below)
 * HTML code edition inside WYSIWYG Editor!
 * Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
@@ -26,7 +27,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
-* **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with WPML and qTranslate.
+* **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with Polylang, WPML and qTranslate.
 * **Segmentation** of subscribers by language and in different mailing lists
 * Support for **SMTP** sending [(tutorial here)](http://www.knewsplugin.com/configure-smtp-submits/).
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
@@ -90,7 +91,7 @@ A WYSIWYG Editor Demo:
 
 4. **You can also optionally configure:**
 
-5. a) **Multilingual**: Knews works as monolingual by default, but it can recognise the languages defined in WPML or qTranslate if you choose. 
+5. a) **Multilingual**: Knews works as monolingual by default, but it can recognise the languages defined in Polylang, WPML or qTranslate if you choose. 
 
 6. b) **CRON**: By default Knews works with wp_cron, but it can be changed (highly recommendable for websites with low traffic). [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/).
 
@@ -141,7 +142,7 @@ Knews allows you to easily modify all the interactive texts for the website visi
 
 **How do I install additional languages in Knews?**
 
-You don't have to. If you have configured Knews to work with WPML or qTranslate, when you configure a new language in these plug-ins, Knews will already be ready. 
+You don't have to. If you have configured Knews to work with Polylang, WPML or qTranslate, when you configure a new language in these plug-ins, Knews will already be ready. 
 
 **Why do you recommend configuring CRON, when wp_cron already works in wordpress without doing anything?**
 
@@ -182,6 +183,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.4.7 =
+
+* Support for Polylang (Now Knews works as multilingual with WPML, Polylang and qTranslate)
+* Nice URLS (In subscription opt-in, cant read and unsubscribe links)
+* Solved blank dialog after subscription
+* Less interferences with another plugins
 
 = 1.4.6 =
 
@@ -491,6 +499,13 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.4.7 =
+
+* Support for Polylang (Now Knews works as multilingual with WPML, Polylang and qTranslate)
+* Nice URLS (In subscription opt-in, cant read and unsubscribe links)
+* Solved blank dialog after subscription
+* Less interferences with another plugins
 
 = 1.4.6 =
 
