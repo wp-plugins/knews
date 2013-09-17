@@ -1,5 +1,5 @@
 <?php
-function knews_pagination($paged, $maxPage, $link_params) {
+function knews_pagination2($paged, $maxPage, $link_params) {
 	$link_params .= '&paged=';
 	//$maxPage=ceil(count($users) / $results_per_page);
 		
@@ -284,7 +284,7 @@ function select_post(n, lang) {
 		//Filters
 		if ($type=='post') {
 			echo '<div class="left_side">';
-			$cats = get_categories(array('hide_empty'=>0));
+			$cats = get_categories();
 			if (count($cats)>1) {
 				echo '<form action="' . $url_base . '" method="get">';
 				echo '<input type="hidden" name="lang" value="' . $lang . '">';
@@ -342,7 +342,7 @@ function select_post(n, lang) {
 			echo '</p>';
 		}
 	 global $wp_query; 
-	 knews_pagination($paged, ceil($wp_query->found_posts/ 10), $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
+	 knews_pagination2($paged, ceil($wp_query->found_posts/ 10), $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
 	 ?>
 	 </div>
 </body>
