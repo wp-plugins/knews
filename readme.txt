@@ -19,11 +19,11 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 = Features =
 
 * **SUPPORT FOR POLYLANG**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
+* New **premium** template "Oldie style", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * PREMIUM VERSION RELEASED: Knews still free and unlimited... but there is a Premim Version also (see below)
 * HTML code edition inside WYSIWYG Editor!
 * Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
-* New **premium** template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * **Widget** for subscriber and surfing language capture, with Name and Surname optional fields.
 * **Newsletter customization**: Name and Surname token replacement in submit time.
 * Possibility of creating **your own templates** [(tutorial here)](http://www.knewsplugin.com/tutorial/).
@@ -105,9 +105,9 @@ A WYSIWYG Editor Demo:
 
 11. a) Drag the Knews **widget** to the sidebar.
 
-12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW Options:** [knews_form id=1 name=ask surname=required stylize=1 labelwhere=outside|inside|none subtitle=0|1 requiredtxt=1|0 terms=0|1 script=1|0]
+12. b) Put the following **shortcode** on any page or post: [knews_form]. **NEW Options:** [knews_form id=1 name=ask surname=required stylize=1 labelwhere=outside|inside|none subtitle=0|1 requiredtext=1|0 terms=0|1 script=1|0]
 
-13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( 0[or mailing list id], '', array('name'=>'ask', 'surname'=>'required', 'stylize'=>[0|1], 'labelwhere'=>'outside|inside|none', 'subtitle'=>[0|1], 'requiredtxt'=>[0|1], 'terms'=>[0|1], 'script'=>[0|1]) ); ?>`
+13. c) **Write** in your theme: `<?php echo knews_plugin_form(); ?>`. **NEW:** Or: `<?php echo knews_plugin_form( array(0[or mailing list id], 'name'=>'ask', 'surname'=>'required', 'stylize'=>[0|1], 'labelwhere'=>'outside|inside|none', 'subtitle'=>[0|1], 'requiredtext'=>[0|1], 'terms'=>[0|1], 'script'=>[0|1]) ); ?>`
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
