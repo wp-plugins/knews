@@ -1,14 +1,14 @@
 <?php
+
+/*
 function knews_pagination2($paged, $maxPage, $link_params) {
 	$link_params .= '&paged=';
 	//$maxPage=ceil(count($users) / $results_per_page);
 		
 	if ($maxPage > 1) {
 ?>		
-	<div class="tablenav bottom">
-
 		<div class="tablenav-pages">
-			<?php /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
+			<?php //<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span> ?>
 			<?php if ($paged > 1) { ?>
 			<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
 			<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
@@ -26,11 +26,10 @@ function knews_pagination2($paged, $maxPage, $link_params) {
 			<?php } ?>
 		</div>
 	<br class="clear">
-	</div>
 <?php
 	}
 }
-
+*/
 
 global $Knews_plugin, $knewsOptions;
 
@@ -279,10 +278,18 @@ function select_post(n, lang) {
 		echo '<div class="pestanyes">';
 		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
 		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
+		echo '</div>';
 		
 		echo '<div class="filters">';
 		//Filters
 		if ($type=='post') {
+			
+			//Polylang support
+			if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='pll') {
+				$GLOBALS['hook_suffix']='knews_select_post';
+				set_current_screen();
+			}
+			
 			echo '<div class="left_side">';
 			$cats = get_categories();
 			if (count($cats)>1) {
@@ -319,7 +326,10 @@ function select_post(n, lang) {
 		add_filter('excerpt_more', 'new_excerpt_more');*/
 	
 		$args = array('posts_per_page' =>10, 'paged' => $paged, 'post_type' => $type, 'post_status' => 'publish');
-	
+
+		//Polylang support
+		if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='pll') $args['lang']=$lang;
+
 		if ($cat != 0) $args['cat'] = $cat;
 		if ($s != '') $args['s'] = $s;
 	
@@ -341,10 +351,12 @@ function select_post(n, lang) {
 			echo get_the_excerpt();
 			echo '</p>';
 		}
-	 global $wp_query; 
-	 knews_pagination2($paged, ceil($wp_query->found_posts/ 10), $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
-	 ?>
-	 </div>
+	global $wp_query; 
+	echo '<div class="tablenav bottom">';
+	knews_pagination($paged, ceil($wp_query->found_posts/ 10), $wp_query->found_posts, $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
+	echo '</div>';
+	?>
+	</div>
 </body>
 </html>
 <?php 

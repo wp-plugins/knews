@@ -226,7 +226,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	
 	
 				if (count($user_found)==0) {
-					$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey) VALUES ('" . $email . "','" . $lang . "', $state, '" . $date . "','" . $confkey . "');";
+					$query = "INSERT INTO " . KNEWS_USERS . " (email, lang, state, joined, confkey, ip) VALUES ('" . $email . "','" . $lang . "', $state, '" . $date . "','" . $confkey . "', '');";
 					$results = $wpdb->query( $query );
 	
 					if ($results) {
@@ -264,9 +264,6 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		}
 	}
 ?>
-	<div class=wrap>
-
-
 	<div class=wrap>
 		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper"><a href="admin.php?page=knews_users" class="nav-tab nav-tab-active"><?php _e('Subscribers','knews'); ?></a><a href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_users&tab=extra_fields' : 'page=knews_config&tab=pro'); ?>" class="nav-tab"><?php _e('Extra fields','knews'); ?></a><a href="#newuser" class="add-new-h2"><?php _e('Create a subscriber manually','knews'); ?></a></h2>
 <?php 

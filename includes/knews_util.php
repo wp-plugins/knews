@@ -240,33 +240,33 @@ function knews_display_templates($popup=false) {
 	if (!$anytemplate && $popup) echo '<p>' . _e('You dont have any mobile template!','knews') . '</p>';
 }
 
-function knews_pagination($paged, $maxPage, $items) {
-	//$link_params .= '&paged=';
-	//$maxPage=ceil(count($users) / $results_per_page);
-	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	$link_params = remove_query_arg('paged', $link_params) . '&paged=';
-
-		
-?>		
+function knews_pagination($paged, $maxPage, $items='', $link_params='') {
+	if ($link_params != '') {
+		$link_params .= '&paged=';
+	} else {
+		$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$link_params = remove_query_arg('paged', $link_params) . '&paged=';
+	}
+?>
 		<div class="tablenav-pages">
-			<span class="displaying-num"><?php echo $items; ?> items</span>
 <?php
+	if ($items != '') echo '<span class="displaying-num">' . $items . '  items</span>';
+
 	if ($maxPage > 1) {
-		 /*<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span>*/ ?>
-		<?php if ($paged > 1) { ?>
-		<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
-		<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
+		if ($paged > 1) { ?>
+			<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+			<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
 		<?php } else { ?>
-		<a href="#" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
-		<a href="#" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
+			<a href="#" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+			<a href="#" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
 		<?php } ?>
-		<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
+			<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
 		<?php if ($maxPage > $paged) { ?>
-		<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
-		<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
+			<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
 		<?php } else { ?>
-		<a href="#" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
-		<a href="#" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
+			<a href="#" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+			<a href="#" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
 <?php 
 		}
 	}

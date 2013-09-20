@@ -37,7 +37,7 @@ if ($Knews_plugin) {
 
 		if ($aj->every_mode ==1) {
 			$knews_aj_look_date = $aj->last_run;
-			$pend_posts = knews_search_posts($aj->id, $aj->every_posts);
+			$pend_posts = knews_search_posts($aj->id, $aj->every_posts, $aj->lang);
 			if (count($pend_posts) == $aj->every_posts) $doit = true;
 			knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
 	
@@ -63,7 +63,7 @@ if ($Knews_plugin) {
 			
 			if ($doit) {
 				$knews_aj_look_date = $aj->last_run;
-				$pend_posts = knews_search_posts($aj->id, -1);
+				$pend_posts = knews_search_posts($aj->id, -1, $aj->lang);
 				knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
 			}
 		}
@@ -98,7 +98,7 @@ function knews_debug($message) {
 	
 }
 
-function knews_search_posts($id_automated, $max) {
+function knews_search_posts($id_automated, $max, $lang='en') {
 	global $wpdb, $Knews_plugin, $knewsOptions, $post;
 	
 	//$look_posts = get_posts( array('numberposts'=> -1, 'suppress_filters'=>0, 'order'=>'ASC'));
@@ -113,10 +113,14 @@ function knews_search_posts($id_automated, $max) {
 	}
 	$cpt[]='post';
 	
-	$look_posts = new WP_Query(array(
+	$args = array(
 		'post_type' => $cpt,
 		'posts_per_page' => -1
-	));
+	);
+	
+	if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='pll') $args['lang']=$lang;
+
+	$look_posts = new WP_Query($args);
 	
 	$pend_posts = array();
 	while ($look_posts->have_posts()) {
