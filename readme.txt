@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.6.1
-Stable tag: 1.4.9
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+* **PORTUGUESE ADDED**: Now Knews adds Portuguese lang.
 * **SUPPORT FOR POLYLANG**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
 * New **premium** template "Oldie style", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 * PREMIUM VERSION RELEASED: Knews still free and unlimited... but there is a Premim Version also (see below)
@@ -33,7 +34,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * **Total control** of deferred sending, pause, start, end, logs, error reports and re-sending.
 * Support for **CRON** [(tutorial here)](http://www.knewsplugin.com/configure-webserver-cron/) and Cron emulation by JavaScript.
 * **Personalisation of all interaction messages** with users, in any installed language.
-* **Multilingual back office**: English, Russian, Arabic, Spanish, German, French, Italian, Finnish, Dutch, Greek and Catalan.
+* **Multilingual back office**: English, Portuguese, Russian, Arabic, Spanish, German, French, Italian, Finnish, Dutch, Greek and Catalan.
 * **Automated** subscription, cancellation and confirmation of subscribers. 
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
@@ -59,7 +60,7 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* **NEW**: Greek - gr_GR (Thanks to Konstantinos Marinoglou)
+* **NEW**: Portuguese - pt_PT (Thanks to BAANNNG. http://www.baannng.com). (duplicated also to pt_BR)
 * English - en_US (Knews Team & Ypsilon http://www.ypsilonet.com )
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Oliver-Frank Hebel http://www.brand-bull.com )
@@ -73,10 +74,13 @@ A WYSIWYG Editor Demo:
 * Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
 * Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
 * Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
+* Greek - gr_GR (Thanks to Konstantinos Marinoglou)
 
-= Future release =
+Do you want to translate Knews to your language? We will give you Knews Pro for free as exchange, please, contact us here: [http://www.knewsplugin.com/professional-contact/](http://www.knewsplugin.com/professional-contact/).
 
-* Support for xili-language, polylang and transposh plugins.
+= Future releases =
+
+* Support for xili-language and transposh plugins.
 * Continued improvement of the WYSIWYG editor.
 * More templates.
 
@@ -183,6 +187,12 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.0 =
+
+* Removed automated upgrade from Knews Free to Pro (Wordpress.org guidelines)
+* Portuguese language added (Thanks to BAANNNG. http://www.baannng.com).
+* MySQL error messages at first installation solved.
 
 = 1.4.9 =
 
@@ -510,54 +520,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
-= 1.4.9 =
+= 1.5.0 =
 
-* Solved can't read link don't show the newsletter bug
-* Solved manual user insertion bug
-* Better support for Polylang
+* Removed automated upgrade from Knews Free to Pro (Wordpress.org guidelines)
+* Portuguese language added (Thanks to BAANNNG. http://www.baannng.com).
+* MySQL error messages at first installation solved.
 
-= 1.4.8 =
-
-* Solved select post blank popup in newsletter editor
-
-= 1.4.7 =
-
-* Support for Polylang (Now Knews works as multilingual with WPML, Polylang and qTranslate)
-* Nice URLS (In subscription opt-in, cant read and unsubscribe links)
-* Solved blank dialog after subscription
-* Less interferences with another plugins
-
-= 1.4.6 =
-
-* Solved blank color picker window under WordPress 3.6
-* Suport for WPML 2.9
-* Import CSV multistep filename error solved
-* Automated newsletters stability
-* Solved some interferences with another plugins
-
-= 1.4.5 =
-
-* Solved the "Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE)" error (only in 1.4.4, we're sorry)
-
-= 1.4.4 =
-
-* **SUBSCRIPTION FORM WIDGET IMPROVEMENTS:**
-* Subtitle added (optional)
-* Show required fields text (optional)
-* More specific message error for required fields
-* Accept terms checkbox (optional)
-* **BETTER IMPORT TOOL:**
-* Import multiple step (every 500 users, in order to avoid memory issues)
-* Mailing lists creation (supports multiple, comma separated)
-* Import error log (see which and why emails reports issues)
-* **IP saving in subscription time**
-* **GENERAL IMPROVEMENTS:**
-* Manual user creation with one step name and surname introduction and options remembering
-* Test SMTP: added from, from name and debug info
-* Saving which link was clicked inside a newsletter
-* Cron call overlap prevented
-* **BUGS SOLVED:**
-* The resize IMG bug in editor (forbidden) solved for some users
-* The retry submission for the errors now works
-* The aphostrophe JS bug in the "see log" option (on submits) in some languages solved.
 
