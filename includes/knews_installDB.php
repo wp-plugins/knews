@@ -102,6 +102,9 @@ if (!$this->tableExists(KNEWS_NEWSLETTERS_SUBMITS)) {
 			strict_control varchar(100) NOT NULL,
 			emails_at_once int(11) NOT NULL,
 			special varchar(32) NOT NULL,
+
+			id_smtp bigint(20) NOT NULL DEFAULT 1,
+
 			UNIQUE KEY id (id)
 		   )$charset_collate;";
 	
@@ -157,6 +160,9 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 		last_run datetime NOT NULL,
 		emails_at_once int(11) NOT NULL DEFAULT 25,
 		run_yet int(1) NOT NULL DEFAULT 1,
+
+		id_smtp bigint(20) NOT NULL DEFAULT 1,
+
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 	   

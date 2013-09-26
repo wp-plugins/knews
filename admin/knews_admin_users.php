@@ -19,10 +19,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$search_user = trim($Knews_plugin->get_safe('search_user', ''));
 	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 	
-	$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');
-	$users_cf=$wpdb->get_results('SELECT ku.id FROM ' . KNEWS_USERS . ' ku, ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.user_id=ku.id ORDER BY ku.id');
+	//$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');
+	//$users_cf=$wpdb->get_results('SELECT ku.id FROM ' . KNEWS_USERS . ' ku, ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.user_id=ku.id ORDER BY ku.id');
 	
 	if ($search_user != '' && count($extra_fields) != 0) {
+		/*
 		$full_insertion='';
 		foreach ($extra_fields as $ef) {
 			if ($full_insertion !='') $full_insertion .= ', ';
@@ -39,19 +40,20 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			}
 			if ($ok_cf==0) {
 				$query = str_replace('%s', $u->id, $full_insertion);
-				$wpdb->query($query);
+				$wpdb->get_results($query);
 			} elseif ($ok_cf != count($extra_fields)) {
 				$incomplete_users[]=$u->id;
 			}
 		}
 		foreach ($incomplete_users as $iu) {
 			foreach ($extra_fields as $ef) {
-				$look = $wpdb->get_row('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
-				if ($look != null) {
-					$wpdb->query( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
+				$look = $wpdb->get_results('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
+				if (count($look) == 0) {
+					$wpdb->get_results( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
 				}
 			}
 		}
+		*/
 	}
 	$results_per_page=20;
 	$mass=0;
@@ -88,11 +90,17 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$where=true;
 		}
 		if (count($extra_fields) > 0) {
-			$filtered_query .= " ( ku.email LIKE '%" . $search_user . "%'";
+			$filtered_query .= " ku.email LIKE '%" . $search_user . "%' OR ((";
+			$firstor=true;
 			foreach ($extra_fields as $ef) {
-				$filtered_query .= " OR (kue.value LIKE '%" . $search_user . "%' AND kue.field_id=" . $ef->id . ")";
+				if ($firstor) {
+					$firstor=false;
+				} else {
+					$filtered_query .= " OR ";
+				}
+				$filtered_query .= " (kue.value LIKE '%" . $search_user . "%' AND kue.field_id=" . $ef->id . ")";
 			}
-			$filtered_query .= ") AND kue.user_id=ku.id AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
+			$filtered_query .= ") AND kue.user_id=ku.id ) "; //AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
 		} else {
 			$filtered_query .= " ku.email LIKE '%" . $search_user . "%'";
 		}
@@ -187,7 +195,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		} else if ($_POST['action']=='delete_users') {
 			
 			$query = 'SELECT id FROM ' . KNEWS_USERS;
-			if ($mass==1) $query = 'SELECT ku.id ' . $filtered_query;
+			if ($mass==1) $query = 'SELECT DISTINCT ku.id ' . $filtered_query;
 			$result=$wpdb->get_results( $query );
 			
 			$n_users=0;
@@ -347,10 +355,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			} else {
 				//List users
 				//echo '<p>' . 'SELECT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) . '</p>';
-				$users = $wpdb->get_results( 'SELECT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
-				
-				$filtered_users = $wpdb->get_results( 'SELECT COUNT(*) AS n ' . $filtered_query );
+				$users = $wpdb->get_results( 'SELECT DISTINCT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
+
+				$filtered_users = $wpdb->get_results( 'SELECT COUNT(DISTINCT ku.email) AS n ' . $filtered_query );
 				$filtered_users = $filtered_users[0]->n;
+				
 				$total_users = $wpdb->get_results( 'SELECT COUNT(*) AS n FROM ' . KNEWS_USERS);
 				$total_users = $total_users[0]->n;
 				?>
@@ -430,7 +439,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 						}
 					}
 
-					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></thead><tbody>';
+					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th><th>' . __('Stats','knews') . '</th></tr></thead><tbody>';
 	
 					foreach ($users as $user) {
 						$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
@@ -472,8 +481,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 								$first_comma=false;
 							}
 						}
-						//echo '<td><input type="checkbox" value="1" name="user_delete_' . $user->id . '" id="user_delete_' . $user->id . '"></td>';
-						echo '</tr>';
+						echo '<td>';
+						if ($Knews_plugin->im_pro()) echo '<a href="admin.php?page=knews_stats&tab=user&user=' . $user->id . '">' . __('User stats','knews') . '</a>';
+						echo '</td></tr>';
 	
 						$alt=!$alt;
 					}
@@ -486,7 +496,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					foreach ($extra_fields as $ef) {
 						if ($ef->show_table == 1) knews_th_orderable($ef->name, $ef->name, 'asc');
 					}
-					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th></tr></tfoot>';
+					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th><th>' . __('Stats','knews') . '</th></tr></tfoot>';
 					echo '</table>';
 				?>
 					<div class="tablenav bottom">

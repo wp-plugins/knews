@@ -338,7 +338,8 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				'paused' => (($aj->auto==1) ? 0 : 1),
 				'priority' => 4,
 				'strict_control' => '',
-				'emails_at_once' => $aj->emails_at_once
+				'emails_at_once' => $aj->emails_at_once,
+				'id_smtp' => $aj->id_smtp
 			);
 								
 			require( KNEWS_DIR . "/includes/submit_batch.php");

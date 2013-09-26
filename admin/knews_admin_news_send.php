@@ -36,9 +36,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			
 */
 
-
 			$user=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
-			
+			$id_smtp = $Knews_plugin->post_safe('knews_select_smtp',1);
 			if (count($user)==1) {
 				$aux_array=array();
 				//array('token'=>$token->token, 'id'=>$token->id, 'default'=>$tokenfound[1])
@@ -50,13 +49,14 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				$user->unsubscribe = $Knews_plugin->get_localized_home($user->lang, 'knews=unsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey);
 				$user->cant_read = $Knews_plugin->get_localized_home($user->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($user->email));
 
-				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
+				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml, '', '', false, false, 0, $id_smtp );
 			} else {
 				$user = new stdClass;
 				$user->unsubscribe = '#';
 				$user->cant_read = $Knews_plugin->get_localized_home('', 'knews=readEmail&id=' . $id_newsletter );
 				$user->email = $Knews_plugin->post_safe('email');
-				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
+				
+				$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml, '', '', false, false, 0, $id_smtp );
 			}
 
 			if ($result['ok']==1) {
@@ -104,9 +104,10 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					'paused' => $Knews_plugin->post_safe('paused'),
 					'priority' => $Knews_plugin->post_safe('priority'),
 					'strict_control' => $Knews_plugin->post_safe('strict_control'),
-					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once')
+					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once'),
+					'id_smtp' => $Knews_plugin->post_safe('knews_select_smtp',1)
 				);
-				
+
 				require( KNEWS_DIR . "/includes/submit_batch.php");
 
 			} else {
@@ -204,7 +205,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		}
 	?>
 	<p>&nbsp;</p>
-	<?php
+	<?php 
+		if ($selector = $Knews_plugin->get_smtp_selector()) {
+			echo '<p>Use the SMTP: ' . $selector . '</p>';
+		}
+
 		if ($cron) {
 		?>
 		<p><?php _e('Start (now or deferred)?','knews'); ?> <?php _e('Time','knews');?>: <input type="text" name="hour" value="<?php echo date( 'H', current_time('timestamp')); ?>" style="width:30px;" />:<input type="text" name="minute" value="<?php echo date( 'i', current_time('timestamp')); ?>" style="width:30px;" /> |  <?php _e('Date (day/month/year)','knews');?>: <input type="text" name="day" value="<?php echo date( 'd', current_time('timestamp')); ?>" style="width:30px;" />/<input type="text" name="month" value="<?php echo date( 'm', current_time('timestamp')); ?>" style="width:30px;" />/<input type="text" name="year" value="<?php echo date( 'Y', current_time('timestamp')); ?>" style="width:50px;" /></p>
@@ -237,6 +242,11 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	<input type="hidden" name="action" id="action" value="submit_manual" />
 	<input type="hidden" name="idnews" id="idnews" value="<?php echo $id_newsletter; ?>" />
 	<p>E-mail: <input type="text" name="email" class="regular-text" /></p>
+	<?php
+		if ($selector = $Knews_plugin->get_smtp_selector()) {
+			echo '<p>Use the SMTP: ' . $selector . '</p>';
+		}
+	?>
 	<div class="submit">
 		<input type="submit" class="button-primary" value="<?php _e('Submit newsletter','knews'); ?>"/>
 	</div>

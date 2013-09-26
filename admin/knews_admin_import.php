@@ -990,11 +990,11 @@ function pass_var ($name, $value) {
 
 function add_confirm($id_user) {
 	
-	global $submit_confirmation_id, $confirmation_sql_count, $wpdb, $Knews_plugin;
+	global $submit_confirmation_id, $confirmation_sql_count, $wpdb, $Knews_plugin, $knewsOptions;
 	
 	if ($submit_confirmation_id == 0) {
 		$mysqldate = $Knews_plugin->get_mysql_date();
-		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . get_current_blog_id() . ', 0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\', \'0000-00-00 00:00:00\')';
+		$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time,id_smtp) VALUES (' . get_current_blog_id() . ', 0, 0, 1, \'' . $mysqldate . '\', 0, 0, 0, 5, \'\', 10, \'import_confirm\', \'0000-00-00 00:00:00\', ' . $knewsOptions['smtp_default'] . ')';
 		$results = $wpdb->query( $query );
 		$submit_confirmation_id=$wpdb->insert_id; $submit_confirmation_id2=mysql_insert_id(); if ($submit_confirmation_id==0) $submit_confirmation_id=$submit_confirmation_id2;
 		//echo $query;

@@ -156,8 +156,8 @@ if ($Knews_plugin) {
 		}
 		
 		//print_r($users);
-		
-		$result=$Knews_plugin->sendMail( $users, $theSubject, $theHtml, '', '', $fp );
+
+		$result=$Knews_plugin->sendMail( $users, $theSubject, $theHtml, '', '', $fp, false, 0, $submit_pend[0]->id_smtp );
 		$ok_count += $result['ok'];
 		$error_count += $result['error'];
 

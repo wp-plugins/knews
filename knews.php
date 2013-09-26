@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.4.9
+Version: 1.5.0
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -56,6 +56,7 @@ if (!class_exists("KnewsPlugin")) {
 				'smtp_user_knews' => '',
 				'smtp_pass_knews' => '',
 				'smtp_secure_knews' => '',
+				'smtp_default' => 1,
 				'multilanguage_knews' => 'off',
 				'no_warn_ml_knews' => 'no',
 				'no_warn_cron_knews' => 'no',
@@ -103,8 +104,14 @@ if (!class_exists("KnewsPlugin")) {
 		}
 	
 		function creaSiNoExisteixDB () {
-			if (!$this->tableExists(KNEWS_USERS)) require( KNEWS_DIR . "/includes/knews_installDB.php");
-			if (version_compare(get_option('knews_version','0.0.0'), KNEWS_VERSION, '<')) require( KNEWS_DIR . "/includes/knews_updateDB.php");
+			if (!$this->tableExists(KNEWS_USERS)) {
+				require( KNEWS_DIR . "/includes/knews_installDB.php");
+				
+			} else {
+				if (version_compare(get_option('knews_version','0.0.0'), KNEWS_VERSION, '<')) {
+					require( KNEWS_DIR . "/includes/knews_updateDB.php");
+				}
+			}
 		}
 		
 		function get_default_messages() {
@@ -577,7 +584,7 @@ if (!class_exists("KnewsPlugin")) {
 
 						$theHtml.= '<p>Email: ' . $this->post_safe('knewsemail') . '</p>';
 
-						$this->sendMail($knewsOptions['notify_signups_email'], 'New user subscribed to: ' . get_bloginfo('name'), $theHtml);
+						$this->sendMail($knewsOptions['notify_signups_email'], 'New user subscribed to: ' . get_bloginfo('name'), $theHtml, '', '', false, false, 0, $knewsOptions['smtp_default']);
 					}
 				}
 				if ($response==2) echo $this->get_custom_text('ajax_subscription_error', $lang_locale);
@@ -680,7 +687,7 @@ if (!class_exists("KnewsPlugin")) {
 			$mailText = str_replace('<br />', '<br />\r\n', $mailText);
 			$mailText = strip_tags($mailText);
 
-			$result=$this->sendMail( $email, $this->get_custom_text('email_subscription_subject', $lang_locale), $mailHtml, $mailText );
+			$result=$this->sendMail( $email, $this->get_custom_text('email_subscription_subject', $lang_locale), $mailHtml, $mailText, '', false, false, 0, $knewsOptions['smtp_default'] );
 			return ($result['ok']==1);
 		}
 
@@ -858,7 +865,48 @@ if (!class_exists("KnewsPlugin")) {
 			);
 			
 		}
+		function get_smtp_multiple($n='', $get_old=false) {
 
+			global $knewsOptions;
+
+				$knews_smtp_multiple = array('1' => array(
+						'from_mail_knews' => $knewsOptions['from_mail_knews'],
+						'from_name_knews' => $knewsOptions['from_name_knews'],
+						'knews_cron' => $knewsOptions['knews_cron'],
+						'smtp_knews' => $knewsOptions['smtp_knews'],
+						'smtp_host_knews' => $knewsOptions['smtp_host_knews'],
+						'smtp_port_knews' => $knewsOptions['smtp_port_knews'],
+						'smtp_user_knews' => $knewsOptions['smtp_user_knews'],
+						'smtp_pass_knews' => $knewsOptions['smtp_pass_knews'],
+						'smtp_secure_knews' => $knewsOptions['smtp_secure_knews'],
+						'is_sendmail' => $knewsOptions['is_sendmail']
+					)
+				);
+			if ($n=='') return $knews_smtp_multiple;
+			if (isset($knews_smtp_multiple[$n])) return $knews_smtp_multiple[$n];
+
+			return false;
+		}
+		function get_smtp_selector($n='') {
+			global $knewsOptions;
+			if ($knewsOptions['smtp_knews']!='1') return false;
+			
+			$knews_smtp_multiple = $this->get_smtp_multiple();
+			if ($n=='') $n = $knewsOptions['smtp_default'];
+			
+			$options=0; $code = '<select name="knews_select_smtp" autocomplete="off">';
+			while ($knews_smtp_once = current($knews_smtp_multiple)) {
+				if (!isset($knews_smtp_once['deleted'])) {
+					$options++;
+					$code .= '<option value="' . key($knews_smtp_multiple) . '"' . ((key($knews_smtp_multiple)==$n) ? ' selected="selected"' : '') . '>';
+					$code .= $knews_smtp_once['from_name_knews'] . ' (' . $knews_smtp_once['from_mail_knews'] . ')</option>';
+				}
+				next($knews_smtp_multiple);
+			}
+			$code .= '</select>';
+			if ($options > 1) return $code;
+			return false;
+		}
 		function pageLang() {
 			foreach($this->knewsLangs as $l) {
 				if($l['active']) break;
@@ -1134,7 +1182,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 
-		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0) {
+		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0, $id_smtp=1) {
 
 			$test_smtp=is_array($test_array);
 			
@@ -1162,8 +1210,13 @@ if (!class_exists("KnewsPlugin")) {
 				
 				if (!$test_smtp) {
 
+					if (!$smtpdata = $this->get_smtp_multiple($id_smtp)) {
+						$smtpdata = $this->get_smtp_multiple(1, true);
+						//$smtpdata = $smtpdata[1];
+					}
+					
 					$mail=new PHPMailer();
-					if ($knewsOptions['is_sendmail']=='1') {
+					if ($smtpdata['is_sendmail']=='1') {
 						$mail->IsSendmail();
 					} else {
 						$mail->IsSMTP();
@@ -1173,19 +1226,19 @@ if (!class_exists("KnewsPlugin")) {
 
 					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_email'];
 					
-					$mail->From = $knewsOptions['from_mail_knews'];
-					$mail->FromName = $knewsOptions['from_name_knews'];
+					$mail->From = $smtpdata['from_mail_knews'];
+					$mail->FromName = $smtpdata['from_name_knews'];
 				
-					$mail->Host = $knewsOptions['smtp_host_knews'];
-					$mail->Port = $knewsOptions['smtp_port_knews'];
+					$mail->Host = $smtpdata['smtp_host_knews'];
+					$mail->Port = $smtpdata['smtp_port_knews'];
 					$mail->Timeout = 30;
 	
-					if ($knewsOptions['smtp_user_knews']!='' || $knewsOptions['smtp_pass_knews'] != '') {
+					if ($smtpdata['smtp_user_knews']!='' || $smtpdata['smtp_pass_knews'] != '') {
 		
 						$mail->SMTPAuth=true;
-						$mail->Username = $knewsOptions['smtp_user_knews'];
-						$mail->Password = $knewsOptions['smtp_pass_knews'];
-						if ($knewsOptions['smtp_secure_knews'] != '') $mail->SMTPSecure = $knewsOptions['smtp_secure_knews'];
+						$mail->Username = $smtpdata['smtp_user_knews'];
+						$mail->Password = $smtpdata['smtp_pass_knews'];
+						if ($smtpdata['smtp_secure_knews'] != '') $mail->SMTPSecure = $smtpdata['smtp_secure_knews'];
 					}
 
 				} else {
@@ -1468,7 +1521,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.4.9');
+		define('KNEWS_VERSION', '1.5.0');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1977,13 +2030,6 @@ if (!function_exists("Knews_plugin_ap")) {
 	}
 	add_filter('query_vars', 'knews_queryvars' );
 
-	if (is_admin()) {
-		$knewsOptions = $Knews_plugin->getAdminOptions();
-		if ($Knews_plugin->im_pro() || ($knewsOptions['registration_email'] != '' && $knewsOptions['registration_serial'] != '')) {
-			require 'includes/plugin-updates/plugin-update-checker.php';
-			$MyUpdateChecker = new PluginUpdateChecker( 'http://www.knewsplugin.com/upgradeinfo.php?email=' . urlencode($knewsOptions['registration_email']) . '&serial=' . urlencode($knewsOptions['registration_serial']), __FILE__, 'knews');
-		}
-	}
 }
 
 ?>

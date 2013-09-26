@@ -2,7 +2,12 @@
 
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-global $wpdb;
+global $wpdb, $knewsOptions;
+
+if (version_compare(get_option('knews_version','0.0.0'), '1.4.9') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0)) {
+	if (!knews_add_column(KNEWS_NEWSLETTERS_SUBMITS, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
+	if (!knews_add_column(KNEWS_AUTOMATED, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
+}
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 	//The 1.1.0 added fields & tables
@@ -51,7 +56,7 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 			
 			foreach ($submit_pend as $sp) {
 				
-				$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time) VALUES (' . get_current_blog_id() . ', ' . $sp->newsletter . ', ' . $sp->finished . ', ' . $sp->paused . ', \'' . $sp->start_time . '\', ' . $sp->users_total . ', ' . $sp->users_ok . ', ' . $sp->users_error . ', ' . $sp->priority . ', \'' . $sp->strict_control . '\', ' . $sp->emails_at_once . ', \'' . $sp->special . '\', \'' . $sp->end_time . '\')';
+				$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time, id_smtp) VALUES (' . get_current_blog_id() . ', ' . $sp->newsletter . ', ' . $sp->finished . ', ' . $sp->paused . ', \'' . $sp->start_time . '\', ' . $sp->users_total . ', ' . $sp->users_ok . ', ' . $sp->users_error . ', ' . $sp->priority . ', \'' . $sp->strict_control . '\', ' . $sp->emails_at_once . ', \'' . $sp->special . '\', \'' . $sp->end_time . '\', ' . $knewsOptions['smtp_default'] . ')';
 				$results = $wpdb->query( $query );
 				$submit_confirmation_id=$wpdb->insert_id; $submit_confirmation_id2=mysql_insert_id(); if ($submit_confirmation_id==0) $submit_confirmation_id=$submit_confirmation_id2;
 

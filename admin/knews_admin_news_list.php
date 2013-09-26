@@ -134,6 +134,7 @@ function enfocar() {
 								<th><?php _e('Modified','knews');?></th>
 								<th><?php _e('Template','knews');?></th>
 								<th><?php _e('Language','knews');?></th>
+								<th><?php _e('Stats','knews');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -160,6 +161,8 @@ function enfocar() {
 								echo '<td>' . (($list->lang == '') ? __('Multilanguage','knews') : $list->lang) . '</td>';
 								//echo '<td><a href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . __('Edit', 'knews') . '</a></td>';
 								//echo '<td align="center"><input type="checkbox" value="1" name="' . $list->id . '_delete" id="' . $list->id . '_delete" /></td>';
+								echo '<td>';
+								echo '&nbsp;</td>';
 								echo '</tr>';
 	
 								$alt=!$alt;
@@ -176,6 +179,7 @@ function enfocar() {
 								<th><?php _e('Modified','knews');?></th>
 								<th><?php _e('Template','knews');?></th>
 								<th><?php _e('Language','knews');?></th>
+								<th><?php _e('Stats','knews');?></th>
 							</tr>
 						</tfoot>
 					</table>

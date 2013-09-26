@@ -4,7 +4,7 @@ global $Knews_plugin;
 	<style type="text/css">
 		#knews_dialog { display:block !important; }
 		#knews_dialog p { margin:0; padding:0 0 20px 0;}
-		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:158px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; box-shadow: 0 0 15px 5px #000000; border-radius:10px;}
+		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:200px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; box-shadow: 0 0 15px 5px #000000; border-radius:10px;}
 		#knews_dialog_button { display:inline-block; background:#666; color:#fff; font-weight:bold; padding:6px 20px; text-decoration:none; border-radius:5px; }
 		#knews_dialog_button:hover { background:#000; box-shadow: 0 0 5px #666; }
 		
