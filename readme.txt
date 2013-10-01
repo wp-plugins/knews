@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
 Requires at least: 3.1
 Tested up to: 3.6.1
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -187,6 +187,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.1 =
+
+* IMPORTANT: SOLVED 1.5.0 BUG: 1.5.0 users can't send newsletters
 
 = 1.5.0 =
 
@@ -519,6 +523,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.5.1 =
+
+* IMPORTANT: SOLVED 1.5.0 BUG: 1.5.0 users can't send newsletters
 
 = 1.5.0 =
 
