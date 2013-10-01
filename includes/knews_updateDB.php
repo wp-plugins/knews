@@ -4,7 +4,7 @@ require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 global $wpdb, $knewsOptions;
 
-if (version_compare(get_option('knews_version','0.0.0'), '1.4.9') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0)) {
+if (version_compare(get_option('knews_version','0.0.0'), '1.5.1') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0)) {
 	if (!knews_add_column(KNEWS_NEWSLETTERS_SUBMITS, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
 	if (!knews_add_column(KNEWS_AUTOMATED, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
 }
