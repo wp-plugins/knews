@@ -71,11 +71,31 @@ if ($Knews_plugin) {
 
 		//Estadistiques
 		$query = "SELECT * FROM " . KNEWS_KEYS . " WHERE submit_id=" . $submit_pend[0]->id;
-		$links_submit = $wpdb->get_results( $query );
+		$urls_submit = $wpdb->get_results( $query );
 		$url_track = get_admin_url() . 'admin-ajax.php?action=knewsTrack&t=%confkey%_';
 		
-		foreach ($links_submit as $link_submit) {
-			$theHtml = str_replace('"' . $link_submit->href . '"', '"' . $url_track . $link_submit->keyy . '"', $theHtml);
+		if (!defined('KNEWS_TRACKPIXEL_URL')) {
+			$wp_dirs = wp_upload_dir();
+			$img_track = $wp_dirs['baseurl'] . '/knewsimages/%confkey%_';
+		} else {
+			$img_track = KNEWS_TRACKPIXEL_URL;
+		}
+		foreach ($urls_submit as $url_submit) {
+			
+			if ($url_submit->type==6) {
+				//Cut extension
+				$real_image = $url_submit->href;
+				$pos = strrpos($real_image, "."); 
+				if ($pos !== false) $real_image=substr($real_image, 0 , $pos);
+
+				//Replace first
+				$pos = strpos($theHtml, $real_image);
+				if ($pos !== false) {
+					$theHtml = substr_replace($theHtml, $img_track . $url_submit->keyy, $pos, strlen($real_image));
+				}
+			} else {
+				$theHtml = str_replace('"' . $url_submit->href . '"', '"' . $url_track . $url_submit->keyy . '"', $theHtml);
+			}
 		}
 
 		$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " WHERE status=0 AND submit=" . $submit_pend[0]->id . " LIMIT " . $submit_pend[0]->emails_at_once;

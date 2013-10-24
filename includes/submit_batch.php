@@ -20,7 +20,7 @@ if (count($targets) > 0) {
 		
 	}
 	
-	// Extraiem links per estadistiques
+	// Extraiem links per estadistiques i la primera imatge
 	require( KNEWS_DIR . "/includes/knews_compose_email.php");
 	// Thanks to http://www.web-max.ca/PHP/misc_23.php
 	/*preg_match_all ("/a[\s]+[^>]*?href[\s]?=[\s\"\']+".
@@ -33,30 +33,56 @@ if (count($targets) > 0) {
 	$matches = $matches[2];
 
 	foreach($matches as $link) {
-		if (
-			strpos($link,'<') === false &&
-			strpos($link,'>') === false &&
-			strpos($link,' ') === false &&
-			strpos($link,'\'') === false &&
-			strpos($link,'"') === false &&
-			strpos($link,'{') === false &&
-			strpos($link,'}') === false &&
-			strpos($link,'[') === false &&
-			strpos($link,']') === false &&
-			strpos($link,'%') === false &&
-			strpos($link,'#') === false &&
-			strpos($link,'mailto:') === false 
-		) {
-		//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
-			$link_key = substr(md5(uniqid()),-16);
-			$query = 'INSERT INTO ' . KNEWS_KEYS . ' (keyy, type, submit_id, href) VALUES (\'' . $link_key . '\', 1, ' . $submit_id . ', \'' . $link . '\')';
-			$results = $wpdb->query( $query );
+		knews_insert_unique_key(1, $submit_id, $link);
+	}
+
+	if ($knewsOptions['pixel_tracking']==1) {
+
+		preg_match_all ("/(img|IMG)[\s]+[^>]*?src[\s]?=[\s\"\']+".
+			"(.*?)[\"\']+.*?>"."([^<]+|.*?)?>/", 
+			$theHtml, $matches_img);
+
+		$matches_img = $matches_img[2];
+		foreach ($matches_img as $img) {
+			if (knews_insert_unique_key(6, $submit_id, $img)) break;
+			//echo $img . ' ha fallat';
 		}
 	}
 	echo '<div class="updated"><p>' . __('Batch submit process has been properly scheduled.','knews') . '</p></div>';				
 	$submit_enqueued=true;
 } else {
 	echo '<div class="error"><p>' . __('No active users in the selected list, nothing programmed to send.','knews') . '</p></div>';				
+}
+
+function knews_insert_unique_key($type, $submit_id, $link) {
+	global  $wpdb;
+	//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
+	if (
+		strpos($link,'<') === false &&
+		strpos($link,'>') === false &&
+		strpos($link,' ') === false &&
+		strpos($link,'\'') === false &&
+		strpos($link,'"') === false &&
+		strpos($link,'{') === false &&
+		strpos($link,'}') === false &&
+		strpos($link,'[') === false &&
+		strpos($link,']') === false &&
+		strpos($link,'%') === false &&
+		strpos($link,'#') === false &&
+		strpos($link,'mailto:') === false 
+	) {
+		$link_key = substr(md5(uniqid()),-16);
+		
+		$query = 'SELECT * FROM ' . KNEWS_KEYS . ' WHERE type=' . $type . ' AND submit_id=' . $submit_id . ' AND href=\'' . $link . '\'';
+		$result = $wpdb->get_row( $query );
+		if (!isset($result->id)) {
+			$query = 'INSERT INTO ' . KNEWS_KEYS . ' (keyy, type, submit_id, href) VALUES (\'' . $link_key . '\', ' . $type . ', ' . $submit_id . ', \'' . $link . '\')';
+			$results = $wpdb->query( $query );
+		}
+		return true;
+	} else {
+		return false;
+	}
 }
 ?>
 	

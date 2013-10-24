@@ -43,6 +43,7 @@ function knews_save_prefs() {
 		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews');
 		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews');
 		$knewsOptions['is_sendmail'] = $Knews_plugin->post_safe('is_sendmail_knews');
+		$knewsOptions['pixel_tracking'] = $Knews_plugin->post_safe('knews_pixel_tracking', 0, 'int');
 
 	} elseif (isset($_POST['update_KnewsAdminRegister'])) {
 
@@ -74,11 +75,18 @@ function knews_save_prefs() {
 	}
 }
 
+$subtab = $Knews_plugin->post_safe('subtab',0,'int');
+if ($subtab==0) $subtab = $Knews_plugin->get_safe('subtab',1,'int');
+
 if ($Knews_plugin->get_safe('tab')=='pro' && $Knews_plugin->im_pro()) {
 	require_once(KNEWS_DIR . '/includes/knews_roles.php');
 	if (isset($_POST['update_KnewsAdminRoles'])) knews_admin_save_caps();
 }
+?>
+<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
 
+<?php
 if ($Knews_plugin->get_safe('tab')=='custom') {
 	
 	$languages = $Knews_plugin->getLangs(true);	
@@ -116,21 +124,6 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 	}
 	
 	?>
-	<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript">
-	function view_lang(n_custom, n_lang) {
-		jQuery('div.pestanyes_'+n_custom+' a').removeClass('on');
-		jQuery('a.link_'+n_custom+'_'+n_lang).addClass('on');
-	
-		target='div.pregunta_'+n_custom+' textarea.on';
-		save_height=jQuery(target).innerHeight() + parseInt(jQuery(target).css('marginTop'), 10) + parseInt(jQuery(target).css('marginBottom'), 10);
-		
-		save_width=jQuery(target).innerWidth() + parseInt(jQuery(target).css('marginLeft'), 10) + parseInt(jQuery(target).css('marginRight'), 10);
-			
-		jQuery('div.pregunta_'+n_custom+' textarea').css('display','none').removeClass('on');
-		jQuery('textarea.custom_lang_'+n_custom+'_'+n_lang).css({display:'block', height:save_height, width:save_width}).addClass('on');
-	}	
-	</script>
 	
 <div class=wrap>
 			<form method="post" action="admin.php?page=knews_config&tab=custom">
@@ -169,7 +162,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					echo '</div><hr />';
 				}
 				?>
-				<p><input type="checkbox" name="reset_all_messages" id="reset_all_messages" value="1" /> <?php _e('Reset all messages to default values (all languages at once)','knews'); ?></p>
+				<p><input type="checkbox" name="reset_all_messages" id="reset_all_messages" value="1" class="knews_on_off align_left" /><label><?php _e('Reset all messages to default values (all languages at once)','knews'); ?></label></p>
 				<div class="submit">
 					<input type="submit" name="update_KnewsAdminCustom" id="update_KnewsAdminCustom" value="<?php _e('Save','knews'); ?>" class="button-primary" />
 				</div>
@@ -187,7 +180,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 	<script type="text/javascript">
 	jQuery(document).ready(function() {
 		jQuery('#knews_cron_callme').click(function() {
-			jQuery('#knews_cron_callme_status').html('<p><?php echo $Knews_plugin->escape_js(sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">')) . '</a>'; ?></p>');
+			jQuery('#knews_cron_callme_status').html('<p><?php echo $Knews_plugin->escape_js(sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">'),"'") . '</a>'; ?></p>');
 		});
 	});
 	
@@ -200,51 +193,62 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
 				<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 			</h2>
-			<h3><?php _e('CRON','knews'); ?></h3>
-			<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('http://www.knewsplugin.com/configure-webserver-cron/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
-			<?php
-				$last_cron_time=$Knews_plugin->get_last_cron_time();
-				$now_time = time();
-				if ($now_time - $last_cron_time < 800) {
-			?>
-				<div class="updated">
-					<p><strong><?php _e('CRON is properly configured','knews'); ?></strong></p>
-					<p><?php _e('The last execution was done','knews'); ?> <?php echo round(($now_time - $last_cron_time) / 60); ?> <?php _e('minutes ago','knews');?></p>
+			<div class="knews_cooltabs_wrapper">
+				<div class="knews_cooltabs">
+					<a href="admin.php?page=knews_config&tab=advanced"<?php if ($subtab==1) echo ' class="active"'; ?>><?php _e('CRON','knews'); ?></a>
+					<a href="admin.php?page=knews_config&tab=advanced&subtab=2"<?php if ($subtab==2) echo ' class="active"'; ?>><?php _e('Submit method','knews');?></a>
+					<a href="admin.php?page=knews_config&tab=advanced&subtab=3"<?php if ($subtab==3) echo ' class="active"'; ?>><?php _e('Tracking pixel','knews');?></a>
 				</div>
-			<?php
-				} else {
-			?>
-				<div class="<?php if ($knewsOptions['knews_cron']=='cronjob') { echo ' error';} else {echo ' updated';} ?>">
-					<p><strong>
-					<?php if ($last_cron_time == 0) {
-						echo __('CRON has not yet been configured','knews') . '</strong></p>';
+			</div>
+			<div class="tabbed_content tab_1"<?php if ($subtab!=1) echo ' style="display:none"'; ?>>
+				<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('http://www.knewsplugin.com/configure-webserver-cron/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
+				<div style="background:#eee url(<?php echo KNEWS_URL; ?>/images/remote.jpg) no-repeat 10px 10px; border:#CCC 1px solid; border-radius:2px; padding:0 15px 0 65px; min-height:65px; margin-left:30px;">
+				<p style="font-size:13px; line-height:20px;"><a href="admin.php?page=knews_config&tab=pro" class="knews_on_off knews_on_off_left" style="background-position: -50px 0px;">&nbsp;</a><label class="knews_processed knews_on_off_left"><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?><br /><strong>This is a Knews Pro feature</strong></label></p>
+				<div id="knews_cron_callme_status"></div>
+			</div>
+				<?php
+					$last_cron_time=$Knews_plugin->get_last_cron_time();
+					$now_time = time();
+					if ($now_time - $last_cron_time < 800) {
+				?>
+					<div class="knews_updated" style="margin-left:30px;">
+						<p><strong><?php _e('CRON is properly configured','knews'); ?></strong></p>
+						<p><?php _e('The last execution was done','knews'); ?> <?php echo round(($now_time - $last_cron_time) / 60); ?> <?php _e('minutes ago','knews');?></p>
+					</div>
+				<?php
 					} else {
-						echo __('CRON has stopped working.','knews') . '</strong></p>';
-						echo '<p>' . __('The last execution was done','knews') . ' ' . round(($now_time - $last_cron_time) / 60) . ' ' . __('minutes ago','knews') . '</p>';
+				?>
+					<div class="<?php if ($knewsOptions['knews_cron']=='cronjob') { echo ' knews_error';} else {echo ' knews_updated';} ?>" style="margin-left:30px;">
+						<p><strong>
+						<?php if ($last_cron_time == 0) {
+							echo __('CRON has not yet been configured','knews') . '</strong></p>';
+						} else {
+							echo __('CRON has stopped working.','knews') . '</strong></p>';
+							echo '<p>' . __('The last execution was done','knews') . ' ' . round(($now_time - $last_cron_time) / 60) . ' ' . __('minutes ago','knews') . '</p>';
+						}
+						//if (ini_get('safe_mode')) echo '<p><strong>' . __('Please note: PHP Safe Mode enabled. Without cron, this directive will fail the bulk of mails.','knews') . '</strong></p>';
+						?>
+						<p><?php _e('Instructions for setting up CRON','knews');?>:</p>
+						<?php
+						if( is_multisite() ) {
+							echo '<p><strong>' . sprintf(__('Multisite detected. Only one instance of %s must be called for all websites.','knews'), $cron_main_url) . '</strong></p>';
+							//switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
+							//restore_current_blog();
+						}
+						?>
+						<p><?php _e('You must add this line in your webserver CRONTAB:','knews'); ?></p>
+						<p><strong>*/10 * * * * wget -q -O/dev/null <?php echo $cron_main_url; ?></strong></p>
+						<?php /*<p><?php printf( __('The file location is: %s','knews'),  KNEWS_DIR . '/direct/knews_cron.php'); ?></p>*/ ?>
+					</div>
+				<?php
 					}
-					//if (ini_get('safe_mode')) echo '<p><strong>' . __('Please note: PHP Safe Mode enabled. Without cron, this directive will fail the bulk of mails.','knews') . '</strong></p>';
-					?>
-					<p><?php _e('Instructions for setting up CRON','knews');?>:</p>
-					<?php
-					if( is_multisite() ) {
-						echo '<p><strong>' . sprintf(__('Multisite detected. Only one instance of %s must be called for all websites.','knews'), $cron_main_url) . '</strong></p>';
-						//switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
-						//restore_current_blog();
-					}
-					?>
-					<p><?php _e('You must add this line in your webserver CRONTAB:','knews'); ?></p>
-					<p><strong>*/10 * * * * wget -q -O/dev/null <?php echo $cron_main_url; ?></strong></p>
-					<?php /*<p><?php printf( __('The file location is: %s','knews'),  KNEWS_DIR . '/direct/knews_cron.php'); ?></p>*/ ?>
-				</div>
-			<?php
-				}
-			
-			/*<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="knews_cron_callme" id="knews_cron_callme" value="1"<?php if ($knewsOptions['cron_callme']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use Knews CRON without configuration (We will trigger your script remotely)','knews'); ?></p><input type="hidden" name="knews_cron_callme_h" id="knews_cron_callme_h" value="0" />
-			<div id="knews_cron_callme_status"></div>*/
-			?>
-			<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronwp"<?php if ($knewsOptions['knews_cron']=='cronwp') echo ' checked="checked"'; ?> /> <?php echo __("Use WordPress's built-in CRON framework.",'knews') . '</h3><p style="margin-top:0;">' .  __('This option no requires configuration, but in less traffic sites can be slow to submit','knews'); ?></h3>
-			<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronjs"<?php if ($knewsOptions['knews_cron']=='cronjs') echo ' checked="checked"'; ?> /> <?php echo __('Use the JavaScript CRON emulation.','knews') . '</h3><p style="margin-top:0;">' .   __("This option requires you to keep a window open during submission and does not allow deferred submits",'knews'); ?></p>
-			<hr />
+				
+				/*<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="knews_cron_callme" id="knews_cron_callme" value="1"<?php if ($knewsOptions['cron_callme']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use Knews CRON without configuration (We will trigger your script remotely)','knews'); ?></p><input type="hidden" name="knews_cron_callme_h" id="knews_cron_callme_h" value="0" />
+				<div id="knews_cron_callme_status"></div>*/
+				?>
+				<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronwp"<?php if ($knewsOptions['knews_cron']=='cronwp') echo ' checked="checked"'; ?> /> <?php echo __("Use WordPress's built-in CRON framework.",'knews') . '</h3><p style="margin-top:0;">' .  __('This option no requires configuration, but in less traffic sites can be slow to submit','knews'); ?></h3>
+				<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronjs"<?php if ($knewsOptions['knews_cron']=='cronjs') echo ' checked="checked"'; ?> /> <?php echo __('Use the JavaScript CRON emulation.','knews') . '</h3><p style="margin-top:0;">' .   __("This option requires you to keep a window open during submission and does not allow deferred submits",'knews'); ?></p>
+			</div>
 			<script type="text/javascript">
 			jQuery(document).ready( function () {
 				jQuery('input#test_smtp').click(function() {
@@ -273,90 +277,106 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				});
 			});
 			</script>
-			<h3><?php _e('Submit method','knews');?><a id="submitmethod">&nbsp;</a></h3>
-			<p><input type="radio" name="smtp_knews" value="0"<?php if ($knewsOptions['smtp_knews']!='1') echo ' checked="checked"'; ?> /> <?php _e('E-mails sent internally using WordPress (wp_mail() function)','knews');?></p>
-			<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('http://www.knewsplugin.com/configure-smtp-submits/','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
-			<?php 
-			$knews_smtp_editing = $Knews_plugin->get_safe('editsmtp', 1, 'int');
-			if ($Knews_plugin->post_safe('knews_smtp_editing') != 'x') $knews_smtp_editing = $Knews_plugin->post_safe('knews_smtp_editing', $knews_smtp_editing, 'int');
-			$knews_smtp_default = $knewsOptions['smtp_default'];
-			if (!$knews_smtp_multiple = get_option('knews_smtp_multiple')) {
-				$knews_smtp_multiple = $Knews_plugin->get_smtp_multiple();
-				$knews_smtp_default=0;
-			}
-			?>
-			<div style="width:420px; float:left; padding-left:30px;">
-				<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
-				<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_name_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_mail_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_host_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('Port SMTP','knews');?>:</td><td><input type="text" name="smtp_port_knews" id="smtp_port_knews" style="width:100px" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_port_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP User','knews');?>: *</td><td><input type="text" name="smtp_user_knews" id="smtp_user_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_user_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP Password','knews');?>: *</td><td><input type="password" name="smtp_pass_knews" id="smtp_pass_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_pass_knews']; ?>" /></td></tr>
-				<tr><td><?php _e('SMTP Secure','knews');?>: </td><td><select name="smtp_secure_knews" id="smtp_secure_knews" autocomplete="off" >
-					<option value=""<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='') echo ' selected="selected"'; ?>>none</option>
-					<option value="tls"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='tls') echo ' selected="selected"'; ?>>tls</option>
-					<option value="ssl"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='ssl') echo ' selected="selected"'; ?>>ssl</option></select></td></tr>
-				<tr><td><?php _e('Conn mode:','knews');?> </td><td><select name="is_sendmail_knews" id="is_sendmail_knews" autocomplete="off" >
-					<option value="0"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['is_sendmail']=='0') echo ' selected="selected"'; ?>>IsSMTP()</option>
-					<option value="1"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['is_sendmail']=='1') echo ' selected="selected"'; ?>>IsSendmail()</option></select></td></tr></table>
-				<p>* <?php _e('Pay attention: If your SMTP server is anonymous leave SMTP User and SMTP Password fields blank','knews');?></p>
-			</div>
-			<div style="width:300px; float:left; padding-left:20px;">
-				<p><?php _e('Before enabling the sending SMTP, enter the values and your e-mail and then click on TEST button','knews');?>:</p>
-				<p><?php _e('Recipient','knews'); ?>: <input type="text" name="email_test" id="email_test" class="regular-text" /></p>
-				<div class="submit">
-					<div class="resultats_test"></div>
-					<input type="button" name="test_smtp" id="test_smtp" class="button" value="<?php _e('Test SMTP config','knews');?>" />
+			<div class="tabbed_content tab_2"<?php if ($subtab!=2) echo ' style="display:none"'; ?>>
+				<p><input type="radio" name="smtp_knews" value="0"<?php if ($knewsOptions['smtp_knews']!='1') echo ' checked="checked"'; ?> /> <?php _e('E-mails sent internally using WordPress (wp_mail() function)','knews');?></p>
+				<p><input type="radio" name="smtp_knews" value="1"<?php if ($knewsOptions['smtp_knews']=='1') echo ' checked="checked"'; ?> /> <?php _e('Send e-mails using SMTP (recommended)','knews');?> <a href="<?php _e('http://www.knewsplugin.com/configure-smtp-submits/','knews');?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Configure SMTP tutorial','knews');?></a></p>
+				<?php 
+				$knews_smtp_editing = $Knews_plugin->get_safe('editsmtp', 1, 'int');
+				if ($Knews_plugin->post_safe('knews_smtp_editing') != 'x') $knews_smtp_editing = $Knews_plugin->post_safe('knews_smtp_editing', $knews_smtp_editing, 'int');
+				$knews_smtp_default = $knewsOptions['smtp_default'];
+				if (!$knews_smtp_multiple = get_option('knews_smtp_multiple')) {
+					$knews_smtp_multiple = $Knews_plugin->get_smtp_multiple();
+					$knews_smtp_default=1;
+				}
+?>
+			<table class="widefat" style="max-width:700px; margin-left:30px;margin-bottom:15px">
+				<thead><tr><th>&nbsp;</th><th>SMTP Sender</th><th>Host</th><th>Default</th></tr></thead>
+				<tbody>
+				<?php 
+				$n=0;
+				while ($knews_smtp_once = current($knews_smtp_multiple)) {
+					$n++;
+					if (!isset($knews_smtp_once['deleted'])) {
+						echo '<tr' . (($n%2==0)? ' class="alt"' : '') . '>';
+						if (key($knews_smtp_multiple)==$knews_smtp_editing || key($knews_smtp_multiple)=='x') {
+							echo '<td><img src="' . KNEWS_URL . '/images/pencil.png" width="16" height="16"></td>';
+							echo '<td><strong>' . $knews_smtp_once['from_name_knews'] . '</strong><div class="row-actions"><span>&nbsp;';
+						} else {
+							echo '<td>&nbsp;</td><td>' . $knews_smtp_once['from_name_knews'] . '<div class="row-actions"><span><a href="admin.php?page=knews_config&tab=advanced&editsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Edit</a>';
+						}
+						echo ((key($knews_smtp_multiple)==1) ? '' : ' | <a href="admin.php?page=knews_config&tab=advanced&delsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Delete</a>') . '</span></div></td>';
+						echo '<td>' . $knews_smtp_once['smtp_host_knews'] . '</td>';
+						echo '<td><input type="radio" name="knews_smtp_default"' . ((key($knews_smtp_multiple)==$knews_smtp_default) ? ' checked="checked"' : '') . ' autocomplete="off" value="' . key($knews_smtp_multiple) . '" /></td></tr>';
+					}
+					next($knews_smtp_multiple);
+
+				}
+				//if ($knews_smtp_editing == -1) $knews_smtp_editing = count($knews_smtp_multiple)-1;
+				?>
+				<tr><td>&nbsp;</td><td colspan="3"><a href="<?php echo (($Knews_plugin->im_pro()) ? 'admin.php?page=knews_config&tab=advanced&action=addsmtp#submitmethod' : 'admin.php?page=knews_config&tab=pro');?>">+ Add SMTP</a></td></tr>
+				</tbody>
+			</table>
+
+				<div style="width:420px; float:left; padding-left:30px;">
+					<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
+					<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_name_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_mail_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('Host SMTP','knews');?>:</td><td><input type="text" name="smtp_host_knews" id="smtp_host_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_host_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('Port SMTP','knews');?>:</td><td><input type="text" name="smtp_port_knews" id="smtp_port_knews" style="width:100px" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_port_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('SMTP User','knews');?>: *</td><td><input type="text" name="smtp_user_knews" id="smtp_user_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_user_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('SMTP Password','knews');?>: *</td><td><input type="password" name="smtp_pass_knews" id="smtp_pass_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['smtp_pass_knews']; ?>" /></td></tr>
+					<tr><td><?php _e('SMTP Secure','knews');?>: </td><td><select name="smtp_secure_knews" id="smtp_secure_knews" autocomplete="off" >
+						<option value=""<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='') echo ' selected="selected"'; ?>>none</option>
+						<option value="tls"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='tls') echo ' selected="selected"'; ?>>tls</option>
+						<option value="ssl"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['smtp_secure_knews']=='ssl') echo ' selected="selected"'; ?>>ssl</option></select></td></tr>
+					<tr><td><?php _e('Conn mode:','knews');?> </td><td><select name="is_sendmail_knews" id="is_sendmail_knews" autocomplete="off" >
+						<option value="0"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['is_sendmail']=='0') echo ' selected="selected"'; ?>>IsSMTP()</option>
+						<option value="1"<?php if ($knews_smtp_multiple[$knews_smtp_editing]['is_sendmail']=='1') echo ' selected="selected"'; ?>>IsSendmail()</option></select></td></tr></table>
+					<p>* <?php _e('Pay attention: If your SMTP server is anonymous leave SMTP User and SMTP Password fields blank','knews');?></p>
 				</div>
+				<div style="width:300px; float:left; padding-left:20px;">
+					<p><?php _e('Before enabling the sending SMTP, enter the values and your e-mail and then click on TEST button','knews');?>:</p>
+					<p><?php _e('Recipient','knews'); ?>: <input type="text" name="email_test" id="email_test" class="regular-text" /></p>
+					<div class="submit">
+						<div class="resultats_test"></div>
+						<input type="button" name="test_smtp" id="test_smtp" class="button" value="<?php _e('Test SMTP config','knews');?>" />
+					</div>
+				</div>
+				<div style="clear:both"></div>
+				<p><?php _e('Load SMTP defaults:','knews'); ?> <a href="#" onclick="knews_conf('gmail')"><?php _e('Gmail SMTP','knews'); ?></a> | <a href="#" onclick="knews_conf('1and1')"><?php _e('My hosting is 1&1','knews'); ?></a> | <a href="#" onclick="knews_conf('godaddy')"><?php _e('My Hosting is GoDaddy','knews'); ?></a> |  <a href="#" onclick="knews_conf('yahoo')"><?php _e('Yahoo SMTP','knews'); ?></a></p>
+				<div class="knews_updated"><p><?php printf(__('The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes','knews'), get_option('admin_email')); ?></p></div>
+				<?php 
+				$rewrite_base = get_bloginfo('url');
+				if (substr($rewrite_base, -1) != '/') $rewrite_base .= '/';
+				$rewrite_base = substr($rewrite_base, strpos($rewrite_base, '/', 7) );
+				?>
 			</div>
-			<div style="clear:both"></div>
-			<p><?php _e('Load SMTP defaults:','knews'); ?> <a href="#" onclick="knews_conf('gmail')"><?php _e('Gmail SMTP','knews'); ?></a> | <a href="#" onclick="knews_conf('1and1')"><?php _e('My hosting is 1&1','knews'); ?></a> | <a href="#" onclick="knews_conf('godaddy')"><?php _e('My Hosting is GoDaddy','knews'); ?></a> |  <a href="#" onclick="knews_conf('yahoo')"><?php _e('Yahoo SMTP','knews'); ?></a></p>
-			<div class="updated"><p><?php printf(__('The e-mails submited to any e-mail terminated with @knewstest.com (like testing001@knewstest.com or xxx@knewstest.com) will be submited to: %s for your testing purposes','knews'), get_option('admin_email')); ?></p></div>
-			<hr />
+			<div class="tabbed_content tab_3"<?php if ($subtab!=3) echo ' style="display:none"'; ?>>
+				<h3>This feature needs modification of your <strong>.htaccess</strong> file.</h3>
+				<p>Please, take care: any modification in the WordPress permalinks options can overwrite this file.</p>
+				<p>A mistake in this file can leave your WordPress down, <strong>please, make a backup of .htaccess file before do this modification</strong></p>
+				<p>You should insert the red lines in your .htaccess file, should be in your WordPress root folder:</p>
+				<pre style="border:#ddd 1px solid; background:#eee; border-radius:5px; padding:10px; overflow:auto;"># BEGIN WordPress<br />&lt;IfModule mod_rewrite.c&gt;<br />RewriteEngine On<br />RewriteBase <?php echo $rewrite_base; ?><br /><span style="color:#e00;">#Begin Knews (add this lines just after the RewriteBase line)<br />RewriteRule ^wp-content/uploads/knewsimages/([^/]+).(jpg|jpeg|gif|png)$ <?php echo $rewrite_base; ?>wp-content/plugins/knews/direct/track.php?img=$1 [L,NC]<br />#End Knews (that's all, your htaccess should continue as is...)</span><br />.<br />.<br />.</pre>
+				<?php
+				$wp_dirs = wp_upload_dir();
+				$img_track = $wp_dirs['baseurl'] . '/knewsimages/testcat.jpg';
+				?>
+				<img src="<?php echo $img_track; ?>" width="155" height="100" alt=".htaccess Test, you should see a cat here" style="float:left; margin-right:10px; border:#000 1px solid;" />
+				<p>If you can see the cat into the left sqare, your .htaccess is well configured, and you can activate the tracking pixel feature.</p>
+				<p><input type="checkbox" name="knews_pixel_tracking" class="knews_on_off align_left" value="1" autocomplete="off"<?php if ($knewsOptions['pixel_tracking']==1) echo ' checked="checked"'; ?> /><label>Allow tracking pixel (yes, I'm seeing the cat)</label></p>
+				<p><strong>Attention:</strong> if you can't see the cat, please, don't activate tracking pixel, otherwise the first image URL in every sent newsletter will be broken.</p>
+				<div style="clear:both; font-size:1px; line-height:1px;"></div>
+			</div>
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettingsAdv" id="update_KnewsAdminSettingsAdv" value="<?php _e('Save','knews');?>" class="button-primary" />
 			</div>
+			<input type="hidden" name="subtab" id="subtab" value="<?php echo $subtab; ?>" />
 			<?php 
 			//Security for CSRF attacks
 			wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 			?>
 		</form>
 	</div>
-	<script type="text/javascript">
-		function knews_conf(w) {
-			if (w=='gmail') {
-				user='youremail@gmail.com';
-				host='smtp.gmail.com';
-				port='587';
-				secure='ssl';
-				comnn='0';
-			} else if (w=='1and1') {
-				user='';
-				host='';
-				port='';
-				secure='';
-				comnn='1';
-			} else if (w=='godaddy') {
-				user='your@email.com';
-				host='relay-hosting.secureserver.net';
-				port='25';
-				secure='';
-				comnn='0';
-			} else if (w=='yahoo') {
-				user='youryahooname';
-				host='smtp.mail.yahoo.com';
-				port='465';
-				secure='ssl';
-				comnn='0';
-			}
-			jQuery('#smtp_host_knews').val(host);
-			jQuery('#smtp_port_knews').val(port);
-			jQuery('#smtp_user_knews').val(user);
-			jQuery('#smtp_secure_knews').val(secure);
-			jQuery('#is_sendmail_knews').val(comnn);			
-		}
-	</script>
 <?php
 
 
@@ -450,21 +470,20 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			</table>
 			<hr />
 			<h3><?php _e('Alerts and logs','knews'); ?></h3>
-			<p><input type="checkbox" name="reset_alerts_knews" value="1" id="reset_alerts_knews" /> <?php _e('Reset all alerts','knews'); ?></p>
-			<p><input type="checkbox" name="write_logs_knews" value="yes" id="write_logs_knews"<?php if ($knewsOptions['write_logs']=='yes') echo ' checked="checked"'; ?> /> <?php _e('Write logs (in /wp-content/plugins/knews/tmp directory) in submits','knews'); ?></p>
+			<p><input type="checkbox" name="reset_alerts_knews" value="1" id="reset_alerts_knews" class="knews_on_off align_left" /><label><?php _e('Reset all alerts','knews'); ?></label></p>
+			<p><input type="checkbox" name="write_logs_knews" value="yes" id="write_logs_knews"<?php if ($knewsOptions['write_logs']=='yes') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Write logs (in /wp-content/plugins/knews/tmp directory) in submits','knews'); ?></label></p>
 			<hr />
 
 			<h3><?php _e('Automated options','knews'); ?></h3>
-			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></p>
+			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></label></p>
 
-			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)','knews'); ?></p>
+			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)','knews'); ?></label></p>
 
 			<hr />
 
 			<h3><?php _e('Compatibility options','knews'); ?></h3>
-			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> /> <?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><?php _e('<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages.','knews'); ?></p>
-
-			<p><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> /> <?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></p>
+			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><?php _e('<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages.','knews'); ?></label></p>
+			<p style="padding-top:15px;"><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></label></p>
 
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />

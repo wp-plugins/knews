@@ -22,8 +22,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	//$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');
 	//$users_cf=$wpdb->get_results('SELECT ku.id FROM ' . KNEWS_USERS . ' ku, ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.user_id=ku.id ORDER BY ku.id');
 	
-	if ($search_user != '' && count($extra_fields) != 0) {
-		/*
+	/*if ($search_user != '' && count($extra_fields) != 0) {
+		
 		$full_insertion='';
 		foreach ($extra_fields as $ef) {
 			if ($full_insertion !='') $full_insertion .= ', ';
@@ -53,8 +53,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				}
 			}
 		}
-		*/
-	}
+	}*/
 	$results_per_page=20;
 	$mass=0;
 	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -90,8 +89,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$where=true;
 		}
 		if (count($extra_fields) > 0) {
-			$filtered_query .= " ku.email LIKE '%" . $search_user . "%' OR ((";
-			$firstor=true;
+			$filtered_query .= " (ku.email LIKE '%" . $search_user . "%' OR kue.value LIKE '%" . $search_user . "%'";
+			/*$firstor=true;
 			foreach ($extra_fields as $ef) {
 				if ($firstor) {
 					$firstor=false;
@@ -99,8 +98,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					$filtered_query .= " OR ";
 				}
 				$filtered_query .= " (kue.value LIKE '%" . $search_user . "%' AND kue.field_id=" . $ef->id . ")";
-			}
-			$filtered_query .= ") AND kue.user_id=ku.id ) "; //AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
+			}*/
+			
+			$filtered_query .= ") AND kue.user_id=ku.id "; //AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
 		} else {
 			$filtered_query .= " ku.email LIKE '%" . $search_user . "%'";
 		}
@@ -354,7 +354,6 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				
 			} else {
 				//List users
-				//echo '<p>' . 'SELECT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) . '</p>';
 				$users = $wpdb->get_results( 'SELECT DISTINCT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
 
 				$filtered_users = $wpdb->get_results( 'SELECT COUNT(DISTINCT ku.email) AS n ' . $filtered_query );

@@ -6,7 +6,21 @@ $knews_nonce_action='kn-admin-stats';
 $knews_nonce_name='_statsadm';
 if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
 //End Security for CSRF attacks
+
+if (isset($_POST['reset_KnewsStats'])) {
+	$query='DELETE FROM ' . KNEWS_STATS;
+	$results=$wpdb->query($query);
+	
+	$query = "DELETE FROM ".KNEWS_NEWSLETTERS_SUBMITS." WHERE blog_id=" . get_current_blog_id() . " AND finished=1";
+	$results=$wpdb->query($query);
+
+	echo '<div class="updated"><p>The stats was reseted.</p></div>';
+}
+
 ?>
+<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
+
 <link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <div class="wrap knews_stats">
 <?php
@@ -19,7 +33,11 @@ $tab = $Knews_plugin->get_safe('tab', $Knews_plugin->post_safe('tab') );
 </h2>
 <?php
 
-function drawPie($values, $captions, $filename, $palette="softtones.txt", $background=true, $legend=true) {
+function knews_hardCut($str, $maxlen=10, $right='...') {
+	if (strlen($str) <= $maxlen) return $str;
+	return substr($str, 0, $maxlen) . $right;
+}
+function knews_drawPie($values, $captions, $filename, $palette="users.txt", $background=true, $legend=true) {
 
 	// Dataset definition
 	$DataSet = new pData;
@@ -95,14 +113,14 @@ function knews_drawLine($values, $captions, $filename, $palette="softtones.txt",
 	$Test->Render(KNEWS_DIR . "/tmp/" . $filename);
 }
 
-function print_options($start, $end, $active) {
+function knews_print_options($start, $end, $active) {
 	for ($a = $start; $a <= $end; $a++) {
 		echo '<option value="' . $a . '"';
 		if ($a==$active) echo ' selected="selected"';
 		echo '>' . $a . '</option>';
 	}
 }
-function safe_percent($p1, $p2) {
+function knews_safe_percent($p1, $p2) {
 	if ($p2==0) return 0;
 	$p3 = round($p1 * 1000 / $p2);
 	if ($p3==0) return 0;
@@ -135,41 +153,31 @@ if ($fp) {
 	$results=$wpdb->get_results($query);
 	$min_joined=$Knews_plugin->sql2time($results[0]->min_joined);
 	if (intval($results[0]->min_joined)==0) $min_joined = $yesterday;
-
-/*	$query='SELECT MAX(joined) AS max_joined FROM ' . KNEWS_USERS;
-	$results=$wpdb->get_results($query);
-	$max_joined=$Knews_plugin->sql2time($results[0]->max_joined);
-	if (intval($results[0]->max_joined)==0) $max_joined = time();*/
 	
 	// Min & max stats
 	$query='SELECT MIN(date) AS min_block FROM ' . KNEWS_STATS;
 	$results=$wpdb->get_results($query);
 	$min_block=$Knews_plugin->sql2time($results[0]->min_block);
 	if (intval($results[0]->min_block)==0) $min_block = $yesterday;
-	
-/*	$query='SELECT MAX(date) AS max_block FROM ' . KNEWS_STATS;
-	$results=$wpdb->get_results($query);
-	$max_block=$Knews_plugin->sql2time($results[0]->max_block);
-	if (intval($results[0]->max_block)==0) $max_block = time();*/
 
+	// Pixel tracking start
+	$query='SELECT MIN(date) AS min_tracking FROM ' . KNEWS_STATS . ' WHERE what=6';
+	$results=$wpdb->get_results($query);
+	if ($results[0]->min_tracking == '') {
+		$min_tracking=$today;
+	} else {
+		$min_tracking=intval($Knews_plugin->sql2time($results[0]->min_tracking));
+	}
+	
 	// Min & max submit date
 	$query='SELECT MIN(start_time) AS min_submit FROM ' . KNEWS_NEWSLETTERS_SUBMITS . ' WHERE blog_id=' . get_current_blog_id() . ' AND users_ok <> 0 OR users_error <> 0';
 	$results=$wpdb->get_results($query);
 	$min_submit=$Knews_plugin->sql2time($results[0]->min_submit);
 	if (intval($results[0]->min_submit)==0) $min_submit = $yesterday;
 
-/*	$query='SELECT MAX(end_time) AS max_submit FROM ' . KNEWS_NEWSLETTERS_SUBMITS . ' WHERE users_ok <> 0 OR users_error <> 0';
-	$results=$wpdb->get_results($query);
-	$max_submit=$Knews_plugin->sql2time($results[0]->max_submit);
-	if (intval($results[0]->max_submit)==0) $max_submit = time();*/
-
 	$min_date_chart = $min_joined;
 	if ($min_block < $min_joined) $min_date_chart = $min_block;
 	if ($min_submit < $min_date_chart) $min_date_chart = $min_submit;
-	
-/*	$max_date_chart = $max_joined;
-	if ($max_block > $max_joined) $max_date_chart = $max_block;
-	if ($max_submit > $max_date_chart) $max_date_chart = $max_submit;*/
 	
 	$max_date_chart=time();
 
@@ -230,13 +238,13 @@ if ($fp) {
 		<div class="stats_filter">
 		<form method="post" action="admin.php?page=knews_stats">
 			<p><?php _e('From date:','knews'); ?>
-			<select name="day_1"><?php print_options(1,31,date("d", $selected_min_date_chart)); ?></select>
-			<select name="month_1"><?php print_options(1,12,date("m", $selected_min_date_chart)); ?></select>
-			<select name="year_1"><?php print_options($select_min_year, $select_max_year, date("Y", $selected_min_date_chart)); ?></select>
+			<select name="day_1"><?php knews_print_options(1,31,date("d", $selected_min_date_chart)); ?></select>
+			<select name="month_1"><?php knews_print_options(1,12,date("m", $selected_min_date_chart)); ?></select>
+			<select name="year_1"><?php knews_print_options($select_min_year, $select_max_year, date("Y", $selected_min_date_chart)); ?></select>
 			
-			| <?php _e('to date:','knews'); ?> <select name="day_2"><?php print_options(1,31,date("d", $selected_max_date_chart)); ?></select>
-			<select name="month_2"><?php print_options(1,12,date("m", $selected_max_date_chart)); ?></select>
-			<select name="year_2"><?php print_options($select_min_year, $select_max_year, date("Y", $selected_max_date_chart)); ?></select>
+			| <?php _e('to date:','knews'); ?> <select name="day_2"><?php knews_print_options(1,31,date("d", $selected_max_date_chart)); ?></select>
+			<select name="month_2"><?php knews_print_options(1,12,date("m", $selected_max_date_chart)); ?></select>
+			<select name="year_2"><?php knews_print_options($select_min_year, $select_max_year, date("Y", $selected_max_date_chart)); ?></select>
 
 			<input type="submit" value="<?php _e('Filter','knews');?>" class="button-secondary" /></p>
 			<p class="selector"><?php _e('Fast selection:','knews'); if ($fast_select=='all') echo '<strong>';?><a href="admin.php?page=knews_stats&sel=all"><?php _e('All','knews'); ?></a><?php if ($fast_select=='all') echo '</strong>';?> | 
@@ -278,25 +286,21 @@ if ($fp) {
 		<h3><span><?php _e('Current status of subscriptions','knews'); ?></span></h3>
 		<?php
 		if ($total_users != 0) {
-			drawPie(array($active_users, $not_confirmed_users, $blocked_users), array("", "", ""), 'chart1.png', 'softtones.txt', false, false);
+			knews_drawPie(array($active_users, $not_confirmed_users, $blocked_users), array("", "", ""), 'chart1.png', 'users.txt', false, false);
 		?>
 			<div class="table_float">
 				<table border="0" cellpadding="0" cellspacing="0" width="350">
 					<tr class="alt">
-						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_1.gif" width="13" height="13" alt="1" /></td>
-						<td><?php _e('Active users:','knews'); ?></td><td align="right"><?php echo $active_users; ?></td><td align="right"><?php echo safe_percent($active_users, $total_users); ?>%</td>
+						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php _e('Active users:','knews'); ?></td><td align="right"><?php echo $active_users; ?></td><td align="right"><?php echo knews_safe_percent($active_users, $total_users); ?>%</td>
 					</tr>
 					<tr>
-						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_2.gif" width="13" height="13" alt="2" /></td>
-						<td><?php _e('Not confirmed:','knews'); ?></td><td align="right"><?php echo $not_confirmed_users; ?></td><td align="right"><?php echo safe_percent($not_confirmed_users, $total_users); ?>%</td>
+						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_orange.gif" width="13" height="13" alt="2" /> <?php _e('Not confirmed:','knews'); ?></td><td align="right"><?php echo $not_confirmed_users; ?></td><td align="right"><?php echo knews_safe_percent($not_confirmed_users, $total_users); ?>%</td>
 					</tr>
 					<tr class="alt">
-						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_3.gif" width="13" height="13" alt="3" /></td>
-						<td><?php _e('Unsubscribed users:','knews'); ?></td><td align="right"><?php echo $blocked_users; ?></td><td align="right"><?php echo safe_percent($blocked_users, $total_users); ?>%</td>
+						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="3" /> <?php _e('Unsubscribed users:','knews'); ?></td><td align="right"><?php echo $blocked_users; ?></td><td align="right"><?php echo knews_safe_percent($blocked_users, $total_users); ?>%</td>
 					</tr>
 					<tr>
-						<td>&nbsp;</td>
-						<td><?php _e('Total:','knews'); ?></td><td align="right"><?php echo $total_users; ?></td><td>&nbsp;</td>
+						<td><img src="<?php echo KNEWS_URL; ?>/images/legend_plus.gif" width="13" height="13" alt="4" /> <?php _e('Total:','knews'); ?></td><td align="right"><?php echo $total_users; ?></td><td>&nbsp;</td>
 					</tr>
 				</table>
 			</div>
@@ -363,13 +367,13 @@ if ($fp) {
 
 		}
 		if ($Knews_plugin->get_custom_text('text_direction', get_bloginfo('language')) == 'ltr') {
-			knews_drawLine ( array($serie1, $serie2, $date_caption), array (__('Users','knews'), __('Sign ups','knews'), __('Unsubscriptions','knews'), ''), 'chart2.png');
-			knews_drawLine ( array($serie1, $date_caption), array (__('Sign ups','knews'), '', ''), 'chart3.png', 'softtones.txt', false);
-			knews_drawLine ( array($serie2, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart4.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($serie1, $serie2, $date_caption), array (__('Users','knews'), __('Sign ups','knews'), __('Unsubscriptions','knews'), ''), 'chart2.png', 'subscriptions.txt');
+			knews_drawLine ( array($serie1, $date_caption), array (__('Sign ups','knews'), '', ''), 'chart3.png', 'blue.txt', false);
+			knews_drawLine ( array($serie2, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart4.png', 'red.txt', false);
 		} else {
-			knews_drawLine ( array($serie1, $serie2, $date_caption), array ('Users', 'Sign ups', 'Unsubscriptions', ''), 'chart2.png');
-			knews_drawLine ( array($serie1, $date_caption), array ('Sign ups', '', ''), 'chart3.png', 'softtones.txt', false);
-			knews_drawLine ( array($serie2, $date_caption), array ('Unsubscriptions', '', ''), 'chart4.png', 'softtones_2.txt', false);
+			knews_drawLine ( array($serie1, $serie2, $date_caption), array ('Users', 'Sign ups', 'Unsubscriptions', ''), 'chart2.png', 'subscriptions.txt');
+			knews_drawLine ( array($serie1, $date_caption), array ('Sign ups', '', ''), 'chart3.png', 'blue.txt', false);
+			knews_drawLine ( array($serie2, $date_caption), array ('Unsubscriptions', '', ''), 'chart4.png', 'red.txt', false);
 		}
  ?>
 <script type="text/javascript">
@@ -384,8 +388,8 @@ if ($fp) {
 </script>
  		<div class="pestanyes pestanyes_1">
 			<a onclick="view_graph(1,1); return false;" class="link_1_1 on" href="#"><?php _e('Sign Ups & Blocks','knews'); ?></a>
-			<a onclick="view_graph(1,2); return false;" class="link_1_2" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_1.gif" width="13" height="13" alt="1" /> <?php _e('Sign ups','knews'); ?></a>
-			<a onclick="view_graph(1,3); return false;" class="link_1_3" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_2.gif" width="13" height="13" alt="2" /> <?php _e('Unsubscriptions','knews'); ?></a>
+			<a onclick="view_graph(1,2); return false;" class="link_1_2" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php _e('Sign ups','knews'); ?></a>
+			<a onclick="view_graph(1,3); return false;" class="link_1_3" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="2" /> <?php _e('Unsubscriptions','knews'); ?></a>
 		</div>
 		<div class="pregunta pregunta_1">
 			<div class="custom_lang_1_1 on"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart2.png" /></div>
@@ -401,10 +405,12 @@ if ($fp) {
 		$cant_read=0;
 		$blocks=0;
 		$clicks=0;
+		$opens=0;
 
 		for ($i=0; $i<$cols; $i++) {
 			$date1 = $Knews_plugin->get_mysql_date($selected_min_date_chart + $i * $interval);
-			$date2 = $Knews_plugin->get_mysql_date($selected_min_date_chart + ($i + 1) * $interval);
+			$date2_num = $selected_min_date_chart + ($i + 1) * $interval;
+			$date2 = $Knews_plugin->get_mysql_date($date2_num);
 			
 			// Enviaments OK i Error
 			$query='SELECT users_ok, users_error FROM ' . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " AND start_time BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
@@ -437,58 +443,78 @@ if ($fp) {
 			$results=$wpdb->get_results($query);
 			$clicks += $results[0]->clicks;
 			$e_serie5[] = $results[0]->clicks;
+
+			// Opened
+			if ($date2_num < $min_tracking) {
+				$query='SELECT COUNT(*) AS opens FROM ' . KNEWS_STATS . " WHERE what = 1 AND date BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
+			} else {
+				$query='SELECT COUNT(*) AS opens FROM ' . KNEWS_STATS . " WHERE what = 6 AND date BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
+			}
+			$results=$wpdb->get_results($query);
+			$opens += $results[0]->opens;
+			$e_serie6[] = $results[0]->opens;
 		}
 
 		if ($Knews_plugin->get_custom_text('text_direction', get_bloginfo('language')) == 'ltr') {
-			knews_drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array (__('Sendings','knews'), __('Sendings OK','knews'), __('Sendings Error','knews'), __('Cant read','knews'), __('Unsubscriptions','knews'), __('Total clicks','knews'), ''), 'chart5.png');
-			knews_drawLine ( array($e_serie1, $date_caption), array (__('Sendings OK','knews'), '', ''), 'chart6.png', 'softtones.txt', false);
-			knews_drawLine ( array($e_serie2, $date_caption), array (__('Sendings Error','knews'), '', ''), 'chart7.png', 'softtones_2.txt', false);
-			knews_drawLine ( array($e_serie3, $date_caption), array (__('Cant read','knews'), '', ''), 'chart8.png', 'softtones_3.txt', false);
-			knews_drawLine ( array($e_serie4, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'chart9.png', 'softtones_4.txt', false);
-			knews_drawLine ( array($e_serie5, $date_caption), array (__('Total clicks','knews'), '', ''), 'chart10.png', 'softtones_5.txt', false);
+			knews_drawLine ( array($e_serie1, $e_serie6, $e_serie2, $e_serie5, $e_serie3, $e_serie4, $date_caption), array (__('Sendings','knews'), __('Sendings OK','knews'), __('Opened','knews'), __('Sendings Error','knews'), __('Link clicks','knews'), __('Cant read','knews'), __('Unsubscriptions','knews'), ''), 'all.png');
+			knews_drawLine ( array($e_serie1, $date_caption), array (__('Sendings OK','knews'), '', ''), 'sendingsok.png', 'blue.txt', false);
+			knews_drawLine ( array($e_serie2, $date_caption), array (__('Sendings Error','knews'), '', ''), 'sendingserr.png', 'orange.txt', false);
+			knews_drawLine ( array($e_serie3, $date_caption), array (__('Cant read','knews'), '', ''), 'cantread.png', 'cian.txt', false);
+			knews_drawLine ( array($e_serie4, $date_caption), array (__('Unsubscriptions','knews'), '', ''), 'unsubscriptions.png', 'red.txt', false);
+			knews_drawLine ( array($e_serie5, $date_caption), array (__('Total clicks','knews'), '', ''), 'clicks.png', 'magenta.txt', false);
+			knews_drawLine ( array($e_serie6, $date_caption), array (__('Opened','knews'), '', ''), 'opened.png', 'green.txt', false);
 		} else {
-			knews_drawLine ( array($e_serie1, $e_serie2, $e_serie3, $e_serie4, $e_serie5, $date_caption), array ('Sendings', 'Sendings OK', 'Sendings Error', 'Cant read', 'Unsubscriptions', 'Total clicks', ''), 'chart5.png');
-			knews_drawLine ( array($e_serie1, $date_caption), array ('Sendings OK', '', ''), 'chart6.png', 'softtones.txt', false);
-			knews_drawLine ( array($e_serie2, $date_caption), array ('Sendings Error', '', ''), 'chart7.png', 'softtones_2.txt', false);
-			knews_drawLine ( array($e_serie3, $date_caption), array ('Cant read', '', ''), 'chart8.png', 'softtones_3.txt', false);
-			knews_drawLine ( array($e_serie4, $date_caption), array ('Unsubscriptions', '', ''), 'chart9.png', 'softtones_4.txt', false);
-			knews_drawLine ( array($e_serie5, $date_caption), array ('Total clicks', '', ''), 'chart10.png', 'softtones_5.txt', false);			
+			knews_drawLine ( array($e_serie1, $e_serie6, $e_serie2, $e_serie5, $e_serie3, $e_serie4, $date_caption), array ('Sendings', 'Sendings OK', 'Opened', 'Sendings Error', 'Link clicks', 'Cant read', 'Unsubscriptions', ''), 'all.png');
+			knews_drawLine ( array($e_serie1, $date_caption), array ('Sendings OK', '', ''), 'sendingsok.png', 'blue.txt', false);
+			knews_drawLine ( array($e_serie2, $date_caption), array ('Sendings Error', '', ''), 'sendingserr.png', 'orange.txt', false);
+			knews_drawLine ( array($e_serie3, $date_caption), array ('Cant read', '', ''), 'cantread.png', 'cian.txt', false);
+			knews_drawLine ( array($e_serie4, $date_caption), array ('Unsubscriptions', '', ''), 'unsubscriptions.png', 'red.txt', false);
+			knews_drawLine ( array($e_serie5, $date_caption), array ('Total clicks', '', ''), 'clicks.png', 'magenta.txt', false);			
+			knews_drawLine ( array($e_serie6, $date_caption), array ('Opened', '', ''), 'opened.png', 'green.txt', false);
 		}
 	?>
 		<p>&nbsp;</p>
 		<h3><span><?php _e('Newsletters & clicks from date:','knews'); echo ' ' . date("d-m-Y", $selected_min_date_chart) . ' '; _e('to date:','knews'); echo ' ' . date("d-m-Y", $selected_max_date_chart); ?></span></h3>
  		<div class="pestanyes pestanyes_2">
 			<a onclick="view_graph(2,1); return false;" class="link_2_1 on" href="#"><?php _e('All','knews'); ?></a>
-			<a onclick="view_graph(2,2); return false;" class="link_2_2" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_1.gif" width="13" height="13" alt="1" /> <?php _e('Sendings OK','knews'); ?></a>
-			<a onclick="view_graph(2,3); return false;" class="link_2_3" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_2.gif" width="13" height="13" alt="2" /> <?php _e('Sendings Error','knews'); ?></a>
-			<a onclick="view_graph(2,4); return false;" class="link_2_4" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_3.gif" width="13" height="13" alt="3" /> <?php _e('Cant read','knews'); ?></a>
-			<a onclick="view_graph(2,5); return false;" class="link_2_5" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_4.gif" width="13" height="13" alt="4" /> <?php _e('Unsubscriptions','knews'); ?></a>
-			<a onclick="view_graph(2,6); return false;" class="link_2_6" href="#"><img src="<?php echo KNEWS_URL; ?>/images/legend_5.gif" width="13" height="13" alt="5" /> <?php _e('Link clicks','knews'); ?></a>
+			<a onclick="view_graph(2,2); return false;" class="link_2_2" href="#" title="<?php _e('Sendings OK','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php echo knews_hardCut(__('Sendings OK','knews')); ?></a>
+			<a onclick="view_graph(2,3); return false;" class="link_2_3" href="#" title="<?php _e('Opened','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_green.gif" width="13" height="13" alt="1" /> <?php echo knews_hardCut(__('Opened','knews')); ?></a>
+			<a onclick="view_graph(2,4); return false;" class="link_2_4" href="#" title="<?php _e('Sendings Error','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_orange.gif" width="13" height="13" alt="2" /> <?php echo knews_hardCut(__('Sendings Error','knews')); ?></a>
+			<a onclick="view_graph(2,5); return false;" class="link_2_5" href="#" title="<?php _e('Link clicks','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_magenta.gif" width="13" height="13" alt="5" /> <?php echo knews_hardCut(__('Link clicks','knews')); ?></a>
+			<a onclick="view_graph(2,6); return false;" class="link_2_6" href="#" title="<?php _e('Cant read','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_cian.gif" width="13" height="13" alt="3" /> <?php echo knews_hardCut(__('Cant read','knews')); ?></a>
+			<a onclick="view_graph(2,7); return false;" class="link_2_7" href="#" title="<?php _e('Unsubscriptions','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="4" /> <?php echo knews_hardCut(__('Unsubscriptions','knews')); ?></a>
 		</div>
 		<div class="pregunta pregunta_2">
-			<div class="custom_lang_2_1 on"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart5.png" /></div>
-			<div class="custom_lang_2_2"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart6.png" /></div>
-			<div class="custom_lang_2_3"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart7.png" /></div>
-			<div class="custom_lang_2_4"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart8.png" /></div>
-			<div class="custom_lang_2_5"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart9.png" /></div>
-			<div class="custom_lang_2_6"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=chart10.png" /></div>
+			<div class="custom_lang_2_1 on"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=all.png" /></div>
+			<div class="custom_lang_2_2"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=sendingsok.png" /></div>
+			<div class="custom_lang_2_3"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=opened.png" /></div>
+			<div class="custom_lang_2_4"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=sendingserr.png" /></div>
+			<div class="custom_lang_2_5"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=clicks.png" /></div>
+			<div class="custom_lang_2_6"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cantread.png" /></div>
+			<div class="custom_lang_2_7"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=unsubscriptions.png" /></div>
 		</div>
 		<div style="background:#fff; padding:20px 0 20px 100px;">
 			<table border="0" cellpadding="0" cellspacing="0" width="650">
 				<tr class="alt">
-					<td><?php _e('Sendings OK','knews'); ?>:</td><td align="right"><?php echo $enviaments_ok; ?></td><td align="right"><?php echo safe_percent($enviaments_ok, $enviaments_ok + $enviaments_error); ?>%</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php _e('Sendings OK','knews'); ?>:</td><td align="right"><?php echo $enviaments_ok; ?></td><td align="right"><?php echo knews_safe_percent($enviaments_ok, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td width="20">&nbsp;</td>
-					<td><?php _e('Cant read','knews'); ?>:</td><td align="right"><?php echo $cant_read; ?></td><td align="right"><?php echo safe_percent($cant_read, $enviaments_ok + $enviaments_error); ?>%</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_green.gif" width="13" height="13" alt="2" /> <?php _e('Opened','knews'); ?>:</td><td align="right"><?php echo $opens; ?></td><td align="right"><?php echo knews_safe_percent($opens, $enviaments_ok + $enviaments_error); ?>%</td>
 				</tr>
 				<tr>
-					<td><?php _e('Sendings Error','knews'); ?>:</td><td align="right"><?php echo $enviaments_error; ?></td><td align="right"><?php echo safe_percent($enviaments_error, $enviaments_ok + $enviaments_error); ?>%</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_orange.gif" width="13" height="13" alt="3" /> <?php _e('Sendings Error','knews'); ?>:</td><td align="right"><?php echo $enviaments_error; ?></td><td align="right"><?php echo knews_safe_percent($enviaments_error, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td>&nbsp;</td>
-					<td><?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo safe_percent($blocks, $enviaments_ok + $enviaments_error); ?>%</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_magenta.gif" width="13" height="13" alt="6" /> <?php _e('Link clicks','knews'); ?>:</td><td align="right"><?php echo $clicks; ?></td><td align="right">&nbsp;</td>
 				</tr>
 				<tr class="alt">
-					<td><?php _e('Total submits','knews'); ?>:</td><td align="right"><?php echo ($enviaments_ok + $enviaments_error); ?></td><td align="right">&nbsp;</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_plus.gif" width="13" height="13" alt="4" /> <?php _e('Total submits','knews'); ?>:</td><td align="right"><?php echo ($enviaments_ok + $enviaments_error); ?></td><td align="right">&nbsp;</td>
 					<td>&nbsp;</td>
-					<td><?php _e('Total clicks','knews'); ?>:</td><td align="right"><?php echo $clicks; ?></td><td align="right">&nbsp;</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_cian.gif" width="13" height="13" alt="4" /> <?php _e('Cant read','knews'); ?>:</td><td align="right"><?php echo $cant_read; ?></td>
+<?php //_e('Total clicks','knews'); ?></td><td align="right"><?php echo knews_safe_percent($cant_read, $enviaments_ok + $enviaments_error); ?>%<?php //echo $clicks; ?></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td><td align="right">&nbsp;</td><td align="right">&nbsp;</td>
+					<td>&nbsp;</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="5" /> <?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo knews_safe_percent($blocks, $enviaments_ok + $enviaments_error); ?>%</td>
 				</tr>
 			</table>
 		</div>
@@ -498,4 +524,14 @@ if ($fp) {
 	printf( '<div class="error"><p>' . __('Error: make sure the directory %s exists and has write permissions (chmod 700).','knews') . '</p></div>', '/wp-content/plugins/knews/tmp');
 }
 ?>
+	<form method="post" action="admin.php?page=knews_stats">
+	<p><input type="checkbox" name="knews_reset_stats" class="knews_on_off align_left" value="1" autocomplete="off" /><label><strong>Reset stats. <span style="color:#e00;">Warning:</span></strong> this action delete all statistic data and <strong>all done submissions data</strong> and can't be recovered. </label></p>
+<?php
+	//Security for CSRF attacks
+	wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+?>
+		<div class="submit">
+			<input type="submit" name="reset_KnewsStats" id="reset_KnewsStats" value="<?php _e('Reset Stats','knews');?>" class="button-primary" />
+		</div>
+	</form>
 </div>

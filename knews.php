@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.5.1
+Version: 1.5.2
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -86,7 +86,8 @@ if (!class_exists("KnewsPlugin")) {
 				'registration_serial' => '',
 				'check_bot' => '1',
 				'newsletter' => 'no',
-				'notify_signups_email' => ''
+				'notify_signups_email' => '',
+				'pixel_tracking' => 0,
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -335,6 +336,7 @@ if (!class_exists("KnewsPlugin")) {
 			}
 			if ($extra_params != '') {
 				if (strpos($url_home, '?')===false) {
+					if (substr($url_home, -1) != '/') $url_home .= '/';
 					$url_home .= '?' . $extra_params;
 				} else {
 					$url_home .= '&' . $extra_params;
@@ -746,10 +748,14 @@ if (!class_exists("KnewsPlugin")) {
 			if (!$this->validEmail($email)) return false;
 			if ($confkey=='') return false;
 			
+			$query = "SELECT * FROM ".KNEWS_USERS." WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
+			$results = $wpdb->get_row( $query );
+			if (!isset($results->id)) return false;
+
 			$query = "UPDATE ".KNEWS_USERS." SET state='2' WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
 			$results = $wpdb->query( $query );
 			
-			return $results;
+			return true;
 		}
 		
 		function block_user_self() {
@@ -1035,17 +1041,17 @@ if (!class_exists("KnewsPlugin")) {
 							});
 						}
 						return false;
-					}
+					};
 					knewsfuncInputs = function() {
 						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
 							if (jQuery(this).val() == jQuery(this).attr(\'title\') ) jQuery(this).val(\'\');
 						}
-					}
+					};
 					knewsfuncInputsExit = function() {
 						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
 							if (jQuery(this).val() == \'\' ) jQuery(this).val( jQuery(this).attr(\'title\') );
 						}
-					}
+					};
 					if (parseInt(jQuery.fn.jquery.split(\'.\').join(\'\'), 10) >= 170) {
 						jQuery(document).on(\'submit\', \'#knewsform_' . $this->knews_form_n . ' form\', knewsfunc);
 						jQuery(document).on(\'focus\', \'#knewsform_' . $this->knews_form_n . ' input\', knewsfuncInputs);
@@ -1081,8 +1087,11 @@ if (!class_exists("KnewsPlugin")) {
 				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
 					div.' . $container . ' textarea.knewscomment {position:absolute; top:-3000px; left:-3000px;}
-					div.' . $container . ' fieldset {border:0;}
-					</style>
+					div.' . $container . ' fieldset {border:0;}';
+				
+				if (isset($instance['customCSS'])) $response .= $instance['customCSS'];
+					
+				$response .= '</style>
 					<form action="' . $this->getAddUserUrl() . '" method="post">';
 
 
@@ -1513,6 +1522,19 @@ if (!class_exists("KnewsPlugin")) {
 				}
 			}
 		}
+		function select_font($what, $extra='', $custom=false) {
+			$fonts = array('Verdana, Geneva, sans-serif', 'Georgia, Times New Roman, Times, serif', 'Courier New, Courier, monospace', 'Arial, Helvetica, sans-serif' , 'Tahoma, Geneva, sans-serif', 'Trebuchet MS, Arial, Helvetica, sans-serif', 'Arial Black, Gadget, sans-serif', 'Times New Roman, Times, serif','Palatino Linotype, Book Antiqua, Palatino, serif', 'Lucida Sans Unicode, Lucida Grande, sans-serif','MS Serif, New York, serif','Lucida Console, Monaco, monospace','Comic Sans MS, cursive');
+			if (is_array($extra)) {
+				foreach ($extra as $e) {
+					echo '<option value="' . $e->value . '"' . (($e->value == $what)? ' selected="selected"' : '') . '>'. $e->caption . '</option>';
+				}
+				foreach ($fonts as $f) {
+					echo '<option value="' . $f . '"' . (($f == $what)? ' selected="selected"' : '') . '>'. $f . '</option>';
+				}
+				if ($custom) echo '<option value="custom"' . (('custom' == $what)? ' selected="selected"' : '') . '>'. __('Custom font','knews') . '</option>';
+			}
+		}
+
 	}
 }
 
@@ -1521,7 +1543,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.5.1');
+		define('KNEWS_VERSION', '1.5.2');
 
 		function Knews_plugin_ap() {
 			global $Knews_plugin;
@@ -1542,7 +1564,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			add_submenu_page( 'knews_news', __('Newsletters','knews'), __('Newsletters','knews'), ($pro_menus ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_news', array(&$Knews_plugin, 'KnewsAdminNews'), '');
 			add_submenu_page( 'knews_news', __('Mailing lists','knews'), __('Mailing lists','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_lists', array(&$Knews_plugin, 'KnewsAdminLists'), '');
 			$hook_asm = add_submenu_page( 'knews_news', __('Subscribers','knews'), __('Subscribers','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_users', array(&$Knews_plugin, 'KnewsAdminUsers'), '');
-			add_submenu_page( 'knews_news', __('Submits','knews'), __('Submits','knews'), ($pro_menus ? 'knews_manage_newsletters' : 'edit_posts'), 'knews_submit', array(&$Knews_plugin, 'KnewsAdminSubmit'), '');
+			add_submenu_page( 'knews_news', __('Submits','knews'), __('Submits','knews'), ($pro_menus ? 'knews_send_newsletters' : 'edit_posts'), 'knews_submit', array(&$Knews_plugin, 'KnewsAdminSubmit'), '');
 			add_submenu_page( 'knews_news', __('Import CSV','knews'), __('Import CSV','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_import', array(&$Knews_plugin, 'KnewsAdminImport'), '');
 			add_submenu_page( 'knews_news', __('Export CSV','knews'), __('Export CSV','knews'), ($pro_menus ? 'knews_manage_users' : 'edit_posts'), 'knews_export', array(&$Knews_plugin, 'KnewsAdminExport'), '');
 			add_submenu_page( 'knews_news', __('Auto-create','knews'), __('Auto-create','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_auto', array(&$Knews_plugin, 'KnewsAdminAuto'), '');
@@ -1623,7 +1645,8 @@ if (!function_exists("Knews_plugin_ap")) {
 	
 	function knews_admin_enqueue() {
 		global $Knews_plugin;
-		if ($Knews_plugin->get_safe('page')=='knews_news' || $Knews_plugin->get_safe('page')=='knews_submit') {
+		if ($Knews_plugin->get_safe('page')=='knews_news' || $Knews_plugin->get_safe('page')=='knews_submit' || $Knews_plugin->get_safe('page')=='knews_config' ||
+			basename($_SERVER['SCRIPT_FILENAME']) == 'widgets.php') {
 			add_thickbox();
 		}
 
@@ -1644,6 +1667,37 @@ if (!function_exists("Knews_plugin_ap")) {
 		//wp_enqueue_style('thickbox.css', '/'.WPINC.'/js/thickbox/thickbox.css', null, '1.0');
 	}
 	add_action('admin_enqueue_scripts', 'knews_admin_enqueue');
+    
+    function knews_admin_footer () {
+		if (basename($_SERVER['SCRIPT_FILENAME']) == 'widgets.php') {
+		?>
+			<div id="knewsWidgetCSS" style="display:none">
+				<p>CSS pel widget:</p>
+				<form method="get" action=".">
+					<textarea name="knewsCustomCSS" rows="10" cols="40" style="width:100%; height:300px;"></textarea>
+					<p style="text-align:right"><input type="button" value="<?php _e('Save','knews'); ?>" class="button-primary" onclick="knewsSaveCSS(this); return false" /></p>
+				</form>
+			</div>
+			<script type="text/javascript">
+				var knewsCSShandler='';
+				function knewsOpenCSS(id) {
+					knewsCSShandler=id;
+					tb_show('CSS for Knews Widget', "#TB_inline?height=400&width=700&inlineId=knewsWidgetCSS");
+					cssContent = jQuery('#' + knewsCSShandler).val();
+					if (cssContent=='') {
+						cssContent="/* Write here your CSS classes. Please, use div.knews_add_user prefix to customize all Knews Subscription widgets at once, or #" + knewsCSShandler.substr(7, knewsCSShandler.length-17) + " prefix to customize this one. Example:  div.knews_add_user input { border: #e00 1px solid; } */";
+					}
+					jQuery('#TB_window textarea[name="knewsCustomCSS"]').val( cssContent );
+				}
+				function knewsSaveCSS(popupObj) {
+					jQuery ('#' + knewsCSShandler).val( jQuery('#TB_window textarea[name="knewsCustomCSS"]').val() );
+					tb_remove();
+				}
+			</script>
+		<?php
+		}
+	}
+	add_action('in_admin_footer', 'knews_admin_footer');
 	
 	function knews_popup() {
 		global $Knews_plugin;
@@ -1932,6 +1986,53 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	add_action('wp_ajax_knewsHTMLedit', 'knews_htmleditor' );
 	add_action('wp_ajax_nopriv_knewsHTMLedit', 'knews_ajax_deny' );
+	// Add the pointer javascript
+	function knews_add_pointer_scripts() {
+		global $Knews_plugin;
+		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
+
+		if ( !in_array( 'knews_pro_welcome', $dismissed ) && $Knews_plugin->im_pro()) {
+			$content = '<h3>' . __('Welcome to Knews Pro','knews') . '</h3><p>' . sprintf(__('You can configure the new features <br />into %s Knews Pro Options tab','knews'), '<a href="admin.php?page=knews_config&tab=pro">') . '</a></p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pro_welcome');
+		}
+
+		if ( !in_array( 'knews_pro_209', $dismissed ) && $Knews_plugin->im_pro() ) {
+			$content = '<h3>' . __('Knews Pro: NEW Features','knews') . '</h3><p>' . sprintf(__('&gt; Now we can trigger remotely your CRONJOB<br> &gt; Knews Pro supports multiple SMTP configur.<br><br />configure it into %s Knews Pro Advanced tab','knews'), '<a href="admin.php?page=knews_config&tab=advanced">') . '</a></p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pro_209');
+		}
+
+		if ( !in_array( 'knews_pixeltrack', $dismissed ) ) {
+			$content = '<h3>' . __('NEW FEATURE: TRACKING PIXEL','knews') . '</h3><p>' . sprintf(__('Knews includes now tracking pixel in the sent newsletters. Please, configure it into %s Knews Advanced tab','knews'), '<a href="admin.php?page=knews_config&tab=advanced&subtab=3">') . '</a></p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pixeltrack');
+		}
+	}
+	function knews_add_pointer_scripts_js($content, $handler, $pointer) {
+	?>
+		<script type="text/javascript">
+		//<![CDATA[
+		jQuery(document).ready( function($) {
+			$('<?php echo $handler; ?>').pointer({
+				content: '<?php echo $content; ?>',
+				position: {
+					edge: 'left',
+					align: 'center'
+				},
+				close:  function() {
+					$.post( ajaxurl, {
+						pointer: '<?php echo $pointer; ?>',
+						action: 'dismiss-wp-pointer'
+					});
+				}
+			}).pointer('open');
+		});
+		//]]>
+		</script>
+	<?php
+	}
+	if ( get_bloginfo( 'version' ) >= '3.3' ) {
+		// Add pointer javascript
+		add_action( 'admin_print_footer_scripts', 'knews_add_pointer_scripts' );
+	}
 
 	class knews_widget extends WP_Widget {
 	
@@ -2002,11 +2103,13 @@ if (!function_exists("Knews_plugin_ap")) {
 			echo '<option value="0"' . (($val=="0") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
 			echo '</select></p>';
 				
+			echo '<a href="#" onclick="knewsOpenCSS(\'' . $this->get_field_id('customCSS') . '\')">' . __('Customize widget CSS','knews') . '</a><br /><br />';
 			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';
+			echo '<input type="hidden" name="' . $this->get_field_name('customCSS') . '" id="' . $this->get_field_id('customCSS') . '" value="' . (isset($instance['customCSS']) ? $instance[ 'customCSS' ] : '') . '">';
 		}
 	
 	} // class Knews_Widget
-
+	
 	function knews_aj_posts_where( $where ) {
 		global $knews_aj_look_date, $knewsOptions, $Knews_plugin;
    		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' "

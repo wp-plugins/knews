@@ -19,9 +19,18 @@ if ($Knews_plugin) {
 
 	$mysqldate = $Knews_plugin->get_mysql_date();
 	
-	$key_user = substr($Knews_plugin->get_safe('t'), 0, 8);
-	$key_submit = substr($Knews_plugin->get_safe('t'), -16);
-	
+	if (isset($_GET['img'])) {
+		if ($_GET['img']=='testcat') {
+			wp_redirect( KNEWS_URL . '/images/testcat.jpg' ); exit;
+		}
+		$key_user = substr($Knews_plugin->get_safe('img'), 0, 8);
+		$key_submit = substr($Knews_plugin->get_safe('img'), -16);
+		$what=6;
+	} else {
+		$key_user = substr($Knews_plugin->get_safe('t'), 0, 8);
+		$key_submit = substr($Knews_plugin->get_safe('t'), -16);
+		$what=1;
+	}
 	//echo $key_user . ' ** ' . $key_submit;
 
 	$query = "SELECT * FROM " . KNEWS_KEYS . " WHERE keyy='" . $key_submit . "'";
@@ -35,18 +44,26 @@ if ($Knews_plugin) {
 		
 		if (count($user) ==1) $user_id=$user[0]->id;
 		
-		if ($key_track[0]->type==1) {
+		if ($key_track[0]->type==1 && $what==1) {
 			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (1, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "', " . $key_track[0]->id . ")";
+			$result=$wpdb->query( $query );
+		}
+
+		$query = "SELECT * FROM " . KNEWS_STATS . " WHERE what=6 AND user_id='" . $user_id . "' AND submit_id='" . $key_track[0]->submit_id . "'";
+		$stat = $wpdb->get_row( $query );
+		
+		if (!isset($stat->id)) {
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (6, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "', " . $key_track[0]->id . ")";
 			$result=$wpdb->query( $query );
 		}
 		
 		wp_redirect( $key_track[0]->href ); exit;
 		
 	} else {
-		echo '<p>Not found</p>';
+		if ($what==1) echo '<p>Not found</p>';
 	}
 } else {
-	echo '<p>Knews is not active</p>';
+	if ($what==1) echo '<p>Knews is not active</p>';
 }
 die();
 ?>

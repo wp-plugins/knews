@@ -96,6 +96,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	}
 
 ?>
+<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
+
 <script type="text/javascript">
 function enfocar() {
 	setTimeout("jQuery('#new_list').focus();", 100);
@@ -180,12 +183,12 @@ function enfocar() {
 							echo '<span><a href="admin.php?page=knews_users&filter_list=' . $list->id . '" title="' . __('See this list users', 'knews') . '" >' . __('See users', 'knews') . '</a> | </span>';
 							echo '<span class="trash"><a href="admin.php?page=knews_lists&da=delete&lid=' . $list->id . '" title="' . __('Delete definitively this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 
-							echo '<td><input type="checkbox"' . (($list->open == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open" id="' . $list->id . '_open" /></td>';
-							echo '<td><input type="checkbox"' . (($list->open_registered == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open_registered" id="' . $list->id . '_open_registered" /></td>';
+							echo '<td><input type="checkbox"' . (($list->open == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open" id="' . $list->id . '_open" class="knews_open_close" /></td>';
+							echo '<td><input type="checkbox"' . (($list->open_registered == '1') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_open_registered" id="' . $list->id . '_open_registered" class="knews_open_close" /></td>';
 							if (KNEWS_MULTILANGUAGE) {
 								$lang_sniffer = explode(',', $list->langs);
 								foreach ($langs_code as $lang_code) {
-									echo '<td><input type="checkbox"' . ((in_array($lang_code, $lang_sniffer) || $list->langs=='') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_' . $lang_code . '" id="' . $list->id . '_' . $lang_code . '" /></td>';
+									echo '<td><input type="checkbox"' . ((in_array($lang_code, $lang_sniffer) || $list->langs=='') ? ' checked="checked"' : '') .' value="1" name="' . $list->id . '_' . $lang_code . '" id="' . $list->id . '_' . $lang_code . '" class="knews_open_close" /></td>';
 								}
 							}
 
