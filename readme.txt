@@ -1,14 +1,14 @@
 === Knews Multilingual Newsletters ===
 Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
-Tags: newsletters, newsletter, multilanguage, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending
+Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 3.6.1
-Stable tag: 1.5.2
+Tested up to: 3.7.1
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Finally, newsletters are multilingual, quick and professional.
+Finally, newsletters are multilingual, quick and professional: Create and send automated newsletters or through his WYSIWYG editor.
 
 == Description ==
 
@@ -113,7 +113,7 @@ Do you want to translate Knews to your language? We will give you Knews Pro for 
 
 14. **If you already have subscribers in some other system or e-mail programme, save them as CSV files: with the import wizard everything will be simple and intuitive.**
 
-15. You can configure the automated newsletters feature: [(tutorial here)] (http://www.knewsplugin.com/automated-newsletter-creation/).
+15. You can configure the automated newsletters feature: [http://www.knewsplugin.com/automated-newsletter-creation/] (http://www.knewsplugin.com/automated-newsletter-creation/).
 
 16. You can customize your email/newsletter with name and surname users values, write: {%name%[Dear user]} {%surname%[]} in any place of newsletter, the tokens %name% and %surname% will be replaced by the user fields in submit time. If there are empty, then will be replaced by the default values (between []).
 
@@ -185,6 +185,17 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.3 =
+
+* Better mailing lists panel: in send newsletter and export users
+* Better stats
+* Lighter export users (less timeout issues, about 50.000 users)
+* Better search users
+* Solved tracking codes repeated
+* IP and date registration in user info panel
+* Support for one-blog plugin activation in a multiblog site
+* Support for distinct than wp-content folder name - See more at: http://www.knewsplugin.com/changelog/#sthash.ZeQfdmsX.dpuf
 
 = 1.5.2 =
 
