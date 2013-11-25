@@ -7,6 +7,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 	global $knewsOptions, $Knews_plugin;
 	
+	require_once( KNEWS_DIR . '/includes/knews_util.php');
+
 	$submit_enqueued=false;
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
@@ -150,31 +152,14 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		<input type="hidden" name="action" id="action" value="submit_batch" />
 		<input type="hidden" name="idnews" id="idnews" value="<?php echo $id_newsletter; ?>" />
 		<?php
-		$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
-		$lists_name = $wpdb->get_results( $query );
+		knews_print_mailinglists();
 
-		$col=count($lists_name)+1; $n=0;
-		if (count($lists_name) > 8) {
-			echo '<table><tr><td valign="top" style="padding-right:50px">';
-			$col = ceil($col / 3);
-		}
-		foreach ($lists_name as $ln) {
-			$n++;
-			if ($n > $col) {
-				$n=1;
-				echo '</td><td valign="top" style="padding-right:50px">';
-			}
-			echo '<p><input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="checklist"> ' . $ln->name . '</p>';
-		}
-		if (count($lists_name) > 8) {
-			echo '</td></tr></table>';
-		}
-		if (count($lists_name) > 1) {
+		/*if (count($lists_name) > 1) {
 			?>
 			<p style="margin:0; padding:0;"><a href="#" onclick="jQuery('input.checklist').attr('checked', true)"><?php _e('Check all mailing lists','knews'); ?></a> | 
 			<a href="#" onclick="jQuery('input.checklist').attr('checked', false)"><?php _e('Uncheck all mailing lists','knews'); ?></a></p>
 			<?php
-		}
+		}*/
 		
 		$cron=true;
 		if ($knewsOptions['knews_cron']=='cronjob') {
@@ -203,9 +188,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			if ($knewsOptions['smtp_knews']!='1') echo '<p>' . __('Sending SMTP is not enabled, the shipments are less reliable.','knews') . '</p>';
 			echo '</div>';
 		}
-	?>
-	<p>&nbsp;</p>
-	<?php 
+
 		if ($selector = $Knews_plugin->get_smtp_selector()) {
 			echo '<p>Use the SMTP: ' . $selector . '</p>';
 		}

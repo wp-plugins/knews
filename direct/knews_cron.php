@@ -17,7 +17,7 @@ if ($Knews_plugin) {
 	
 	//global $knewsOptions;
 
-	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
+	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID && $Knews_plugin->im_networked() ) die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 
 	$cron_time = time();
 	update_option('knews_cron_time', $cron_time);

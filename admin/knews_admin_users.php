@@ -19,51 +19,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$search_user = trim($Knews_plugin->get_safe('search_user', ''));
 	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 	
-	//$users=$wpdb->get_results('SELECT id FROM ' . KNEWS_USERS . ' ORDER BY id');
-	//$users_cf=$wpdb->get_results('SELECT ku.id FROM ' . KNEWS_USERS . ' ku, ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.user_id=ku.id ORDER BY ku.id');
-	
-	/*if ($search_user != '' && count($extra_fields) != 0) {
-		
-		$full_insertion='';
-		foreach ($extra_fields as $ef) {
-			if ($full_insertion !='') $full_insertion .= ', ';
-			$full_insertion .= '(%s, ' . $ef->id . ",'')";
-		}
-		$full_insertion = 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES ' . $full_insertion;
-		$index_cf=0;
-		$incomplete_users=array();
-		foreach ($users as $u) {
-			$ok_cf=0;
-			while (isset($users_cf[$index_cf]) && $users_cf[$index_cf]->id == $u->id) {
-				$ok_cf++;
-				$index_cf++;
-			}
-			if ($ok_cf==0) {
-				$query = str_replace('%s', $u->id, $full_insertion);
-				$wpdb->get_results($query);
-			} elseif ($ok_cf != count($extra_fields)) {
-				$incomplete_users[]=$u->id;
-			}
-		}
-		foreach ($incomplete_users as $iu) {
-			foreach ($extra_fields as $ef) {
-				$look = $wpdb->get_results('SELECT * FROM ' . KNEWS_USERS_EXTRA . ' WHERE user_id=' . $iu . ' AND field_id=' . $ef->id);
-				if (count($look) == 0) {
-					$wpdb->get_results( 'INSERT INTO ' . KNEWS_USERS_EXTRA . ' (user_id, field_id, value) VALUES (' . $iu . ', ' . $ef->id . ", '')");
-				}
-			}
-		}
-	}*/
-	$results_per_page=20;
-	$mass=0;
-	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	
-	//'admin.php?page=knews_users&filter_list='.$filter_list.'&filter_state='.$filter_state.'&search_user='.$search_user.'&paged=';
-
-	$filtered_query = "FROM " . KNEWS_USERS . " ku";
 	$ef_order=0;
-	$where=false;
-	
 	if ($Knews_plugin->get_safe('orderby') != '' && $Knews_plugin->get_safe('orderby') != 'email') {
 		foreach ($extra_fields as $ef) {
 			if ($ef->name==$Knews_plugin->get_safe('orderby')) {
@@ -73,61 +29,59 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		}
 	}
 
-	if (($search_user != '' && count($extra_fields) > 0) || $ef_order != 0) {
-		$filtered_query .= ', ' . KNEWS_USERS_EXTRA . " kue";					
-	}
-	if ($filter_list != 0) {
-		$where=true;
-		$filtered_query .= ", " . KNEWS_USERS_PER_LISTS . " kupl WHERE ku.id = kupl.id_user AND kupl.id_list=" . $filter_list;
+	$results_per_page=20;
+	$mass=0;
+
+	$link_params = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 	
-	}
+	//'admin.php?page=knews_users&filter_list='.$filter_list.'&filter_state='.$filter_state.'&search_user='.$search_user.'&paged=';
+
+	$filtered_query = '';
+
+//SELECT DISTINCT ku.* FROM wp_knewsusers ku LEFT JOIN wp_knewsusersextra kue ON kue.user_id=ku.id WHERE (ku.email LIKE \'%prova%\' OR kue.value LIKE \'%prova%\') LIMIT 20 OFFSET 0
+//SELECT id FROM wp_knewsusers ku WHERE ku.email LIKE \'%gmail%\' UNION SELECT user_id FROM wp_knewsusersextra kue WHERE kue.value LIKE \'%gmail%\'
+	
 	if ($search_user != '') {
-		if ($where) {
-			$filtered_query .= " AND";
-		} else {
-			$filtered_query .= " WHERE";
-			$where=true;
+		$select_query = 'SELECT id FROM ' . KNEWS_USERS . ' ku ';
+		$select_query_count = 'SELECT COUNT(id) AS n FROM ' . KNEWS_USERS . ' ku ';
+		$filtered_query .= ' WHERE ku.email LIKE \'%' . $search_user . '%\' UNION SELECT user_id FROM ' . KNEWS_USERS_EXTRA . ' kue WHERE kue.value LIKE \'%' . $search_user . '%\'';
+	} else {
+		$select_query = 'SELECT DISTINCT ku.* FROM ' . KNEWS_USERS . ' ku ';
+		$select_query_count = 'SELECT COUNT(DISTINCT ku.id) AS n FROM ' . KNEWS_USERS . ' ku ';
+
+		if ($filter_list != 0) {
+			$select_query .= ", " . KNEWS_USERS_PER_LISTS . " kupl ";
+			$select_query_count .= ", " . KNEWS_USERS_PER_LISTS . " kupl ";
+			$filtered_query .= " WHERE ku.id = kupl.id_user AND kupl.id_list=" . $filter_list;
 		}
-		if (count($extra_fields) > 0) {
-			$filtered_query .= " (ku.email LIKE '%" . $search_user . "%' OR kue.value LIKE '%" . $search_user . "%'";
-			/*$firstor=true;
-			foreach ($extra_fields as $ef) {
-				if ($firstor) {
-					$firstor=false;
-				} else {
-					$filtered_query .= " OR ";
-				}
-				$filtered_query .= " (kue.value LIKE '%" . $search_user . "%' AND kue.field_id=" . $ef->id . ")";
-			}*/
 			
-			$filtered_query .= ") AND kue.user_id=ku.id "; //AND kue.field_id=" . (($ef_order == 0) ? $extra_fields[0]->id : $ef_order);
-		} else {
-			$filtered_query .= " ku.email LIKE '%" . $search_user . "%'";
+		if ($filter_state != 0) {
+				if ($filtered_query != '') {
+				$filtered_query .= " AND ";
+			} else {
+				$filtered_query .= " WHERE ";
+			}
+			$filtered_query .= "ku.state=" . $filter_state;
 		}
-	}
-	if ($filter_state != 0) {
-		if ($where) {
-			$filtered_query .= " AND ";
-		} else {
-			$filtered_query .= " WHERE ";
-			$where=true;
-		}
-		$filtered_query .= "ku.state=" . $filter_state;
-	}
-	if ($Knews_plugin->get_safe('orderby') != '') {
-		if ($Knews_plugin->get_safe('orderby') == 'email') {
-			$filtered_query .= ' ORDER BY ku.email ' . $Knews_plugin->get_safe('order', 'asc');
-		} elseif ($ef_order != 0) {
-			if ($search_user == '') {
-				if ($where) {
+			
+		if ($Knews_plugin->get_safe('orderby') != '') {
+				
+			if ($Knews_plugin->get_safe('orderby') == 'email') {
+				$filtered_query .= ' ORDER BY ku.email ' . $Knews_plugin->get_safe('order', 'asc');
+				
+			} elseif ($ef_order != 0) {
+				
+				$select_query .= ', ' . KNEWS_USERS_EXTRA . " kue ";
+				$select_query_count .= ', ' . KNEWS_USERS_EXTRA . " kue ";
+				
+				if ($filtered_query != '') {
 					$filtered_query .= " AND ";
 				} else {
 					$filtered_query .= " WHERE ";
-					$where=true;
 				}
 				$filtered_query .= "ku.id = kue.user_id AND kue.field_id=" . $ef_order ;
+				$filtered_query .= " ORDER BY kue.value " . $Knews_plugin->get_safe('order', 'asc');
 			}
-			$filtered_query .= " ORDER BY kue.value " . $Knews_plugin->get_safe('order', 'asc');
 		}
 	}
 
@@ -151,8 +105,16 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	}
 
 	if ($Knews_plugin->get_safe('da')=='delete') {
+		
 		$query="DELETE FROM " . KNEWS_USERS . " WHERE id=" . $Knews_plugin->get_safe('uid', 0, 'int');
 		$results = $wpdb->query( $query );
+
+		$query = "DELETE FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $Knews_plugin->get_safe('uid', 0, 'int');
+		$results = $wpdb->query( $query );
+	
+		$query = "DELETE FROM " . KNEWS_USERS_EXTRA . " WHERE user_id=" . $Knews_plugin->get_safe('uid', 0, 'int');
+		$results = $wpdb->query( $query );
+
 		echo '<div class="updated"><p>' . __('User deleted','knews') . '</p></div>';
 	}
 	if ($Knews_plugin->get_safe('da')=='bounce') {
@@ -195,7 +157,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		} else if ($_POST['action']=='delete_users') {
 			
 			$query = 'SELECT id FROM ' . KNEWS_USERS;
-			if ($mass==1) $query = 'SELECT DISTINCT ku.id ' . $filtered_query;
+			if ($mass==1) $query = $select_query . $filtered_query;
 			$result=$wpdb->get_results( $query );
 			
 			$n_users=0;
@@ -279,7 +241,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			
 			if ($edit_user!=0) {
 				//Edit user
-				$query = "SELECT id, email, state, lang FROM " . KNEWS_USERS . ' WHERE id=' . $edit_user;
+				$query = "SELECT * FROM " . KNEWS_USERS . ' WHERE id=' . $edit_user;
 				$users = $wpdb->get_results( $query );
 	
 				if (count($users) != 0) {
@@ -337,6 +299,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 							echo '<tr><td>&nbsp;</td><td><input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '"' . (($active) ? ' checked="checked"' : '') . '>' . $ln->name . '</td></tr>';
 						}
 						?>
+						<tr><td><?php _e('Joined:','knews');?></td><td><?php echo $users[0]->joined; ?></td></tr>
+						<tr><td>IP:</td><td><?php echo $users[0]->ip; ?></td></tr>
 						<tfoot><th><?php _e('Field','knews');?></th><th><?php _e('Value','knews');?></th></tfoot>
 					</table>
 					<div class="submit">
@@ -354,9 +318,21 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				
 			} else {
 				//List users
-				$users = $wpdb->get_results( 'SELECT DISTINCT ku.* ' . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
+//echo '** ' . $select_query . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) . '**';
 
-				$filtered_users = $wpdb->get_results( 'SELECT COUNT(DISTINCT ku.email) AS n ' . $filtered_query );
+				$users = $wpdb->get_results( $select_query . $filtered_query . ' LIMIT ' . $results_per_page . ' OFFSET ' . $results_per_page * ($paged - 1) );
+//print_r($users);
+				if ($search_user != '') {
+					$users_complete=array();
+					foreach ($users as $u) {
+						$users_complete[] = $wpdb->get_row('SELECT * FROM ' . KNEWS_USERS . ' WHERE id=' . $u->id);
+					}
+					$users = $users_complete;
+				}
+
+				$filtered_users = $wpdb->get_results( $select_query_count . $filtered_query );
+//echo '**' . $select_query_count . $filtered_query . '**';
+//print_r($filtered_users);
 				$filtered_users = $filtered_users[0]->n;
 				
 				$total_users = $wpdb->get_results( 'SELECT COUNT(*) AS n FROM ' . KNEWS_USERS);
@@ -412,9 +388,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 							echo '<input type="hidden" name="orderby" id="orderby" value="' . $Knews_plugin->get_safe('orderby') . '" />';
 							echo '<input type="hidden" name="order" id="order" value="' . $Knews_plugin->get_safe('order') . '" />';
 						}
-						if ($search_user != '') {
+						/*if ($search_user != '') {
 							echo '<input type="hidden" name="search_user" id="search_user" value="' . $search_user . '" />';
-						}
+						}*/
 						?>
 					</form>
 				</div>				
@@ -439,52 +415,54 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					}
 
 					echo '<th>' . __('Language','knews') . '</th><th>' . __('State','knews') . '</th><th>' . __('Subscriptions','knews') . '</th><th>' . __('Stats','knews') . '</th></tr></thead><tbody>';
-	
+//print_r($users);
 					foreach ($users as $user) {
-						$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
-						$lists = $wpdb->get_results( $query );
-						
-						echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
-						'<td><strong><a href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . $user->email . '</a></strong>';
-						
-						echo '<div class="row-actions"><span><a title="' . __('Edit this user', 'knews') . '" href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . __('Edit', 'knews') . '</a> | </span>';
-						
-						if ($user->state!=2) echo '<span><a href="' . $link_params . '&da=activate&uid=' . $user->id . '" title="' . __('Activate this user', 'knews') . '">' . __('Activate', 'knews') . '</a> | </span>';							
-						if ($user->state!=3) echo '<span><a href="' . $link_params . '&da=block&uid=' . $user->id . '" title="' . __('Block this user', 'knews') . '">' . __('Block', 'knews') . '</a> | </span>';
-						if ($user->state!=4 && $Knews_plugin->im_pro()) echo '<span><a href="' . $link_params . '&da=bounce&uid=' . $user->id . '" title="' . __('Mark as bounced email', 'knews') . '">' . __('Bounce', 'knews') . '</a> | </span>';						
-						
-						echo '<span class="trash"><a href="' . $link_params . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitively this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
-
-						reset($extra_fields);
-						foreach ($extra_fields as $ef) {
-							if ($ef->show_table == 1) echo '<td>' . $Knews_plugin->get_user_field($user->id, $ef->id, '&nbsp;') . '</td>';
-						}
-						echo '<td>' . (($user->lang!='') ? $user->lang : '/') . '</td><td>';
-						if ($user->state==1) echo '<img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" title="' . __('Unconfirmed','knews') . '" /></td>';
-						if ($user->state==2) echo '<img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" title="' . __('Confirmed','knews') . '" /></td>';
-						if ($user->state==3) echo '<img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" title="' . __('Blocked','knews') . '" /></td>';
-						if ($user->state==4) echo '<img src="' . KNEWS_URL . '/images/gray_led.gif" width="20" height="20" title="' . __('Bounced','knews') . '" /></td>';
-						echo '</td><td>';
-						
-						if (count($lists) != 0) {
-							$first_comma=true;
-							foreach ($lists as $list) {
-								if (!$first_comma) echo ', ';
-								if (isset($lists_indexed[$list->id_list])) {
-									echo $lists_indexed[$list->id_list];
-								} else {
-									echo '<i>';
-									_e('deleted list','knews');
-									echo '</i>';
-								}
-								$first_comma=false;
-							}
-						}
-						echo '<td>';
-						if ($Knews_plugin->im_pro()) echo '<a href="admin.php?page=knews_stats&tab=user&user=' . $user->id . '">' . __('User stats','knews') . '</a>';
-						echo '</td></tr>';
+						if (isset($user->id)) {
+							$query = "SELECT id_list FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user->id;
+							$lists = $wpdb->get_results( $query );
+							
+							echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $user->id . '" value="1"></th>' . 
+							'<td><strong><a href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . $user->email . '</a></strong>';
+							
+							echo '<div class="row-actions"><span><a title="' . __('Edit this user', 'knews') . '" href="admin.php?page=knews_users&edit_user=' . $user->id . '">' . __('Edit', 'knews') . '</a> | </span>';
+							
+							if ($user->state!=2) echo '<span><a href="' . $link_params . '&da=activate&uid=' . $user->id . '" title="' . __('Activate this user', 'knews') . '">' . __('Activate', 'knews') . '</a> | </span>';							
+							if ($user->state!=3) echo '<span><a href="' . $link_params . '&da=block&uid=' . $user->id . '" title="' . __('Block this user', 'knews') . '">' . __('Block', 'knews') . '</a> | </span>';
+							if ($user->state!=4 && $Knews_plugin->im_pro()) echo '<span><a href="' . $link_params . '&da=bounce&uid=' . $user->id . '" title="' . __('Mark as bounced email', 'knews') . '">' . __('Bounce', 'knews') . '</a> | </span>';						
+							
+							echo '<span class="trash"><a href="' . $link_params . '&da=delete&uid=' . $user->id . '" title="' . __('Delete definitively this user', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 	
-						$alt=!$alt;
+							reset($extra_fields);
+							foreach ($extra_fields as $ef) {
+								if ($ef->show_table == 1) echo '<td>' . $Knews_plugin->get_user_field($user->id, $ef->id, '&nbsp;') . '</td>';
+							}
+							echo '<td>' . (($user->lang!='') ? $user->lang : '/') . '</td><td>';
+							if ($user->state==1) echo '<img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" title="' . __('Unconfirmed','knews') . '" /></td>';
+							if ($user->state==2) echo '<img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" title="' . __('Confirmed','knews') . '" /></td>';
+							if ($user->state==3) echo '<img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" title="' . __('Blocked','knews') . '" /></td>';
+							if ($user->state==4) echo '<img src="' . KNEWS_URL . '/images/gray_led.gif" width="20" height="20" title="' . __('Bounced','knews') . '" /></td>';
+							echo '</td><td>';
+							
+							if (count($lists) != 0) {
+								$first_comma=true;
+								foreach ($lists as $list) {
+									if (!$first_comma) echo ', ';
+									if (isset($lists_indexed[$list->id_list])) {
+										echo $lists_indexed[$list->id_list];
+									} else {
+										echo '<i>';
+										_e('deleted list','knews');
+										echo '</i>';
+									}
+									$first_comma=false;
+								}
+							}
+							echo '<td>';
+							if ($Knews_plugin->im_pro()) echo '<a href="admin.php?page=knews_stats&tab=user&user=' . $user->id . '">' . __('User stats','knews') . '</a>';
+							echo '</td></tr>';
+		
+							$alt=!$alt;
+						}
 					}
 
 					echo '</tbody><tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox" /></th>';
@@ -584,25 +562,5 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		?>
 	</div>
 <?php
-
-function knews_th_orderable ($label, $orderby, $order) {
-	global $Knews_plugin;
-	
-	if ($Knews_plugin->get_safe('orderby') == $orderby) {
-		$order = (($Knews_plugin->get_safe('order')=='asc') ? 'desc' : 'asc');
-		$sortable = 'sorted';
-	} else {
-		$sortable = 'sortable';
-	}
-	$sorted = (($order=='asc') ? 'desc' : 'asc');
-	
-	$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	
-	$current_url = remove_query_arg( array( 'orderby', 'order' ), $current_url );
-	$current_url = add_query_arg( 'orderby', $orderby, $current_url );
-	$current_url = add_query_arg( 'order', $order, $current_url );
-	
-	echo '<th class="manage-column ' . $sortable . ' ' . $sorted . '"><a href="' . esc_url( $current_url ) . '"><span>' . $label . '</span><span class="sorting-indicator"></span></a></th>';
-}
 
 ?>

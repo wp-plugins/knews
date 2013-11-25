@@ -1,10 +1,10 @@
 <?php
 global $Knews_plugin;
-?>
-	<style type="text/css">
+
+$popup_styles ='<style type="text/css">
 		#knews_dialog { display:block !important; }
 		#knews_dialog p { margin:0; padding:0 0 20px 0;}
-		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:200px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; box-shadow: 0 0 15px 5px #000000; border-radius:10px;}
+		#knews_dialog_bg { left:50%; top:50%; margin-left:-250px; margin-top:-100px; width:458px; height:188px; padding:30px 20px 0 20px; border:#eee 1px solid; background:#fff; color:#000; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:15px; text-align:center; position:absolute; box-shadow: 0 0 15px 5px #000000; border-radius:10px;}
 		#knews_dialog_button { display:inline-block; background:#666; color:#fff; font-weight:bold; padding:6px 20px; text-decoration:none; border-radius:5px; }
 		#knews_dialog_button:hover { background:#000; box-shadow: 0 0 5px #666; }
 		
@@ -15,7 +15,7 @@ global $Knews_plugin;
 			display:none;
 			color:#fff;
 			left:50%;
-			background:url("<?php echo KNEWS_URL; ?>/images/cs-x-close.png") repeat 0 0;
+			background:url("' . KNEWS_URL . '/images/cs-x-close.png") repeat 0 0;
 			width:38px;
 			height:41px;
 			text-decoration:none;
@@ -24,7 +24,7 @@ global $Knews_plugin;
 		div.knews_pop_bg {
 			position:fixed;
 			top:0; left:0; bottom:0; right:0;
-			background:url("<?php echo KNEWS_URL; ?>/images/bg_dialog.png") repeat 0 0;
+			background:url("' . KNEWS_URL . '/images/bg_dialog.png") repeat 0 0;
 			z-index:1000;
 			display:none;
 		}
@@ -51,56 +51,58 @@ global $Knews_plugin;
 			top:0;
 			
 		}
-	</style>
-<?php
+	</style>';
 
 if (defined('KNEWS_POP_DIALOG')) {
-?>
-	<script type="text/javascript">
+
+$popup_scripts = '<script type="text/javascript">
 	function knews_deleteLayer(id) {
 		jQuery("div.knews_pop_bg").fadeOut("slow", function() {
 			jQuery("div.knews_pop_bg").remove();
 		});
 	}
-	</script>
-	<div id="knews_dialog" class="knews_pop_bg">
-		<div id="knews_dialog_bg">
-			<?php 
+	</script>';
+
+	$popup_code = '';
+	$popup_text = '<div id="knews_dialog" class="knews_pop_bg"><div id="knews_dialog_bg">';
+
 			$lang_locale = $Knews_plugin->localize_lang($Knews_plugin->getLangs(true), $Knews_plugin->get_safe('lang', substr(get_bloginfo('language'), 0, 2)), get_bloginfo('language'));
 
 			if ($Knews_plugin->get_safe('subscription')=='ok' || ( $Knews_plugin->get_safe('knews')=='confirmUser' && $knews_subscription_result ) ) {
-			?>
-				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_ok_title', $lang_locale); ?></strong></p>
-				<p><?php echo $Knews_plugin->get_custom_text('subscription_ok_message', $lang_locale); ?></p>
-				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
-			<?php 
+				$popup_code='subscriptionOK';
+				$popup_text .= '<p style="font-size:14px;"><strong>' . $Knews_plugin->get_custom_text('subscription_ok_title', $lang_locale) . '</strong></p>';
+				$popup_text .= '<p>' . $Knews_plugin->get_custom_text('subscription_ok_message', $lang_locale) . '</p>';
+				$popup_text .= '<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer(\'knews_dialog\')">' . $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p>';
+
 			} else if ($Knews_plugin->get_safe('subscription')=='error' || ( $Knews_plugin->get_safe('knews')=='confirmUser' && !$knews_subscription_result )) {
-			?>
-				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_error_title', $lang_locale); ?></strong></p>
-				<p><?php echo $Knews_plugin->get_custom_text('subscription_error_message', $lang_locale); ?></p>
-				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
-			<?php 
+
+				$popup_code='subscriptionERROR';
+				$popup_text .= '<p style="font-size:14px;"><strong>' . $Knews_plugin->get_custom_text('subscription_error_title', $lang_locale) . '</strong></p>';
+				$popup_text .= '<p>' . $Knews_plugin->get_custom_text('subscription_error_message', $lang_locale) . '</p>';
+				$popup_text .= '<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer(\'knews_dialog\')">' . $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p>';
+
 			} else if ($Knews_plugin->get_safe('unsubscribe')=='ok' || ( $Knews_plugin->get_safe('knews')=='unsubscribe' && $knews_block_result )) {
-			?>
-				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_stop_ok_title', $lang_locale); ?></strong></p>
-				<p><?php echo $Knews_plugin->get_custom_text('subscription_stop_ok_message', $lang_locale); ?></p>
-				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
-			<?php 
+
+				$popup_code='unsubscribeOK';
+				$popup_text .= '<p style="font-size:14px;"><strong>' . $Knews_plugin->get_custom_text('subscription_stop_ok_title', $lang_locale) . '</strong></p>';
+				$popup_text .= '<p>' . $Knews_plugin->get_custom_text('subscription_stop_ok_message', $lang_locale) . '</p>';
+				$popup_text .= '<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer(\'knews_dialog\')">' . $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p>';
+
 			} else if ($Knews_plugin->get_safe('unsubscribe')=='error' || ( $Knews_plugin->get_safe('knews')=='unsubscribe' && !$knews_block_result )) {
-			?>
-				<p style="font-size:14px;"><strong><?php echo $Knews_plugin->get_custom_text('subscription_stop_error_title', $lang_locale); ?></strong></p>
-				<p><?php echo $Knews_plugin->get_custom_text('subscription_stop_error_message', $lang_locale); ?></p>
-				<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer('knews_dialog')"><?php echo $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale); ?></a></p>
-			<?php 
+
+				$popup_code='unsubscribeERROR';
+				$popup_text .= '<p style="font-size:14px;"><strong>' . $Knews_plugin->get_custom_text('subscription_stop_error_title', $lang_locale) . '</strong></p>';
+				$popup_text .= '<p>' . $Knews_plugin->get_custom_text('subscription_stop_error_message', $lang_locale) . '</p>';
+				$popup_text .= '<p><a href="#" id="knews_dialog_button" onclick="knews_deleteLayer(\'knews_dialog\')">' . $Knews_plugin->get_custom_text('dialogs_close_button', $lang_locale) . '</a></p>';
 			}
-			?>
-		</div>
-	</div>
-<?php
+	$popup_text .= '</div></div>';
+
+	do_action('knews_echo_dialog', $popup_code, $popup_scripts, $popup_styles, $popup_text, $lang_locale);
 }
 
 if (defined('KNEWS_POP_HOME')) {
 
+	echo $popup_styles;
 ?>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
@@ -128,6 +130,8 @@ if (defined('KNEWS_POP_HOME')) {
 }
 
 if (defined('KNEWS_POP_NEWS')) {
+
+	echo $popup_styles;
 ?>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {

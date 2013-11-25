@@ -848,18 +848,18 @@ function absoluteReplace(string, strfind, strreplace) {
 	return string.split(strfind).join(strreplace);
 }
 
-function CallBackPost(n, lang) {
+function CallBackPost(n, lang, type) {
 	not_saved();
 	tb_remove();
 
 	if (navigator.sayswho[0]=='MSIE' && parseInt(navigator.sayswho[1], 10) === 8 && to_shitty_ie8=='') {
 		//alert("callback_img('" + html + "')");
-		to_shitty_ie8 = setTimeout("CallBackPost('" + n + "','" + lang + "')", 2000);
+		to_shitty_ie8 = setTimeout("CallBackPost('" + n + "','" + lang + "','" + type + "')", 2000);
 		//alert("ie8b");
 	}
 
 	jQuery.ajax({
-		data: "action=knewsSelPost&ajaxid=" + n + "&lang=" + lang,
+		data: "action=knewsSelPost&ajaxid=" + n + "&lang=" + lang + "&type=" + type,
 		type: "GET",
 		dataType: "json",
 		//url: url_plugin + "/direct/select_post.php",

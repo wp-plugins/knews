@@ -18,9 +18,7 @@ if (isset($_POST['reset_KnewsStats'])) {
 }
 
 ?>
-<link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
-
 <link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <div class="wrap knews_stats">
 <?php
@@ -33,7 +31,7 @@ $tab = $Knews_plugin->get_safe('tab', $Knews_plugin->post_safe('tab') );
 </h2>
 <?php
 
-function knews_hardCut($str, $maxlen=10, $right='...') {
+function knews_hardCut($str, $maxlen=8, $right='.') {
 	if (strlen($str) <= $maxlen) return $str;
 	return substr($str, 0, $maxlen) . $right;
 }
@@ -93,7 +91,7 @@ function knews_drawLine($values, $captions, $filename, $palette="softtones.txt",
 	$Test->drawFilledRoundedRectangle(7,7,843,223,5,240,240,240);
 	$Test->drawRoundedRectangle(5,5,845,225,5,230,230,230);
 	$Test->drawGraphArea(255,255,255,TRUE);
-	$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2);
+	$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_START0,150,150,150,TRUE,0,2);
 	$Test->drawGrid(4,TRUE,230,230,230,50);
 	
 	// Draw the 0 line
@@ -139,14 +137,20 @@ if ($fp) {
 	$today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
 	$yesterday = strtotime ('-1 day', $today);
 	
+	// Pixel tracking start
+	$query='SELECT MIN(date) AS min_tracking FROM ' . KNEWS_STATS . ' WHERE what=7';
+	$results=$wpdb->get_results($query);
+	if ($results[0]->min_tracking == '') {
+		$min_tracking=$today;
+	} else {
+		$min_tracking=intval($Knews_plugin->sql2time($results[0]->min_tracking));
+	}
+
 	if ($tab == 'news') {
 		require ('knews_admin_stats_news.php');
-		die();
-	}
-	if ($tab == 'user') {
+	} elseif ($tab == 'user') {
 		require ('knews_admin_stats_user.php');
-		die();
-	}
+	} else {
 
 	// Min & max user date
 	$query='SELECT MIN(joined) AS min_joined FROM ' . KNEWS_USERS;
@@ -160,15 +164,6 @@ if ($fp) {
 	$min_block=$Knews_plugin->sql2time($results[0]->min_block);
 	if (intval($results[0]->min_block)==0) $min_block = $yesterday;
 
-	// Pixel tracking start
-	$query='SELECT MIN(date) AS min_tracking FROM ' . KNEWS_STATS . ' WHERE what=6';
-	$results=$wpdb->get_results($query);
-	if ($results[0]->min_tracking == '') {
-		$min_tracking=$today;
-	} else {
-		$min_tracking=intval($Knews_plugin->sql2time($results[0]->min_tracking));
-	}
-	
 	// Min & max submit date
 	$query='SELECT MIN(start_time) AS min_submit FROM ' . KNEWS_NEWSLETTERS_SUBMITS . ' WHERE blog_id=' . get_current_blog_id() . ' AND users_ok <> 0 OR users_error <> 0';
 	$results=$wpdb->get_results($query);
@@ -405,11 +400,14 @@ if ($fp) {
 		$cant_read=0;
 		$blocks=0;
 		$clicks=0;
+			$mobile=0;
 		$opens=0;
+			$sbounced=0;
+			$hbounced=0;
 
 		for ($i=0; $i<$cols; $i++) {
 			$date1 = $Knews_plugin->get_mysql_date($selected_min_date_chart + $i * $interval);
-			$date2_num = $selected_min_date_chart + ($i + 1) * $interval;
+				$date2_num = $selected_min_date_chart + ($i + 1) * $interval-1;
 			$date2 = $Knews_plugin->get_mysql_date($date2_num);
 			
 			// Enviaments OK i Error
@@ -448,7 +446,7 @@ if ($fp) {
 			if ($date2_num < $min_tracking) {
 				$query='SELECT COUNT(*) AS opens FROM ' . KNEWS_STATS . " WHERE what = 1 AND date BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
 			} else {
-				$query='SELECT COUNT(*) AS opens FROM ' . KNEWS_STATS . " WHERE what = 6 AND date BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
+					$query='SELECT COUNT(*) AS opens FROM ' . KNEWS_STATS . " WHERE what = 7 AND date BETWEEN '" . $date1 . "' AND '" . $date2 . "'";
 			}
 			$results=$wpdb->get_results($query);
 			$opens += $results[0]->opens;
@@ -493,36 +491,34 @@ if ($fp) {
 			<div class="custom_lang_2_6"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cantread.png" /></div>
 			<div class="custom_lang_2_7"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=unsubscriptions.png" /></div>
 		</div>
-		<div style="background:#fff; padding:20px 0 20px 100px;">
-			<table border="0" cellpadding="0" cellspacing="0" width="650">
+			<div style="background:#fff; padding:20px 0;">
+				<table border="0" cellpadding="0" cellspacing="0">
 				<tr class="alt">
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php _e('Sendings OK','knews'); ?>:</td><td align="right"><?php echo $enviaments_ok; ?></td><td align="right"><?php echo knews_safe_percent($enviaments_ok, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td width="20">&nbsp;</td>
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_green.gif" width="13" height="13" alt="2" /> <?php _e('Opened','knews'); ?>:</td><td align="right"><?php echo $opens; ?></td><td align="right"><?php echo knews_safe_percent($opens, $enviaments_ok + $enviaments_error); ?>%</td>
+						<td width="20">&nbsp;</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="5" /> <?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo knews_safe_percent($blocks, $enviaments_ok + $enviaments_error); ?>%</td>
 				</tr>
 				<tr>
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_orange.gif" width="13" height="13" alt="3" /> <?php _e('Sendings Error','knews'); ?>:</td><td align="right"><?php echo $enviaments_error; ?></td><td align="right"><?php echo knews_safe_percent($enviaments_error, $enviaments_ok + $enviaments_error); ?>%</td>
 					<td>&nbsp;</td>
-					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_magenta.gif" width="13" height="13" alt="6" /> <?php _e('Link clicks','knews'); ?>:</td><td align="right"><?php echo $clicks; ?></td><td align="right">&nbsp;</td>
+					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_magenta.gif" width="13" height="13" alt="6" /> <?php _e('Link clicks','knews'); ?>:</td><td align="right"><?php echo $clicks; ?></td><td align="right"><?php echo knews_safe_percent($clicks, $enviaments_ok + $enviaments_error); ?>%</td>
+						<td width="20">&nbsp;</td>
+					<td></td><td align="right"></td>
 				</tr>
 				<tr class="alt">
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_plus.gif" width="13" height="13" alt="4" /> <?php _e('Total submits','knews'); ?>:</td><td align="right"><?php echo ($enviaments_ok + $enviaments_error); ?></td><td align="right">&nbsp;</td>
 					<td>&nbsp;</td>
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_cian.gif" width="13" height="13" alt="4" /> <?php _e('Cant read','knews'); ?>:</td><td align="right"><?php echo $cant_read; ?></td>
 <?php //_e('Total clicks','knews'); ?></td><td align="right"><?php echo knews_safe_percent($cant_read, $enviaments_ok + $enviaments_error); ?>%<?php //echo $clicks; ?></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td><td align="right">&nbsp;</td><td align="right">&nbsp;</td>
-					<td>&nbsp;</td>
-					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_red.gif" width="13" height="13" alt="5" /> <?php _e('Unsubscriptions','knews'); ?>:</td><td align="right"><?php echo $blocks; ?></td><td align="right"><?php echo knews_safe_percent($blocks, $enviaments_ok + $enviaments_error); ?>%</td>
+						<td width="20">&nbsp;</td>
+					<td></td><td align="right"></td><td align="right"></td>
 				</tr>
 			</table>
 		</div>
 <?php
 	}
-} else {
-	printf( '<div class="error"><p>' . __('Error: make sure the directory %s exists and has write permissions (chmod 700).','knews') . '</p></div>', '/wp-content/plugins/knews/tmp');
-}
 ?>
 	<form method="post" action="admin.php?page=knews_stats">
 	<p><input type="checkbox" name="knews_reset_stats" class="knews_on_off align_left" value="1" autocomplete="off" /><label><strong>Reset stats. <span style="color:#e00;">Warning:</span></strong> this action delete all statistic data and <strong>all done submissions data</strong> and can't be recovered. </label></p>
@@ -534,4 +530,10 @@ if ($fp) {
 			<input type="submit" name="reset_KnewsStats" id="reset_KnewsStats" value="<?php _e('Reset Stats','knews');?>" class="button-primary" />
 		</div>
 	</form>
+	<?php
+	}
+} else {
+	printf( '<div class="error"><p>' . __('Error: make sure the directory %s exists and has write permissions (chmod 700).','knews') . '</p></div>', '/wp-content/plugins/knews/tmp');
+}
+?>
 </div>

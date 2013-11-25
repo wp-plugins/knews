@@ -17,6 +17,7 @@ if ($Knews_plugin) {
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
 	$id_newsletter = $Knews_plugin->get_safe('id', 0, 'int');
+	$submit_id = $Knews_plugin->get_safe('k', 0, 'int');
 	$email = $Knews_plugin->get_safe('e');
 	$user_id=0;
 	
@@ -29,7 +30,7 @@ if ($Knews_plugin) {
 			$what=2;
 			if ($Knews_plugin->get_safe('m')=='mbl') $what=4;
 			
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (" . $what . ", " . $user_id . ", " . $id_newsletter . ", '" . $mysqldate . "', 0)";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (" . $what . ", " . $user_id . ", " . $submit_id . ", '" . $mysqldate . "', 0)";
 			$result=$wpdb->query( $query );
 
 		}
@@ -59,7 +60,7 @@ if ($Knews_plugin) {
 
 		$theHtml = str_replace('%unsubscribe_href%', '#', $theHtml);
 
-		$theHtml = str_replace('%mobile_version_href%', $Knews_plugin->get_localized_home('', 'knews=ReadEmail&id=' . $id_newsletter . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk')), $theHtml);
+		$theHtml = str_replace('%mobile_version_href%', $Knews_plugin->get_localized_home('', 'knews=readEmail&id=' . $id_newsletter . '&m=' . (($results[0]->mobile==0) ? 'mbl' : 'dsk')), $theHtml);
 	}
 	$theHtml = str_replace('%cant_read_href%', '#' , $theHtml);
 

@@ -1,36 +1,5 @@
 <?php
 
-/*
-function knews_pagination2($paged, $maxPage, $link_params) {
-	$link_params .= '&paged=';
-	//$maxPage=ceil(count($users) / $results_per_page);
-		
-	if ($maxPage > 1) {
-?>		
-		<div class="tablenav-pages">
-			<?php //<span class="displaying-num"><?php echo count($users); ?> <?php _e('users','knews'); ?></span> ?>
-			<?php if ($paged > 1) { ?>
-			<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
-			<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
-			<?php } else { ?>
-			<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
-			<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
-			<?php } ?>
-			<span class="paging-input"><?php echo $paged; ?> <?php _e('of','knews'); ?> <span class="total-pages"><?php echo $maxPage; ?></span></span>
-			<?php if ($maxPage > $paged) { ?>
-			<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
-			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
-			<?php } else { ?>
-			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
-			<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
-			<?php } ?>
-		</div>
-	<br class="clear">
-<?php
-	}
-}
-*/
-
 global $Knews_plugin, $knewsOptions;
 
 if ($Knews_plugin) {
@@ -42,9 +11,15 @@ if ($Knews_plugin) {
 	require_once( KNEWS_DIR . '/includes/knews_util.php');
 
 	$ajaxid = $Knews_plugin->get_safe('ajaxid', 0, 'int');
-	if ($ajaxid != 0) {
-		global $post;
-		$post = get_post($ajaxid);
+	$type = $Knews_plugin->get_safe('type', 'post');
+
+	function get_post_knews ($reply, $id, $type) {
+		
+		if (is_array($reply) && isset($reply['skip'])) return $reply;
+		
+		global $post, $Knews_plugin, $knewsOptions;
+		
+		$post = get_post($id);
 		setup_postdata($post);
 
 		$excerpt_length = apply_filters('excerpt_length', 55);
@@ -75,40 +50,19 @@ if ($Knews_plugin) {
 			//array_push($words, '[...]');
 			$excerpt = implode(' ', $words) . '...';
 		}
-
-		/*$excerpt = (string) get_the_excerpt();
-		
-		$text1 = get_the_content();
-		$text = strip_shortcodes( $text1 );
-		if ($knewsOptions['apply_filters_on']=='1') $text = apply_filters('the_content', $text);
-		$text = knews_iterative_extract_code('<script', '</script>', $text, true);
-		$text = knews_iterative_extract_code('<fb:like', '</fb:like>', $text, true);
-		$text = str_replace(']]>', ']]>', $text);
-		$text = strip_tags($text);
-		$excerpt_length = apply_filters('excerpt_length', 55);
-		$words = explode(' ', $text, $excerpt_length + 1);
-		if (count($words) > $excerpt_length) {
-			array_pop($words);
-			//array_push($words, '[...]');
-			$text = implode(' ', $words);
-		}
-		$text = nl2br($text);*/
-
-		$jsondata['permalink'] = get_permalink($ajaxid);
- 	    $jsondata['title'] = get_the_title();
- 	    $jsondata['excerpt'] = $excerpt;
-		/*if ($knewsOptions['apply_filters_on']=='1') $text1 = apply_filters( 'the_content', $text1 );
-		$text1 = knews_iterative_extract_code('<script', '</ script>', $text1, true);
-		$text1 = knews_iterative_extract_code('<fb:like', '</fb:like>', $text1, true);*/
- 	    $jsondata['content'] = $content;
-
-
-		if (has_post_thumbnail( $post->ID ) && $Knews_plugin->im_pro()) {
-			$jsondata['image'] = knews_get_image_path();
-		} else {
-			$jsondata['image'] = '';
+		$featimg = '';
+		if ($Knews_plugin->im_pro()) {
+			if (has_post_thumbnail( $post->ID ) ) {
+				$featimg = knews_get_image_path();
+			}
 		}
 
+		return array('title' => get_the_title(), 'excerpt' => $excerpt, 'content' => $content, 'permalink' => get_permalink($id), 'image' => $featimg);
+	}
+
+	if ($ajaxid != 0) {
+
+		$jsondata = apply_filters('knews_get_post', array(), $ajaxid, $type);
  		echo json_encode($jsondata);
 		
 	} else {
@@ -245,8 +199,8 @@ if ($Knews_plugin) {
 </style>
 
 <script type="text/javascript">
-function select_post(n, lang) {
-	parent.CallBackPost(n, lang);
+function select_post(n, lang, type) {
+	parent.CallBackPost(n, lang, type);
 }
 </script>
 </head>
@@ -325,36 +279,20 @@ function select_post(n, lang) {
 		}
 		add_filter('excerpt_more', 'new_excerpt_more');*/
 	
-		$args = array('posts_per_page' =>10, 'paged' => $paged, 'post_type' => $type, 'post_status' => 'publish');
-
-		//Polylang support
-		if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='pll') $args['lang']=$lang;
-
-		if ($cat != 0) $args['cat'] = $cat;
-		if ($s != '') $args['s'] = $s;
+		$myposts = apply_filters ('knews_posts_preview', array(), $lang, $type, $cat, $s, $paged, 'published', 10);
 	
-		$myposts = query_posts($args);
-		
-		//print_r($myposts);
-		
-		global $post;
-		foreach($myposts as $post) {
-			setup_postdata($post);
-			echo '<p><a href="#" onclick="select_post(' . $post->ID . ',\'' . $lang . '\')"><strong>';
-			$t=get_the_title();
-			if ($t=='') {
-				echo '{no title}';
-			} else {
-				echo $t;
+		foreach($myposts as $p) {
+			if (is_array($p) && isset($p['ID'])) {
+				echo '<p><a href="#" onclick="select_post(' . $p['ID'] . ',\'' . $p['lang'] . '\',\'' . $type . '\')"><strong>' . $p['title'] . '</strong></a><br>' . $p['excerpt'] . '</p>';
 			}
-			echo '</strong></a><br>';
-			echo get_the_excerpt();
-			echo '</p>';
 		}
-	global $wp_query; 
+		
+		//global $wp_query; 
+		if (isset($myposts['found_posts'])) {
 	echo '<div class="tablenav bottom">';
-	knews_pagination($paged, ceil($wp_query->found_posts/ 10), $wp_query->found_posts, $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
+			knews_pagination($paged, ceil($myposts['found_posts']/ 10), $myposts['found_posts'], $url_base . '?action=knewsSelPost&lang=' . $lang . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
 	echo '</div>';
+		}
 	?>
 	</div>
 </body>

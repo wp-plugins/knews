@@ -25,7 +25,7 @@ if ($Knews_plugin) {
 		}
 		$key_user = substr($Knews_plugin->get_safe('img'), 0, 8);
 		$key_submit = substr($Knews_plugin->get_safe('img'), -16);
-		$what=6;
+		$what=7;
 	} else {
 		$key_user = substr($Knews_plugin->get_safe('t'), 0, 8);
 		$key_submit = substr($Knews_plugin->get_safe('t'), -16);
@@ -49,21 +49,24 @@ if ($Knews_plugin) {
 			$result=$wpdb->query( $query );
 		}
 
-		$query = "SELECT * FROM " . KNEWS_STATS . " WHERE what=6 AND user_id='" . $user_id . "' AND submit_id='" . $key_track[0]->submit_id . "'";
+		$query = "SELECT * FROM " . KNEWS_STATS . " WHERE what=7 AND user_id='" . $user_id . "' AND submit_id='" . $key_track[0]->submit_id . "'";
 		$stat = $wpdb->get_row( $query );
 		
 		if (!isset($stat->id)) {
-			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (6, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "', " . $key_track[0]->id . ")";
+			$query = "INSERT INTO " . KNEWS_STATS . " (what, user_id, submit_id, date, statkey) VALUES (7, " . $user_id . ", " . $key_track[0]->submit_id . ", '" . $mysqldate . "', " . $key_track[0]->id . ")";
 			$result=$wpdb->query( $query );
 		}
-		
-		wp_redirect( $key_track[0]->href ); exit;
+		if (isset($key_track[0]->param_href) && $key_track[0]->param_href != '') {
+			wp_redirect( $key_track[0]->param_href ); exit;
+		} else {
+			wp_redirect( $key_track[0]->href ); exit;
+		}
 		
 	} else {
 		if ($what==1) echo '<p>Not found</p>';
 	}
 } else {
-	if ($what==1) echo '<p>Knews is not active</p>';
+	echo '<p>Knews is not active</p>';
 }
 die();
 ?>

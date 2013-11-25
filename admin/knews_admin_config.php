@@ -52,7 +52,7 @@ function knews_save_prefs() {
 
 	}
 
-	if (isset($_POST['update_KnewsAdminSettings']) || isset($_POST['update_KnewsAdminSettingsAdv']) || isset($_POST['update_KnewsAdminSettingsPro']) || isset($_POST['update_KnewsAdminRegister']) || $Knews_plugin->post_safe('knews_cron_callme_h')!=0) {
+	if (isset($_POST['update_KnewsAdminSettings']) || isset($_POST['update_KnewsAdminSettingsAdv']) || isset($_POST['update_KnewsAdminSettingsPro']) || isset($_POST['update_KnewsAdminRegister'])) {
 
 		update_option($Knews_plugin->adminOptionsName, $knewsOptions);
 	
@@ -177,14 +177,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 	$cron_main_url = $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCron';
 	knews_save_prefs();
 ?>
-	<script type="text/javascript">
-	jQuery(document).ready(function() {
-		jQuery('#knews_cron_callme').click(function() {
-			jQuery('#knews_cron_callme_status').html('<p><?php echo $Knews_plugin->escape_js(sprintf(__('Sorry, this is a premium feature. Please, %s click here and see all the Knews Pro features.','knews'), '<a href=\"http://www.knewsplugin.com/knews-free-vs-knews-pro\" target=\"_blank\">'),"'") . '</a>'; ?></p>');
-		});
-	});
-	
-	</script>
+
 	<div class=wrap>
 		<form method="post" action="admin.php?page=knews_config&tab=advanced" id="form_advanced">
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper">
@@ -203,7 +196,11 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<div class="tabbed_content tab_1"<?php if ($subtab!=1) echo ' style="display:none"'; ?>>
 				<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('http://www.knewsplugin.com/configure-webserver-cron/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
 				<div style="background:#eee url(<?php echo KNEWS_URL; ?>/images/remote.jpg) no-repeat 10px 10px; border:#CCC 1px solid; border-radius:2px; padding:0 15px 0 65px; min-height:65px; margin-left:30px;">
+<?php if ($Knews_plugin->im_pro()) { ?>
 				<p style="font-size:13px; line-height:20px;"><a href="admin.php?page=knews_config&tab=pro" class="knews_on_off knews_on_off_left" style="background-position: -50px 0px;">&nbsp;</a><label class="knews_processed knews_on_off_left"><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?><br /><strong>This is a Knews Pro feature</strong></label></p>
+<?php } else { ?>
+				<p style="font-size:13px; line-height:20px;"><a href="#" onclick="knews_cron_callme(); return false;"><img src="http://www.knewsplugin.com/look_cron.php?email=<?php echo $knewsOptions['registration_email']; ?>&serial=<?php echo $knewsOptions['registration_serial']; ?>&url=<?php echo urlencode($cron_main_url); ?>" style="vertical-align:middle; margin-right:10px;" /></a><label><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?></label></p>
+<?php } ?>
 				<div id="knews_cron_callme_status"></div>
 			</div>
 				<?php
@@ -230,7 +227,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 						?>
 						<p><?php _e('Instructions for setting up CRON','knews');?>:</p>
 						<?php
-						if( is_multisite() ) {
+					if( $Knews_plugin->im_networked() ) {
 							echo '<p><strong>' . sprintf(__('Multisite detected. Only one instance of %s must be called for all websites.','knews'), $cron_main_url) . '</strong></p>';
 							//switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 							//restore_current_blog();
@@ -242,9 +239,6 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 					</div>
 				<?php
 					}
-				
-				/*<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="knews_cron_callme" id="knews_cron_callme" value="1"<?php if ($knewsOptions['cron_callme']=='1') echo ' checked="checked"'; ?> /> <?php _e('Use Knews CRON without configuration (We will trigger your script remotely)','knews'); ?></p><input type="hidden" name="knews_cron_callme_h" id="knews_cron_callme_h" value="0" />
-				<div id="knews_cron_callme_status"></div>*/
 				?>
 				<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronwp"<?php if ($knewsOptions['knews_cron']=='cronwp') echo ' checked="checked"'; ?> /> <?php echo __("Use WordPress's built-in CRON framework.",'knews') . '</h3><p style="margin-top:0;">' .  __('This option no requires configuration, but in less traffic sites can be slow to submit','knews'); ?></h3>
 				<h3 style="margin-bottom:0"><input type="radio" name="knews_cron" value="cronjs"<?php if ($knewsOptions['knews_cron']=='cronjs') echo ' checked="checked"'; ?> /> <?php echo __('Use the JavaScript CRON emulation.','knews') . '</h3><p style="margin-top:0;">' .   __("This option requires you to keep a window open during submission and does not allow deferred submits",'knews'); ?></p>
@@ -313,7 +307,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				}
 				//if ($knews_smtp_editing == -1) $knews_smtp_editing = count($knews_smtp_multiple)-1;
 				?>
-				<tr><td>&nbsp;</td><td colspan="3"><a href="<?php echo (($Knews_plugin->im_pro()) ? 'admin.php?page=knews_config&tab=advanced&action=addsmtp#submitmethod' : 'admin.php?page=knews_config&tab=pro');?>">+ Add SMTP</a></td></tr>
+				<tr><td>&nbsp;</td><td colspan="3"><a href="<?php echo (($Knews_plugin->im_pro()) ? 'admin.php?page=knews_config&tab=advanced&subtab=2&action=addsmtp' : 'admin.php?page=knews_config&tab=pro');?>">+ Add SMTP</a></td></tr>
 				</tbody>
 			</table>
 
@@ -356,7 +350,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				<p>Please, take care: any modification in the WordPress permalinks options can overwrite this file.</p>
 				<p>A mistake in this file can leave your WordPress down, <strong>please, make a backup of .htaccess file before do this modification</strong></p>
 				<p>You should insert the red lines in your .htaccess file, should be in your WordPress root folder:</p>
-				<pre style="border:#ddd 1px solid; background:#eee; border-radius:5px; padding:10px; overflow:auto;"># BEGIN WordPress<br />&lt;IfModule mod_rewrite.c&gt;<br />RewriteEngine On<br />RewriteBase <?php echo $rewrite_base; ?><br /><span style="color:#e00;">#Begin Knews (add this lines just after the RewriteBase line)<br />RewriteRule ^wp-content/uploads/knewsimages/([^/]+).(jpg|jpeg|gif|png)$ <?php echo $rewrite_base; ?>wp-content/plugins/knews/direct/track.php?img=$1 [L,NC]<br />#End Knews (that's all, your htaccess should continue as is...)</span><br />.<br />.<br />.</pre>
+				<pre style="border:#ddd 1px solid; background:#eee; border-radius:5px; padding:10px; overflow:auto;"># BEGIN WordPress<br />&lt;IfModule mod_rewrite.c&gt;<br />RewriteEngine On<br />RewriteBase <?php echo $rewrite_base; ?><br /><span style="color:#e00;">#Begin Knews (add this lines just after the RewriteBase line)<br />RewriteRule ^<?php echo KNEWS_WP_CONTENT; ?>/uploads/knewsimages/([^/]+).(jpg|jpeg|gif|png)$ <?php echo $rewrite_base . KNEWS_WP_CONTENT; ?>/plugins/knews/direct/track.php?img=$1 [L,NC]<br />#End Knews (that's all, your htaccess should continue as is...)</span><br />.<br />.<br />.</pre>
 				<?php
 				$wp_dirs = wp_upload_dir();
 				$img_track = $wp_dirs['baseurl'] . '/knewsimages/testcat.jpg';
@@ -390,9 +384,23 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<a class="nav-tab nav-tab-active" href="admin.php?page=knews_config&tab=pro"><?php _e('Knews Pro options','knews'); ?></a>
 			<a class="nav-tab" href="admin.php?page=knews_config&tab=custom"><?php _e('Customised messages','knews'); ?></a>
 		</h2>
-		<h3><?php _e('Registration','knews');?></h3>
+
 		<?php 
-		if (!$Knews_plugin->im_pro()) {
+		if ($Knews_plugin->im_pro()) {
+		?>
+		<div class="knews_cooltabs_wrapper">
+			<div class="knews_cooltabs">
+				<a href="admin.php?page=knews_config&tab=pro"<?php if ($subtab==1) echo ' class="active"'; ?>><?php _e('Registration','knews');?></a>
+				<a href="admin.php?page=knews_config&tab=pro&subtab=2"<?php if ($subtab==2) echo ' class="active"'; ?>><?php _e('Bounce configuration','knews');?></a>
+				<a href="admin.php?page=knews_config&tab=pro&subtab=3"<?php if ($subtab==3) echo ' class="active"'; ?>><?php _e('Roles and capabilities','knews');?></a>
+				<a href="admin.php?page=knews_config&tab=pro&subtab=4"<?php if ($subtab==4) echo ' class="active"'; ?>><?php _e('Custom Post Types configuration','knews');?></a>
+			</div>
+		</div>
+		<div class="tabbed_content tab_1"<?php if ($subtab!=1) echo ' style="display:none"'; ?>>
+		<?php
+			echo '<h3>' . __('Knews Pro is currently installed.','knews') . '</h3>';	
+		} else {
+			echo '<h3>' . __('Registration','knews') . '</h3>';
 			$look = wp_remote_get( 'http://www.knewsplugin.com/shop/be_pro.php' );
 			if (!is_wp_error($look)) {
 				if (isset($look['body'])) echo $look['body'];
@@ -409,8 +417,6 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			</script>
 			<?php
 			}
-		} else {
-			echo '<h3>' . __('Knews Pro is currently installed.','knews') . '</h3>';	
 		}
 } else {
 	knews_save_prefs();

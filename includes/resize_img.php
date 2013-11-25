@@ -12,7 +12,7 @@ function knews_resize_img_fn($url_img, $width, $height) {
 	//echo '*' . substr($url_img, 0, strlen($wp_dirs['baseurl'])) . '*<br>';
 	if (substr($url_img, 0, strlen($wp_dirs['baseurl'])) != $wp_dirs['baseurl']) {
 		//echo 'no comencen igual<br>';
-		$wp_dirs['baseurl']=substr($url_img, 0, strpos($url_img, 'wp-content'));
+		$wp_dirs['baseurl']=substr($url_img, 0, strpos($url_img, KNEWS_WP_CONTENT));
 		$wp_dirs['basedir']=substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
 	}
 	//echo '*' . $wp_dirs['baseurl'] . '*<br>';

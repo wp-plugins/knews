@@ -193,9 +193,12 @@ function enfocar() {
 							}
 
 							$query = "SELECT COUNT(" . KNEWS_USERS . ".id) AS HOW_MANY FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS_PER_LISTS . ".id_user=" . KNEWS_USERS . ".id AND " . KNEWS_USERS . ".state='2' AND  " . KNEWS_USERS_PER_LISTS . ".id_list=" . $list->id;
-
 							$count = $wpdb->get_results( $query );
-							echo '<td>' . $count[0]->HOW_MANY . '</td>';
+
+							$query = "SELECT COUNT(" . KNEWS_USERS . ".id) AS HOW_MANY FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS_PER_LISTS . ".id_user=" . KNEWS_USERS . ".id AND " . KNEWS_USERS . ".state<>'2' AND  " . KNEWS_USERS_PER_LISTS . ".id_list=" . $list->id;
+							$count2 = $wpdb->get_results( $query );
+
+							echo '<td align="center"><strong style="color:#25c500">' . $count[0]->HOW_MANY . '</strong> / ' . $count2[0]->HOW_MANY . '</td>';
 							
 							//echo '<td align="center"><input type="checkbox" value="1" name="' . $list->id . '_delete" id="' . $list->id . '_delete" /></td>';
 							echo '<td><input type="text" value="' . $list->orderlist . '" name="' . $list->id . '_order" id="' . $list->id . '_order" style="width:35px;" /></td>';

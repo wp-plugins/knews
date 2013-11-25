@@ -139,6 +139,7 @@ $sql =	"CREATE TABLE " .KNEWS_KEYS . " (
 		type int(2) NOT NULL,
 		submit_id bigint(20) UNSIGNED NOT NULL,
 		href mediumtext NOT NULL,
+		param_href mediumtext NOT NULL,
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 

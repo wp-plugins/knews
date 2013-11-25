@@ -4,7 +4,19 @@ require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 global $wpdb, $knewsOptions;
 
-if (version_compare(get_option('knews_version','0.0.0'), '1.5.1') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0)) {
+if ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0) {
+	//Let's add new cappabilitie 
+	global $wp_roles;
+	$all_roles = $wp_roles->roles;
+	foreach ($all_roles as $key=>$role) {
+		if (isset($role['capabilities']['knews_manage_newsletters']) && !isset($role['capabilities']['knews_send_newsletters'])) {
+			$role = get_role($key);
+			$role->add_cap('knews_send_newsletters', true);
+		}
+	}
+}
+// in the 2.0.9 this fields are introduced, but some users haven't it (update issue in 2.1.0 & 2.1.1 versions):
+if (version_compare(get_option('knews_version','0.0.0'), '1.4.9') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.1.2') < 0)) {
 	if (!knews_add_column(KNEWS_NEWSLETTERS_SUBMITS, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
 	if (!knews_add_column(KNEWS_AUTOMATED, 'id_smtp', "bigint(20) NOT NULL DEFAULT 1")) return;
 }
@@ -32,6 +44,9 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.1.0') < 0) {
 				strict_control varchar(100) NOT NULL,
 				emails_at_once int(11) NOT NULL,
 				special varchar(32) NOT NULL,
+	
+				id_smtp bigint(20) NOT NULL DEFAULT 1,
+	
 				UNIQUE KEY id (id)
 			   )$charset_collate;";
 		
@@ -138,7 +153,6 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.2.6') < 0) {
 		   
 	dbDelta($sql);
 
-	$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
 }
 
 if (version_compare(get_option('knews_version','0.0.0'), '1.4.2') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.3') < 0)) {
@@ -153,14 +167,43 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.4.4') < 0 || ( $this
 	if (!knews_add_column(KNEWS_USERS, 'ip', "varchar(45) NOT NULL")) return;
 }
 
+if (version_compare(get_option('knews_version','0.0.0'), '1.5.3') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.1.1') < 0)) {
+	if (!knews_add_column(KNEWS_KEYS, 'param_href', "mediumtext NOT NULL")) return;
+
+	$query  = "UPDATE " . KNEWS_STATS . " SET what=7 WHERE what=6";
+	$results = $wpdb->query( $query );
+
+	if (!knews_add_column(KNEWS_KEYS, 'param_href', "mediumtext NOT NULL")) return;
+}
+
+if (version_compare(get_option('knews_version','0.0.0'), '1.5.3') < 0 || ( version_compare(get_option('knews_version','0.0.0'), '1.9.9') > 0  && version_compare(get_option('knews_version','0.0.0'), '2.1.3') < 0)) {
+	//Earlier versions saves wrong submit ID in stats for cant read, block and mobile click users
+	$query = "SELECT DISTINCT (submit_id) FROM " . KNEWS_STATS . " WHERE what=2 OR what=3 OR what=4";
+	$bad_ids = $wpdb->get_results($query);
+	foreach ($bad_ids as $b_id) {
+		$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE newsletter=" . $b_id->submit_id . ' AND blog_id=' . get_current_blog_id();
+		$submits = $wpdb->get_results($query);
+		if (count($submits) == 1) {
+			$query = "UPDATE " . KNEWS_STATS . " SET submit_id=" . $submits[0]->id . " WHERE (what=2 OR what=3 OR what=4) AND submit_id=" . $b_id->submit_id;
+			$result = $wpdb->query($query);
+		} else if (count($submits) > 1) {
+			$query = "UPDATE " . KNEWS_STATS . " SET submit_id=0 WHERE (what=2 OR what=3 OR what=4) AND submit_id=" . $b_id->submit_id;
+			$result = $wpdb->query($query);
+		}
+	}
+}
+
 update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
+$this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);
+
 
 function knews_update_sql($sql) {
 	global $wpdb;
 	if (!$wpdb->query($sql)) {
 		echo '<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
 		_e('Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE).','knews');
+		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error;
 		echo '</div>';
 		return false;
 	}
@@ -177,6 +220,7 @@ function knews_add_column($table, $field, $typefield) {
 	if (!$wpdb->query($sql)) {
 		echo '<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
 		_e('Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE).','knews');
+		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error;
 		echo '</div>';
 		return false;
 	}

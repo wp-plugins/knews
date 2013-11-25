@@ -1,5 +1,96 @@
 <?php
-// Returns true if $string is valid UTF-8 and false otherwise.
+function knews_print_mailinglists() {
+	global $Knews_plugin, $wpdb;
+	
+	$order_by = $Knews_plugin->get_safe('orderby', 'orderlist');
+	$order = $Knews_plugin->get_safe('order', 'asc');
+
+	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY " . $order_by . " " . $order;
+	$lists_name = $wpdb->get_results( $query );
+
+	//$col=count($lists_name)+1; 
+	$n=0;
+	if (count($lists_name) > 8) {
+		echo '<table class="widefat"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox"></th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th><th>&nbsp;</th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th><th>&nbsp;</th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th></tr></thead><tbody><tr class="alt">';
+		//$col = ceil($col / 3);
+	} else {
+		echo '<table class="widefat" style="width:480px"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox"></th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th></tr></thead><tbody><tr class="alt">';
+	}
+	$alt=false;
+	foreach ($lists_name as $ln) {
+
+		$query = "SELECT COUNT(" . KNEWS_USERS . ".id) AS HOW_MANY FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS_PER_LISTS . ".id_user=" . KNEWS_USERS . ".id AND " . KNEWS_USERS . ".state='2' AND  " . KNEWS_USERS_PER_LISTS . ".id_list=" . $ln->id;
+		$count = $wpdb->get_results( $query );
+
+		$query = "SELECT COUNT(" . KNEWS_USERS . ".id) AS HOW_MANY FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS_PER_LISTS . ".id_user=" . KNEWS_USERS . ".id AND " . KNEWS_USERS . ".state<>'2' AND  " . KNEWS_USERS_PER_LISTS . ".id_list=" . $ln->id;
+		$count2 = $wpdb->get_results( $query );
+
+		if (count($lists_name) < 9) {
+			if ($n != 0) {
+				echo '</tr><tr' . (($alt) ? ' class="alt"' : '') . '>';
+				if ($alt) {$alt=false;} else {$alt=true;}
+			}
+		} elseif ($n%3 == 0 ) {
+			echo '</tr><tr' . (($alt) ? ' class="alt"' : '') . '>';
+			if ($alt) {$alt=false;} else {$alt=true;}
+		}
+		$n++;
+		echo '<th class="check-column" style="padding:9px 0 4px 0;"><input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="checklist"></td><td style="padding:7px 60px 0px 7px;">' . $ln->name . '</td><td><strong style="color:#25c500">' . $count[0]->HOW_MANY . '</strong> / ' . $count2[0]->HOW_MANY . '</td>';
+	}
+
+	if (count($lists_name) > 8) {
+		
+		while ($n%3 != 0) {
+			echo '<td>&nbsp;</td><td>&nbsp;</td>';
+			$n++;
+		}
+		echo '</tr>';
+		echo '<tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox"></th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th><th>&nbsp;</th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th><th>&nbsp;</th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th></tr></tfoot><table>';
+		//$col = ceil($col / 3);
+	} else {
+		echo '</tr>';
+		echo '<tfoot><tr><th class="manage-column column-cb check-column"><input type="checkbox"></th>';
+		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
+		echo '<th>&nbsp;</th></tr></tfoot></table>';
+	}
+}
+
+function knews_th_orderable ($label, $orderby, $order, $extra_style='') {
+	global $Knews_plugin;
+	
+	if ($extra_style != '') $extra_style = ' style="' . $extra_style . '"';
+	
+	if ($Knews_plugin->get_safe('orderby') == $orderby) {
+		$order = (($Knews_plugin->get_safe('order')=='asc') ? 'desc' : 'asc');
+		$sortable = 'sorted';
+	} else {
+		$sortable = 'sortable';
+	}
+	$sorted = (($order=='asc') ? 'desc' : 'asc');
+	
+	$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	
+	$current_url = remove_query_arg( array( 'orderby', 'order' ), $current_url );
+	$current_url = add_query_arg( 'orderby', $orderby, $current_url );
+	$current_url = add_query_arg( 'order', $order, $current_url );
+	
+	echo '<th class="manage-column ' . $sortable . ' ' . $sorted . '"' . $extra_style . '><a href="' . esc_url( $current_url ) . '"><span>' . $label . '</span><span class="sorting-indicator"></span></a></th>';
+}
+
 function knews_is_utf8($str) {
     $c=0; $b=0;
     $bits=0;

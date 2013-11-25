@@ -3,7 +3,7 @@ global $knewsOptions, $Knews_plugin, $wpdb;
 
 if ($Knews_plugin) {
 
-	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID ) {
+	if ( get_current_blog_id() != $Knews_plugin->KNEWS_MAIN_BLOG_ID && $Knews_plugin->im_networked() ) {
 		die("You must call the main blog www.yourdomain.com/wp-admin/admin-ajax.php?action=knewsCron URL");
 	}
 		
@@ -18,7 +18,7 @@ if ($Knews_plugin) {
 
 		if ($Knews_plugin->initialized) die("Knews internal error: can't be initialized before!");
 
-		if( is_multisite() ) {
+		if( $Knews_plugin->im_networked() ) {
 			$Knews_plugin->init($submit_pend[0]->blog_id);
 		} else {
 			$Knews_plugin->init();
@@ -148,8 +148,8 @@ if ($Knews_plugin) {
 					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($users[$users_index]->id, $token['id'], $token['defaultval']) );
 				}
 				$users[$users_index]->tokens = $aux_array;
-				$users[$users_index]->unsubscribe = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=unsubscribe&e=' . urlencode($users[$users_index]->email) . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter);
-				$users[$users_index]->cant_read = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($users[$users_index]->email));
+				$users[$users_index]->unsubscribe = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=unsubscribe&e=' . urlencode($users[$users_index]->email) . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter . '&id=' . $submit_pend[0]->id);
+				$users[$users_index]->cant_read = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($users[$users_index]->email) . '&k=' . $submit_pend[0]->id);
 				
 				//$result=$Knews_plugin->sendMail( array( array('email' => $user->email, 'unsubscribe'=>get_bloginfo('url') ) ), $theSubject, $theHtml );
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
@@ -193,7 +193,13 @@ if ($Knews_plugin) {
 		$recount = $wpdb->get_results( $query );
 		$error_count = count($recount);
 
-		if ($submit_pend[0]->users_total <= ($ok_count + $error_count)) {
+		if (count($submits)==0 && $submit_pend[0]->users_total > ($ok_count + $error_count)) {
+			$end_sql=', finished=1, users_total=' . ($ok_count + $error_count) . ', end_time=\'' . $Knews_plugin->get_mysql_date() . '\'';
+			if ($fp) {
+				$hour = date('H:i:s', current_time('timestamp'));
+				fwrite($fp, '  ' . $hour . ' | ok: ' . $ok_count . ' | error: ' . $error_count . ' | FINISHED SUBMIT. BAD TOTAL USER COUNT.' . "<br>\r\n");
+			}
+		} elseif ($submit_pend[0]->users_total <= ($ok_count + $error_count)) {
 			$end_sql=', finished=1, end_time=\'' . $Knews_plugin->get_mysql_date() . '\'';
 			if ($fp) {
 				$hour = date('H:i:s', current_time('timestamp'));
@@ -225,11 +231,11 @@ if ($js != 0) {
 	<head><title>JS Cron</title></head>
 	<script type="text/javascript">
 	var start = new Date().getTime();
-	var total_time = 1000*60*5 // 5 minutes;
+	var total_time = 1000*60*10 // 10 minutes;
 	function jump() {
 	<?php 
 		if ($pend) {
-			if (is_multisite()) switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
+			if ($Knews_plugin->im_networked()) switch_to_blog($Knews_plugin->KNEWS_MAIN_BLOG_ID);
 	?>
 			location.href="<?php echo $Knews_plugin->get_main_admin_url() . 'admin-ajax.php?action=knewsCronDo&js=' . (intval($js)+1); ?>"
 	<?php
