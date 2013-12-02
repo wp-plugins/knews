@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 3.7.1
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+* **CHINESE ADDED**: Simplified & Traditional.
 * **TRACKING PIXEL**: Now Knews uses an image to track opened newsletters, not only user clicks.
 * **SUPPORT FOR POLYLANG**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
 * HTML code edition inside WYSIWYG Editor!
@@ -58,20 +59,22 @@ A WYSIWYG Editor Demo:
 
 **Admin languages:**
 
-* **NEW**: Portuguese - pt_PT (Thanks to BAANNNG. http://www.baannng.com). (duplicated also to pt_BR)
+* **NEW**: Chinese Simplified - zh_CN (thanks to: Edwin Cheng http://waiwai.com.au )
+* **NEW**: Chinese Traditional - zh_TW (thanks to: Kenyo Wu http://waiwai.com.au )
+* Arabic - ar (thanks to: Hasan Yousef)
+* Bosnian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
+* Catalan - ca (Knews Team)
+* Croatian - hr - about 60% translated (thanks to: Hasan Yousef)
+* Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
 * English - en_US (Knews Team & Ypsilon http://www.ypsilonet.com )
+* Finnish - fi (thanks to: Esa Ratanen http://eccola.fi )
 * French - fr_FR (thanks to: Ypsilon http://www.ypsilonet.com )
 * German - de_DE (thanks to: Oliver-Frank Hebel http://www.brand-bull.com )
 * Italian - it_IT (thanks to: Ypsilon http://www.ypsilonet.com )
-* Spanish - es_ES (Knews Team)
-* Catalan - ca (Knews Team)
-* Arabic - ar (thanks to: Hasan Yousef)
-* Finnish - fi (thanks to: Esa Ratanen http://eccola.fi )
-* Bosnian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
-* Croatian - hr - about 60% translated (thanks to: Hasan Yousef)
-* Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
+* Portuguese - pt_PT (Thanks to BAANNNG. http://www.baannng.com). (duplicated also to pt_BR)
 * Russian - ru_RU (Thanks to Ivan Komarov. http://http://ivkom.ru )
-* Dutch - nl_NL (Thanks to: Carl Rozema. http://www.hetsites.nl )
+* Serbian - sr_RS - about 60% translated (thanks to: Hasan Yousef)
+* Spanish - es_ES (Knews Team)
 * Greek - gr_GR (Thanks to Konstantinos Marinoglou)
 
 Do you want to translate Knews to your language? We will give you Knews Pro for free as exchange, please, contact us here: [http://www.knewsplugin.com/professional-contact/](http://www.knewsplugin.com/professional-contact/).
@@ -185,6 +188,17 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.4 =
+* Chinese Simplified & Traditional added
+* User IP and registration date export added (in CSV)
+* Solved not-homepage-issue under newsletter or dialog
+* Full support for distinct /wp-content folder name
+* Full support for Hungarian chars (thanks to @easy82)
+* Support for relative image URLs inside WordPress
+* Patch added for some users who can't see stats graphs (thanks to @burakali)
+* More clean code in newsletters (less comments)
+* Better code line cut
 
 = 1.5.3 =
 
