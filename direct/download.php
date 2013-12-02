@@ -5,6 +5,10 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 	
+	//burakali patch #1
+	ob_clean();
+	ob_start();
+
 	$filename = $Knews_plugin->get_safe('file');
 	
 	if ($filename != '') {
@@ -21,6 +25,10 @@ if ($Knews_plugin) {
 				header('Content-type: image/png');
 			}
 			echo $file;
+
+			//burakali patch #2
+			echo ob_get_clean();
+			
 			die();
 		}
 	}

@@ -28,8 +28,13 @@
 
 		$name = $Knews_plugin->post_safe('new_news');
 		$lang = $Knews_plugin->post_safe('lang');
-		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
 		$path_template = $Knews_plugin->post_safe('path_' . $Knews_plugin->post_safe('template'));
+
+		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
+
+		$blog_url = get_bloginfo('url');
+		if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
+		if (strpos($url_template, $blog_url) === false) $url_template = $blog_url . $url_template;
 
 		$lang_localized='';
 		if(!empty($languages)){

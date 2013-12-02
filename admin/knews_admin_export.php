@@ -102,7 +102,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 					$csv_code .= $enclosure . __('Language','knews') . $enclosure . $delimiter;
 					$csv_code .= $enclosure . __('State','knews') . $enclosure . $delimiter;
-					$csv_code .= $enclosure . __('Lists','knews') . $enclosure . "\r\n";
+					$csv_code .= $enclosure . __('Lists','knews') . $enclosure . $delimiter;
+					$csv_code .= $enclosure . __('Register Date','knews') . $enclosure . $delimiter;
+					$csv_code .= $enclosure . __('Register IP','knews') . $enclosure . "\r\n";
 			}
 			
 			/*$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
@@ -196,7 +198,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 					$csv_code .= $enclosure . $user->lang . $enclosure . $delimiter;
 					$csv_code .= $enclosure . $user->state . $enclosure . $delimiter;
-					$csv_code .= $enclosure . $lists_user . $enclosure . "\r\n";
+				$csv_code .= $enclosure . $lists_user . $enclosure . $delimiter;
+				$csv_code .= $enclosure . $user->joined . $enclosure . $delimiter;
+				$csv_code .= $enclosure . $user->ip . $enclosure . "\r\n";
 				//}
 			}
 			

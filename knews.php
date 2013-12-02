@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.5.3
+Version: 1.5.4
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -87,6 +87,7 @@ if (!class_exists("KnewsPlugin")) {
 				'check_bot' => '1',
 				'newsletter' => 'no',
 				'notify_signups_email' => '',
+				'double_optin' => 1,
 				'pixel_tracking' => 0,
 				);
 
@@ -196,13 +197,15 @@ if (!class_exists("KnewsPlugin")) {
 			if (!defined('KNEWS_WP_CONTENT')){
 				$content_folder = 'wp-content';
 				if (defined('WP_CONTENT_URL')) {
-					$home_url = get_option('home');
+					/*$home_url = get_option('home');
+					echo '*' . $home_url . '*' . WP_CONTENT_URL . '*';
 					$pos = strpos(WP_CONTENT_URL, $home_url);
 					if ($pos !== false) {
-						$content_folder = substr(WP_CONTENT_URL, $pos + strlen($home_url));
+						$content_folder = substr(WP_CONTENT_URL, $pos + strlen($home_url));*/
+						$content_folder = WP_CONTENT_URL;
 						if (substr($content_folder, 0, 1) == '/') $content_folder = substr($content_folder, 1);
 						if (substr($content_folder, -1) == '/') $content_folder = substr($content_folder, 0, strlen($content_folder) -1);
-					}
+					//}
 				}
 				define ('KNEWS_WP_CONTENT', $content_folder);
 			}
@@ -603,7 +606,8 @@ if (!class_exists("KnewsPlugin")) {
 				
 			} else {
 				//$code = $this->add_user($email, $id_list_news, $lang, $lang_locale, $custom_fields);
-				$code = apply_filters('knews_add_user_db', 0, $email, $id_list_news, $lang, $lang_locale, $custom_fields, false);
+				
+				$code = apply_filters('knews_add_user_db', 0, $email, $id_list_news, $lang, $lang_locale, $custom_fields, ($knewsOptions['double_optin']==0) );
 				
 				if ($code==1) {
 					$response = $this->get_custom_text('ajax_subscription', $lang_locale);
@@ -1266,10 +1270,10 @@ if (!class_exists("KnewsPlugin")) {
 			$search = array_map('utf8_encode', $search);
 
 			//Add hungarian chars support
-			$search[] = chr(0xc5).chr(0x91); $values[] = '&#337';
-			$search[] = chr(0xc5).chr(0xb1); $values[] = '&#369';
-			$search[] = chr(0xc5).chr(0x90); $values[] = '&#336';
-			$search[] = chr(0xc5).chr(0xb0); $values[] = '&#368';
+			$search[] = chr(0xc5).chr(0x91); $values[] = '&#337;';
+			$search[] = chr(0xc5).chr(0xb1); $values[] = '&#369;';
+			$search[] = chr(0xc5).chr(0x90); $values[] = '&#336;';
+			$search[] = chr(0xc5).chr(0xb0); $values[] = '&#368;';
 
 			$str_in = str_replace($search, $values, $str_in);
 			
@@ -1630,7 +1634,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.5.3');
+		define('KNEWS_VERSION', '1.5.4');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -2219,6 +2223,8 @@ if (!function_exists("Knews_plugin_ap")) {
 	}
 
 	function knews_queryvars( $qvars ) {
+		global $wp;
+		$qvars=$wp->extra_query_vars;
 		if (isset($_GET['knews'])) {
 			if (!is_array($qvars)) $qvars=array();
 			if (!in_array('knews', $qvars)) $qvars[] = 'knews';
@@ -2228,9 +2234,9 @@ if (!function_exists("Knews_plugin_ap")) {
 			if (!in_array('id', $qvars)) $qvars[] = 'id';
 			if (!in_array('m', $qvars)) $qvars[] = 'm';
 		}
-		return $qvars;
+		$wp->extra_query_vars=$qvars;
 	}
-	add_filter('query_vars', 'knews_queryvars' );
+	add_filter('init', 'knews_queryvars' );
 
 }
 

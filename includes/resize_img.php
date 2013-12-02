@@ -4,9 +4,16 @@ function knews_resize_img_fn($url_img, $width, $height) {
 
 	$wp_dirs = wp_upload_dir();
 		
-	$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
+	$blog_url = get_bloginfo('url');
+	if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
+	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
 
-	$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $absolute_dir));
+
+	if (strpos($url_img, $blog_url) === false) $url_img = $blog_url . $url_img;
+	if (strpos($wp_dirs['baseurl'], $blog_url) === false) $wp_dirs['baseurl'] = $blog_url . $wp_dirs['baseurl'];
+
+
+	$wp_dirs['basedir'] = substr($wp_dirs['basedir'], strpos($wp_dirs['basedir'], $blog_url));
 
 	//echo '*' . $wp_dirs['baseurl'] . '*<br>';
 	//echo '*' . substr($url_img, 0, strlen($wp_dirs['baseurl'])) . '*<br>';
@@ -110,7 +117,7 @@ function knews_resize_img_fn($url_img, $width, $height) {
 				return $jsondata;
 	
 			} else {
-				if (is_file($absolute_dir . $url)) {
+				if (is_file($blog_url . $url)) {
 
 					$jsondata['result'] = 'ok';
 					$jsondata['url'] = $wp_dirs['baseurl'] . $url;
