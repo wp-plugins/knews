@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 3.7.1
-Stable tag: 1.5.4
+Tested up to: 3.8
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.5 =
+* Double optin subscription on/off (default on)
+* Email subscription advice (Knews email you when someone subscribes)
+* Error in image resize solved
+* Gmail port corrected in SMTP wizard
+* Solved downloadable file link tracking stats param issue in newsletters
 
 = 1.5.4 =
 * Chinese Simplified & Traditional added
