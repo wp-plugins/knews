@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.5.4
+Version: 1.5.5
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -88,6 +88,7 @@ if (!class_exists("KnewsPlugin")) {
 				'newsletter' => 'no',
 				'notify_signups_email' => '',
 				'double_optin' => 1,
+				'double_optin_register' => 0,
 				'pixel_tracking' => 0,
 				);
 
@@ -197,15 +198,13 @@ if (!class_exists("KnewsPlugin")) {
 			if (!defined('KNEWS_WP_CONTENT')){
 				$content_folder = 'wp-content';
 				if (defined('WP_CONTENT_URL')) {
-					/*$home_url = get_option('home');
-					echo '*' . $home_url . '*' . WP_CONTENT_URL . '*';
+					$home_url = get_option('home');
 					$pos = strpos(WP_CONTENT_URL, $home_url);
 					if ($pos !== false) {
-						$content_folder = substr(WP_CONTENT_URL, $pos + strlen($home_url));*/
-						$content_folder = WP_CONTENT_URL;
+						$content_folder = substr(WP_CONTENT_URL, $pos + strlen($home_url));
 						if (substr($content_folder, 0, 1) == '/') $content_folder = substr($content_folder, 1);
 						if (substr($content_folder, -1) == '/') $content_folder = substr($content_folder, 0, strlen($content_folder) -1);
-					//}
+					}
 				}
 				define ('KNEWS_WP_CONTENT', $content_folder);
 			}
@@ -609,9 +608,7 @@ if (!class_exists("KnewsPlugin")) {
 				
 				$code = apply_filters('knews_add_user_db', 0, $email, $id_list_news, $lang, $lang_locale, $custom_fields, ($knewsOptions['double_optin']==0) );
 				
-				if ($code==1) {
-					$response = $this->get_custom_text('ajax_subscription', $lang_locale);
-				
+				if ($code==1 || ($code==3 && $knewsOptions['double_optin']==0)) {
 					if ($knewsOptions['notify_signups_email'] != '') {
 
 						$theHtml = '<p>' . sprintf('A new user was subscribed to: %s', get_bloginfo('name')) . '</p>';
@@ -627,6 +624,7 @@ if (!class_exists("KnewsPlugin")) {
 						$this->sendMail($knewsOptions['notify_signups_email'], 'New user subscribed to: ' . get_bloginfo('name'), $theHtml, '', '', false, false, 0, $knewsOptions['smtp_default']);
 					}
 				}
+				if ($code==1) $response = $this->get_custom_text('ajax_subscription', $lang_locale);
 				if ($code==2) $response = $this->get_custom_text('ajax_subscription_error', $lang_locale);
 				if ($code==3 || $code==5) $response = $this->get_custom_text('ajax_subscription_direct', $lang_locale);
 				if ($code==4) $response = $this->get_custom_text('ajax_subscription_oops', $lang_locale);
@@ -706,7 +704,7 @@ if (!class_exists("KnewsPlugin")) {
 								
 				if ($submit_mail) {
 					
-					if ($bypass_confirmation) return 1;
+					if ($bypass_confirmation) return 3;
 										
 					if (apply_filters('knews_submit_confirmation', $email, $confkey, $lang_locale, $lang)) {
 					//if ($this->submit_confirmation ($email, $confkey, $lang_locale, $lang)) {
@@ -1294,7 +1292,6 @@ if (!class_exists("KnewsPlugin")) {
 			global $knewsOptions, $wpdb;
 
 			if ($knewsOptions['smtp_knews']=='0' && !$test_smtp) {
-				
 				$headers='';
 
 				$headers .= 'From: ' . $knewsOptions['from_name_knews'] . ' <' . $knewsOptions['from_mail_knews'] . '>' . "\r\n";
@@ -1321,7 +1318,6 @@ if (!class_exists("KnewsPlugin")) {
 						$mail->IsSMTP();
 					}
 					$mail->CharSet='UTF-8';
-					$mail->Subject=$theSubject;
 
 					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_email'];
 					
@@ -1349,7 +1345,6 @@ if (!class_exists("KnewsPlugin")) {
 						$mail->IsSMTP();
 					}
 					$mail->CharSet='UTF-8';
-					$mail->Subject=$theSubject;
 
 					//$mail->From = $knewsOptions['from_mail_knews'];
 					//$mail->FromName = $knewsOptions['from_name_knews'];
@@ -1398,10 +1393,12 @@ if (!class_exists("KnewsPlugin")) {
 					$customText=str_replace('%mobile_version_href%', $recipient->cant_read . (($mobile) ? '&m=dsk' : '&m=mbl'), $customText);
 				}
 
+				$customSubject=$theSubject;
 				if (isset($recipient->tokens)) {
 					foreach ($recipient->tokens as $token) {
 						$customHtml=str_replace($token['token'], $token['value'], $customHtml);
 						$customText=str_replace($token['token'], $token['value'], $customText);
+						$customSubject=str_replace($token['token'], $token['value'], $customSubject);
 					}
 				}
 
@@ -1425,7 +1422,7 @@ if (!class_exists("KnewsPlugin")) {
 						$mail_recipient = get_option('admin_email');
 					}
 
-					if (wp_mail($mail_recipient, $theSubject, $message, $headers)) {
+					if (wp_mail($mail_recipient, $customSubject, $message, $headers)) {
 						$submit_ok++;
 						$error_info[]='submit ok [wp_mail()]';
 						$status_submit=1;
@@ -1634,7 +1631,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.5.4');
+		define('KNEWS_VERSION', '1.5.5');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );

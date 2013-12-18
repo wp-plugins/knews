@@ -55,11 +55,12 @@ if ($Knews_plugin) {
 	foreach ($all_tokens as $token) {
 		if ($token->token != '') {
 			
-			preg_match("#\{" . $token->token . "\[([^\]]*)\]\}#", $theHtml, $tokenfound);
+			preg_match("#\{" . $token->token . "\[([^\]]*)\]\}#", $theSubject . $theHtml, $tokenfound);
 			
 			if( count($tokenfound) != 0) {
 				$used_tokens[] = array('token'=>$token->token, 'id'=>$token->id, 'defaultval'=>$tokenfound[1]);
 				$theHtml = str_replace($tokenfound[0], $token->token, $theHtml);
+				$theSubject = str_replace($tokenfound[0], $token->token, $theSubject);
 			}
 		}
 	}

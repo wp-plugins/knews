@@ -4,7 +4,7 @@ function knews_conf(w) {
 	if (w=='gmail') {
 		user='youremail@gmail.com';
 		host='smtp.gmail.com';
-		port='587';
+		port='465';
 		secure='ssl';
 		comnn='0';
 	} else if (w=='1and1') {

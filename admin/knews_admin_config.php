@@ -14,6 +14,8 @@ function knews_save_prefs() {
 		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews');
 		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews');
 		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews');
+		$knewsOptions['double_optin'] = $Knews_plugin->post_safe('double_optin_knews', '0');
+		$knewsOptions['notify_signups_email'] = $Knews_plugin->post_safe('notify_signups_knews', '');
 		$knewsOptions['write_logs'] = $Knews_plugin->post_safe('write_logs_knews', 'no');
 		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', '0');
 		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', '0');
@@ -196,7 +198,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<div class="tabbed_content tab_1"<?php if ($subtab!=1) echo ' style="display:none"'; ?>>
 				<h3><input type="radio" name="knews_cron" value="cronjob"<?php if ($knewsOptions['knews_cron']=='cronjob') echo ' checked="checked"'; ?> /> <?php _e('Use the CRON server (recommended)','knews'); ?> <a href="<?php _e('http://www.knewsplugin.com/configure-webserver-cron/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; font-weight:normal;" target="_blank"><?php _e('Configure CRON tutorial','knews'); ?></a></h3>
 				<div style="background:#eee url(<?php echo KNEWS_URL; ?>/images/remote.jpg) no-repeat 10px 10px; border:#CCC 1px solid; border-radius:2px; padding:0 15px 0 65px; min-height:65px; margin-left:30px;">
-<?php if ($Knews_plugin->im_pro()) { ?>
+<?php if (!$Knews_plugin->im_pro()) { ?>
 				<p style="font-size:13px; line-height:20px;"><a href="admin.php?page=knews_config&tab=pro" class="knews_on_off knews_on_off_left" style="background-position: -50px 0px;">&nbsp;</a><label class="knews_processed knews_on_off_left"><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?><br /><strong>This is a Knews Pro feature</strong></label></p>
 <?php } else { ?>
 				<p style="font-size:13px; line-height:20px;"><a href="#" onclick="knews_cron_callme(); return false;"><img src="http://www.knewsplugin.com/look_cron.php?email=<?php echo $knewsOptions['registration_email']; ?>&serial=<?php echo $knewsOptions['registration_serial']; ?>&url=<?php echo urlencode($cron_main_url); ?>" style="vertical-align:middle; margin-right:10px;" /></a><label><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?></label></p>
@@ -474,6 +476,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" value="<?php echo $knewsOptions['from_name_knews']; ?>" /></td></tr>
 			<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" value="<?php echo $knewsOptions['from_mail_knews']; ?>" /></td></tr>
 			</table>
+			<hr />
+			<h3><?php _e('At subscription time','knews'); ?></h3>
+			<p><input type="checkbox" name="double_optin_knews" value="1" id="double_optin_knews"<?php if ($knewsOptions['double_optin']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Double optin. (Send email confirmation after subscription). Leave checked if you want to obey the european laws.','knews'); ?></label></p>
+			<p><label><?php _e('Advice me:','knews'); ?></label><input type="text" name="notify_signups_knews" value="<?php echo $knewsOptions['notify_signups_email']; ?>" id="notify_signups_knews" class="regular-text" /> <?php _e('Insert your email if you want to be emailed when someone subscribe','knews'); ?></p>
 			<hr />
 			<h3><?php _e('Alerts and logs','knews'); ?></h3>
 			<p><input type="checkbox" name="reset_alerts_knews" value="1" id="reset_alerts_knews" class="knews_on_off align_left" /><label><?php _e('Reset all alerts','knews'); ?></label></p>

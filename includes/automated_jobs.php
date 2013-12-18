@@ -200,6 +200,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 	
 	if ($total_posts >= count($pend_posts)) {
 
+		$subject = $news[0]->subject;
 		$most_recent=0;
 		foreach ($pend_posts as $pp) {
 			knews_debug('- including post: ' . $pp->post_title . "\r\n");
@@ -278,6 +279,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				$news_mod2[$s] = str_replace('%the_title_' . $n . '%', $title, $news_mod2[$s]);
 				$news_mod2[$s] = str_replace('%the_excerpt_' . $n . '%', $excerpt, $news_mod2[$s]);
 				$news_mod2[$s] = str_replace('%the_content_' . $n . '%', $content, $news_mod2[$s]);
+				$subject = str_replace('%the_title_1%', $title, $subject);
 				
 				knews_debug('- included: ' . $pp->post_title . "\r\n");
 				
@@ -306,8 +308,9 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				$news_mod = knews_iterative_deleteTag('a', '%the_permalink_' . $n . '%', $news_mod);
 				$news_mod = knews_iterative_deleteTag('img', 'the_feat_img_' . $n . '%', $news_mod);
 			}
+			
 			knews_debug('- saving the created newsletter' . "\r\n");
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($news[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ")";
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ")";
 			$results = $wpdb->query($sql);				
 			$id_newsletter = $wpdb->insert_id; $id_newsletter2=mysql_insert_id(); if ($id_newsletter==0) $id_newsletter=$id_newsletter2;
 
