@@ -189,6 +189,9 @@ In any case, the degree of personalisation of our templates is immense, with tho
 
 == Changelog ==
 
+= 1.5.6 =
+* Solved empty subject bug when the newsletter was sent trough SMTP: We're sorry, guys!
+
 = 1.5.5 =
 * Double optin subscription on/off (default on)
 * Email subscription advice (Knews email you when someone subscribes)
@@ -562,6 +565,38 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.5.6 =
+* Solved empty subject bug when the newsletter was sent trough SMTP: We're sorry, guys!
+
+= 1.5.5 =
+* Double optin subscription on/off (default on)
+* Email subscription advice (Knews email you when someone subscribes)
+* Error in image resize solved
+* Gmail port corrected in SMTP wizard
+* Solved downloadable file link tracking stats param issue in newsletters
+
+= 1.5.4 =
+* Chinese Simplified & Traditional added
+* User IP and registration date export added (in CSV)
+* Solved not-homepage-issue under newsletter or dialog
+* Full support for distinct /wp-content folder name
+* Full support for Hungarian chars (thanks to @easy82)
+* Support for relative image URLs inside WordPress
+* Patch added for some users who can't see stats graphs (thanks to @burakali)
+* More clean code in newsletters (less comments)
+* Better code line cut
+
+= 1.5.3 =
+
+* Better mailing lists panel: in send newsletter and export users
+* Better stats
+* Lighter export users (less timeout issues, about 50.000 users)
+* Better search users
+* Solved tracking codes repeated
+* IP and date registration in user info panel
+* Support for one-blog plugin activation in a multiblog site
+* Support for distinct than wp-content folder name - See more at: http://www.knewsplugin.com/changelog/#sthash.ZeQfdmsX.dpuf
 
 = 1.5.2 =
 
