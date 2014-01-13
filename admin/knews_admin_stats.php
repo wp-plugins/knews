@@ -491,7 +491,7 @@ if ($fp) {
 			<div class="custom_lang_2_6"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=cantread.png" /></div>
 			<div class="custom_lang_2_7"><img src="<?php echo get_admin_url(); ?>admin-ajax.php?action=knewsSafeDownload&file=unsubscriptions.png" /></div>
 		</div>
-			<div style="background:#fff; padding:20px 0;">
+			<div style="padding:20px 0;">
 				<table border="0" cellpadding="0" cellspacing="0">
 				<tr class="alt">
 					<td><img src="<?php echo KNEWS_URL; ?>/images/legend_blue.gif" width="13" height="13" alt="1" /> <?php _e('Sendings OK','knews'); ?>:</td><td align="right"><?php echo $enviaments_ok; ?></td><td align="right"><?php echo knews_safe_percent($enviaments_ok, $enviaments_ok + $enviaments_error); ?>%</td>

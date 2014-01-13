@@ -56,14 +56,14 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	if (isset($_FILES['file_csv']['tmp_name'])) {
 		$filename = KNEWS_DIR . '/tmp/' . pathinfo($_FILES['file_csv']['tmp_name'], PATHINFO_FILENAME);
 		if ( move_uploaded_file($_FILES['file_csv']['tmp_name'], $filename) ) {
-			echo '<p>' . __('File uploaded correctly','knews'). '</p>';
+			echo '<div class="updated"><p>' . __('File uploaded correctly','knews'). '</p></div>';
 		} else {
-			echo '<p>' . __("Error: can't move uploaded file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';
+			echo '<div class="error"><p>' . __("Error: can't move uploaded file.",'knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p></div>';
 		}
 	} else {
 		if ($step > 1) {
 			if (!is_file($filename)) {
-				echo '<p>' . __('You must upload a file.','knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p>';
+				echo '<div class="error"><p>' . __('You must upload a file.','knews') . ' ' . __('The directory /wp-content/plugins/knews/tmp must be writable (chmod 700)', 'knews') . '</p></div>';
 				$step = 1;
 			}
 		}
@@ -149,20 +149,20 @@ p.knews_progress span {
 	float:left;
 	padding:0 10px 20px 10px;
 	color:#333;
-	background:url(<?php echo KNEWS_URL; ?>/images/progress_pass.gif) no-repeat center bottom;
+	background:url(<?php echo KNEWS_URL; ?>/images/progress_pass.png) no-repeat center bottom;
 }
 p.knews_progress span.first {
-	background:url(<?php echo KNEWS_URL; ?>/images/progress_hi.gif) no-repeat left bottom;
+	background:url(<?php echo KNEWS_URL; ?>/images/progress_hi.png) no-repeat left bottom;
 	padding-left:0;
 }
 
 p.knews_progress span.wait {
-	color:#999;
-	background:url(<?php echo KNEWS_URL; ?>/images/progress.gif) no-repeat center bottom;
+	color:#666;
+	background:url(<?php echo KNEWS_URL; ?>/images/progress.png) no-repeat center bottom;
 }
 p.knews_progress span.on {
 	color:#21759B;
-	background:url(<?php echo KNEWS_URL; ?>/images/progress_hi.gif) no-repeat center bottom;
+	background:url(<?php echo KNEWS_URL; ?>/images/progress_hi.png) no-repeat center bottom;
 	font-weight:bold;
 	font-size:13px;
 }

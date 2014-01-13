@@ -55,52 +55,5 @@ if (count($targets) > 0) {
 	echo '<div class="error"><p>' . __('No active users in the selected list, nothing programmed to send.','knews') . '</p></div>';				
 }
 
-function knews_insert_unique_key($type, $submit_id, $link) {
-	global  $wpdb, $Knews_plugin;
-	
-	if ($type==1) {
-		$valid_ext=array('','.phtml', '.php', '.php3', '.php4', '.php5', '.php6', '.phps', '.cgi', '.exe', '.pl', '.asp', '.aspx', '.shtml', '.shtm', '.fcgi', '.fpl', '.jsp', '.htm', '.html', '.xhtml', '.wml');
-		$ext=$link;
-		if (strpos($ext,'.') === false) return false; $ext=substr($ext, strpos($ext,'.'));
-		if (strpos($ext,'/') === false) $ext='';
-		if (strpos($ext,'/') !== false) $ext=substr($ext, strpos($ext,'/'));
-		if (strpos($ext,'#') !== false) $ext=substr($ext, 0, strpos($ext,'#'));
-		if (strpos($ext,'?') !== false) $ext=substr($ext, 0, strpos($ext,'?'));
-		if (strrpos($ext,'.') !== false) $ext=substr($ext, strrpos($ext,'.'));
-		if (substr($ext, -1) == '/') $ext = substr($ext, 0, strlen($ext) -1);
-		$ext=strtolower($ext);
-		if (!in_array($ext, $valid_ext)) return false;
-	}
-	//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
-	if (
-		strpos($link,'<') === false &&
-		strpos($link,'>') === false &&
-		strpos($link,' ') === false &&
-		strpos($link,'\'') === false &&
-		strpos($link,'"') === false &&
-		strpos($link,'{') === false &&
-		strpos($link,'}') === false &&
-		strpos($link,'[') === false &&
-		strpos($link,']') === false &&
-		strpos($link,'%') === false &&
-		strpos($link,'#blog_name#') === false &&
-		strpos($link,'#url_confirm#') === false &&
-		strpos($link,'mailto:') === false 
-	) {
-		$link_key = substr(md5(uniqid('',true)),-16); $param_href='';
-
-
-		
-		$query = 'SELECT * FROM ' . KNEWS_KEYS . ' WHERE type=' . $type . ' AND submit_id=' . $submit_id . ' AND href=\'' . $link . '\'';
-		$result = $wpdb->get_row( $query );
-		if (!isset($result->id)) {
-			$query = 'INSERT INTO ' . KNEWS_KEYS . ' (keyy, type, submit_id, href, param_href) VALUES (\'' . $link_key . '\', ' . $type . ', ' . $submit_id . ', \'' . $link . '\', \'' . $param_href . '\')';
-			$results = $wpdb->query( $query );
-		}
-		return true;
-	} else {
-		return false;
-	}
-}
 ?>
 	

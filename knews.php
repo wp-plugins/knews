@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.5.6
+Version: 1.5.7
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -559,6 +559,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function add_user_self(){
+			header('X-Frame-Options: GOFORIT');
 
 			global $knewsOptions;
 
@@ -626,8 +627,9 @@ if (!class_exists("KnewsPlugin")) {
 				}
 				if ($code==1) $response = $this->get_custom_text('ajax_subscription', $lang_locale);
 				if ($code==2) $response = $this->get_custom_text('ajax_subscription_error', $lang_locale);
-				if ($code==3 || $code==5) $response = $this->get_custom_text('ajax_subscription_direct', $lang_locale);
-				if ($code==4) $response = $this->get_custom_text('ajax_subscription_oops', $lang_locale);
+				if ($code==3) $response = $this->get_custom_text('ajax_subscription_direct', $lang_locale);
+				if ($code==4) $response = $this->get_custom_text('ajax_subscription_error', $lang_locale);
+				if ($code==5) $response = $this->get_custom_text('ajax_subscription_oops', $lang_locale);
 			}
 
 			do_action('knews_echo_ajax_reply', $code, $response, $lang_locale);
@@ -1041,12 +1043,12 @@ if (!class_exists("KnewsPlugin")) {
 				}
 			}
 			if (count($lists) > 1) {
-				$response = '<select name="user_knews_list">';
+				$response = '<fieldset><select name="user_knews_list">';
 				while ($list = current($lists)) {
 					$response .= '<option value="' . key($lists) . '">' . $list . '</option>';
 					next($lists);
 				}
-				$response .= '</select>';
+				$response .= '</select></fieldset>';
 			} else if (count($lists) == 1) {
 				$response = '<input type="hidden" name="user_knews_list" value="' . key($lists) . '" />';
 			} else {
@@ -1280,221 +1282,7 @@ if (!class_exists("KnewsPlugin")) {
 
 
 		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0, $id_smtp=1) {
-
-			$test_smtp=is_array($test_array);
-			
-			if (!is_array($recipients)) {
-				$myobject = new stdClass;
-				$myobject->email = $recipients;
-				$recipients = array($myobject);
-			}
-			
-			global $knewsOptions, $wpdb;
-
-			if ($knewsOptions['smtp_knews']=='0' && !$test_smtp) {
-				$headers='';
-
-				$headers .= 'From: ' . $knewsOptions['from_name_knews'] . ' <' . $knewsOptions['from_mail_knews'] . '>' . "\r\n";
-				if ($theHtml != '') add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
-
-			} else {
-				
-				//include_once (KNEWS_DIR . '/includes/class-phpmailer.php');
-				//include_once (KNEWS_DIR . '/includes/class-smtp.php');
-				if ( !class_exists("PHPMailer") ) require_once ABSPATH . WPINC . '/class-phpmailer.php';
-				if ( !class_exists("SMTP") ) require_once ABSPATH . WPINC . '/class-smtp.php';
-				
-				if (!$test_smtp) {
-
-					if (!$smtpdata = $this->get_smtp_multiple($id_smtp)) {
-						$smtpdata = $this->get_smtp_multiple(1, true);
-						//$smtpdata = $smtpdata[1];
-					}
-					
-					$mail=new PHPMailer();
-					if ($smtpdata['is_sendmail']=='1') {
-						$mail->IsSendmail();
-					} else {
-						$mail->IsSMTP();
-					}
-					$mail->CharSet='UTF-8';
-
-					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_email'];
-					
-					$mail->From = $smtpdata['from_mail_knews'];
-					$mail->FromName = $smtpdata['from_name_knews'];
-				
-					$mail->Host = $smtpdata['smtp_host_knews'];
-					$mail->Port = $smtpdata['smtp_port_knews'];
-					$mail->Timeout = 30;
-	
-					if ($smtpdata['smtp_user_knews']!='' || $smtpdata['smtp_pass_knews'] != '') {
-		
-						$mail->SMTPAuth=true;
-						$mail->Username = $smtpdata['smtp_user_knews'];
-						$mail->Password = $smtpdata['smtp_pass_knews'];
-						if ($smtpdata['smtp_secure_knews'] != '') $mail->SMTPSecure = $smtpdata['smtp_secure_knews'];
-					}
-
-				} else {
-
-					$mail=new PHPMailer();
-					if ($test_array['is_sendmail']=='1') {
-						$mail->IsSendmail();
-					} else {
-						$mail->IsSMTP();
-					}
-					$mail->CharSet='UTF-8';
-
-					//$mail->From = $knewsOptions['from_mail_knews'];
-					//$mail->FromName = $knewsOptions['from_name_knews'];
-					$mail->From = $test_array['from_mail_knews'];
-					$mail->FromName = $test_array['from_name_knews'];
-
-					$mail->Host = $test_array['smtp_host_knews'];
-					$mail->Port = $test_array['smtp_port_knews'];
-					$mail->Timeout = 30;
-					$mail->SMTPDebug=1;
-					
-					if ($test_array['smtp_user_knews']!='' || $test_array['smtp_pass_knews'] != '') {
-		
-						$mail->SMTPAuth=true;
-						$mail->Username = $test_array['smtp_user_knews'];
-						$mail->Password = $test_array['smtp_pass_knews'];
-						if ($test_array['smtp_secure_knews'] != '') $mail->SMTPSecure = $test_array['smtp_secure_knews'];
-					}
-					
-				}
-				
-				if (count($recipients) > 1) $mail->SMTPKeepAlive = true;
-			}
-
-			$submit_error=0;
-			$submit_ok=0;
-			$error_info=array();
-
-			foreach ($recipients as $recipient) {
-				$customHtml = $theHtml; $customText = $theText;
-
-				if (isset($recipient->confirm)) {
-					$customHtml=str_replace('#url_confirm#', $recipient->confirm, $customHtml);
-					$customText=str_replace('#url_confirm#', $recipient->confirm, $customText);
-				}
-				if (isset($recipient->unsubscribe)) {
-					$customHtml=str_replace('%unsubscribe_href%', $recipient->unsubscribe, $customHtml);
-					$customText=str_replace('%unsubscribe_href%', $recipient->unsubscribe, $customText);
-				}
-
-				if (isset($recipient->cant_read)) {
-					$customHtml=str_replace('%cant_read_href%', $recipient->cant_read, $customHtml);
-					$customText=str_replace('%cant_read_href%', $recipient->cant_read, $customText);
-
-					$customHtml=str_replace('%mobile_version_href%', $recipient->cant_read . (($mobile) ? '&m=dsk' : '&m=mbl'), $customHtml);
-					$customText=str_replace('%mobile_version_href%', $recipient->cant_read . (($mobile) ? '&m=dsk' : '&m=mbl'), $customText);
-				}
-
-				$customSubject=$theSubject;
-				if (isset($recipient->tokens)) {
-					foreach ($recipient->tokens as $token) {
-						$customHtml=str_replace($token['token'], $token['value'], $customHtml);
-						$customText=str_replace($token['token'], $token['value'], $customText);
-						$customSubject=str_replace($token['token'], $token['value'], $customSubject);
-					}
-				}
-
-				$customHtml = str_replace('#blog_name#', get_bloginfo('name'), $customHtml);
-				$customText = str_replace('#blog_name#', get_bloginfo('name'), $customText);
-
-				if (isset($recipient->confkey)) {
-					$customHtml = str_replace('%confkey%', $recipient->confkey, $customHtml);
-					$customText = str_replace('%confkey%', $recipient->confkey, $customText);
-				}
-
-				$customHtml = $this->htmlentities_corrected($customHtml); $customText = $this->htmlentities_corrected($customText);
-
-				if ($knewsOptions['smtp_knews']=='0' && !$test_smtp) {
-
-					$message = (($theHtml!='') ? $customHtml : $customText);
-					
-					if (strpos($recipient->email , '@knewstest.com') === false) {
-						$mail_recipient = $recipient->email;
-					} else {
-						$mail_recipient = get_option('admin_email');
-					}
-
-					if (wp_mail($mail_recipient, $customSubject, $message, $headers)) {
-						$submit_ok++;
-						$error_info[]='submit ok [wp_mail()]';
-						$status_submit=1;
-					} else {
-						$submit_error++;
-						$error_info[]='wp_mail() error';
-						$status_submit=2;
-					}
-
-				} else {
-
-					$mail->Subject=$customSubject;
-
-					if (strpos($recipient->email , '@knewstest.com') === false) {
-						$mail_recipient = $recipient->email;
-					} else {
-						$mail_recipient = get_option('admin_email');
-					}
-
-					$mail->AddAddress($mail_recipient);
-
-					//if ($theHtml != '') $mail->Body=utf8_encode($customHtml);
-					//if ($theText != '') $mail->AltBody=utf8_encode($customText);
-					if ($theHtml != '') $mail->Body=$customHtml;
-					if ($theText != '') $mail->AltBody=$customText;
-					if ($theHtml != '') $mail->IsHTML(true);
-
-					if ($mail->Send()) {
-						$submit_ok++;
-						$error_info[]='submit ok [smtp]';
-						$status_submit=1;
-					} else {
-						$submit_error++;
-						$error_info[]=$mail->ErrorInfo . ' [smtp]';
-						$status_submit=2;
-					}
-						
-					$mail->ClearAddresses();
-					$mail->ClearAttachments();
-					$mail->ClearCustomHeaders();
-
-				}
-
-				if (count($recipients) > 1) {
-					if( !ini_get('safe_mode') ) set_time_limit(25);
-					echo ' ';
-				}
-
-				if (isset($recipient->unique_submit)) {
-					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=" . $status_submit . " WHERE id=" .$recipient->unique_submit;
-					$result = $wpdb->query( $query );
-				}
-				
-				if ($fp) {
-					$hour = date('H:i:s', current_time('timestamp'));
-					fwrite($fp, '  ' . $hour . ' | ' . $recipient->email . ' | ' . $error_info[count($error_info)-1] . "<br>\r\n");
-				}
-				
-				if ($submit_error != 0) {
-					for ($i = $submit_ok+1; $i < count($recipients); $i++) {
-						if (isset($recipients[$i]->unique_submit)) {
-							$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE id=" .$recipients[$i]->unique_submit;
-							$unlock = $wpdb->query( $query );
-						}
-					}
-					break;
-				}
-			}
-		
-			if (count($recipients) > 1 && ($knewsOptions['smtp_knews']!='0') || $test_smtp) $mail->SmtpClose();
-			
-			return array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info);
+			require('includes/knews_send_mail.php');
 			
 		}
 
@@ -1633,7 +1421,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.5.6');
+		define('KNEWS_VERSION', '1.5.7');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1767,33 +1555,7 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('admin_enqueue_scripts', 'knews_admin_enqueue');
     
     function knews_admin_footer () {
-		if (basename($_SERVER['SCRIPT_FILENAME']) == 'widgets.php') {
-		?>
-			<div id="knewsWidgetCSS" style="display:none">
-				<p>CSS pel widget:</p>
-				<form method="get" action=".">
-					<textarea name="knewsCustomCSS" rows="10" cols="40" style="width:100%; height:300px;"></textarea>
-					<p style="text-align:right"><input type="button" value="<?php _e('Save','knews'); ?>" class="button-primary" onclick="knewsSaveCSS(this); return false" /></p>
-				</form>
-			</div>
-			<script type="text/javascript">
-				var knewsCSShandler='';
-				function knewsOpenCSS(id) {
-					knewsCSShandler=id;
-					tb_show('CSS for Knews Widget', "#TB_inline?height=400&width=700&inlineId=knewsWidgetCSS");
-					cssContent = jQuery('#' + knewsCSShandler).val();
-					if (cssContent=='') {
-						cssContent="/* Write here your CSS classes. Please, use div.knews_add_user prefix to customize all Knews Subscription widgets at once, or #" + knewsCSShandler.substr(7, knewsCSShandler.length-17) + " prefix to customize this one. Example:  div.knews_add_user input { border: #e00 1px solid; } */";
-					}
-					jQuery('#TB_window textarea[name="knewsCustomCSS"]').val( cssContent );
-				}
-				function knewsSaveCSS(popupObj) {
-					jQuery ('#' + knewsCSShandler).val( jQuery('#TB_window textarea[name="knewsCustomCSS"]').val() );
-					tb_remove();
-				}
-			</script>
-		<?php
-		}
+		if (basename($_SERVER['SCRIPT_FILENAME']) == 'widgets.php') require ('includes/widgets_footer.php');
 	}
 	add_action('in_admin_footer', 'knews_admin_footer');
 	
@@ -1834,74 +1596,7 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('wp_footer', 'knews_popup');
 	
 	function knews_admin_notice() {
-	
-		$div='<div style="background-color:#FFFBCC; border:#E6DB55 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
-		$div_error='<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
-		
-		global $Knews_plugin, $knewsOptions;
-		if (! $Knews_plugin->initialized) $Knews_plugin->init();
-
-		if ($Knews_plugin->knews_admin_messages != '') {
-			echo $div . $Knews_plugin->knews_admin_messages . '</div>';
-		} else {
-
-			if (strpos($_SERVER['REQUEST_URI'],'knews_news&section=edit') !== false && $knewsOptions['videotutorial'] == 'no') {
-				echo $div . sprintf(__('There is a videotutorial about Knews WYSIWYG Editor, %s view it in Youtube','knews'), '<a href="http://www.youtube.com/watch?v=axDO5ZIW-9s" target="_blank">') . '</a>';
-				echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=videotutorial&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-			} else {
-
-				if (version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0 || get_option('knews_pro') == 'yes') {
-					if ($knewsOptions['update_knews'] == 'no' && version_compare( KNEWS_VERSION, get_option('knews_version' )) < 0) {
-						echo $div_error . __('You are downgraded the version of Knews, you can lose data, please update quickly','knews');
-						echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=update_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-					} else {
-						if (get_option('knews_pro') == 'yes') {
-							if ($knewsOptions['update_pro'] == 'no') {
-								echo $div;
-								printf( __('You are downgraded to the free version of Knews, you can lose data, please update quickly! You can get the professional version %s here','knews'), '<a href="http://www.knewsplugin.com" target="_blank">');
-								echo '</a>';
-								echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=update_pro&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-							}
-						}
-					}
-				}
-			}
-			
-			if (strpos($_SERVER['REQUEST_URI'],'knews_config') === false) {
-				if ($knewsOptions['config_knews'] == 'no') {
-					
-					printf($div . __('Welcome to Knews.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-						'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
-					echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=config_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-			
-				} else {
-		
-					if (!$Knews_plugin->check_multilanguage_plugin() && $knewsOptions['multilanguage_knews'] != 'off' && $knewsOptions['no_warn_ml_knews'] == 'no') {
-		
-						printf($div_error . __('The multilanguage plugin has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-							'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
-						echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=no_warn_ml_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-		
-					} elseif ($knewsOptions['knews_cron']=='cronjob') {
-						$last_cron_time = $Knews_plugin->get_last_cron_time();
-						$now_time = time();
-						if ($now_time - $last_cron_time > 1000 && $last_cron_time != 0 && $knewsOptions['no_warn_cron_knews'] == 'no') {
-		
-							printf($div_error . __('CRON has stopped working.','knews') . ' ' . __('Please, go to %s configuration page','knews') . "</a>", 
-								'<a href="' . get_admin_url() . 'admin.php?page=knews_config">');
-							echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=no_warn_cron_knews&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-						}
-					} else {
-						if ($knewsOptions['newsletter'] == 'no') {
-							echo $div;
-							printf( __('<strong>Knews:</strong> Do you want to stay-in-touch about latest Knews features, tips and tricks? Please, subscribe to our newsletter %s here','knews'), '<a href="http://www.knewsplugin.com/multi-language/" target="_blank">');
-							echo '</a>';
-							echo ' <a href="' . get_admin_url() . 'admin-ajax.php?action=knewsOffWarn&w=newsletter&b=' . urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '" style="float:right">' . __("Don't show this message again [x]",'knews') . '</a></div>';
-						}							
-					}
-				}
-			}
-		}
+		require('includes/admin_notices.php');
 	}
 	add_action( 'admin_notices', 'knews_admin_notice' );
 	
@@ -1912,6 +1607,35 @@ if (!function_exists("Knews_plugin_ap")) {
 		return $Knews_plugin->getForm($id_list, '', $atts);
 	}
 	add_shortcode("knews_form", "knews_plugin_form");
+	
+	function knews_plugin_form_ext() {
+		global $Knews_plugin; if (!isset($Knews_plugin)) die();
+		
+		$id_list = $Knews_plugin->get_safe('id', 0, 'int');
+
+		header('X-Frame-Options: GOFORIT');
+		
+		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head profile="http://gmpg.org/xfn/11">
+		<meta name="robots" content="NOINDEX,NOFOLLOW">
+		<meta charset="utf-8" />
+		<title>Knews Subscription</title>';
+		wp_head();
+		if ($Knews_plugin->get_safe('css') != '') {
+			$upload_dir = wp_upload_dir();
+			echo '<link rel="stylesheet" href="' . $upload_dir['baseurl'] . '/' . $Knews_plugin->get_safe('css') . '.css" type="text/css" media="all" />';
+		}
+		echo '</head>';
+		echo '<body>';
+		echo $Knews_plugin->getForm($id_list, '', $_GET);
+		echo '</body>
+		</html>';
+				
+		die();
+	}
+	add_action('wp_ajax_knewsRemote', 'knews_plugin_form_ext' );
+	add_action('wp_ajax_nopriv_knewsRemote', 'knews_plugin_form_ext' );
 	
 	function knews_post_options_fn() {
 		global $Knews_plugin, $post, $knewsOptions, $wpdb;
@@ -2156,58 +1880,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		}
 	
 		public function form( $instance ) {
-			global $Knews_plugin;
-			if (! $Knews_plugin->initialized) $Knews_plugin->init();			
-			$extra_fields = $Knews_plugin->get_extra_fields();
-			
-			$val='0';
-			if (isset($instance[ 'subtitle' ])) $val=$instance[ 'subtitle' ];
-			echo '<p><label for="' . $this->get_field_id('subtitle') . '">' . __('Show subtitle','knews') . '</label>';
-			echo '<select id="' . $this->get_field_id('subtitle') . '" name="' . $this->get_field_name('subtitle') . '" style="float:right;">';
-			echo '<option value="0"' . (($val=="0" || $val=="") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
-			echo '<option value="1"' . (($val=="1") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
-			echo '</select></p>';
-
-			foreach ($extra_fields as $field) {
-				$val=1;
-				if (isset($instance[ $field->name ])) $val=$instance[ $field->name ];
-				
-				echo '<p><label for="' . $this->get_field_id($field->name) . '">' . $field->name . '</label>';
-				echo '<select id="' . $this->get_field_id($field->name) . '" name="' . $this->get_field_name($field->name) . '" style="float:right;">';
-				echo '<option value="off"' . (($val=="off") ? ' selected="selected"' : '') . '>' . __('Dont ask','knews') . '</option>';
-				echo '<option value="ask"' . (($val=="ask") ? ' selected="selected"' : '') . '>' . __('Not required','knews') . '</option>';
-				echo '<option value="required"' . (($val=="required") ? ' selected="selected"' : '') . '>' . __('Required','knews') . '</option>';
-				echo '</select></p>';
-			}
-
-			$val='outside';
-			if (isset($instance[ 'labelwhere' ])) $val=$instance[ 'labelwhere' ];
-			echo '<p><label for="' . $this->get_field_id('labelwhere') . '">' . __('Label position','knews') . '</label>';
-			echo '<select id="' . $this->get_field_id('labelwhere') . '" name="' . $this->get_field_name('labelwhere') . '" style="float:right;">';
-			echo '<option value="outside"' . (($val=="outside") ? ' selected="selected"' : '') . '>' . __('Outside','knews') . '</option>';
-			echo '<option value="inside"' . (($val=="inside") ? ' selected="selected"' : '') . '>' . __('Inside','knews') . '</option>';
-			echo '<option value="hidden"' . (($val=="hidden") ? ' selected="selected"' : '') . '>' . __('Hidden','knews') . '</option>';
-			echo '</select></p>';
-
-			$val='0';
-			if (isset($instance[ 'terms' ])) $val=$instance[ 'terms' ];
-			echo '<p><label for="' . $this->get_field_id('terms') . '">' . __('Terms checkbox','knews') . '</label>';
-			echo '<select id="' . $this->get_field_id('terms') . '" name="' . $this->get_field_name('terms') . '" style="float:right;">';
-			echo '<option value="0"' . (($val=="0" || $val=="") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
-			echo '<option value="1"' . (($val=="1") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
-			echo '</select></p>';
-
-			$val='1';
-			if (isset($instance[ 'requiredtext' ])) $val=$instance[ 'requiredtext' ];
-			echo '<p><label for="' . $this->get_field_id('requiredtext') . '">' . __('Show required text fields','knews') . '</label>';
-			echo '<select id="' . $this->get_field_id('requiredtext') . '" name="' . $this->get_field_name('requiredtext') . '" style="float:right;">';
-			echo '<option value="1"' . (($val=="1" || $val=="") ? ' selected="selected"' : '') . '>' . __('Yes','knews') . '</option>';
-			echo '<option value="0"' . (($val=="0") ? ' selected="selected"' : '') . '>' . __('No','knews') . '</option>';
-			echo '</select></p>';
-				
-			echo '<a href="#" onclick="knewsOpenCSS(\'' . $this->get_field_id('customCSS') . '\')">' . __('Customize widget CSS','knews') . '</a><br /><br />';
-			echo '<a href="admin.php?page=knews_config&tab=custom">' . __('Customize widget messages','knews') . '</a>';
-			echo '<input type="hidden" name="' . $this->get_field_name('customCSS') . '" id="' . $this->get_field_id('customCSS') . '" value="' . (isset($instance['customCSS']) ? $instance[ 'customCSS' ] : '') . '">';
+			require ('includes/widget_form.php');
 		}
 	
 	} // class Knews_Widget

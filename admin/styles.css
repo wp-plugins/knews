@@ -203,6 +203,7 @@ input.knews_processed {
 	z-index:-1;
 	width:1px;
 	height:1px;
+	margin-left:2px;
 }
 label.knews_processed {
 	display:inline-block;
@@ -280,4 +281,19 @@ div.knews_error {
 div.knews_error {
 	background-color: #FFEBE8;
 	border-color: #CC0000;
+}
+
+/* 3.8 new look & feel */
+.knews_cooltabs .active:after {
+	background:#f1f1f1;
+}
+.knews_cooltabs_wrapper {
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.3);
+}
+div.pestanyes {
+	background:none;
+}
+div.pregunta textarea {
+	background:#fff;
 }

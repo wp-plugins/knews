@@ -35,14 +35,15 @@ if ($Knews_plugin) {
 		code=parent.jQuery('iframe#knews_editor').contents().find('div.wysiwyg_editor').html();
 		parent.jQuery('iframe#knews_editor').contents().find('div.wysiwyg_editor').html(save_code);
 		
-		parent.jQuery('#code',document).html(code);
+		//parent.jQuery('#code',document).html(code);
 
 		var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-		  mode: "text/html",
+		  //mode: "text/html",
 		  lineNumbers: true,
 		  lineWrapping: true,
 		  tabMode: "indent"
 		});
+		editor.setValue(code);
 		editor.setSize(parseInt(parent.jQuery(window).width(), 10)-15, parseInt(parent.jQuery(window).height(), 10)-60);
 		
 		parent.jQuery('input.save', document).click(function() {
