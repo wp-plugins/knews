@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 3.8
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.7 =
+* New styles for 3.8 admin interface
+* Subscription form outer WordPress (from other websites through Iframe)
+* Solved auto-creation bug when more than one process starts at same time (only one was sent in past)
+* Trying re-subscribe error message solved
+* Solved the HTML code editor blank error
 
 = 1.5.6 =
 * Solved empty subject bug when the newsletter was sent trough SMTP: We're sorry, guys!
