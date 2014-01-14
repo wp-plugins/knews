@@ -18,7 +18,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* **REMOTE SUBSCRIPTION ADDED**: Now Knews give you an ifram HTML code for remote subscription in external websites.
+* **REMOTE SUBSCRIPTION ADDED**: Now Knews give you an iframe HTML code for remote subscription in external websites.
 * **CHINESE ADDED**: Simplified & Traditional.
 * **TRACKING PIXEL**: Now Knews uses an image to track opened newsletters, not only user clicks.
 * SUPPORT FOR POLYLANG: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
