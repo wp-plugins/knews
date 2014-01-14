@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 3.8
-Stable tag: 1.5.7
+Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,9 +18,10 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
+* **REMOTE SUBSCRIPTION ADDED**: Now Knews give you an ifram HTML code for remote subscription in external websites.
 * **CHINESE ADDED**: Simplified & Traditional.
 * **TRACKING PIXEL**: Now Knews uses an image to track opened newsletters, not only user clicks.
-* **SUPPORT FOR POLYLANG**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
+* SUPPORT FOR POLYLANG: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
 * HTML code edition inside WYSIWYG Editor!
 * Easy SMTP default configuration for 1&1 and GoDaddy hostings & Gmail and Yahoo external accounts.
 * **Automated** newslettering creation and submit [(tutorial here)](http://www.knewsplugin.com/automated-newsletter-creation/).
@@ -188,6 +189,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.8 =
+* Solved the "email submission failed" message. It's a bug introduced in 1.5.7 (the emails really was sent, 
+but Knews always show sending error, in SMTP test, unique submission and mailing list submission.
 
 = 1.5.7 =
 * New styles for 3.8 admin interface

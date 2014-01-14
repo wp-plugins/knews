@@ -212,4 +212,4 @@
 		
 			if (count($recipients) > 1 && ($knewsOptions['smtp_knews']!='0') || $test_smtp) $mail->SmtpClose();
 			
-			return array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info);
+			$reply = array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info);

@@ -74,7 +74,6 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 
 		<div id="poststuff">
 			<div id="titlediv">
-			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
 			<div id="titlewrap">
 				<label for="title" id="title-prompt-text" style="" class="hide-if-no-js"><?php _e('Subject','knews'); ?></label>
 				<input type="text" autocomplete="off" id="title" value="<?php echo $subject; ?>" tabindex="1" size="30" name="post_title">
