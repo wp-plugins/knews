@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 3.8
-Stable tag: 1.5.8
+Tested up to: 3.8.1
+Stable tag: 1.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,11 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.5.9 =
+* Added language filter in subscribers administration
+* Added support for the new MAC Safari versions (WYSIWYG drag & drop works again)
+* Solved link tracking bug for stats
 
 = 1.5.8 =
 * Solved the "email submission failed" message. It's a bug introduced in 1.5.7 (the emails really was sent, 
@@ -578,55 +583,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
-= 1.5.6 =
-* Solved empty subject bug when the newsletter was sent trough SMTP: We're sorry, guys!
+= 1.5.9 =
+* Added language filter in subscribers administration
+* Added support for the new MAC Safari versions (WYSIWYG drag & drop works again)
+* Solved link tracking bug for stats
 
-= 1.5.5 =
-* Double optin subscription on/off (default on)
-* Email subscription advice (Knews email you when someone subscribes)
-* Error in image resize solved
-* Gmail port corrected in SMTP wizard
-* Solved downloadable file link tracking stats param issue in newsletters
-
-= 1.5.4 =
-* Chinese Simplified & Traditional added
-* User IP and registration date export added (in CSV)
-* Solved not-homepage-issue under newsletter or dialog
-* Full support for distinct /wp-content folder name
-* Full support for Hungarian chars (thanks to @easy82)
-* Support for relative image URLs inside WordPress
-* Patch added for some users who can't see stats graphs (thanks to @burakali)
-* More clean code in newsletters (less comments)
-* Better code line cut
-
-= 1.5.3 =
-
-* Better mailing lists panel: in send newsletter and export users
-* Better stats
-* Lighter export users (less timeout issues, about 50.000 users)
-* Better search users
-* Solved tracking codes repeated
-* IP and date registration in user info panel
-* Support for one-blog plugin activation in a multiblog site
-* Support for distinct than wp-content folder name - See more at: http://www.knewsplugin.com/changelog/#sthash.ZeQfdmsX.dpuf
-
-= 1.5.2 =
-
-* Tracking pixel automated, with easy configuration wizard (it needs one change in htaccess file)
-* Better stats, better colors and reset option added
-* Now you can add custom CSS for subscription widget (don't need modify your CSS theme anymore)
-* Too faster search subscriber (admin side)
-* Solved bad links in outlook (last slash in unsubscribe and can't read links)
-* Tabbed configuration and sexy switches instead checkboxes
-
-= 1.5.1 =
-
-* IMPORTANT: SOLVED 1.5.0 BUG: 1.5.0 users can't send newsletters
-
-= 1.5.0 =
-
-* Removed automated upgrade from Knews Free to Pro (Wordpress.org guidelines)
-* Portuguese language added (Thanks to BAANNNG. http://www.baannng.com).
-* MySQL error messages at first installation solved.
 
 
