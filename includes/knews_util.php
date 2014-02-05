@@ -370,21 +370,9 @@ function knews_pagination($paged, $maxPage, $items='', $link_params='') {
 function knews_insert_unique_key($type, $submit_id, $link) {
 	global  $wpdb, $Knews_plugin;
 	
-	if ($type==1) {
-		$valid_ext=array('','.phtml', '.php', '.php3', '.php4', '.php5', '.php6', '.phps', '.cgi', '.exe', '.pl', '.asp', '.aspx', '.shtml', '.shtm', '.fcgi', '.fpl', '.jsp', '.htm', '.html', '.xhtml', '.wml');
-		$ext=$link;
-		if (strpos($ext,'.') === false) return false; $ext=substr($ext, strpos($ext,'.'));
-		if (strpos($ext,'/') === false) $ext='';
-		if (strpos($ext,'/') !== false) $ext=substr($ext, strpos($ext,'/'));
-		if (strpos($ext,'#') !== false) $ext=substr($ext, 0, strpos($ext,'#'));
-		if (strpos($ext,'?') !== false) $ext=substr($ext, 0, strpos($ext,'?'));
-		if (strrpos($ext,'.') !== false) $ext=substr($ext, strrpos($ext,'.'));
-		if (substr($ext, -1) == '/') $ext = substr($ext, 0, strlen($ext) -1);
-		$ext=strtolower($ext);
-		if (!in_array($ext, $valid_ext)) return false;
-	}
 	//if ($link != '%cant_read_href%' && $link != '%unsubscribe_href%' && $link != '#') {
 	if (
+		strpos($link,'.') !== false &&
 		strpos($link,'<') === false &&
 		strpos($link,'>') === false &&
 		strpos($link,' ') === false &&

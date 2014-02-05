@@ -6,10 +6,38 @@
 				</form>
 			</div>
 			<div id="knewsWidgetIFRAME" style="display:none">
-				<p>Paste this code into your remote site:</p>
 				<form method="get" action=".">
+					<?php
+						global $Knews_plugin;
+						if (! $Knews_plugin->initialized) $Knews_plugin->init();
+						//print_r($Knews_plugin->knewsLangs);
+						if (count($Knews_plugin->knewsLangs) > 1) {
+					?>
+							<div id="knewsLangSelect">
+								<div style="height:300px;"><p>Knews can't determine the browsing language in the remote site, you must select the language, it will be used to display the form and assigned to the subscriber:</p>
+								<select id="knewsLangSelector" autocomplete="off">
+									<option value="" selected="selected">Select the form language</option>
+									<?php
+									foreach ($Knews_plugin->knewsLangs as $l) {
+										echo '<option value="' . $l['localized_code'] . '">' . $l['native_name'] . '</option>';
+									}
+									?>
+								</select></div>
+							</div>
+							<div id="knewsIframeCode" style="display:none">
+					<?php
+						}
+					?>
+						<p>Paste this code into your remote site:</p>
 					<textarea name="knewsIFRAME" rows="10" cols="40" style="width:100%; height:200px;"></textarea>
 					<p>You can add your own CSS file also. Upload it into your WordPress /wp-uploads folder (for example myown.css file): In the Iframe URL add the param: &css=myown (without the .css extension in param)</p>
+					<?php
+						if (count($Knews_plugin->knewsLangs) > 1) {
+					?>
+							</div>
+					<?php
+						}
+					?>
 					<p style="text-align:right"><input type="button" value="<?php _e('Close','knews'); ?>" class="button-primary" onclick="tb_remove(); return false" /></p>
 				</form>
 			</div>
@@ -30,6 +58,9 @@
 				}
 
 				function knewsOpenIFRAME(popupObj) {
+					jQuery('#knewsLangSelect').show();
+					jQuery('#knewsIframeCode').hide();
+
 					popupObj = popupObj.substr(0, popupObj.length-9);
 					var fields=new Array('subtitle','labelwhere', 'terms', 'requiredtext'<?php
 					
@@ -50,5 +81,17 @@
 					
 					tb_show('IFRAME code for Knews Subscription Form for other sites', "#TB_inline?height=400&width=700&inlineId=knewsWidgetIFRAME");
 					jQuery('#TB_window textarea[name="knewsIFRAME"]').val( code );
+
+					jQuery('#knewsLangSelector').change(function () {
+
+						code=jQuery('#TB_window textarea[name="knewsIFRAME"]').val();						
+						code=code.replace('action=knewsRemote', 'action=knewsRemote&forcelang=' + jQuery(this).val()); 
+						jQuery('#TB_window textarea[name="knewsIFRAME"]').val(code);
+
+						jQuery('#knewsLangSelect').hide();
+						jQuery('#knewsIframeCode').show();
+					});
 				}
+				
+				
 			</script>

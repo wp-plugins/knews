@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.5.8
+Version: 1.5.9
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -90,6 +90,7 @@ if (!class_exists("KnewsPlugin")) {
 				'double_optin' => 1,
 				'double_optin_register' => 0,
 				'pixel_tracking' => 0,
+				'https_conn' => 0,
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -1064,15 +1065,16 @@ if (!class_exists("KnewsPlugin")) {
 		function getLangHidden($html=true) {
 			global $knewsOptions;
 			
-			$lang = $this->pageLang();
-			
-			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
-			
+			if ($this->get_safe('forcelang') != '') {
+				$cut=explode('_',$this->get_safe('forcelang'));
+				$lang = array('language_code' => $cut[0], 'localized_code' => $this->get_safe('forcelang') );
+			} else {
+				$lang = $this->pageLang();
+				if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $lang['localized_code'] = $this->wpml_locale($lang['language_code']);
+			}
 			if (!$html) return $lang;
-			
 			$response = '<input type="hidden" name="lang_user" value="' . $lang['language_code'] . '" />';
 			$response .= '<input type="hidden" name="lang_locale_user" value="' . $lang['localized_code'] . '" />';
-			
 			return $response;
 		}
 		
@@ -1158,12 +1160,13 @@ if (!class_exists("KnewsPlugin")) {
 				$requiredtxt = '1'; if (isset($instance['requiredtext'])) $requiredtxt = $instance['requiredtext'];
 
 				foreach ($extra_fields as $field) {
-					if (isset($instance[$field->name]) && ($instance[$field->name]=='ask' || $instance[$field->name]=='required')) {
+					$name = strtolower($field->name);
+					if (isset($instance[$name]) && ($instance[$name]=='ask' || $instance[$name]=='required')) {
 						$response .= '<fieldset class="' . $field->name . '">';
 						
 						$label = $this->get_custom_text('widget_label_' . $field->name, $lang['localized_code']);
 						if ($label=='') $label=$field->name;
-						if ($instance[$field->name]=='required' && $requiredtxt=='1') $label .= '*';
+						if ($instance[$name]=='required' && $requiredtxt=='1') $label .= '*';
 						
 						if ($labelwhere == 'outside') $response .= '<label for="' . $field->name . '"' . (($stylize) ? ' style="display:block;"' : '') . '>' . $label . '</label>';
 
@@ -1171,7 +1174,7 @@ if (!class_exists("KnewsPlugin")) {
 						if ($labelwhere == 'inside') $response .= strip_tags($label) . '" title="' . strip_tags($label);
 						$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' />';
 						
-						if ($instance[$field->name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" />';
+						if ($instance[$name]=='required') $response .= '<input type="hidden" value="1" name="required_' . $field->name . '" />';
 						$response .= '</fieldset>';
 					}
 				}
@@ -1298,6 +1301,9 @@ if (!class_exists("KnewsPlugin")) {
 
 				$response = wp_remote_get( 'http://www.knewsplugin.com/read_advice.php?v=' . KNEWS_VERSION . '&l=' . WPLANG . '&p=' . ($this->im_pro() ? '1' : '0') );
 
+				if( is_wp_error( $response ) ) 
+					$response = wp_remote_get( 'https://knewsplugin.com/read_advice.php?v=' . KNEWS_VERSION . '&l=' . WPLANG . '&p=' . ($this->im_pro() ? '1' : '0') );
+
 			} else {
 				$response = get_option('knews_advice_response', '0');
 				return $response;
@@ -1421,7 +1427,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.5.8');
+		define('KNEWS_VERSION', '1.5.9');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1816,21 +1822,12 @@ if (!function_exists("Knews_plugin_ap")) {
 		if ( !in_array( 'knews_pro_welcome', $dismissed ) && $Knews_plugin->im_pro()) {
 			$content = '<h3>' . __('Welcome to Knews Pro','knews') . '</h3><p>' . sprintf(__('You can configure the new features <br />into %s Knews Pro Options tab','knews'), '<a href="admin.php?page=knews_config&tab=pro">') . '</a></p>';
 			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pro_welcome');
+
+		} else if ( !in_array( 'knews_remote', $dismissed )  ) {
+			$content = '<h3>' . __('NEW Feature','knews') . '</h3><p>' . sprintf(__('&gt; Now you can add a subscription form in any remote website.<br><br />Get the %s iframe HTML code','knews'), '<a href="widgets.php">') . '</a></p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_remote');
 		}
 
-		if ( !in_array( 'knews_pro_209', $dismissed ) && $Knews_plugin->im_pro() ) {
-			$content = '<h3>' . __('Knews Pro: NEW Features','knews') . '</h3><p>' . sprintf(__('&gt; Now we can trigger remotely your CRONJOB<br> &gt; Knews Pro supports multiple SMTP configur.<br><br />configure it into %s Knews Pro Advanced tab','knews'), '<a href="admin.php?page=knews_config&tab=advanced">') . '</a></p>';
-			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pro_209');
-		}
-
-		if ( !in_array( 'knews_pixeltrack', $dismissed ) ) {
-			$content = '<h3>' . __('NEW FEATURE: TRACKING PIXEL','knews') . '</h3><p>' . sprintf(__('Knews includes now tracking pixel in the sent newsletters. Please, configure it into %s Knews Advanced tab','knews'), '<a href="admin.php?page=knews_config&tab=advanced&subtab=3">') . '</a></p>';
-			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pixeltrack');
-		}
-		if ( !in_array( 'knews_ga', $dismissed ) && $Knews_plugin->im_pro() ) {
-			$content = '<h3>' . __('KNEWS LOVES GOOGLE ANALYTICS','knews') . '</h3><p>If you have a Google Analytics account and you have ve installed the GA code (in your theme or through some plugin) you can create a campaign and insert here the GA params, it will be added into the final newsletter URLs:</p>';
-			knews_add_pointer_scripts_js($content, 'a.knews_open_ga', 'knews_ga');
-		}
 	}
 	function knews_add_pointer_scripts_js($content, $handler, $pointer) {
 	?>

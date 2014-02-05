@@ -160,8 +160,7 @@ div.wysiwyg_toolbar div.tools {
 	padding:0 6px 0 0;
 }*/
 div.wysiwyg_toolbar div.save_button {
-	padding:5px 10px 0 0;
-	height:25px;
+	padding:0 7px 5px 0;
 	text-align:right;
 }
 div.wysiwyg_toolbar div.tools span.clear {

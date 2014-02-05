@@ -16,6 +16,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$extra_fields = $Knews_plugin->get_extra_fields();
 	$filter_list = $Knews_plugin->get_safe('filter_list', 0, 'int');
 	$filter_state = $Knews_plugin->get_safe('filter_state', 0, 'int');
+	$filter_lang = $Knews_plugin->get_safe('filter_lang');
 	$search_user = trim($Knews_plugin->get_safe('search_user', ''));
 	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 	
@@ -64,6 +65,15 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$filtered_query .= "ku.state=" . $filter_state;
 		}
 			
+		if ($filter_lang != '') {
+			if ($filtered_query != '') {
+				$filtered_query .= " AND ";
+			} else {
+				$filtered_query .= " WHERE ";
+			}
+			$filtered_query .= "ku.lang='" . $filter_lang . "'";
+		}
+		
 		if ($Knews_plugin->get_safe('orderby') != '') {
 				
 			if ($Knews_plugin->get_safe('orderby') == 'email') {
@@ -353,12 +363,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 								echo '<input type="hidden" name="orderby" id="orderby" value="' . $Knews_plugin->get_safe('orderby') . '" />';
 								echo '<input type="hidden" name="order" id="order" value="' . $Knews_plugin->get_safe('order') . '" />';
 							}
-							if ($filter_list != 0) {
-								echo '<input type="hidden" name="filter_list" id="filter_list" value="' . $filter_list . '" />';
-							}
-							if ($filter_state != 0) {
-								echo '<input type="hidden" name="filter_state" id="filter_state" value="' . $filter_state . '" />';
-							}
+							if ($filter_list != 0) echo '<input type="hidden" name="filter_list" id="filter_list" value="' . $filter_list . '" />';
+							if ($filter_lang != '') echo '<input type="hidden" name="filter_lang" id="filter_lang" value="' . $filter_lang . '" />';
+							if ($filter_state != 0) echo '<input type="hidden" name="filter_state" id="filter_state" value="' . $filter_state . '" />';
 							?>
 						</form>
 					</div>
@@ -381,6 +388,16 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 							<option value="2"<?php if ($filter_state==2) echo ' selected="selected"'; ?>><?php _e('Confirmed','knews'); ?></option>
 							<option value="3"<?php if ($filter_state==3) echo ' selected="selected"'; ?>><?php _e('Blocked','knews'); ?></option>
 							<?php if ($Knews_plugin->im_pro()) { ?><option value="4"<?php if ($filter_state==4) echo ' selected="selected"'; ?>><?php _e('Bounced','knews'); ?></option><?php } ?>
+						</select>
+						<?php _e('Filter by language','knews'); ?>: <select name="filter_lang" id="filter_lang" style="float:none">
+							<option value=""<?php if ($filter_lang=='') echo ' selected="selected"'; ?>><?php _e('All','knews'); ?></option>
+							<?php
+							foreach ($languages as $l) {
+								echo '<option value="' . $l['language_code'] . '" ';
+								if ($filter_lang==$l['language_code']) echo ' selected="selected"';
+								echo '>' . $l['translated_name'] . '</option>';
+							}
+						?>
 						</select>
 						<input type="submit" value="<?php _e('Filter','knews'); ?>" class="button-secondary" />
 						<?php

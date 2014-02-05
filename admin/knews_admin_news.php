@@ -32,7 +32,8 @@
 
 		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
 
-		$blog_url = get_bloginfo('url');
+		$blog_url = get_option('home');
+		//$blog_url = get_bloginfo('url');
 		if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
 		if (strpos($url_template, $blog_url) === false) $url_template = $blog_url . $url_template;
 
