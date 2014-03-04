@@ -99,13 +99,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 <link href="<?php echo KNEWS_URL; ?>/admin/styles.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
 
-<script type="text/javascript">
-function enfocar() {
-	setTimeout("jQuery('#new_list').focus();", 100);
-}
-</script>
 	<div class=wrap>
-			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Mailing lists','knews'); ?><a class="add-new-h2" href="#newlist" onclick="enfocar()"><?php _e('Create new mailing list','knews'); ?></a></h2>
+			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2><?php _e('Mailing lists','knews'); ?><a class="add-new-h2" href="#newlist" onclick="enfocar_knews('#new_list')"><?php _e('Create new mailing list','knews'); ?></a></h2>
 				<?php
 					$query = "SELECT * FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 					$results = $wpdb->get_results( $query );

@@ -29,20 +29,26 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		echo '<div class="updated"><p>' . (($Knews_plugin->get_safe('auto')==1) ? __('Automated submit activated','knews') : __('Manual submit activated','knews')) . '</p></div>';
 	}
 
-	if ($Knews_plugin->post_safe('action')=='add_auto') {
+	if ($Knews_plugin->post_safe('action')=='add_autoresponder' || $Knews_plugin->post_safe('action')=='add_auto') {
 
 		$name = $Knews_plugin->post_safe('auto_name');
 		$lang = $Knews_plugin->post_safe('auto_lang');
 		$news = $Knews_plugin->post_safe('auto_newsletter');
 		$target = $Knews_plugin->post_safe('auto_target');
-		$paused = $Knews_plugin->post_safe('auto_paused');
-		$auto = $Knews_plugin->post_safe('auto_auto');
-		$mode = $Knews_plugin->post_safe('auto_mode');
+		$paused = $Knews_plugin->post_safe('auto_paused', 0);
+		$auto = $Knews_plugin->post_safe('auto_auto', 0);
+		$mode = $Knews_plugin->post_safe('auto_mode', 0);
 		$posts = $Knews_plugin->post_safe('auto_posts', 0);
 		$time = $Knews_plugin->post_safe('auto_time', 0);
 		$day = $Knews_plugin->post_safe('auto_dayweek', 0);
 		$at_once = $Knews_plugin->post_safe('emails_at_once', 50);
 		$id_smtp = $Knews_plugin->post_safe('knews_select_smtp', 1);
+		
+		$event = $Knews_plugin->post_safe('auto_event');
+		$delay = $Knews_plugin->post_safe('auto_delay', 0);
+		$delay_unit = $Knews_plugin->post_safe('auto_delay_unit');	
+
+		$type = 'autocreate'; if ($Knews_plugin->post_safe('action')=='add_autoresponder') $type = 'autoresponder';
 		
 		if ($name =='' || $news=='' || $target=='') {
 			
@@ -59,8 +65,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 			$results = $wpdb->get_results( $query );
 			
 			if (count($results)==0) {
-				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run, emails_at_once, run_yet, id_smtp) VALUES (";
-				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "', " . $at_once . ", 0, " . $id_smtp . ")";
+				$sql = "INSERT INTO " . KNEWS_AUTOMATED . " (name, selection_method, target_id, newsletter_id, lang, paused, auto, every_mode, every_time, what_dayweek, every_posts, last_run, emails_at_once, run_yet, id_smtp, what_is, event, delay, delay_unit) VALUES (";
+				$sql .= "'" . $name . "', 1, " . $target . ", " . $news . ", '" . $lang . "', " . $paused . ", " . $auto . ", " . $mode . ", " . $time . ", " . $day . ", " . $posts . ", '" . $Knews_plugin->get_mysql_date() . "', " . $at_once . ", 0, " . $id_smtp . ", '" . $type . "', '" . $event . "', " . $delay . ", '" . $delay_unit . "')";
 				
 				if ($wpdb->query($sql)) {
 					echo '<div class="updated"><p>' . __('Automated submit created','knews') . '</p></div>';
@@ -78,7 +84,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$results_per_page=10;
 	$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 
-	$query = "SELECT id, name, lang, html_mailing FROM " . KNEWS_NEWSLETTERS . " WHERE automated=0 AND mobile=0 ORDER BY modified DESC";
+	$query = "SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE automated=0 AND mobile=0 ORDER BY modified DESC";
 	$news = $wpdb->get_results( $query );
 
 	$frequency = array ('daily','weekly','every 15 days','monthly','every 2 months','every 3 months');
@@ -87,17 +93,17 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
 	$lists_name = $wpdb->get_results( $query );
 ?>
-<script type="text/javascript">
-function enfocar() {
-	setTimeout("jQuery('#auto_name').focus();", 100);
-}
-</script>
 	<div class=wrap>
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
-			<h2><?php _e('Auto-create Newsletters','knews');?><a href="#newauto" class="add-new-h2" onclick="enfocar()"><?php _e('New Auto-creation Process','knews'); ?></a></h2>
+		<h2 class="nav-tab-wrapper">
+<?php
+if ($Knews_plugin->get_safe('tab')!='autoresponders') {
+?>
+		<a href="admin.php?page=knews_auto" class="nav-tab nav-tab-active"><?php _e('Autocreators','knews'); ?></a>
+		<a href="admin.php?page=knews_auto&tab=autoresponders" class="nav-tab"><?php _e('Autoresponders','knews'); ?></a></h2><br />
 			<?php 
 
-			$query = "SELECT * FROM " . KNEWS_AUTOMATED; 
+			$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE what_is='autocreate'"; 
 			$results = $wpdb->get_results( $query );
 			if (count($results) != 0) {
 			?>
@@ -270,21 +276,21 @@ function enfocar() {
 				<?php
 				$disponible_news=array();
 				foreach ($news as $n) {
-					if (strrpos($n->html_mailing, '%the_title') !== false || strrpos($n->html_mailing, '%the_excerpt') !== false || strrpos($n->html_mailing, '%the_content') !== false) {
+					if (strrpos($n->html_mailing, '%the_title') !== false || strrpos($n->html_mailing, '%the_excerpt') !== false || strrpos($n->html_mailing, '%the_content') !== false && ($n->newstype == 'unknown' || $n->newstype == 'autocreation')) {
 						$disponible_news[]=$n;
 					}
 				}
 				if (count($disponible_news) != 0) {
 					echo '<select name="auto_newsletter" id="auto_newsletter">';
 					foreach ($disponible_news as $n) {
-						echo '<option value="' . $n->id . '">' . $n->name . ' (' . $n->lang . ')</option>';
+						echo '<option value="' . $n->id . '"' . (($Knews_plugin->get_safe('id')==$n->id) ? ' selected="selected"' : '') . '>' . $n->name . ' (' . $n->lang . ')</option>';
 					}
 					echo '</select></p>';
 				} else {
 					echo __('You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)','knews') . '</p>';
 				}
 				?>
-				<p><input type="radio" name="auto_mode" autocomplete="off" value="1" checked="checked" /><?php printf(__('Create a newsletter every %s posts','knews'), '<input type="text" name="auto_posts" id="auto_posts" value="5" style="width:30px;" />');?></p>
+				<p><input type="radio" name="auto_mode" autocomplete="off" value="1" checked="checked" /><?php printf(__('Create a newsletter every %s posts','knews'), '<input type="text" name="auto_posts" id="auto_posts" value="5" style="text-align:right; width:30px;" />');?></p>
 				<p><input type="radio" name="auto_mode" autocomplete="off" value="2" /> <?php _e('Create a newsletter every x amount of time','knews');?> 
 				<?php /*<span id="auto_mode_1">Every <input type="text" name="auto_posts" id="auto_posts" value="5" style="width:30px;" /> posts</span>*/?>
 				<span id="auto_mode_2" style="display:none;"><label for="auto_time"><?php _e('Submit','knews'); ?></label> <select name="auto_time" id="auto_time" autocomplete="off">
@@ -323,10 +329,9 @@ function enfocar() {
 				}
 				?>
 				<p><label for="auto_auto"><?php _e('Submit method:','knews');?></label> <select name="auto_auto" id="auto_auto"><option value="0" selected="selected"><?php _e('Manual submit','knews');?></option><option value="1"><?php _e('Automated submit','knews');?></option></select></p>
-<?php if ($Knews_plugin->im_pro()) {?>
-<div id="at_once" style="display:none;"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select></p>
+<div id="at_once" style="display:none;"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select> <span class="at_once_preview">300</span> per hour.</p>
 </div>
-<?php
+<?php if ($Knews_plugin->im_pro()) {
 if ($selector = $Knews_plugin->get_smtp_selector()) {
 	echo '<p>Use the SMTP: ' . $selector . '</p>';
 }
@@ -338,6 +343,216 @@ if ($selector = $Knews_plugin->get_smtp_selector()) {
 				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 				?>
 			</form>
+<?php
+} else {
+?>
+		<a href="admin.php?page=knews_auto" class="nav-tab"><?php _e('Autocreators','knews'); ?></a>
+		<a href="admin.php?page=knews_auto&tab=autoresponders" class="nav-tab nav-tab-active"><?php _e('Autoresponders','knews'); ?></a></h2><br />
+<?php 
+			$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE what_is='autoresponder'"; 
+			$results = $wpdb->get_results( $query );
+			if (count($results) != 0) {
+			?>
+				<form method="post" action="admin.php?page=knews_auto&tab=autoresponders">
+				<table class="widefat">
+					<thead>
+						<tr>
+							<?php /*<th class="manage-column column-cb check-column"><input type="checkbox" /></th>*/ ?>
+							<th align="left"><?php _e('autoresponder process name','knews');?></th>
+							<th><?php _e('Event','knews');?></th>
+							<th><?php _e('Target','knews');?></th>
+							<th><?php _e('Newsletter','knews');?></th>
+							<th><?php _e('Activated','knews');?></th>
+							<th><?php _e('Delay','knews');?></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php
+					$alt=false;
+					$results_counter=0;
+					foreach ($results as $automated) {
+						$results_counter++;
+						if ($results_per_page * ($paged-1)<$results_counter) {
+							echo '<tr' . (($alt) ? ' class="alt"' : '') . '>'; //<th class="check-column"><input type="checkbox" name="batch_' . $list->id . '" value="1"></th>';
+							echo '<td class="name_' . $automated->id  . '"><strong>' . $automated->name . '</strong>';
+							
+							echo '<div class="row-actions"><span><a title="' . __('Activate/deactivate the automated task', 'knews') . '" href="admin.php?page=knews_auto&activated=' . (($automated->paused==1) ? '0' : '1') . '&tab=autoresponders&idauto=' . $automated->id . '">' . (($automated->paused==1) ? __('Activate', 'knews') : __('Deactivate', 'knews')) . '</a> | </span>';
+
+							echo '<span class="trash"><a href="admin.php?page=knews_auto&tab=autoresponders&da=delete&idauto=' . $automated->id . '" title="' . __('Delete definitively this automated task', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div>';
+
+							echo '</td><td>';
+							echo $automated->event;
+							echo '</td><td>';
+
+							if ($automated->target_id==0) {
+								echo __('All','knews');
+							} else {
+								foreach ($lists_name as $ln) {
+									if ($ln->id==$automated->target_id) {
+										echo $ln->name;
+										break;
+									}
+								}
+							}
+							echo '</td>';
+							echo '<td>';
+							foreach ($news as $n) {
+								if ($n->id==$automated->newsletter_id) {
+									echo $n->name;
+									break;
+								}
+							}
+							echo '</td>';
+							echo '<td>' . (($automated->paused==1) ? __('Off', 'knews') : __('On', 'knews')) . '</td>';
+							echo '<td>' . $automated->delay . ' ' . $automated->delay_unit . '</td></tr>';
+						}
+						$alt=!$alt;
+						if ($results_counter == $results_per_page * $paged) break;
+					}
+					?>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th align="left"><?php _e('autoresponder process name','knews');?></th>
+							<th><?php _e('Event','knews');?></th>
+							<th><?php _e('Target','knews');?></th>
+							<th><?php _e('Newsletter','knews');?></th>
+							<th><?php _e('Activated','knews');?></th>
+							<th><?php _e('Delay','knews');?></th>
+						</tr>
+					</tfoot>
+				</table>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
+				<?php /*
+				<div class="submit">
+					<select name="action">
+						<option selected="selected" value=""><?php _e('Batch actions','knews'); ?></option>
+						<option value="delete_news"><?php _e('Delete','knews'); ?></option>
+					</select>
+					<input type="submit" value="<?php _e('Apply','knews'); ?>">
+				</div>*/
+				?>
+				</form>
+				<?php
+				//Pagination
+				$maxPage=ceil(count($results) / $results_per_page);
+				$link_params='admin.php?page=knews_auto&tab=autoresponders&paged=';
+				if ($maxPage > 1) {
+				?>		
+				<div class="tablenav bottom">
+
+					<div class="tablenav-pages">
+						<span class="displaying-num"><?php echo count($results); ?> <?php _e('Automated submits','knews'); ?></span>
+						<?php if ($paged > 1) { ?>
+						<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
+						<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
+						<?php } else { ?>
+						<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
+						<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
+						<?php } ?>
+						<span class="paging-input"><?php echo $paged; ?> de <span class="total-pages"><?php echo $maxPage; ?></span></span>
+						<?php if ($maxPage > $paged) { ?>
+						<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
+						<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
+						<?php } else { ?>
+						<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
+						<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
+						<?php } ?>
+					</div>
+				<br class="clear">
+				</div>
+				<?php
+				}
+				if ($pending) {
+				?>
+				<div class="updated">
+					<p><?php _e('Knews runs every hour the automated newsletter creation jobs.','knews'); ?></p>
+					<p><?php echo sprintf(__('You can manually trigger this task now (only recommended for testing purposes) %s Run Automated Creation Now','knews'), '<a href="' . get_admin_url() . 'admin-ajax.php?action=knewsForceAutomated&manual=1" class="button" target="_blank">'); ?></a></p>
+				</div>
+				<?php
+				}
+			} else {
+			?>
+				<p><?php _e('At the moment there is no autoresponder tasks, you can create new ones','knews'); ?></p>
+			<?php
+			}
+			?><p>&nbsp;</p>
+			<hr />
+			<a id="newauto"></a>
+			<h2><?php _e('New autoresponder','knews');?></h2>
+			<form method="post" action="admin.php?page=knews_auto&tab=autoresponders" id="create_autoresponder">
+				<input type="hidden" name="action" id="action" value="add_autoresponder" />
+				<p><label for="auto_name"><?php _e('autoresponder name:','knews');?> </label><input type="text" name="auto_name" id="auto_name" class="regular-text" /></p> 
+
+				<p><label for="auto_event"><?php _e('Event:','knews');?></label> 
+				<select name="auto_event" id="auto_event">
+					<option value="not_confirmed"><?php _e('Not confirmed','knews'); ?></option>
+					<option value="after_confirmation"><?php _e('After confirmation','knews'); ?></option>
+				</select></p>
+				
+				<p><label for="auto_delay"><?php _e('Delay:','knews');?> *</label> <input type="text" name="auto_delay" id="auto_delay" value="1" style="text-align:right; width:30px;" />
+				<select name="auto_delay_unit" id="auto_delay_unit">
+					<option value="minutes"><?php _e('minutes','knews'); ?></option>
+					<option value="hours"><?php _e('hours','knews');?></option>
+					<option value="days" selected="selected"><?php _e('days','knews'); ?></option>
+					<option value="weeks"><?php _e('weeks','knews'); ?></option>
+				</select><br />
+				<?php _e ('* Not confirmed autoresponder should have some delay, otherwise the subscribers will recieve the autoresponder without time to confirm','knews'); ?></p>
+				
+				<p><label for="auto_newsletter"><?php _e('Use as template:','knews');?></label> 
+				<?php
+				$disponible_news=array();
+				foreach ($news as $n) {
+					if (strrpos($n->html_mailing, '%the_title') == false && strrpos($n->html_mailing, '%the_excerpt') == false && strrpos($n->html_mailing, '%the_content') == false && ($n->newstype == 'unknown' || $n->newstype == 'autoresponder')) {
+						$disponible_news[]=$n;
+					}
+				}
+				if (count($disponible_news) != 0) {
+					echo '<select name="auto_newsletter" id="auto_newsletter">';
+					foreach ($disponible_news as $n) {
+						echo '<option value="' . $n->id . '"' . (($Knews_plugin->get_safe('id')==$n->id) ? ' selected="selected"' : '') . '>' . $n->name . ' (' . $n->lang . ')</option>';
+					}
+					echo '</select></p>';
+				} else {
+					echo __('You must first create a newsletter as must shown (remove all %the_content%, %the_title% etc.)','knews') . '</p>';
+				}
+				if (count($lists_name) != 0) {
+					?>
+					<p><label for="auto_target"><?php _e('Target for newsletter:','knews');?></label> 
+					<select name="auto_target" id="auto_target">
+					<?php
+					echo '<option value="0">' . __('All','knews') . '</option>';
+					foreach ($lists_name as $ln) {
+						echo '<option value="' . $ln->id . '">' . $ln->name . '</option>';
+					}
+					?>
+					</select>
+					</p>
+					<?php
+				} else {
+					echo '<p>' . __('Error: there are no mailing lists','knews'). '</p>';
+				}
+				?>
+<div id="at_once"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select> <span class="at_once_preview">300</span> per hour.</p>
+</div>
+<?php if ($Knews_plugin->im_pro()) {
+if ($selector = $Knews_plugin->get_smtp_selector()) {
+	echo '<p>Use the SMTP: ' . $selector . '</p>';
+}
+?>
+<?php } ?>
+				<p><input type="submit" value="<?php _e('New autoresponder','knews'); ?>" class="button-primary" /></p>
+				<?php 
+				//Security for CSRF attacks
+				wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
+				?>
+			</form>
+<?php
+}
+?>
 	</div>
 <script type="text/javascript">
 	jQuery(document).ready(function() {
@@ -356,7 +571,6 @@ if ($selector = $Knews_plugin->get_smtp_selector()) {
 				jQuery('span#auto_mode_2').hide();
 			}
 		});
-<?php if ($Knews_plugin->im_pro()) {?>
 		jQuery('#auto_auto').change(function() {
 			val=jQuery(this).val();
 			if (val==0) {
@@ -365,6 +579,6 @@ if ($selector = $Knews_plugin->get_smtp_selector()) {
 				jQuery('div#at_once').show();
 			}
 		});
-<?php } ?>
 	});
 </script>
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>

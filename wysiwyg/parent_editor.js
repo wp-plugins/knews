@@ -1,6 +1,7 @@
 // JavaScript Document
 var debug_knews=false;
 
+var inside_title=false;
 var magic_offset=0;
 var iframe_pos=0;
 var io='';
@@ -29,6 +30,7 @@ var font_picker_number;
 //1.1.0 var referer_image;
 var referer_delete;
 var saved_range='';
+var saved_range_title=''
 
 var referer_image_size='';
 var resizing_image='';
@@ -85,9 +87,18 @@ jQuery(window).load(function() {
 	jQuery('#title')
 		.focus(function() {
 			jQuery('#title-prompt-text').hide();
+			inside_title=true;
+			jQuery('#botonera div.automated_buttons').removeClass('desactivada');
 		})
 		.blur(function() {
 			if (jQuery('#title').val() == "") jQuery('#title-prompt-text').show();
+			if (!jQuery('div.automated_menu').hasClass('automated_menu_visible')) {
+				inside_title=false;
+				if (!document.getElementById('knews_editor').contentWindow.inside_editor) {
+					jQuery('#botonera div.automated_buttons').addClass('desactivada');
+					jQuery(this).removeClass('automated_on');
+				}
+			}
 		});
 	
 	io=jQuery('#knews_editor').contents();
@@ -671,9 +682,10 @@ function tb_dialog_click (what, where) {
 
 	tb_remove();
 	
-	if (where == 'saveok' && what) {
-		window.location=submit_news;
-	}
+	if (where == 'saveok' && what) window.location=submit_news;
+	if (where == 'saveok_autocreation' && what) window.location=autocreation_news;
+	if (where == 'saveok_autoresponder' && what) window.location=autoresponder_news;
+	
 	if (where == 'saveok' && !what) {
 		window.location=reload_news + '&r=' + Math.floor(Math.random()*100000);
 	}
@@ -1263,6 +1275,9 @@ function clean_before_save() {
 			jQuery(this).html("<!--[start module]-->" + str_mod + "<!--[end module]-->");
 		}
 	});
+
+	jQuery('*', io).removeAttr('data-cfsrc').removeAttr('data-cfstyle');
+
 }
 
 save_news_sem=false;
@@ -1273,8 +1288,41 @@ function save_news () {
 	}
 
 	if (!save_news_sem) {
-		save_news_sem=true;
 
+		savecode=jQuery('div.wysiwyg_editor', io).html();
+		title=jQuery('input#title').val();
+		
+		var err_shortcodes=false;
+		var err_title=false;
+		var err_insertable_post=false;
+		var err_insertable_post2=false;
+		
+		if (newstype!='autoresponder' && savecode.indexOf("#blog_name#") != -1) err_shortcodes=true;
+		if (newstype!='autoresponder' && savecode.indexOf("#url_confirm#") != -1) err_shortcodes=true;
+
+		for (var x=1; x<10; x++) {
+			if (newstype!='autocreation' && savecode.indexOf("%the_title_" + x + "%") != -1) err_insertable_post=true;
+			if (newstype!='autocreation' && title.indexOf("%the_title_" + x + "%") != -1) err_title=true;
+		}
+		if (newstype=='autocreation' && savecode.indexOf("%the_title_1%") == -1) err_insertable_post2=true;
+		
+		if (title=='') {
+			if (!confirm('Your newsletter should have subject. Save it anyway?')) return;
+		}
+		if (err_shortcodes){
+			if (!confirm('Only autoresponders can have shortcodes. Save it anyway?')) return;
+		}
+		if (err_title){
+			if (!confirm('Only auto-creation type can have the_title in subject. Save it anyway?')) return;
+		}
+		if (err_insertable_post){
+			if (!confirm('Only auto-creation type can have empty insertable posts. Save it anyway?')) return;
+		}
+		if (err_insertable_post2){
+			if (!confirm('Auto-creation type must have at least one insertable post. Save it anyway?')) return;
+		}
+		
+		save_news_sem=true;
 		clean_before_save();
 
 		savecode=jQuery('div.wysiwyg_editor', io).html();
@@ -1283,6 +1331,7 @@ function save_news () {
 		jQuery.ajax({
 			data: { code: savecode,
 					title: jQuery('input#title').val(),
+					newstype: newstype,
 					idnews: id_news,
 					testslash: "aa'aa",
 					action: 'knewsSaveNews',
@@ -1302,7 +1351,14 @@ function save_news () {
 				} else {
 					saved();
 					//alert(ok_save);
-					tb_dialog('Knews', ok_save, button_submit_newsletter, button_continue_editing, 'saveok');
+						if (newstype=='manual' || newstype=='unknown') {
+							tb_dialog('Knews', ok_save, button_submit_newsletter, button_continue_editing, 'saveok');
+						} else if (newstype=='autocreation') {
+							tb_dialog('Knews', ok_save, button_create_automation, button_continue_editing, 'saveok_autocreation');
+						} else if (newstype=='autoresponder') {
+							tb_dialog('Knews', ok_save, button_create_autoresponder, button_continue_editing, 'saveok_autoresponder');
+						}
+
 				}
 			},
 
@@ -1361,6 +1417,70 @@ function b_htmledit() {
 		tb_show('HTML Editor', url_admin + 'admin-ajax.php?action=knewsHTMLedit&amp;editor=1&amp;TB_iframe=true&amp;width=' + (parseInt(jQuery(parent.window).width(), 10)-100) + '&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100) );
 	}
 }
+function close_automated_menu() {
+	if (jQuery('div.automated_menu').hasClass('automated_menu_visible')) {
+		jQuery('div.automated_menu li').addClass('off');
+		jQuery('div.automated_menu').removeClass('automated_menu_visible');
+		jQuery('a.automated').removeClass('automated_on');
+	}
+}
+jQuery (document).ready(function () {
+	jQuery('html').click(close_automated_menu);
+		
+	jQuery('a.automated')
+		.mousedown(function() {
+			if (jQuery('div.automated_menu').hasClass('automated_menu_visible')) {
+				jQuery('div.automated_menu li').addClass('off');
+				jQuery('div.automated_menu').removeClass('automated_menu_visible');
+				jQuery(this).removeClass('automated_on');
+			} else {
+				if (inside_title) {
+					//saved_range_title=document.getElementById('knews_editor').contentWindow.saveSelection();
+					jQuery('div.automated_menu li.token').removeClass('off');
+					if (newstype == 'autocreation') jQuery('div.automated_menu li.thetitle').removeClass('off');
+					
+				} else if (document.getElementById('knews_editor').contentWindow.inside_editor) {
+		
+					saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();
+					//not_saved();
+		
+					jQuery('div.automated_menu li.token').removeClass('off');
+					if (newstype == 'autoresponder') jQuery('div.automated_menu li.shortcode').removeClass('off');
+				} else {
+					return;
+				}
+				jQuery('div.automated_menu').addClass('automated_menu_visible');
+				jQuery(this).addClass('automated_on');
+			}
+		})
+		.click(function() {
+			return false;
+		});
+	jQuery('div.automated_menu a').click(function() {
+		if (!jQuery(this).parent().hasClass('off')) {
+
+			not_saved();
+			
+			inserttext = jQuery(this).html();
+			if (jQuery(this).parent().hasClass('token')) inserttext = '{' + inserttext + '[alternative text, replace or delete it]}';
+			
+			if (inside_title) {
+				jQuery('#title').focus();
+				v1 = parseInt(document.getElementById('title').selectionStart, 10);
+				v2 = parseInt(document.getElementById('title').selectionEnd, 10);
+				if (v1 > v2) { va=v1; v1=v2; v2=va; }
+				titleval = jQuery('#title').val();
+				jQuery('#title').val( titleval.substring(0,v1) + inserttext + titleval.substring(v2,titleval.length) );
+			} else {
+				document.getElementById('knews_editor').contentWindow.b_insertText(inserttext);
+			}
+			jQuery('div.automated_menu li').addClass('off');
+			jQuery('div.automated_menu').removeClass('automated_menu_visible');
+			jQuery('a.automated').removeClass('automated_on');
+		}
+		return false;
+	});
+});
 function CallBackColourEditor(hex) {
 	document.getElementById('knews_editor').contentWindow.restoreSelection(saved_range);
 	not_saved();
@@ -1388,4 +1508,37 @@ function clone_safe(origen, destino) {
 
 function debug_alert(msg, data) {
 	if (debug_knews) alert('The Knews Debugging mode is turned on.\r' + msg + '\r' + data);
+}
+
+//Type selector
+jQuery(window).load(function () {
+	if (newstype=='unknown') dialog_ask_type();
+	jQuery('#newstype a').click(dialog_ask_type);
+});
+
+function dialog_ask_type() {
+
+	height = 190; content = '';
+	
+	if (newstype=='unknown') {
+		content += '<p><input type="radio" name="newstype" value="unknown"' + ((newstype=='unknown') ? ' checked="checked"' : '') + '> I\'m not sure, leave as unknown</p>';
+		height = 240;
+	}
+
+	content += '<p><input type="radio" name="newstype" value="manual"' + ((newstype=='manual') ? ' checked="checked"' : '') + '> Manual newsletter</p>';
+	content += '<p><input type="radio" name="newstype" value="autocreation"' + ((newstype=='autocreation') ? ' checked="checked"' : '') + '> Newsletter for auto-creation</p>';
+	content += '<p><input type="radio" name="newstype" value="autoresponder"' + ((newstype=='autoresponder') ? ' checked="checked"' : '') + '> Newsletter for autoresponder</p>';
+	content += '<p style="text-align:center; margin-bottom:0; padding-bottom:0;">';
+	
+	content += '<input type="button" value="' + button_continue + '" onclick="dialog_set_type()">';
+	content += '&nbsp;<input type="button" value="' + 'Cancelar' + '" onclick="tb_dialog_click(false, \'cancel\')"></p>';
+
+	tb_show('Choose the newsletter type:', "#TB_inline?height=" + height + "&width=400&inlineId=modalDiv");
+	jQuery('#TB_ajaxContent').html(content);
+	return false;
+}
+function dialog_set_type() {
+	newstype = jQuery('#TB_ajaxContent input[name=newstype]:checked').val();
+	jQuery('#newstype strong').html(newstype);
+	tb_remove();	
 }

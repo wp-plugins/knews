@@ -28,18 +28,22 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 		$parentid=0;
 		$title=$results_news[0]->name;
 		$subject=$results_news[0]->subject;
+		$newstype=$results_news[0]->newstype;
 ?>
 <script type="text/javascript">
 	url_plugin = '<?php echo KNEWS_URL; ?>';
 	news_lang='<?php echo $results_news[0]->lang; ?>';
 	droppable_code='<?php echo $results_news[0]->html_container; ?>';
 	id_news='<?php echo $Knews_plugin->get_safe('idnews');?>';
+	newstype='<?php echo $newstype; ?>';
 	<?php
 	$one_post = get_posts(array('numberposts' => 1) );
 	if (count($one_post)!=1) $one_post = get_pages();
 	echo 'one_post_id=' . intval($one_post[0]->ID) . ';';
 	?>
 	submit_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=send&id=<?php echo (($parentid==0) ? $Knews_plugin->get_safe('idnews') : $parentid);?>';
+	autocreation_news='<?php echo get_admin_url(); ?>admin.php?page=knews_auto&id=<?php echo (($parentid==0) ? $Knews_plugin->get_safe('idnews') : $parentid);?>#newauto';
+	autoresponder_news='<?php echo get_admin_url(); ?>admin.php?page=knews_auto&tab=autoresponders&id=<?php echo (($parentid==0) ? $Knews_plugin->get_safe('idnews') : $parentid);?>#newauto';
 	reload_news='<?php echo get_admin_url(); ?>admin.php?page=knews_news&section=edit&idnews=<?php echo $Knews_plugin->get_safe('idnews') ;?>';
 	
 	must_apply_undo = "<?php echo $Knews_plugin->escape_js(__('You are in image edition mode. You must press Apply or Undo image changes (or press ESC key) before doing anything.','knews')); ?>";
@@ -58,6 +62,8 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	ok_save = "<?php  echo $Knews_plugin->escape_js(__('Newsletter saved','knews')); ?>";
 	button_continue_editing = "<?php echo $Knews_plugin->escape_js(__('Continue editing','knews')); ?>";
 	button_submit_newsletter = "<?php  echo $Knews_plugin->escape_js(__('Submit newsletter','knews')); ?>";
+	button_create_automation = "<?php  echo $Knews_plugin->escape_js(__('Create task for news autocreation','knews')); ?>";
+	button_create_autoresponder = "<?php  echo $Knews_plugin->escape_js(__('Create task for autoresponder','knews')); ?>";
 
 	confirm_delete = "<?php echo $Knews_plugin->escape_js(__('Do you really want to delete this module?','knews')); ?>";
 	button_yes = "<?php echo $Knews_plugin->escape_js(__('Yes','knews')); ?>";
@@ -91,7 +97,9 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 				echo '<a href="' . get_admin_url() . 'admin.php?page=knews_news&section=edit&idnews=' . $parentid . '" class="nav-tab knews_save_before">' . __('Desktop version','knews') . '</a>';
 				echo '<a href="#" class="nav-tab nav-tab-active">' . __('Mobile version','knews') . '</a>';				
 			}
+			//Type: Manual For AutoCreation For AutoResponder
 			?>
+			<span id="newstype">Type: <strong><?php echo $newstype; ?></strong> <a href="#">Change</a></span>
 			</h2>
 				<?php
 				$lang_attr='';
@@ -190,8 +198,23 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 						<div>
 							<a href="#" class="htmledit" title="HTML edit" onclick="b_htmledit(); return false;">H</a>
 						</div>
-
+						<div class="automated_buttons desactivada">
+							<a href="#" class="automated" title="Automated" onclick="return false;">A</a>
+						</div>
 						<span class="clear"></span>
+					</div>
+					<div class="automated_menu">
+						<ul>
+							<?php
+							$ef = $Knews_plugin->get_extra_fields();
+							foreach ($ef as $e) {
+								if ($e->token != '') echo '<li class="token off"><a href="#">' . $e->token . '</a></li>';
+							}
+							?>
+							<li class="shortcode off"><a href="#">#blog_name#</a></li>
+							<li class="shortcode off"><a href="#">#url_confirm#</a></li>
+							<li class="thetitle off"><a href="#">%the_title_1%</a></li>
+						</ul>
 					</div>
 					<div class="iframe_container"><iframe class="knews_editor" id="knews_editor" name="knews_editor" style="width:100%; height:100px" src="<?php echo get_admin_url() . 'admin-ajax.php?action=knewsEditNewsletter&idnews=' . $id_edit . '&r=' . uniqid() . $lang_attr; ?>"></iframe></div>
 					<div id="tagsnav"></div>

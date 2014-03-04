@@ -88,4 +88,21 @@ jQuery(document).ready(function() {
 			}
 		});
 	});
+	jQuery('select[name=emails_at_once]')
+		.change(function() {
+			jQuery('span.at_once_preview').html(jQuery(this).val() * 6);
+		})
+		.each(function () {
+			jQuery('span.at_once_preview').html(jQuery(this).val() * 6);
+		});
 });
+
+jQuery(document).ready(function() {
+	jQuery('form.new_newsletter').submit(function () {
+		//alert(jQuery('
+	});
+});
+
+function enfocar_knews(que) {
+	setTimeout("jQuery('" + que + "').focus();", 100);
+}

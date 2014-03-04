@@ -17,9 +17,41 @@ if ($Knews_plugin) {
 		$fp=false;
 	}
 	
+	//Evitem doble execucio
+	@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile2.txt', 'x');
+	if (!$filelock) {
+		//Existeix?
+		if (is_file(KNEWS_DIR . '/tmp/lockfile2.txt')) {
+			@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile2.txt', 'r');
+			$timelock = intval(fread($filelock, filesize(KNEWS_DIR . '/tmp/lockfile2.txt')));
+			fclose($filelock);
+			if (intval(time()) - $timelock > 3500) {
+				//Posem la nova data
+				knews_debug ('* Previous submit process terminated suddenly, continuing...' . "\r\n");
+				@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile2.txt', 'w');
+				if (!$filelock) {
+					knews_debug( "\r\n" . '* Cant write filelock' . "\r\n");
+					if ($fp) fclose($fp);
+					die();
+				}
+				fwrite($filelock, time() );
+				fclose($filelock);
+
+			} else {
+				knews_debug( "\r\n" . '* Submit process overlapped, terminating this one...' . "\r\n");
+				if ($fp) fclose($fp);
+				die();
+			}
+		}
+	} else {
+		//Escribim fitxer
+		fwrite($filelock, time() );
+		fclose($filelock);
+	}
+	
 	$mysqldate = $Knews_plugin->get_mysql_date();
 	
-	$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE paused=0";
+	$query = "SELECT * FROM " . KNEWS_AUTOMATED . " WHERE paused=0 ORDER BY what_is";
 	$automated_jobs = $wpdb->get_results( $query );
 
 	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') {
@@ -31,61 +63,126 @@ if ($Knews_plugin) {
 		knews_debug("\r\n" . 'Automated job (' . $aj->name . ')' . "\r\n");
 		$doit=false;
 		
-		//$sql="SELECT wp_posts.ID from wp_posts, wp_postmeta WHERE wp_posts.post_status='publish' AND wp_posts.post_type='post' AND wp_posts.post_modified > '" . $aj->last_run . "' AND wp_posts.ID=wp_postmeta.post_id AND wp_postmeta.meta_key='_knews_automated' AND wp_postmeta.meta_value='1' AND NOT EXISTS ( SELECT * FROM wp_knewsautomatedposts WHERE wp_knewsautomatedposts.id_automated=" . $aj->id . " AND wp_knewsautomatedposts.id_post=wp_posts.ID )";
-		
-		if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
-
-		if ($aj->every_mode ==1) {
-			$knews_aj_look_date = $aj->last_run;
-			$pend_posts = knews_search_posts($aj->id, $aj->every_posts, $aj->lang);
-			if (count($pend_posts) == $aj->every_posts) $doit = true;
-			knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
-	
-		} else {
-			$time_lapsus = time();
-			if ($aj->every_time == 1) $time_lapsus = $time_lapsus - 24 * 60 * 60; //Daily
-			if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 6 * 24 * 60 * 60; //Weekly
-			if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 13 * 24 * 60 * 60; //2 weeks
-			if ($aj->every_time == 4) $time_lapsus = $time_lapsus - 30 * 24 * 60 * 60; //Monthly
-			if ($aj->every_time == 5) $time_lapsus = $time_lapsus - 60 * 24 * 60 * 60; //2 Monthly
-			if ($aj->every_time == 6) $time_lapsus = $time_lapsus - 90 * 24 * 60 * 60; //3 Monthly
+		if ($aj->what_is=='autoresponder') {
 			
-			if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus || $aj->run_yet==0 ) {
-				if ($aj->every_time == 1) {
-					$doit=true;
-				} else {
-					$daynumber=date('w');
-					if ($daynumber==0) $daynumber=7;
-					if ($daynumber == $aj->what_dayweek) $doit=true;
-					knews_debug('- must submit dayweek number: ' . $aj->what_dayweek . ' and today is: ' . $daynumber . ' dayweek number. ' . "\r\n");
-				}
+			$delay = array('minutes' => 60, 'hours' => 60*60, 'days' => 60*60*24, 'weeks' => 60*60*24*7);
+			$max_date = time() - $delay[$aj->delay_unit] * $aj->delay;
+			
+			$select = 'SELECT u.*';
+			$from = ' FROM ' . KNEWS_USERS . ' u';
+			$left_join = ' LEFT JOIN (SELECT user_id FROM ' . KNEWS_USERS_EVENTS . ' WHERE event = \'' . $aj->event . '\' AND u.joined >= \'' . $aj->last_run . '\') ue ON u.id = ue.user_id';
+			$where = " WHERE ue.user_id IS NULL AND u.joined < '" . $Knews_plugin->get_mysql_date($max_date) . "' AND u.joined >= '" . $aj->last_run . "'";
+			
+			if ($aj->target_id != 0) {
+				$select .= ', upl.*';
+				$from .=  ' JOIN ' . KNEWS_USERS_PER_LISTS . ' upl';
+				$where .= ' AND upl.id_list = ' . $aj->target_id . ' AND upl.id_user = u.id';
 			}
 			
-			if ($doit) {
-				$knews_aj_look_date = $aj->last_run;
-				$pend_posts = knews_search_posts($aj->id, -1, $aj->lang);
-				knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
-			}
-		}
-		
-		if ($doit && count($pend_posts) != 0) {
+			if ($aj->event == 'not_confirmed') $where .= ' AND u.state = 1';
+			if ($aj->event == 'after_confirmation') $where .= ' AND u.state = 2';
 			
-			$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . $aj->newsletter_id;
-			$news = $wpdb->get_results( $query );
+			$query = $select . $from . $left_join . $where . ' LIMIT ' . $aj->emails_at_once;			
+			//$Knews_plugin->get_mysql_date(
 			
-			$rightnews = false;
-			if (count($news) != 0) $rightnews=true;
-	
-			if ($rightnews) {
-				knews_debug('- there is a newsletter to build: ' . $news[0]->name . "\r\n");
-				require_once (KNEWS_DIR . '/includes/knews_util.php');
+			$selected_users = $wpdb->get_results( $query );
+			
+			knews_debug("\r\n" . 'There are ' . count($selected_users) . ' users to send this autoresponder' . "\r\n");
+			
+			if (count($selected_users) > 0) {
 				
-				if (!$Knews_plugin->im_pro()) $news_id = knews_create_news($aj, $pend_posts, $news, $fp, false, 0);
+				$mysqldate = $Knews_plugin->get_mysql_date();
+				
+				$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS . ' (blog_id, newsletter, finished, paused, start_time, users_total, users_ok, users_error, priority, strict_control, emails_at_once, special, end_time, id_smtp) VALUES (' . get_current_blog_id() . ', ' . $aj->newsletter_id . ', 0, 0, \'' . $mysqldate . '\', ' . count($selected_users) . ', 0, 0, 3, \'\', ' . $aj->emails_at_once . ', \'\', \'0000-00-00 00:00:00\', ' . $aj->id_smtp . ')';
+
+				$results = $wpdb->query( $query );
+				
+				$submit_id=$wpdb->insert_id; $submit_id2=mysql_insert_id(); if ($submit_id==0) $submit_id=$submit_id2;
+	
+				foreach ($selected_users as $user) {
+					knews_debug("\r\n" . $user->email . "\r\n");
+					//$target->id;
+					$query = 'INSERT INTO ' . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . ' (submit, user, status) VALUES (' . $submit_id . ', ' . $user->id . ', 0)';
+					$results = $wpdb->query( $query );
+
+					$query = 'INSERT INTO ' . KNEWS_USERS_EVENTS . ' (user_id, event, triggered) VALUES (' . $user->id . ', \'' . $aj->event . '\', \'' . $mysqldate . '\')';
+					$results = $wpdb->query( $query );
+				}
+				
+				$query = "UPDATE " . KNEWS_AUTOMATED . " SET last_run='" . $Knews_plugin->get_mysql_date() . "', run_yet=1 WHERE id=" . $aj->id . " ";
+				$results = $wpdb->query($query);				
 			}
+			
+			
+		} elseif ($aj->what_is=='autocreate') {
+		
+			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
+	
+			while (true) :
+				if ($aj->every_mode ==1) {
+					$knews_aj_look_date = $aj->last_run;
+					$pend_posts = knews_search_posts($aj->id, $aj->every_posts, $aj->lang);
+					if (count($pend_posts) == $aj->every_posts) $doit = true;
+					knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
+			
+				} else {
+					$time_lapsus = time();
+					if ($aj->every_time == 1) $time_lapsus = $time_lapsus - 24 * 60 * 60; //Daily
+					if ($aj->every_time == 2) $time_lapsus = $time_lapsus - 6 * 24 * 60 * 60; //Weekly
+					if ($aj->every_time == 3) $time_lapsus = $time_lapsus - 13 * 24 * 60 * 60; //2 weeks
+					if ($aj->every_time == 4) $time_lapsus = $time_lapsus - 30 * 24 * 60 * 60; //Monthly
+					if ($aj->every_time == 5) $time_lapsus = $time_lapsus - 60 * 24 * 60 * 60; //2 Monthly
+					if ($aj->every_time == 6) $time_lapsus = $time_lapsus - 90 * 24 * 60 * 60; //3 Monthly
+					
+					if ($Knews_plugin->sql2time($aj->last_run) < $time_lapsus || $aj->run_yet==0 ) {
+						if ($aj->every_time == 1) {
+							$doit=true;
+						} else {
+							$daynumber=date('w');
+							if ($daynumber==0) $daynumber=7;
+							if ($daynumber == $aj->what_dayweek) $doit=true;
+							knews_debug('- must submit dayweek number: ' . $aj->what_dayweek . ' and today is: ' . $daynumber . ' dayweek number. ' . "\r\n");
+						}
+					}
+					
+					if ($doit) {
+						$knews_aj_look_date = $aj->last_run;
+						$pend_posts = knews_search_posts($aj->id, -1, $aj->lang);
+						knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
+					}
+				}
+			
+				if ($doit && count($pend_posts) != 0) {
+					
+					$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . $aj->newsletter_id;
+					$news = $wpdb->get_results( $query );
+					
+					$rightnews = false;
+					if (count($news) != 0) $rightnews=true;
+			
+					if ($rightnews) {
+						knews_debug('- there is a newsletter to build: ' . $news[0]->name . "\r\n");
+						require_once (KNEWS_DIR . '/includes/knews_util.php');
+	
+
+						if (!$Knews_plugin->im_pro()) $news_id = knews_create_news($aj, $pend_posts, $news, $fp, false, 0);
+					} else {
+						knews_debug('broken automation, the newsletter was deleted' . "\r\n");
+					}
+				} else {
+					break;
+				}
+				if ($aj->every_mode !=1 || !$rightnews) break;
+				knews_debug('let\'s iterate, maybe more posts wait for news build' . "\r\n");
+			endwhile;
 		}
 	}
 	remove_filter('posts_where', 'knews_aj_posts_where' );
 	remove_filter('excerpt_length', 'knews_excerpt_length' );
+
+	unlink(KNEWS_DIR . '/tmp/lockfile2.txt');
+	if ($fp) fclose($fp);
+
 	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($save_lang);
 }
 
@@ -115,7 +212,9 @@ function knews_search_posts($id_automated, $max, $lang='en') {
 	
 	$args = array(
 		'post_type' => $cpt,
-		'posts_per_page' => -1
+		'posts_per_page' => -1,
+		'order' => 'ASC',
+		'post_status' => 'publish'
 	);
 	
 	if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='pll') $args['lang']=$lang;
@@ -129,11 +228,15 @@ function knews_search_posts($id_automated, $max, $lang='en') {
 		$result = $wpdb->get_results($query);
 		if (count($result) == 0) {
 			$include_option=get_post_meta($post->ID, '_knews_automated', true);
-			if ($include_option=='1' || ($include_option=='' && $knewsOptions['def_autom_post']==1)) $pend_posts[] = $post;
+			if ($include_option=='1' || ($include_option=='' && $knewsOptions['def_autom_post']==1)) {
+
+				if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt') $post->post_title = get_the_title();
+				if ($post->post_title != '') $pend_posts[] = $post;
+			}
 		}
 		if (count($pend_posts) == $max) break;
 	}
-	return $pend_posts;
+	return array_reverse($pend_posts);
 }
 
 function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_id) {
@@ -310,7 +413,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			}
 			
 			knews_debug('- saving the created newsletter' . "\r\n");
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ")";
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . mysql_real_escape_string($news[0]->name) . " (" . date('d/m/Y') . ")', '" . mysql_real_escape_string($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . mysql_real_escape_string($news_mod) . "','" . mysql_real_escape_string($news[0]->html_head) . "','" . mysql_real_escape_string($news[0]->html_modules) . "','" . mysql_real_escape_string($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
 			$results = $wpdb->query($sql);				
 			$id_newsletter = $wpdb->insert_id; $id_newsletter2=mysql_insert_id(); if ($id_newsletter==0) $id_newsletter=$id_newsletter2;
 

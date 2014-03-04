@@ -16,6 +16,7 @@ var preview_css=false;
 //function start() {
 parent.jQuery(document).ready( function () {
 //parent.jQuery(window).load(function() {
+	parent.jQuery('html', document).click(parent.close_automated_menu);
 
 	parent.jQuery('select#zoom').change(function () {
 		parent.jQuery('body', document).attr('style','zoom: ' + parent.jQuery(this).val() + '; -moz-transform: scale(' + parent.jQuery(this).val() + '); -moz-transform-origin: 0 0;');
@@ -672,8 +673,15 @@ function update_editor() {
 			parent.jQuery('#botonera div.justify_buttons').addClass('desactivada');
 		}
 
+		parent.jQuery('#botonera div.automated_buttons').removeClass('desactivada');
+			
 	} else {
 
+		if (parent.inside_title) {
+			parent.jQuery('#botonera div.automated_buttons').removeClass('desactivada');
+		} else {
+			parent.jQuery('#botonera div.automated_buttons').addClass('desactivada');
+		}
 		parent.jQuery('#tagsnav').html('');
 		parent.jQuery('#botonera a.color').css('backgroundColor', '#888888');
 		parent.jQuery('#botonera div.standard_buttons').addClass('desactivada');
@@ -714,6 +722,15 @@ function b_simple(action) {
 	if (inside_editor) {
 		//container = parent.jQuery(find_tag(info_node().commonAncestorContainer)).closest('span.content_editable');
 		var returnValue = document.execCommand(action,false,null);
+		firefox_separate(current_editor);
+		restore_focus();
+		update_editor();
+	}
+}
+function b_insertText(text) {
+	if (inside_editor) {
+		//container = parent.jQuery(find_tag(info_node().commonAncestorContainer)).closest('span.content_editable');
+		var returnValue = document.execCommand('insertText',false,text);
 		firefox_separate(current_editor);
 		restore_focus();
 		update_editor();

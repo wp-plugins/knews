@@ -244,8 +244,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		}
 	}
 ?>
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
 	<div class=wrap>
-		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper"><a href="admin.php?page=knews_users" class="nav-tab nav-tab-active"><?php _e('Subscribers','knews'); ?></a><a href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_users&tab=extra_fields' : 'page=knews_config&tab=pro'); ?>" class="nav-tab"><?php _e('Extra fields','knews'); ?></a><a href="#newuser" class="add-new-h2"><?php _e('Create a subscriber manually','knews'); ?></a></h2>
+		<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div><h2 class="nav-tab-wrapper"><a href="admin.php?page=knews_users" class="nav-tab nav-tab-active"><?php _e('Subscribers','knews'); ?></a><a href="admin.php?<?php echo (($Knews_plugin->im_pro()) ? 'page=knews_users&tab=extra_fields' : 'page=knews_config&tab=pro'); ?>" class="nav-tab"><?php _e('Extra fields','knews'); ?></a><a href="#newuser" class="add-new-h2" onclick="enfocar_knews('#email')"><?php _e('Create a subscriber manually','knews'); ?></a></h2>
 <?php 
 			$edit_user = $Knews_plugin->get_safe('edit_user', 0, 'int');
 			

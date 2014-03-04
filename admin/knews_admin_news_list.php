@@ -11,7 +11,7 @@ function duplicate_news($results) {
 	
 	if ($results) {
 		
-		$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile) VALUES ('(copy)" . mysql_real_escape_string($results[0]->name) . "', '" . mysql_real_escape_string($results[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "', '" . $results[0]->lang . "', 0, " . $results[0]->mobile . ", " . $results[0]->id_mobile . ")";
+		$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('(copy)" . mysql_real_escape_string($results[0]->name) . "', '" . mysql_real_escape_string($results[0]->subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $results[0]->template . "','" . mysql_real_escape_string($results[0]->html_mailing) . "','" . mysql_real_escape_string($results[0]->html_head) . "','" . mysql_real_escape_string($results[0]->html_modules) . "','" . mysql_real_escape_string($results[0]->html_container) . "', '" . $results[0]->lang . "', 0, " . $results[0]->mobile . ", " . $results[0]->id_mobile . ", '" . $results[0]->newstype . "')";
 			
 		$results = $wpdb->query($sql);
 		
@@ -68,27 +68,32 @@ function duplicate_news($results) {
 	}
 
 ?>
-<script type="text/javascript">
-function enfocar() {
-	setTimeout("jQuery('#new_news').focus();", 100);
-}
-</script>
+<script type="text/javascript" src="<?php echo KNEWS_URL; ?>/admin/scripts.js"></script>
+
 	<div class=wrap>
 			<div class="icon32" style="background:url(<?php echo KNEWS_URL; ?>/images/icon32.png) no-repeat 0 0;"><br></div>
-			<h2 class="nav-tab-wrapper"><a class="nav-tab<?php if ($tab=='') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news"><?php _e('Manual Newsletters','knews');?></a><a class="nav-tab<?php if ($tab=='auto') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=auto"><?php _e('Auto-created Newsletters','knews'); ?></a></h2>
+			<h2 class="nav-tab-wrapper">
+				<a class="nav-tab<?php if ($tab=='') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news"><?php _e('Manual Newsletters','knews');?></a>
+				<a class="nav-tab<?php if ($tab=='autocreated') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=autocreated"><?php _e('Auto-created Newsletters','knews'); ?></a>
+				<a class="nav-tab<?php if ($tab=='automation') echo ' nav-tab-active'; ?>" href="admin.php?page=knews_news&tab=automation"><?php _e('Templates for Automation','knews');?></a>
+				<a class="add-new-h2" href="#newnews" onclick="enfocar_knews('#new_news')" title="<?php _e('Create new newsletter','knews'); ?>">+</a>
+			</h2>
+			<br />
 			<?php 
 					$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 									
-					if ($tab=='') {
-						echo '<p><a class="add-new-h2" href="#newnews" onclick="enfocar()">' . __('Create new newsletter','knews') . '</a></p>';
 						$results_per_page=10;
-					} else {
-						echo '<p>&nbsp;</p>';
-						$results_per_page=20;
-					}
 
-					$query = "SELECT id, name, created, modified, template, lang, id_mobile FROM " . KNEWS_NEWSLETTERS . " WHERE mobile=0 AND automated=" . (($tab=='') ? '0' : '1') . " ORDER BY modified DESC";
-					$results = $wpdb->get_results( $query );
+					$query = " FROM " . KNEWS_NEWSLETTERS . " WHERE mobile=0 AND automated=" . (($tab=='autocreated') ? '1' : '0');
+					if ($tab=='') $query .= ' AND (newstype="unknown" OR newstype="manual")';
+					if ($tab=='automation') $query .= ' AND (newstype="autocreation" OR newstype="autoresponder")';
+					
+					$filtered_lists = $wpdb->get_results( 'SELECT COUNT(id) AS n ' . $query );
+					$filtered_lists = $filtered_lists[0]->n;
+
+					$query .= " ORDER BY modified DESC LIMIT " . $results_per_page . " OFFSET " . $results_per_page * ($paged - 1);
+
+					$results = $wpdb->get_results( 'SELECT * ' . $query );
 					if (count($results) != 0) {
 				?>
 					<script type="text/javascript">
@@ -130,6 +135,7 @@ function enfocar() {
 							<tr>
 								<th class="manage-column column-cb check-column"><input type="checkbox" /></th>
 								<th align="left"><?php _e('Newsletter name','knews');?></th>
+								<th><?php _e('Type','knews');?></th>
 								<th><?php _e('Created','knews');?></th>
 								<th><?php _e('Modified','knews');?></th>
 								<th><?php _e('Template','knews');?></th>
@@ -143,7 +149,7 @@ function enfocar() {
 						$results_counter=0;
 						foreach ($results as $list) {
 							$results_counter++;
-							if ($results_per_page * ($paged-1)<$results_counter) {
+							//if ($results_per_page * ($paged-1)<$results_counter) {
 								echo '<tr' . (($alt) ? ' class="alt"' : '') . '><th class="check-column"><input type="checkbox" name="batch_' . $list->id . '" value="1"></th>';
 								echo '<td class="name_' . $list->id  . '"><strong><a href="admin.php?page=knews_news&section=edit&idnews=' . $list->id . '">' . $list->name . '</a></strong>';
 	
@@ -151,10 +157,14 @@ function enfocar() {
 								
 								echo '<span><a href="#" title="' . __('Rename this newsletter', 'knews') . '" onclick="rename(' . $list->id . '); return false;">' . __('Rename', 'knews') . '</a> | </span>';
 								echo '<span><a href="' . get_admin_url() . 'admin-ajax.php?action=knewsReadEmail&id=' . $list->id . '&preview=1" target="_blank" title="' . __('Open a preview in a new window', 'knews') . '">' . __('Preview', 'knews') . '</a> | </span>';
+
+								if ($list->newstype != 'autoresponder' && $list->newstype != 'autocreation') 
 								echo '<span><a href="admin.php?page=knews_news&section=send&id=' . $list->id . '" title="' . __('Submit this newsletter', 'knews') . '">' . __('Submit', 'knews') . '</a> | </span>';
-								echo '<span><a href="admin.php?page=knews_news&da=duplicate&did=' . $list->id . '" title="' . __('Duplicate this newsletter', 'knews') . '">' . __('Duplicate', 'knews') . '</a> | </span>';
-								echo '<span class="trash"><a href="admin.php?page=knews_news&da=delete&nid=' . $list->id . '" title="' . __('Delete definitively this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
 	
+								echo '<span><a href="admin.php?page=knews_news&da=duplicate&did=' . $list->id . '&tab=' . $tab . '" title="' . __('Duplicate this newsletter', 'knews') . '">' . __('Duplicate', 'knews') . '</a> | </span>';
+								echo '<span class="trash"><a href="admin.php?page=knews_news&da=delete&nid=' . $list->id . '&tab=' . $tab . '" title="' . __('Delete definitively this newsletter', 'knews') . '" class="submitdelete">' . __('Delete', 'knews') . '</a></span></div></td>';
+
+								echo '<td>' . ($tab=='autocreated' ? 'autocreated' : $list->newstype) . '</td>';	
 								echo '<td>' . $Knews_plugin->humanize_dates($list->created, 'mysql') . '</td>';
 								echo '<td>' . $Knews_plugin->humanize_dates($list->modified, 'mysql') . '</td>';
 								echo '<td>' . $list->template . '</td>';
@@ -166,8 +176,8 @@ function enfocar() {
 								echo '</tr>';
 	
 								$alt=!$alt;
-								if ($results_counter == $results_per_page * $paged) break;
-							}
+								//if ($results_counter == $results_per_page * $paged) break;
+							//}
 						}
 				?>
 						</tbody>
@@ -175,6 +185,7 @@ function enfocar() {
 							<tr>
 								<th class="manage-column column-cb check-column"><input type="checkbox" /></th>
 								<th align="left"><?php _e('Newsletter name','knews');?></th>
+								<th><?php _e('Type','knews');?></th>
 								<th><?php _e('Created','knews');?></th>
 								<th><?php _e('Modified','knews');?></th>
 								<th><?php _e('Template','knews');?></th>
@@ -183,12 +194,15 @@ function enfocar() {
 							</tr>
 						</tfoot>
 					</table>
-					<div class="submit">
+					<div class="tablenav bottom">
+						<div class="alignleft actions">
 						<select name="action">
 							<option selected="selected" value=""><?php _e('Batch actions','knews'); ?></option>
 							<option value="delete_news"><?php _e('Delete','knews'); ?></option>
 						</select>
 						<input type="submit" value="<?php _e('Apply','knews'); ?>" class="button-secondary" />
+					</div>
+						<?php knews_pagination($paged, ceil($filtered_lists/ $results_per_page), $filtered_lists); ?>
 					</div>
 					<?php 
 					//Security for CSRF attacks
@@ -196,45 +210,20 @@ function enfocar() {
 					?>
 					</form>
 				<?php
-					//Pagination
-						$maxPage=ceil(count($results) / $results_per_page);
-						$link_params='admin.php?page=knews_news&tab='.$tab.'&paged=';
-						if ($maxPage > 1) {
-				?>		
-						<div class="tablenav bottom">
 	
-							<div class="tablenav-pages">
-								<span class="displaying-num"><?php echo count($results); ?> <?php _e('newsletters','knews'); ?></span>
-								<?php if ($paged > 1) { ?>
-								<a href="<?php echo $link_params; ?>1" title="<?php _e('Go to first page','knews'); ?>" class="first-page">&laquo;</a>
-								<a href="<?php echo $link_params . ($paged-1); ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page">&lsaquo;</a>
-								<?php } else { ?>
-								<a href="<?php echo $link_params; ?>" title="<?php _e('Go to first page','knews'); ?>" class="first-page disabled">&laquo;</a>
-								<a href="<?php echo $link_params; ?>" title="<?php _e('Go to previous page','knews'); ?>" class="prev-page disabled">&lsaquo;</a>
-								<?php } ?>
-								<span class="paging-input"><?php echo $paged; ?> de <span class="total-pages"><?php echo $maxPage; ?></span></span>
-								<?php if ($maxPage > $paged) { ?>
-								<a href="<?php echo $link_params . ($paged+1); ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page">&rsaquo;</a>
-								<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page">&raquo;</a>
-								<?php } else { ?>
-								<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to next page','knews'); ?>" class="next-page disabled">&rsaquo;</a>
-								<a href="<?php echo $link_params . $maxPage; ?>" title="<?php _e('Go to last page','knews'); ?>" class="last-page disabled">&raquo;</a>					
-								<?php } ?>
-							</div>
-						<br class="clear">
-						</div>
-			<?php
-						}
 					} else {
 						if ($tab=='') {
 							echo '<p>' . __('At the moment there is no newsletter, you can create new ones','knews') . '</p>';
+						} else if ($tab=='automation') {
+							echo '<p>' . __('There is no autoresponders or newsletters for automation (maybe are under "manual newsletters" as unknown type).','knews') . '</p>';
 						} else {
 							echo '<p>' . __('There is no auto-created newsletter.','knews') . '</p>';							
 						}
 					}
 					
-					if ($tab=='') {
+					//if ($tab=='' || $tab=='automation') {
 				?>
+					<br />
 					<hr />
 					<a id="newnews"></a>
 					<h2><?php _e('Create new newsletter','knews');?> <a href="<?php _e('http://www.knewsplugin.com/tutorial/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Make your own templates how-to','knews'); ?></a></h2>
@@ -270,6 +259,10 @@ function enfocar() {
 						<?php
 						knews_display_templates(); 
 						?>
+						<h3 style="clear:both">Type of newsletter</h3>
+						<p><input type="radio" name="newstype" value="manual" /> Manual newsletter</p>
+						<p><input type="radio" name="newstype" value="autocreation" /> Newsletter for auto-creation <a href="<?php _e('http://www.knewsplugin.com/automated-newsletter-creation/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:13px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></p>
+						<p><input type="radio" name="newstype" value="autoresponder" /> Newsletter for autoresponder <a href="http://www.knewsplugin.com/knews-have-autoresponders/" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:13px;" target="_blank"><?php _e('Autoresponders Tutorial','knews'); ?></a></p>
 						<div style="clear:both;"></div>
 						<div class="submit">
 							<input type="submit" value="<?php _e('Add newsletter','knews');?>" class="button-primary" />
@@ -317,11 +310,4 @@ function enfocar() {
 						wp_nonce_field($knews_nonce_action, $knews_nonce_name); 
 						?>
 					</form>
-				<?php
-					} else {
-				?>
-				<p><a href="<?php _e('http://www.knewsplugin.com/automated-newsletter-creation/','knews'); ?>" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px;" target="_blank"><?php _e('Auto-create Newsletters Tutorial','knews'); ?></a></p>
-				<?php
-					}
-				?>
 	</div>

@@ -49,7 +49,7 @@ if ($Knews_plugin) {
 				if (intval(time()) - $timelock > 3500) {
 					//Posem la nova data
 					if ($fp) fwrite($fp, '* Previous submit process terminated suddenly, continuing...' . "<br>\r\n");
-					@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'r');
+					@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'w');
 					if (!$filelock) die();
 					fwrite($filelock, time() );
 					fclose($filelock);
@@ -128,6 +128,8 @@ if ($Knews_plugin) {
 			$users[$users_index]=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE id=" . $unique_submit->user);
 			$users[$users_index]->unique_submit = $unique_submit->id;
 
+			$users[$users_index]->confirm = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=confirmUser&k=' . $users[$users_index]->confkey . '&e=' . urlencode($users[$users_index]->email) );
+			
 			if ($submit_pend[0]->special == 'import_confirm') {
 		
 				$localized_lang = $Knews_plugin->localize_lang($langs_array, $users[$users_index]->lang);
@@ -135,7 +137,6 @@ if ($Knews_plugin) {
 				$theSubject = $Knews_plugin->get_custom_text('email_importation_subject', $localized_lang);
 				$theHtml = '<head><title>' . $theSubject . '</title></head><body>'.$Knews_plugin->get_custom_text('email_importation_body', $localized_lang).'</body>';
 
-				$users[$users_index]->confirm = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=confirmUser&k=' . $users[$users_index]->confkey . '&e=' . urlencode($users[$users_index]->email) );
 				//$theHtml = str_replace('#url_confirm#', $url_confirm, $theHtml);
 
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );

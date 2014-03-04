@@ -71,6 +71,7 @@ div#botonera a {
 	text-decoration:none;
 	background:#eee url(../images/iconos.png) no-repeat 0 0;
 	font-size:1px;
+	overflow:hidden;
 }
 .rtl div#botonera a {
 	float:right;
@@ -100,6 +101,42 @@ div#botonera a.redo, div#botonera div.desactivada a.redo:hover { background-posi
 div#botonera a.undo, div#botonera div.desactivada a.undo:hover { background-position:-325px 0; }	div#botonera a.undo:hover { background-position:-325px -25px; }
 
 div#botonera a.htmledit, div#botonera div.desactivada a.htmledit:hover { background-position:-600px 0; }	div#botonera a.htmledit:hover { background-position:-600px -25px; }
+div#botonera a.automated, div#botonera div.desactivada a.automated:hover { background-position:-625px 0; }	div#botonera a.automated:hover, div#botonera a.automated_on { background-position:-625px -25px; }
+
+div.automated_menu {
+	display:none;
+	width:150px;
+	position:absolute;
+	border:#959595 1px solid;
+	background:#f7f7f7;
+	margin-left:410px;
+	margin-top:-9px;
+}
+div.automated_menu_visible {
+	display:block;
+}
+div.automated_menu ul,
+div.automated_menu li {
+	margin:0;
+}
+div.automated_menu a {
+	display:inline-block;
+	width:90%;
+	padding:1px 5%;
+	color:#666666;
+	text-decoration:none;
+	font-size:13px;
+}
+div.automated_menu a:hover {
+	background:#666;
+	color:#fff;
+}
+div.automated_menu li.off a,
+div.automated_menu li.off a:hover {
+	color:#dbdbdb;
+	background:none;
+	cursor:default;
+}
 
 div#botonera div.desactivada a {
 	cursor:default;
@@ -306,4 +343,8 @@ div.knews_vars_dialog input.txt {
 }
 #title-prompt-text {
 	display:none;
+}
+#newstype {
+	float:right;
+	font-size:13px;
 }

@@ -2,7 +2,7 @@
 
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-global $wpdb, $knewsOptions;
+global $wpdb, $knewsOptions, $Knews_plugin;
 
 if ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.0.9') < 0) {
 	//Let's add new cappabilitie 
@@ -191,6 +191,25 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.5.3') < 0 || ( versi
 			$result = $wpdb->query($query);
 		}
 	}
+}
+
+if (version_compare(get_option('knews_version','0.0.0'), '1.6.0') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.2.0') < 0)) {
+
+	if (!knews_add_column(KNEWS_AUTOMATED, 'what_is', "varchar(20) NOT NULL DEFAULT 'autocreate'")) return;
+	if (!knews_add_column(KNEWS_AUTOMATED, 'event', "varchar(20) NOT NULL DEFAULT ''")) return;
+	if (!knews_add_column(KNEWS_AUTOMATED, 'delay', "int(11) NOT NULL DEFAULT 0")) return;
+	if (!knews_add_column(KNEWS_AUTOMATED, 'delay_unit', "varchar(20) NOT NULL DEFAULT ''")) return;
+	if (!knews_add_column(KNEWS_NEWSLETTERS, 'newstype', "varchar(20) NOT NULL DEFAULT 'unknown'")) return;
+	
+	$sql =	"CREATE TABLE " .KNEWS_USERS_EVENTS . " (
+			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			user_id bigint(20) UNSIGNED NOT NULL,
+			event varchar(100) NOT NULL,
+			triggered datetime NOT NULL,
+			UNIQUE KEY id (id)
+		   )$charset_collate;";
+		   
+	dbDelta($sql);
 }
 
 update_option('knews_version', KNEWS_VERSION);

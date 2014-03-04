@@ -8,6 +8,13 @@ function knews_resize_img_fn($url_img, $width, $height) {
 	if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
 	//$absolute_dir = substr($_SERVER['SCRIPT_FILENAME'], 0, strpos($_SERVER['SCRIPT_FILENAME'], 'wp-admin'));
 
+	//Support for https admin
+	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') {
+		if (substr($url_img,0,5) == 'http:') $url_img = 'https:' . substr($url_img,5);
+		if (substr($blog_url,0,5) == 'http:') $blog_url = 'https:' . substr($blog_url,5);
+		if (substr($wp_dirs['baseurl'],0,5) == 'http:') $wp_dirs['baseurl'] = 'https:' . substr($wp_dirs['baseurl'],5);
+		if (substr($wp_dirs['basedir'],0,5) == 'http:') $wp_dirs['basedir'] = 'https:' . substr($wp_dirs['basedir'],5);
+	}
 
 	if (strpos($url_img, $blog_url) === false) $url_img = $blog_url . $url_img;
 	if (strpos($wp_dirs['baseurl'], $blog_url) === false) $wp_dirs['baseurl'] = $blog_url . $wp_dirs['baseurl'];

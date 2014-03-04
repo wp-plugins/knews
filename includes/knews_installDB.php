@@ -1,4 +1,5 @@
 <?php
+global $wpdb, $knewsOptions, $Knews_plugin;
 
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
@@ -79,6 +80,8 @@ $sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS . " (
 
 		mobile varchar(1) NOT NULL DEFAULT 0,
 		id_mobile bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+
+		newstype varchar(20) NOT NULL DEFAULT 'unknown',
 
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
@@ -164,6 +167,11 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED . " (
 
 		id_smtp bigint(20) NOT NULL DEFAULT 1,
 
+		what_is varchar(20) NOT NULL DEFAULT 'autocreate',
+		event varchar(20) NOT NULL DEFAULT '',
+		delay int(11) NOT NULL DEFAULT 0,
+		delay_unit varchar(20) NOT NULL DEFAULT '',
+
 		UNIQUE KEY id (id)
 	   )$charset_collate;";
 	   
@@ -189,6 +197,19 @@ $sql =	"CREATE TABLE " .KNEWS_AUTOMATED_SELECTION . " (
 	   )$charset_collate;";
 	   
 dbDelta($sql);
+
+$sql =	"CREATE TABLE " .KNEWS_USERS_EVENTS . " (
+		id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+		user_id bigint(20) UNSIGNED NOT NULL,
+		event varchar(100) NOT NULL,
+		triggered datetime NOT NULL,
+		UNIQUE KEY id (id)
+	   )$charset_collate;";
+
+dbDelta($sql);
+
+
+
 
 update_option('knews_version', KNEWS_VERSION);
 ?>

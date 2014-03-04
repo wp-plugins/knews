@@ -17,6 +17,7 @@ if ($Knews_plugin) {
 	$id=	$Knews_plugin->post_safe('idnews');
 	$title=	$Knews_plugin->post_safe('title', '', 'unsafe');
 	$code=	$Knews_plugin->post_safe('code', '', 'unsafe');
+	$newstype=	$Knews_plugin->post_safe('newstype', 'unknown');
 	
 	$date=	$Knews_plugin->get_mysql_date();
 	
@@ -33,17 +34,17 @@ if ($Knews_plugin) {
 	if (strlen($Knews_plugin->post_safe('testslash', '', 'unsafe'))==5) {
 		
 		$title = mysql_real_escape_string($title);
-		$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET html_mailing='" . mysql_real_escape_string($code) . "', modified='" . $date . "', subject='" . $title . "' WHERE id=" . $id;
+		$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET html_mailing='" . mysql_real_escape_string($code) . "', modified='" . $date . "', subject='" . $title . "', newstype='" . $newstype . "' WHERE id=" . $id;
 	} else {
 		
-		$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET html_mailing='" . $code . "', modified='" . $date . "', subject='" . $title . "' WHERE id=" . $id;
+		$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET html_mailing='" . $code . "', modified='" . $date . "', subject='" . $title . "', newstype='" . $newstype . "' WHERE id=" . $id;
 	}
 	
 	if ($wpdb->query($query)) {
 		$query = "SELECT id FROM " . KNEWS_NEWSLETTERS . " WHERE id_mobile=" . $id;
 		$newsparent = $wpdb->get_results( $query );
 		if (count($newsparent) > 0) {
-			$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET modified='" . $date . "', subject='" . $title . "' WHERE id=" . $newsparent[0]->id;
+			$query = "UPDATE " . KNEWS_NEWSLETTERS . " SET modified='" . $date . "', subject='" . $title . "', newstype='" . $newstype . "' WHERE id=" . $newsparent[0]->id;
 			$wpdb->query($query);
 		}
 		echo 'knews:ok';

@@ -156,6 +156,7 @@ img.editable:hover {
 }
 body {
 	margin-bottom:100px;
+	background:#fff;
 }
 
 /* preview without css*/

@@ -1,5 +1,8 @@
 <?php
 global $Knews_plugin, $wpdb, $knewsOptions;
+require_once( KNEWS_DIR . '/includes/knews_util.php');
+
+$paged = $Knews_plugin->get_safe('paged', 1, 'int');
 
 if ($Knews_plugin->get_safe('da')=='priority') {
 	$query = "UPDATE ".KNEWS_NEWSLETTERS_SUBMITS." SET priority='" . $Knews_plugin->get_safe('np') . "' WHERE blog_id=" . get_current_blog_id() . " AND id=" . $Knews_plugin->get_safe('sid', 0, 'int');
@@ -119,8 +122,12 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 				<?php
 				$pending=false;
 				$alt=false;
-				$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC";
-				$results = $wpdb->get_results( $query );
+				$results_per_page=20;
+				$query = "FROM " . KNEWS_NEWSLETTERS_SUBMITS . " WHERE blog_id=" . get_current_blog_id() . " ORDER BY finished, paused, start_time DESC LIMIT " . $results_per_page . " OFFSET " . $results_per_page * ($paged - 1);
+
+				$results = $wpdb->get_results( 'SELECT * ' . $query );
+				$query_count = $wpdb->get_results( 'SELECT COUNT(id) AS n ' . $query );
+				$query_count = $query_count[0]->n;
 
 				if (count($results) == 0) echo '<tr><td colspan="7"><p>' . __('No submits yet. First go to Newsletters, create one, and then submit it.','knews') . '</p></td></tr>';
 				
@@ -215,6 +222,9 @@ if ($Knews_plugin->get_safe('da')=='delete') {
 					</tr>
 				</tfoot>
 			</table>
+			<div class="tablenav bottom">
+				<?php knews_pagination($paged, ceil($query_count/ $results_per_page), $query_count); ?>
+			</div>
 			<?php
 			if ($pending) {
 			?>

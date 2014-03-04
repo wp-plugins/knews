@@ -26,6 +26,7 @@
 
 	if ($section=='' && ($Knews_plugin->post_safe('action')=='add_news' || $mobile)) {
 
+		$newstype = $Knews_plugin->post_safe('newstype');
 		$name = $Knews_plugin->post_safe('new_news');
 		$lang = $Knews_plugin->post_safe('lang');
 		$path_template = $Knews_plugin->post_safe('path_' . $Knews_plugin->post_safe('template'));
@@ -35,6 +36,10 @@
 		$blog_url = get_option('home');
 		//$blog_url = get_bloginfo('url');
 		if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
+
+		//Support for https admin
+		if (substr($blog_url,0,5) == 'http:' && substr($url_template,0,5) == 'https') $blog_url = 'https:' . substr($blog_url,5);
+
 		if (strpos($url_template, $blog_url) === false) $url_template = $blog_url . $url_template;
 
 		$lang_localized='';
@@ -48,7 +53,7 @@
 		}
 
 		if ($lang_localized != '' || $lang =='') {
-			if ($name != '' || $mobile) {
+			if (($name != '' && $newstype != '') || $mobile) {
 	
 				if ($mobile) {
 					$query = "SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id_mobile=0 AND id=" . $Knews_plugin->post_safe('parent', 0, 'int');
@@ -151,7 +156,7 @@
 						$headTemplate = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($headTemplate));
 						$codeModule = mysql_real_escape_string($Knews_plugin->htmlentities_corrected($codeModule));
 	
-						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject, lang, automated, mobile, id_mobile) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0, " . (($mobile) ? "1" : "0") . ", 0)";
+						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject, lang, automated, mobile, id_mobile, newstype) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0, " . (($mobile) ? "1" : "0") . ", 0, '" . $newstype . "')";
 						if ($wpdb->query($sql)) {
 							$id_edit=$wpdb->insert_id; $id_edit2=mysql_insert_id(); if ($id_edit==0) $id_edit=$id_edit2;
 							
