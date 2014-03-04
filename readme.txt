@@ -18,7 +18,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 
-* **Finally! AUTORESPONDERS!!** please, take a look here](http://www.knewsplugin.com/knews-have-autoresponders/)
+* **Finally! AUTORESPONDERS!!** please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
 * REMOTE SUBSCRIPTION ADDED: Now Knews give you an iframe HTML code for remote subscription in external websites.
 * **Tracking pixel**: Now Knews uses an image to track opened newsletters, not only user clicks.
 * Support for **Polylang**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
@@ -191,7 +191,7 @@ In any case, the degree of personalisation of our templates is immense, with tho
 == Changelog ==
 
 = 1.6.0 =
-* Finally! Autoresponders!! please, take a look here](http://www.knewsplugin.com/knews-have-autoresponders/)
+* Finally! Autoresponders!! please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
 * Emails at once in autocreation
 * Newsletters classified by type: manual, autocreated, and autocreation + autoresponders
 * Assistant inside WYSIWYG Editor for tokens and shortcodes insertion
@@ -592,10 +592,14 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
-= 1.5.9 =
-* Added language filter in subscribers administration
-* Added support for the new MAC Safari versions (WYSIWYG drag & drop works again)
-* Solved link tracking bug for stats
+= 1.6.0 =
+* Finally! Autoresponders!! please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
+* Emails at once in autocreation
+* Newsletters classified by type: manual, autocreated, and autocreation + autoresponders
+* Assistant inside WYSIWYG Editor for tokens and shortcodes insertion
+* More stable newsletter autocreation
+* Emails per hour preview
+* Support in WYSIWYG Editor for HTTPS administration
 
 
 
