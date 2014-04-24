@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.6.0
+Version: 1.6.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -483,9 +483,14 @@ if (!class_exists("KnewsPlugin")) {
 		function get_user_field ($user_id, $field_id, $empty='') {
 			global $wpdb;
 			
+			if ($field_id==0) {
+				$query = "SELECT email FROM " . KNEWS_USERS . " WHERE id=" . $user_id;
+				$field_found = $wpdb->get_col( $query, 0 );
+
+			} else {
 			$query = "SELECT * FROM " . KNEWS_USERS_EXTRA . " WHERE user_id=" . $user_id . ' AND field_id=' . $field_id;
 			$field_found = $wpdb->get_col( $query, 3 );
-
+			}
 			if ($field_found) {
 				if ($field_found[0]!='') return $field_found[0];
 			}
@@ -810,7 +815,8 @@ if (!class_exists("KnewsPlugin")) {
 			$results = $wpdb->get_row( $query );
 			if (!isset($results->id)) return false;
 
-			$query = "UPDATE ".KNEWS_USERS." SET state='2' WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
+			$date = $this->get_mysql_date();
+			$query = "UPDATE ".KNEWS_USERS." SET state='2', joined='" . $date . "' WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
 			$results = $wpdb->query( $query );
 			
 			return true;
@@ -1161,7 +1167,8 @@ if (!class_exists("KnewsPlugin")) {
 				$requiredtxt = '1'; if (isset($instance['requiredtext'])) $requiredtxt = $instance['requiredtext'];
 
 				foreach ($extra_fields as $field) {
-					$name = strtolower($field->name);
+					$name = $field->name;
+					if (!isset($instance[$name])) $name = strtolower($field->name);
 					if (isset($instance[$name]) && ($instance[$name]=='ask' || $instance[$name]=='required')) {
 						$response .= '<fieldset class="' . $field->name . '">';
 						
@@ -1428,7 +1435,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.6.0');
+		define('KNEWS_VERSION', '1.6.1');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );

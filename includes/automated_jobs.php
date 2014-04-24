@@ -70,7 +70,7 @@ if ($Knews_plugin) {
 			
 			$select = 'SELECT u.*';
 			$from = ' FROM ' . KNEWS_USERS . ' u';
-			$left_join = ' LEFT JOIN (SELECT user_id FROM ' . KNEWS_USERS_EVENTS . ' WHERE event = \'' . $aj->event . '\' AND u.joined >= \'' . $aj->last_run . '\') ue ON u.id = ue.user_id';
+			$left_join = ' LEFT JOIN (SELECT user_id FROM ' . KNEWS_USERS_EVENTS . ' WHERE event = \'' . $aj->event . '\' ) ue ON u.id = ue.user_id';
 			$where = " WHERE ue.user_id IS NULL AND u.joined < '" . $Knews_plugin->get_mysql_date($max_date) . "' AND u.joined >= '" . $aj->last_run . "'";
 			
 			if ($aj->target_id != 0) {
