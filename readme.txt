@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 3.9
-Stable tag: 1.6.1
+Tested up to: 3.9.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,11 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.6.2 =
+* Complaint with the new WP 3.9 WPDB extra layer for PHP 5.5+ (Warning: mysql_real_escape_string()... messages)
+* Solved bug in autoresponders: never was created when used with one list filter.
+* Solved issue with qTranslate on manual post insertion
 
 = 1.6.1 =
 * Solved bug in autoresponders: never was sent in some installations
@@ -595,6 +600,11 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.6.2 =
+* Complaint with the new WP 3.9 WPDB extra layer for PHP 5.5+ (Warning: mysql_real_escape_string()... messages)
+* Solved bug in autoresponders: never was created when used with one list filter.
+* Solved issue with qTranslate on manual post insertion
 
 = 1.6.1 =
 * Solved bug in autoresponders: never was sent in some installations
