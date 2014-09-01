@@ -217,7 +217,7 @@ if ($Knews_plugin) {
 
 		$result = $wpdb->query( $query );
 
-		unlink(KNEWS_DIR . '/tmp/lockfile.txt');
+		if (is_file(KNEWS_DIR . '/tmp/lockfile.txt')) unlink(KNEWS_DIR . '/tmp/lockfile.txt');
 		if ($fp) fclose($fp);
 		
 		$pend=true;

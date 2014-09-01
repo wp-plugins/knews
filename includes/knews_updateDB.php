@@ -220,6 +220,9 @@ if (version_compare(get_option('knews_version','0.0.0'), '1.6.0') < 0 || ( $this
 	dbDelta($sql);
 }
 
+if (version_compare(get_option('knews_version','0.0.0'), '1.6.4') < 0 || ( $this->im_pro() && version_compare(get_option('knews_version','0.0.0'), '2.2.6') < 0)) {
+	if (!knews_add_column(KNEWS_LISTS, 'auxiliary', "int(1) UNSIGNED NOT NULL DEFAULT '0'")) return;
+}
 update_option('knews_version', KNEWS_VERSION);
 update_option('knews_advice_time', 0);
 $this->knews_admin_messages = sprintf("Knews updated the database successfully. Welcome to %s version.", KNEWS_VERSION);

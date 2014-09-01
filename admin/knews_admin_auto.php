@@ -100,7 +100,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	$frequency = array ('daily','weekly','every 15 days','monthly','every 2 months','every 3 months');
 	$dayname = array ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
 	
-	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY orderlist";
+	$query = "SELECT id, name FROM " . KNEWS_LISTS . " WHERE auxiliary=0 ORDER BY orderlist";
 	$lists_name = $wpdb->get_results( $query );
 
 	if (!$Knews_plugin->im_pro()) {
@@ -629,7 +629,9 @@ if ($selector = $Knews_plugin->get_smtp_selector()) {
 				}
 				?>
 				</p>
-<div id="at_once"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" selected="selected">50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option></select> <span class="at_once_preview">300</span> per hour.</p>
+<div id="at_once"><p><?php _e('E-mails sent at once','knews');?>: <select name="emails_at_once"><option value="2">2 <?php _e('test mode','knews');?></option><option value="10">10</option><option value="25">25</option><option value="50" <?php if (!defined('KNEWS_CUSTOM_SPEED')) echo 'selected="selected"'; ?>>50 <?php _e('(normal)','knews');?></option><option value="100">100</option><option value="250">250 <?php _e('(high performance SMTP)','knews');?></option><option value="500">500 <?php _e('(high performance SMTP)','knews');?></option>
+<?php if (defined('KNEWS_CUSTOM_SPEED')) echo '<option value="' . KNEWS_CUSTOM_SPEED . '" selected="selected">' . KNEWS_CUSTOM_SPEED . '</option>'; ?>
+</select> <span class="at_once_preview"><?php if (defined('KNEWS_CUSTOM_SPEED')) echo KNEWS_CUSTOM_SPEED; else echo '300'; ?></span> per hour.</p>
 </div>
 <?php if ($Knews_plugin->im_pro()) {
 if ($selector = $Knews_plugin->get_smtp_selector()) {

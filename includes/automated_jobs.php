@@ -119,7 +119,6 @@ if ($Knews_plugin) {
 		} elseif ($aj->what_is=='autocreate') {
 		
 			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
-	
 			while (true) :
 				if ($aj->every_mode ==1) {
 					$knews_aj_look_date = $aj->last_run;
@@ -182,7 +181,7 @@ if ($Knews_plugin) {
 	remove_filter('posts_where', 'knews_aj_posts_where' );
 	remove_filter('excerpt_length', 'knews_excerpt_length' );
 
-	unlink(KNEWS_DIR . '/tmp/lockfile2.txt');
+	if (is_file(KNEWS_DIR . '/tmp/lockfile2.txt')) unlink(KNEWS_DIR . '/tmp/lockfile2.txt');
 	if ($fp) fclose($fp);
 
 	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($save_lang);
@@ -288,13 +287,6 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 		$total_posts=$total_posts+$n-1;
 	}
 	
-	/*for ($a=1; $a<10; $a++) {
-		$news_mod = str_replace('%the_permalink_' . $a . '%', '%the_permalink%', $news_mod);
-		$news_mod = str_replace('%the_title_' . $a . '%', '%the_title%', $news_mod);
-		$news_mod = str_replace('%the_excerpt_' . $a . '%', '%the_excerpt%', $news_mod);
-		$news_mod = str_replace('%the_content_' . $a . '%', '%the_content%', $news_mod);
-	}*/
-	
 	$s=0;
 	while ($total_posts < count($pend_posts) && $total_posts !=0) {
 
@@ -342,9 +334,9 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			$content = knews_iterative_extract_code('<script', '</script>', $content, true);
 			$content = knews_iterative_extract_code('<fb:like', '</fb:like>', $content, true);
 			$content = str_replace(']]>', ']]>', $content);
-			$content = strip_tags($content);
+			$content = strip_tags($content, $knewsOptions['allowed_content_tags']);
 	
-			if ($excerpt=='') $excerpt = $content;
+			if ($excerpt=='') $excerpt = strip_tags($content);
 	
 			$words = explode(' ', $content, $excerpt_length + 1);
 			if (count($words) > $excerpt_length) {
@@ -352,7 +344,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				//array_push($words, '[...]');
 				$excerpt = implode(' ', $words) . '...';
 			}
-			$content = nl2br($content);
+			//$content = nl2br($content);
 	
 			$words = explode(' ', $excerpt, $excerpt_length + 1);
 			if (count($words) > $excerpt_length) {
@@ -361,27 +353,6 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 				$excerpt = implode(' ', $words) . '...';
 			}
 
-			/*$content = $pp->post_content;
-
-			$excerpt = strip_shortcodes( $content );
-			if ($knewsOptions['apply_filters_on']=='1') $excerpt = apply_filters('the_content', $excerpt);
-			$excerpt = knews_iterative_extract_code('<script', '</script>', $excerpt, true);
-			$excerpt = knews_iterative_extract_code('<fb:like', '</fb:like>', $excerpt, true);
-			$excerpt = str_replace(']]>', ']]>', $excerpt);
-			$excerpt = strip_tags($excerpt);
-			$excerpt_length = apply_filters('excerpt_length', 55);
-			$words = explode(' ', $excerpt, $excerpt_length + 1);
-			if (count($words) > $excerpt_length) {
-				array_pop($words);
-				//array_push($words, '[...]');
-				$excerpt = implode(' ', $words);
-			}
-			//$excerpt = nl2br($excerpt);
-			if ($knewsOptions['apply_filters_on']=='1') $content = apply_filters('the_content', $content);
-			*/
-			
-			//$title = $pp->post_title;
-			//$permalink = get_permalink($pp->ID);
 			
 			$s=0;
 			while ($news_mod_map[$s]==0 && $s < count($news_mod_map)) { $s++; }
@@ -389,7 +360,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			$n=1;
 			$found=false;
 			while (!$found && $n<20) {
-				if (strpos($news_mod2[$s], '%the_title_' . $n . '%') !== false || strpos($news_mod2[$s], '%the_excerpt_' . $n . '%') !== false || strpos($news_mod2[$s], '%the_permalink_' . $n . '%') !== false) {
+				if (strpos($news_mod2[$s], '%the_title_' . $n . '%') !== false || strpos($news_mod2[$s], '%the_excerpt_' . $n . '%') !== false || strpos($news_mod2[$s], '%the_permalink_' . $n . '%') !== false || strpos($news_mod2[$s], '%the_content_' . $n . '%') !== false) {
 					$found=true;
 				} else {
 					$n++;

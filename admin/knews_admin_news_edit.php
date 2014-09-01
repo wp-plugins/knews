@@ -207,6 +207,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 						<ul>
 							<?php
 							$ef = $Knews_plugin->get_extra_fields();
+							echo '<li class="token off"><a href="#">%email%</a></li>';
 							foreach ($ef as $e) {
 								if ($e->token != '') echo '<li class="token off"><a href="#">' . $e->token . '</a></li>';
 							}

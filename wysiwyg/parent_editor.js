@@ -104,6 +104,8 @@ jQuery(window).load(function() {
 	io=jQuery('#knews_editor').contents();
 
 	jQuery(io).ready( function () {
+		redraw_droppables();
+		jQuery('.droppable_empty', io).hide();
 		
 		//document.getElementById('knews_editor').contentWindow.start();
 		document.getElementById('knews_editor').contentWindow.test_browser();
@@ -1277,6 +1279,7 @@ function clean_before_save() {
 	});
 
 	jQuery('*', io).removeAttr('data-cfsrc').removeAttr('data-cfstyle');
+	jQuery('.droppable_empty', io).remove();
 
 }
 

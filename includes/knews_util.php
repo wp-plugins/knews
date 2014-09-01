@@ -11,13 +11,13 @@ function knews_list_items($element, $all_elements) {
 	return $reply;
 }
 
-function knews_print_mailinglists() {
+function knews_print_mailinglists($new_way=false) {
 	global $Knews_plugin, $wpdb;
 	
 	$order_by = $Knews_plugin->get_safe('orderby', 'orderlist');
 	$order = $Knews_plugin->get_safe('order', 'asc');
 
-	$query = "SELECT id, name FROM " . KNEWS_LISTS . " ORDER BY " . $order_by . " " . $order;
+	$query = "SELECT id, name, auxiliary FROM " . KNEWS_LISTS . " ORDER BY " . $order_by . " " . $order;
 	$lists_name = $wpdb->get_results( $query );
 
 	//$col=count($lists_name)+1; 
@@ -34,7 +34,7 @@ function knews_print_mailinglists() {
 	} else {
 		echo '<table class="widefat" style="width:480px"><thead><tr><th class="manage-column column-cb check-column"><input type="checkbox"></th>';
 		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
-		echo '<th>&nbsp;</th></tr></thead><tbody><tr class="alt">';
+		echo '<th>&nbsp;</th></tr></thead><tbody>';
 	}
 	$alt=false;
 	foreach ($lists_name as $ln) {
@@ -46,16 +46,23 @@ function knews_print_mailinglists() {
 		$count2 = $wpdb->get_results( $query );
 
 		if (count($lists_name) < 9) {
-			if ($n != 0) {
-				echo '</tr><tr' . (($alt) ? ' class="alt"' : '') . '>';
+			if ($n != 0) echo '</tr>';
+			echo '<tr' . (($alt) ? ' class="alt"' : '') . '>';
 				if ($alt) {$alt=false;} else {$alt=true;}
-			}
 		} elseif ($n%3 == 0 ) {
-			echo '</tr><tr' . (($alt) ? ' class="alt"' : '') . '>';
+			if ($n != 0) echo '</tr>';
+			echo '<tr' . (($alt) ? ' class="alt"' : '') . '>';
 			if ($alt) {$alt=false;} else {$alt=true;}
 		}
 		$n++;
-		echo '<th class="check-column" style="padding:9px 0 4px 0;"><input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="checklist"></td><td style="padding:7px 60px 0px 7px;">' . $ln->name . '</td><td><strong style="color:#25c500">' . $count[0]->HOW_MANY . '</strong> / ' . $count2[0]->HOW_MANY . '</td>';
+		
+		echo '<th class="check-column" style="padding:9px 0 4px 0;">';
+		if ($new_way) {
+			echo '<input type="checkbox" value="' . $ln->id . '" name="list[]" id="list_' . $ln->id . '" class="checklist">';
+		} else {
+			echo '<input type="checkbox" value="1" name="list_' . $ln->id . '" id="list_' . $ln->id . '" class="checklist">';
+		}
+		echo '</th><td style="padding:7px 60px 0px 7px;">' . (($ln->auxiliary==0) ? '<strong>' : '') . $ln->name . (($ln->auxiliary==0) ? '</strong>' : '') . '</td><td><strong style="color:#25c500">' . $count[0]->HOW_MANY . '</strong> / ' . ($count[0]->HOW_MANY + $count2[0]->HOW_MANY) . '</td>';
 	}
 
 	if (count($lists_name) > 8) {
@@ -71,7 +78,7 @@ function knews_print_mailinglists() {
 		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
 		echo '<th>&nbsp;</th><th>&nbsp;</th>';
 		knews_th_orderable(__('Name list','knews'),'name','asc','padding-right:60px');
-		echo '<th>&nbsp;</th></tr></tfoot><table>';
+		echo '<th>&nbsp;</th></tr></tfoot></table>';
 		//$col = ceil($col / 3);
 	} else {
 		echo '</tr>';

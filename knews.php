@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.6.3
+Version: 1.6.4
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -91,6 +91,7 @@ if (!class_exists("KnewsPlugin")) {
 				'double_optin_register' => 0,
 				'pixel_tracking' => 0,
 				'https_conn' => 0,
+				'allowed_content_tags' => '<br><i><em><b><strong><ul><li><ol>'
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -1022,7 +1023,7 @@ if (!class_exists("KnewsPlugin")) {
 			} else {
 				$query .= " WHERE open='1'";
 			}
-			$query .= " ORDER BY orderlist";
+			$query .= " AND auxiliary=0 ORDER BY orderlist";
 			$results = $wpdb->get_results( $query );
 
 			foreach ($results as $list) {
@@ -1449,7 +1450,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.6.3');
+		define('KNEWS_VERSION', '1.6.4');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1611,7 +1612,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			?>
 			<script type="text/javascript">
 			jQuery(document).ready(function() {
-				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>/admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
+				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>/admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e') . '&k=' . $Knews_plugin->get_safe('k'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
 			});
 			</script>
 			<?php

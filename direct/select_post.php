@@ -42,9 +42,9 @@ if ($Knews_plugin) {
 		$content = knews_iterative_extract_code('<script', '</script>', $content, true);
 		$content = knews_iterative_extract_code('<fb:like', '</fb:like>', $content, true);
 		$content = str_replace(']]>', ']]>', $content);
-		$content = strip_tags($content);
+			$content = strip_tags($content, $knewsOptions['allowed_content_tags']);
 
-		if ($excerpt=='') $excerpt = $content;
+			if ($excerpt=='') $excerpt = strip_tags($content);
 
 		$words = explode(' ', $content, $excerpt_length + 1);
 		if (count($words) > $excerpt_length) {
@@ -52,7 +52,7 @@ if ($Knews_plugin) {
 			//array_push($words, '[...]');
 			$excerpt = implode(' ', $words) . '...';
 		}
-		$content = nl2br($content);
+			//$content = nl2br($content);
 
 		$words = explode(' ', $excerpt, $excerpt_length + 1);
 		if (count($words) > $excerpt_length) {
@@ -290,7 +290,7 @@ function select_post(n, lang, type) {
 		}
 		add_filter('excerpt_more', 'new_excerpt_more');*/
 	
-		$myposts = apply_filters ('knews_posts_preview', array(), $lang, $type, $cat, $s, $paged, 'published', 10);
+		$myposts = apply_filters ('knews_posts_preview', array(), $lang, $type, $cat, $s, $paged, 'publish', 10);
 	
 		foreach($myposts as $p) {
 			if (is_array($p) && isset($p['ID'])) {

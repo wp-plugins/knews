@@ -22,6 +22,8 @@ function knews_save_prefs() {
 		$knewsOptions['check_bot'] = $Knews_plugin->post_safe('check_bot_knews', '0');
 		$knewsOptions['apply_filters_on'] = $Knews_plugin->post_safe('apply_filters_on_knews', '0');
 		$knewsOptions['config_knews'] = 'yes';
+		$knewsOptions['allowed_content_tags'] = $Knews_plugin->post_safe('allowed_content_tags_knews', '');
+		
 		
 		if ($Knews_plugin->post_safe('reset_alerts_knews')=='1') {
 			$knewsOptions['no_warn_cron_knews'] = 'no';
@@ -298,9 +300,9 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 							echo '<td><img src="' . KNEWS_URL . '/images/pencil.png" width="16" height="16"></td>';
 							echo '<td><strong>' . $knews_smtp_once['from_name_knews'] . '</strong><div class="row-actions"><span>&nbsp;';
 						} else {
-							echo '<td>&nbsp;</td><td>' . $knews_smtp_once['from_name_knews'] . '<div class="row-actions"><span><a href="admin.php?page=knews_config&tab=advanced&editsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Edit</a>';
+							echo '<td>&nbsp;</td><td>' . $knews_smtp_once['from_name_knews'] . '<div class="row-actions"><span><a href="admin.php?page=knews_config&tab=advanced&subtab=2&editsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Edit</a>';
 						}
-						echo ((key($knews_smtp_multiple)==1) ? '' : ' | <a href="admin.php?page=knews_config&tab=advanced&delsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Delete</a>') . '</span></div></td>';
+						echo ((key($knews_smtp_multiple)==1) ? '' : ' | <a href="admin.php?page=knews_config&tab=advanced&subtab=2&delsmtp=' . key($knews_smtp_multiple) . '#submitmethod">Delete</a>') . '</span></div></td>';
 						echo '<td>' . $knews_smtp_once['smtp_host_knews'] . '</td>';
 						echo '<td><input type="radio" name="knews_smtp_default"' . ((key($knews_smtp_multiple)==$knews_smtp_default) ? ' checked="checked"' : '') . ' autocomplete="off" value="' . key($knews_smtp_multiple) . '" /></td></tr>';
 					}
@@ -492,6 +494,9 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<p><input type="checkbox" name="def_autom_post_knews" value="1" id="def_autom_post_knews"<?php if ($knewsOptions['def_autom_post']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Include the posts in the automated newsletters (default value for the new created posts)','knews'); ?></label></p>
 
 			<p><input type="checkbox" name="edited_autom_post_knews" value="1" id="edited_autom_post_knews"<?php if ($knewsOptions['edited_autom_post']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Use post edition date instead post creation date for the automated newsletters (older posts never included in automation, will be included if you edit it and activate this option)','knews'); ?></label></p>
+
+			<p><label><strong><?php _e('Allow this tags in %the_content% post insertion (manual & automated):','knews'); echo '</strong><br />'; _e('Warning: some tags can break the newsletter design, add it at your own risk!','knews'); ?></label>
+			<textarea name="allowed_content_tags_knews" id="allowed_content_tags_knews" style="width:100%"><?php echo $knewsOptions['allowed_content_tags']; ?></textarea></p>
 
 			<hr />
 

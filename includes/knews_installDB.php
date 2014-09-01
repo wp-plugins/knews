@@ -47,6 +47,7 @@ $sql =	"CREATE TABLE " .KNEWS_LISTS . " (
 		open_registered varchar(1) NOT NULL,
 		langs varchar(100) NOT NULL,
 		orderlist int(11) NOT NULL DEFAULT '0',
+		auxiliary int(1) UNSIGNED NOT NULL DEFAULT '0',
 		UNIQUE KEY id (id)
 	   )$charset_collate;
 	   
