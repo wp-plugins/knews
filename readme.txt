@@ -190,6 +190,17 @@ In any case, the degree of personalisation of our templates is immense, with tho
 
 == Changelog ==
 
+= 1.6.4 =
+* Added a quick status check pane on submit newsletter screen
+* Support for %the_content_1% ... %the_content_n% in custom newsletter 
+* You can add your custom speed in wp-config.php file: define ('KNEWS_CUSTOM_SPEED', x); //where x is emails sent every 10 minutes
+* Solved bug on multistep import: some users experienced fail in large files
+* Solved bug on admin submits screen pagination
+* Solved: In manual post insertion, it shows ALL articles, even those which are in trash.
+* In mailing lists, now count the total users well
+* Solved PHP warnings about temporary text file deletion (lockfile.txt and lockfile2.txt)
+* Minor bugs solved
+
 = 1.6.3 =
 * AUTOMATED NEWSLETTERS & AUTORESPONDERS NEW FEATURES
 - Autoresponders can be filtered by user language
@@ -609,6 +620,17 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.6.4 =
+* Added a quick status check pane on submit newsletter screen
+* Support for %the_content_1% ... %the_content_n% in custom newsletter 
+* You can add your custom speed in wp-config.php file: define ('KNEWS_CUSTOM_SPEED', x); //where x is emails sent every 10 minutes
+* Solved bug on multistep import: some users experienced fail in large files
+* Solved bug on admin submits screen pagination
+* Solved: In manual post insertion, it shows ALL articles, even those which are in trash.
+* In mailing lists, now count the total users well
+* Solved PHP warnings about temporary text file deletion (lockfile.txt and lockfile2.txt)
+* Minor bugs solved
 
 = 1.6.3 =
 * AUTOMATED NEWSLETTERS & AUTORESPONDERS NEW FEATURES
