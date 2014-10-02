@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.6.4
+Version: 1.6.5
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -39,6 +39,7 @@ if (!class_exists("KnewsPlugin")) {
 		var $knews_admin_messages = '';
 		var $knews_form_n = 1;
 		var $polylang_options = '';
+		var $email_blacklist = '';
 						
 		/******************************************************************************************
 		/*                                   INICIALITZAR
@@ -91,7 +92,9 @@ if (!class_exists("KnewsPlugin")) {
 				'double_optin_register' => 0,
 				'pixel_tracking' => 0,
 				'https_conn' => 0,
-				'allowed_content_tags' => '<br><i><em><b><strong><ul><li><ol>'
+				'allowed_content_tags' => '<br><i><em><b><strong><ul><li><ol>',
+				'email_blacklist' => 1,
+				'blacklist_scan' => 0,
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -588,7 +591,7 @@ if (!class_exists("KnewsPlugin")) {
 			//$name = esc_sql($_POST['name']);
 			$lang = $this->post_safe('lang_user');
 			$lang_locale = $this->post_safe('lang_locale_user');
-			$email = $this->post_safe('knewsemail');
+			$email = trim($this->post_safe('knewsemail'));
 			$id_list_news = $this->post_safe('user_knews_list', 0, 'int');
 			
 			$custom_fields=array();
@@ -773,15 +776,23 @@ if (!class_exists("KnewsPlugin")) {
 
 		function validEmail($email) {
 
-			$email=trim($email);
-
 			if (empty($email) || !is_email($email)) {
 				return false;
 			} else {
-				return true;
+				global $email_blacklist; $this->load_blacklist();
+
+				$domain = explode('@',$email);
+				return (!in_array(strtolower($domain[1]), $email_blacklist));
 			}
 		}
-		
+		function load_blacklist($loadInAnycase = false) {
+			global $email_blacklist, $knewsOptions;
+			if ($loadInAnycase || ($knewsOptions['email_blacklist']==1 && $email_blacklist=='') ) {
+				$email_blacklist=file(KNEWS_DIR . '/includes/disposable_email_blacklist.conf', FILE_IGNORE_NEW_LINES);
+			} else {
+				$email_blacklist=array();
+			}
+		}
 		function localize_lang($langs_array, $lang, $not_found='en_US') {
 			$lang_locale=$not_found;
 			foreach ($langs_array as $search_lang) {
@@ -1450,7 +1461,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.6.4');
+		define('KNEWS_VERSION', '1.6.5');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1612,7 +1623,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			?>
 			<script type="text/javascript">
 			jQuery(document).ready(function() {
-				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>/admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e') . '&k=' . $Knews_plugin->get_safe('k'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
+				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e') . '&k=' . $Knews_plugin->get_safe('k'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
 			});
 			</script>
 			<?php

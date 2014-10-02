@@ -547,7 +547,7 @@ function print_state($step, $where) {
 							}
 	
 							$confkey = $Knews_plugin->get_unique_id();
-							$email=$user_csv[$Knews_plugin->post_safe('email_col', 0, 'int')-1];
+							$email=trim($user_csv[$Knews_plugin->post_safe('email_col', 0, 'int')-1]);
 	
 							if (substr($_POST['state_col_val'],0,4)=='val_') {
 								$state=intval(substr($_POST['state_col_val'],4));

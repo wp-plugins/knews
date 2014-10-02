@@ -260,19 +260,37 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 			$wp_dirs = wp_upload_dir();
 			echo '<tr class="alt"><td><span style="background:url(' . KNEWS_URL . '/images/red_led.gif); display:block; width:20px; height:20px;"><span style="background:url(' . $wp_dirs['baseurl'] . '/knewsimages/testled.gif); display:block; width:20px; height:20px;"></span></span></td><td>';
-			echo '<a href="http://www.knewsplugin.com/debug/wp-admin/admin.php?page=knews_config&tab=advanced&subtab=3">' . __('Tracking pixel','knews') . '</a></td></tr>';
+			echo '<a href="admin.php?page=knews_config&tab=advanced&subtab=3">' . __('Tracking pixel','knews') . '</a></td></tr>';
 		
 		} else {
 			echo '<tr class="alt"><td><img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" alt="" /></td><td>';
-			echo '<a href="http://www.knewsplugin.com/debug/wp-admin/admin.php?page=knews_config&tab=advanced&subtab=3">' . __('Please, configure the tracking pixel, it will give you accurate stats.','knews') . '</a></td></tr>';
+			echo '<a href="admin.php?page=knews_config&tab=advanced&subtab=3">' . __('Please, configure the tracking pixel, it will give you accurate stats.','knews') . '</a></td></tr>';
 			
 		}
+		
+		global $email_blacklist; $this->load_blacklist(true);
 
+		if ($knewsOptions['blacklist_scan']==0) {
 
+			echo '<tr><td><img src="' . KNEWS_URL . '/images/red_led.gif" width="20" height="20" alt="" /></td><td>';
+			echo '<a href="admin.php?page=knews_users#blacklists">' . __('Please, scan mailing lists with the new blacklist domains.','knews') . '</a></td></tr>';
+
+		} elseif ($knewsOptions['blacklist_scan']!=count($email_blacklist)) {
+
+			echo '<tr><td><img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" alt="" /></td><td>';
+			echo '<a href="admin.php?page=knews_users#blacklists">' . __('Please, scan mailing lists with the new blacklist domains.','knews') . '</a></td></tr>';
+			
+		} else {
+
+			echo '<tr><td><img src="' . KNEWS_URL . '/images/green_led.gif" width="20" height="20" alt="" /></td><td>';
+			echo __('Mailing lists cleaned from blacklists.','knews') . '</td></tr>';
+			
+		}
+		
 		if (!$Knews_plugin->im_pro()) {
 
-			echo '<tr><td><img src="' . KNEWS_URL . '/images/gray_led.gif" width="20" height="20" alt="" /></td><td>';
-			echo '<a href="http://www.knewsplugin.com/debug/wp-admin/admin.php?page=knews_config&tab=pro">' . __('Only Knews Pro has a built-in email bounce detection','knews') . '</a></td></tr>';
+			echo '<tr class="alt"><td><img src="' . KNEWS_URL . '/images/gray_led.gif" width="20" height="20" alt="" /></td><td>';
+			echo '<a href="admin.php?page=knews_config&tab=pro">' . __('Only Knews Pro has a built-in email bounce detection','knews') . '</a></td></tr>';
 			
 		} elseif ($knewsOptions['bounce_on'] == 1) {
 
@@ -281,7 +299,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		
 		} else {
 			echo '<tr><td><img src="' . KNEWS_URL . '/images/yellow_led.gif" width="20" height="20" alt="" /></td><td>';
-			echo '<a href="http://www.knewsplugin.com/debug/wp-admin/admin.php?page=knews_config&tab=pro&subtab=2">' . __('Bounce detection deactivated','knews') . '</a></td></tr>';
+			echo '<a href="admin.php?page=knews_config&tab=pro&subtab=2">' . __('Bounce detection deactivated','knews') . '</a></td></tr>';
 			
 		}
 

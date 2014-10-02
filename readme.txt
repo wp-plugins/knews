@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 3.9.2
-Stable tag: 1.6.4
+Tested up to: 4.0
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Knews is a powerful multilingual plug-in that allows you to **build professional
 Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) editor. Based on templates, with no need to know HTML.
 
 = Features =
-
+* **NEW**: 591 domain blacklist added (keep mailing lists clean)
 * **Finally! AUTORESPONDERS!!** please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
 * REMOTE SUBSCRIPTION ADDED: Now Knews give you an iframe HTML code for remote subscription in external websites.
 * **Tracking pixel**: Now Knews uses an image to track opened newsletters, not only user clicks.
@@ -189,6 +189,15 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.6.5 =
+* 591 domain blacklist added (keep mailing lists clean)
+* Clean scanning blacklist tool added for current subscribers
+* Automated newsletter creation timeout error proof
+* Open newsletter detection for users without tracking pixel configured
+* Reliable email submit script (it will restart at the same point if some error like PHP timeout break the script)
+* Spaces in emails bug solved (on import, subscription and manual creation and edition)
+* Solved newsletter display over home page in some WP installations
 
 = 1.6.4 =
 * Added a quick status check pane on submit newsletter screen
@@ -620,6 +629,15 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.6.5 =
+* 591 domain blacklist added (keep mailing lists clean)
+* Clean scanning blacklist tool added for current subscribers
+* Automated newsletter creation timeout error proof
+* Open newsletter detection for users without tracking pixel configured
+* Reliable email submit script (it will restart at the same point if some error like PHP timeout break the script)
+* Spaces in emails bug solved (on import, subscription and manual creation and edition)
+* Solved newsletter display over home page in some WP installations
 
 = 1.6.4 =
 * Added a quick status check pane on submit newsletter screen

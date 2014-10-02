@@ -152,4 +152,8 @@ jQuery(document).ready(function() {
 		alert(jQuery(this).attr('title'));
 		return false;
 	});
+	jQuery('a.knews_blacklist').click(function() {
+		jQuery('div.knews_blacklist').toggle();
+		return false;
+	});
 });

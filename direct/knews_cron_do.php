@@ -47,6 +47,10 @@ if ($Knews_plugin) {
 				$timelock = intval(fread($filelock, filesize(KNEWS_DIR . '/tmp/lockfile.txt')));
 				fclose($filelock);
 				if (intval(time()) - $timelock > 3500) {
+
+					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
+					$restart = $wpdb->query( $query );
+
 					//Posem la nova data
 					if ($fp) fwrite($fp, '* Previous submit process terminated suddenly, continuing...' . "<br>\r\n");
 					@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'w');
@@ -80,13 +84,16 @@ if ($Knews_plugin) {
 		} else {
 			$img_track = KNEWS_TRACKPIXEL_URL;
 		}
+		
+		if ($knewsOptions['pixel_tracking']!=1) $img_track = KNEWS_URL . '/direct/track.php?img=%confkey%_';
+		
 		foreach ($urls_submit as $url_submit) {
 			
 			if ($url_submit->type==6) {
 				//Cut extension
 				$real_image = $url_submit->href;
 				$pos = strrpos($real_image, "."); 
-				if ($pos !== false) $real_image=substr($real_image, 0 , $pos);
+				if ($pos !== false && $knewsOptions['pixel_tracking']==1) $real_image=substr($real_image, 0 , $pos);
 
 				//Replace first
 				$pos = strpos($theHtml, $real_image);
@@ -101,7 +108,7 @@ if ($Knews_plugin) {
 		$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " WHERE status=0 AND submit=" . $submit_pend[0]->id . " LIMIT " . $submit_pend[0]->emails_at_once;
 		$submits = $wpdb->get_results( $query );
 
-		$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=2 WHERE status=0 AND submit=" . $submit_pend[0]->id . " LIMIT " . $submit_pend[0]->emails_at_once;
+		$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=3 WHERE status=0 AND submit=" . $submit_pend[0]->id . " LIMIT " . $submit_pend[0]->emails_at_once;
 		$block = $wpdb->query( $query );
 		
 		$ok_count = $submit_pend[0]->users_ok;

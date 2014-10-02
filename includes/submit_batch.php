@@ -48,6 +48,8 @@ if (count($targets) > 0) {
 			if (knews_insert_unique_key(6, $submit_id, $img)) break;
 			//echo $img . ' ha fallat';
 		}
+	} else {
+		while (!knews_insert_unique_key(6, $submit_id, KNEWS_URL . '/images/unpix.gif')) {}
 	}
 	echo '<div class="updated"><p>' . __('Batch submit process has been properly scheduled.','knews') . '</p></div>';				
 	$submit_enqueued=true;

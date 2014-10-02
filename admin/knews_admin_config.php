@@ -20,6 +20,7 @@ function knews_save_prefs() {
 		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', '0');
 		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', '0');
 		$knewsOptions['check_bot'] = $Knews_plugin->post_safe('check_bot_knews', '0');
+		$knewsOptions['email_blacklist'] = $Knews_plugin->post_safe('email_blacklist_knews', '0');
 		$knewsOptions['apply_filters_on'] = $Knews_plugin->post_safe('apply_filters_on_knews', '0');
 		$knewsOptions['config_knews'] = 'yes';
 		$knewsOptions['allowed_content_tags'] = $Knews_plugin->post_safe('allowed_content_tags_knews', '');
@@ -502,8 +503,19 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 
 			<h3><?php _e('Compatibility options','knews'); ?></h3>
 			<p><input type="checkbox" name="apply_filters_on_knews" value="1" id="apply_filters_on_knews"<?php if ($knewsOptions['apply_filters_on']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Apply filter the_content in the newsletter post insertion (Deactivate for compatibility issues with some plugins like NextGen Gallery)','knews'); ?><br /><?php _e('<strong>Note</strong>: if you are using <strong>qTranslate</strong> you cant deactivate this option, because it uses this filter to divide the post contents into different languages.','knews'); ?></label></p>
-			<p style="padding-top:15px;"><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></label></p>
 
+			<hr />
+
+			<h3><a name="blacklists" id="blacklists"></a><?php _e('Clean lists','knews'); ?></h3>
+			<p style="padding-bottom:15px;"><input type="checkbox" name="check_bot_knews" value="1" id="check_bot_knews"<?php if ($knewsOptions['check_bot']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Prevent bot registrations. Some Cache Plugins can need deactivate this option (Subscribe always fails "wrong e-mail adress" message).','knews'); ?></label></p>
+			<?php
+			global $email_blacklist; $this->load_blacklist(true);
+			?>
+			<div class="updated below-h2">
+				<p><?php echo sprintf(__('Knews includes now a %s domains blacklist. It includes temporary email domains, used widely by spammers.','knews'), '<strong>' . count($email_blacklist) . '</strong>' ); ?> <a href="#" class="knews_blacklist"><?php _e('Look list','knews'); ?></a></p><p><a href="admin.php?page=knews_users&da=cleanBlackList" class="button" target="_blank"><?php _e('Run Mailing lists clean now','knews'); ?></a></p>
+			</div>
+			<p><input type="checkbox" name="email_blacklist_knews" value="1" id="email_blacklist_knews"<?php if ($knewsOptions['email_blacklist']=='1') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php echo __('Block registrations from blacklist domains.','knews'); ?></label></p>
+			<div class="knews_blacklist" style="display:none;"><textarea style="width:100%; height:200px"><?php echo implode(', ', $email_blacklist); ?></textarea></div>
 			<div class="submit">
 				<input type="submit" name="update_KnewsAdminSettings" id="update_KnewsAdminSettings" value="<?php _e('Save','knews');?>" class="button-primary" />
 			</div>

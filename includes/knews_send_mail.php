@@ -1,4 +1,5 @@
 <?php
+			$break_to_avoid_timeout=false;
 			$test_smtp=is_array($test_array);
 			
 			if (!is_array($recipients)) {
@@ -92,6 +93,7 @@
 			$partial_submit_error=0;
 			$partial_submit_ok=0;
 			$timer = time();
+			$aux_timer = $timer;
 			$error_info=array();
 
 			foreach ($recipients as $recipient) {
@@ -192,16 +194,17 @@
 				}
 
 				if (count($recipients) > 1) {
-					if( !ini_get('safe_mode') ) set_time_limit(25);
+					if( !@set_time_limit(25) ) {
+						if ($timer + ini_get('max_execution_time') - 4 >= time()) $break_to_avoid_timeout=true;
+					}
 					echo ' ';
 					
-					if ($timer + 8 <= time()) {
+					if ($aux_timer + 8 >= time() || $break_to_avoid_timeout) {
+						$aux_timer = time();
 						$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS . " SET users_ok = users_ok + " . $partial_submit_ok . ", users_error = users_error + " . $partial_submit_error . " WHERE id=" . $idNewsletter;
 						$result = $wpdb->query( $query );
 						$partial_submit_error = 0;
 						$partial_submit_ok = 0;
-						
-						$timer = time();
 					}
 
 				}
@@ -223,8 +226,15 @@
 							$unlock = $wpdb->query( $query );
 						}
 					}
+					//break;
+				}
+				if ($break_to_avoid_timeout) {
+					if ($fp) {
+						fwrite($fp, '* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error... (' . $hour . ') ' . "<br>\r\n");
+					}
 					break;
 				}
+				
 			}
 		
 			if (count($recipients) > 1 && ($knewsOptions['smtp_knews']!='0') || $test_smtp) $mail->SmtpClose();

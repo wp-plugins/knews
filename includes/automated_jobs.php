@@ -1,6 +1,9 @@
 <?php
 global $knewsOptions, $Knews_plugin, $wpdb, $knews_aj_look_date;
 
+$break_to_avoid_timeout=false;
+$timer = time();
+
 if ($Knews_plugin) {
 
 	add_filter( 'excerpt_length', 'knews_excerpt_length', 999 );
@@ -119,7 +122,8 @@ if ($Knews_plugin) {
 		} elseif ($aj->what_is=='autocreate') {
 		
 			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
-			while (true) :
+			while (!$break_to_avoid_timeout) :
+			
 				if ($aj->every_mode ==1) {
 					$knews_aj_look_date = $aj->last_run;
 					$pend_posts = knews_search_posts($aj, $aj->every_posts);
@@ -175,8 +179,13 @@ if ($Knews_plugin) {
 				}
 				if ($aj->every_mode !=1 || !$rightnews) break;
 				knews_debug('let\'s iterate, maybe more posts wait for news build' . "\r\n");
+				
+				knews_prevent_timeout();
 			endwhile;
 		}
+		
+		knews_prevent_timeout();
+		if ($break_to_avoid_timeout) break;
 	}
 	remove_filter('posts_where', 'knews_aj_posts_where' );
 	remove_filter('excerpt_length', 'knews_excerpt_length' );
@@ -187,6 +196,15 @@ if ($Knews_plugin) {
 	if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($save_lang);
 }
 
+function knews_prevent_timeout() {
+	global $break_to_avoid_timeout, $timer;
+
+	if( !@set_time_limit(25) ) {
+		if ($timer + ini_get('max_execution_time') - 4 >= time()) $break_to_avoid_timeout=true;
+		knews_debug('* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error...' . "\r\n");
+	}
+	echo ' ';
+}
 function knews_debug($message) {
 	
 	global $fp, $Knews_plugin;
