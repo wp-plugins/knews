@@ -5,8 +5,7 @@ $knews_nonce_name='_admusr';
 if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_name);
 //End Security for CSRF attacks
 
-	global $wpdb;
-	global $Knews_plugin;
+	global $wpdb, $Knews_plugin, $knewsOptions;
 	
 	require_once( KNEWS_DIR . '/includes/knews_util.php');
 

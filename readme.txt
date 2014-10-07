@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.0
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.6.6 =
+* Solved an stupid bug: the Knews preferences was deleted when you do an scanning blacklist (Now safe). 
+- This bug was introduced on 1.6.5. Sorry guys!!!
 
 = 1.6.5 =
 * 591 domain blacklist added (keep mailing lists clean)
@@ -629,6 +633,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.6.6 =
+* Solved an stupid bug: the Knews preferences was deleted when you do an scanning blacklist (Now safe). 
+- This bug was introduced on 1.6.5. Sorry guys!!!
 
 = 1.6.5 =
 * 591 domain blacklist added (keep mailing lists clean)
