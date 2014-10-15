@@ -1,9 +1,8 @@
 <?php
-global $knewsOptions, $Knews_plugin, $wpdb, $knews_aj_look_date, $knews_timer, $break_to_avoid_timeout;
+global $knewsOptions, $Knews_plugin, $wpdb, $knews_aj_look_date;
 
 $break_to_avoid_timeout=false;
-$knews_timer = time();
-knews_prevent_timeout();
+$timer = time();
 
 if ($Knews_plugin) {
 
@@ -29,9 +28,7 @@ if ($Knews_plugin) {
 			@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile2.txt', 'r');
 			$timelock = intval(fread($filelock, filesize(KNEWS_DIR . '/tmp/lockfile2.txt')));
 			fclose($filelock);
-			$timemax = 3500;
-			if( !@set_time_limit(25) ) $timemax = ini_get('max_execution_time') + 120;
-			if (intval(time()) - $timelock > $timemax) {
+			if (intval(time()) - $timelock > 3500) {
 				//Posem la nova data
 				knews_debug ('* Previous submit process terminated suddenly, continuing...' . "\r\n");
 				@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile2.txt', 'w');
@@ -48,8 +45,6 @@ if ($Knews_plugin) {
 				if ($fp) fclose($fp);
 				die();
 			}
-		} else {
-			knews_debug("\r\n" . '* Please, make writable the folder wp-content/plugins/knews/tmp. Otherwise overlapped process can occur.' . "\r\n");				
 		}
 	} else {
 		//Escribim fitxer
@@ -202,13 +197,11 @@ if ($Knews_plugin) {
 }
 
 function knews_prevent_timeout() {
-	global $break_to_avoid_timeout, $knews_timer;
+	global $break_to_avoid_timeout, $timer;
 
 	if( !@set_time_limit(25) ) {
-		if ($knews_timer + ini_get('max_execution_time') - 4 <= time()) {
-			$break_to_avoid_timeout=true;
-			knews_debug('* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error...' . "\r\n");
-		}
+		if ($timer + ini_get('max_execution_time') - 4 >= time()) $break_to_avoid_timeout=true;
+		knews_debug('* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error...' . "\r\n");
 	}
 	echo ' ';
 }

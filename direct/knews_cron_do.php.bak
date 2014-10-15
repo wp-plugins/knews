@@ -46,10 +46,7 @@ if ($Knews_plugin) {
 				@$filelock = fopen(KNEWS_DIR . '/tmp/lockfile.txt', 'r');
 				$timelock = intval(fread($filelock, filesize(KNEWS_DIR . '/tmp/lockfile.txt')));
 				fclose($filelock);
-
-				$timemax = 3500;
-				if( !@set_time_limit(25) ) $timemax = ini_get('max_execution_time') + 120;
-				if (intval(time()) - $timelock > $timemax) {
+				if (intval(time()) - $timelock > 3500) {
 
 					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
 					$restart = $wpdb->query( $query );
@@ -68,10 +65,6 @@ if ($Knews_plugin) {
 					}
 					if ($js != 0) echo 'Submit process overlapped, wait some minutes and refresh...';
 					die();
-				}
-			} else {
-				if ($fp) {
-					fwrite($fp, '* Please, make writable the folder wp-content/plugins/knews/tmp. Otherwise double submits can occur.' . "<br>\r\n");				
 				}
 			}
 		} else {
@@ -195,11 +188,6 @@ if ($Knews_plugin) {
 		$result=$Knews_plugin->sendMail( $users, $theSubject, $theHtml, '', '', $fp, false, 0, $submit_pend[0]->id_smtp );
 		$ok_count += $result['ok'];
 		$error_count += $result['error'];
-
-		if ($result['break_to_avoid_timeout']) {			
-			$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
-			$unlock = $wpdb->query( $query );
-		}
 
 		//print_r($result);
 	

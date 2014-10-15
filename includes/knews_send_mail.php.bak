@@ -195,7 +195,7 @@
 
 				if (count($recipients) > 1) {
 					if( !@set_time_limit(25) ) {
-						if ($timer + ini_get('max_execution_time') - 4 <= time()) $break_to_avoid_timeout=true;
+						if ($timer + ini_get('max_execution_time') - 4 >= time()) $break_to_avoid_timeout=true;
 					}
 					echo ' ';
 					
@@ -229,17 +229,14 @@
 					//break;
 				}
 				if ($break_to_avoid_timeout) {
-
-					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
-					$restart = $wpdb->query( $query );
-
 					if ($fp) {
 						fwrite($fp, '* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error... (' . $hour . ') ' . "<br>\r\n");
 					}
 					break;
 				}
+				
 			}
 		
 			if (count($recipients) > 1 && ($knewsOptions['smtp_knews']!='0') || $test_smtp) $mail->SmtpClose();
 			
-			$reply = array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info, 'break_to_avoid_timeout' => $break_to_avoid_timeout);
+			$reply = array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info);
