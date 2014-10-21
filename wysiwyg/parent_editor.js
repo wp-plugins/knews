@@ -1279,7 +1279,12 @@ function clean_before_save() {
 	});
 
 	jQuery('*', io).removeAttr('data-cfsrc').removeAttr('data-cfstyle');
-	//jQuery('.droppable_empty', io).remove();
+	
+	for (var x=1; x<10; x++) {
+		jQuery('.container_zone_' + x, io).each(function() {
+			if(jQuery('.droppable', this).length != 0) jQuery('.droppable_empty', this).remove();
+		});
+	}
 
 }
 

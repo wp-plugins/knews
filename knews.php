@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.6.6
+Version: 1.6.7
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -1318,7 +1318,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 
 
-		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0, $id_smtp=1) {
+		function sendMail($recipients, $theSubject, $theHtml, $theText='', $test_array='', $fp=false, $mobile=false, $idNewsletter=0, $id_smtp=1, $idSubmit=0) {
 			require('includes/knews_send_mail.php');
 			return $reply;
 		}
@@ -1461,7 +1461,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.6.6');
+		define('KNEWS_VERSION', '1.6.7');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );

@@ -1,5 +1,6 @@
 <?php
 			$break_to_avoid_timeout=false;
+			$consecutive_emails_error=0;
 			$test_smtp=is_array($test_array);
 			
 			if (!is_array($recipients)) {
@@ -30,7 +31,15 @@
 						//$smtpdata = $smtpdata[1];
 					}
 					
-					$mail=new PHPMailer();
+					class KnewsPHPMailer extends PHPMailer {
+						public function KnewsSmtpReset() {
+							if ($this->smtp !== null and $this->smtp->connected()) {
+								return $this->smtp->reset();
+							}
+						}
+					};
+					
+					$mail=new KnewsPHPMailer();
 					if ($smtpdata['is_sendmail']=='1') {
 						$mail->IsSendmail();
 					} else {
@@ -150,11 +159,13 @@
 						$partial_submit_ok++;
 						$error_info[]='submit ok [wp_mail()]';
 						$status_submit=1;
+						$consecutive_emails_error=0;
 					} else {
 						$submit_error++;
 						$partial_submit_error++;
 						$error_info[]='wp_mail() error';
 						$status_submit=2;
+						$consecutive_emails_error++;
 					}
 
 				} else {
@@ -180,11 +191,18 @@
 						$partial_submit_ok++;
 						$error_info[]='submit ok [smtp]';
 						$status_submit=1;
+						$consecutive_emails_error=0;
 					} else {
 						$submit_error++;
 						$partial_submit_error++;
 						$error_info[]=$mail->ErrorInfo . ' [smtp]';
 						$status_submit=2;
+						$consecutive_emails_error++;
+
+						$reset_result = $mail->KnewsSmtpReset();	
+						if ($fp) {
+							fwrite($fp, '* Reset SMTP after fail, result: ' . ($reset_result ? '1' : '0') . "<br>\r\n");
+						}
 					}
 						
 					$mail->ClearAddresses();
@@ -201,7 +219,7 @@
 					
 					if ($aux_timer + 8 >= time() || $break_to_avoid_timeout) {
 						$aux_timer = time();
-						$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS . " SET users_ok = users_ok + " . $partial_submit_ok . ", users_error = users_error + " . $partial_submit_error . " WHERE id=" . $idNewsletter;
+						$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS . " SET users_ok = users_ok + " . $partial_submit_ok . ", users_error = users_error + " . $partial_submit_error . " WHERE id=" . $idSubmit;
 						$result = $wpdb->query( $query );
 						$partial_submit_error = 0;
 						$partial_submit_ok = 0;
@@ -219,6 +237,7 @@
 					fwrite($fp, '  ' . $hour . ' | ' . $recipient->email . ' | ' . $error_info[count($error_info)-1] . "<br>\r\n");
 				}
 				
+				/*
 				if ($submit_error != 0) {
 					for ($i = $submit_ok+1; $i < count($recipients); $i++) {
 						if (isset($recipients[$i]->unique_submit)) {
@@ -228,13 +247,18 @@
 					}
 					//break;
 				}
-				if ($break_to_avoid_timeout) {
+				*/
+				if ($break_to_avoid_timeout || $consecutive_emails_error > 4) {
 
-					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
+					$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $idSubmit;
 					$restart = $wpdb->query( $query );
 
 					if ($fp) {
-						fwrite($fp, '* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error... (' . $hour . ') ' . "<br>\r\n");
+						if ($break_to_avoid_timeout) {
+							fwrite($fp, '* Your webserver are run under safe mode, terminating the script to avoid the PHP timeout error... (' . $hour . ') ' . "<br>\r\n");
+						} else {
+							fwrite($fp, '* Too much consecutive submissions error. Let\'s stop & wait next cycle... (' . $hour . ') ' . "<br>\r\n");							
+						}
 					}
 					break;
 				}
@@ -242,4 +266,4 @@
 		
 			if (count($recipients) > 1 && ($knewsOptions['smtp_knews']!='0') || $test_smtp) $mail->SmtpClose();
 			
-			$reply = array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info, 'break_to_avoid_timeout' => $break_to_avoid_timeout);
+			$reply = array('ok'=>$submit_ok, 'error'=>$submit_error, 'error_info'=>$error_info, 'break_to_avoid_timeout' => $break_to_avoid_timeout, 'too_consecutive_emails_error'=> $consecutive_emails_error > 4);

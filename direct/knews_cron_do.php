@@ -192,11 +192,11 @@ if ($Knews_plugin) {
 		
 		//print_r($users);
 
-		$result=$Knews_plugin->sendMail( $users, $theSubject, $theHtml, '', '', $fp, false, 0, $submit_pend[0]->id_smtp );
+		$result=$Knews_plugin->sendMail( $users, $theSubject, $theHtml, '', '', $fp, false, 0, $submit_pend[0]->id_smtp, $submit_pend[0]->id );
 		$ok_count += $result['ok'];
 		$error_count += $result['error'];
 
-		if ($result['break_to_avoid_timeout']) {			
+		if ($result['break_to_avoid_timeout'] || $result['too_consecutive_emails_error']) {			
 			$query = "UPDATE " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " SET status=0 WHERE status=3 AND submit=" . $submit_pend[0]->id;
 			$unlock = $wpdb->query( $query );
 		}
@@ -213,13 +213,13 @@ if ($Knews_plugin) {
 		$recount = $wpdb->get_results( $query );
 		$error_count = count($recount);
 
-		if (count($submits)==0 && $submit_pend[0]->users_total > ($ok_count + $error_count)) {
+		if (count($submits)==0 && $submit_pend[0]->users_total > ($ok_count + $error_count) && !$result['break_to_avoid_timeout'] && !$result['too_consecutive_emails_error']) {
 			$end_sql=', finished=1, users_total=' . ($ok_count + $error_count) . ', end_time=\'' . $Knews_plugin->get_mysql_date() . '\'';
 			if ($fp) {
 				$hour = date('H:i:s', current_time('timestamp'));
 				fwrite($fp, '  ' . $hour . ' | ok: ' . $ok_count . ' | error: ' . $error_count . ' | FINISHED SUBMIT. BAD TOTAL USER COUNT.' . "<br>\r\n");
 			}
-		} elseif ($submit_pend[0]->users_total <= ($ok_count + $error_count)) {
+		} elseif ($submit_pend[0]->users_total <= ($ok_count + $error_count) && !$result['break_to_avoid_timeout'] && !$result['too_consecutive_emails_error']) {
 			$end_sql=', finished=1, end_time=\'' . $Knews_plugin->get_mysql_date() . '\'';
 			if ($fp) {
 				$hour = date('H:i:s', current_time('timestamp'));

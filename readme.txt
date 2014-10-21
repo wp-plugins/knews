@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.0
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.6.7 =
+* Improvements on submit script:
+- solved double submit bug after submit error
+- PHP timeout error proof (really)
+- reset smtp after email send error
+- wait after 5 consecutive email send error
 
 = 1.6.6 =
 * Solved an stupid bug: the Knews preferences was deleted when you do an scanning blacklist (Now safe). 
@@ -634,6 +641,13 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.6.7 =
+* Improvements on submit script:
+- solved double submit bug after submit error
+- PHP timeout error proof (really)
+- reset smtp after email send error
+- wait after 5 consecutive email send error
+
 = 1.6.6 =
 * Solved an stupid bug: the Knews preferences was deleted when you do an scanning blacklist (Now safe). 
 - This bug was introduced on 1.6.5. Sorry guys!!!
@@ -657,33 +671,4 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * In mailing lists, now count the total users well
 * Solved PHP warnings about temporary text file deletion (lockfile.txt and lockfile2.txt)
 * Minor bugs solved
-
-= 1.6.3 =
-* AUTOMATED NEWSLETTERS & AUTORESPONDERS NEW FEATURES
-- Autoresponders can be filtered by user language
-- Extra info added in the list
-- Emails at once added on manual submision
-* Bug solved: some autoresponders never was sent to some users
-* Support for new Polylang versions
-* Solved a qTranslate issue in automated newsletters
-
-= 1.6.2 =
-* Complaint with the new WP 3.9 WPDB extra layer for PHP 5.5+ (Warning: mysql_real_escape_string()... messages)
-* Solved bug in autoresponders: never was created when used with one list filter.
-* Solved issue with qTranslate on manual post insertion
-
-= 1.6.1 =
-* Solved bug in autoresponders: never was sent in some installations
-* Solved issue with qTranslate on image insertion
-
-= 1.6.0 =
-* Finally! Autoresponders!! please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
-* Emails at once in autocreation
-* Newsletters classified by type: manual, autocreated, and autocreation + autoresponders
-* Assistant inside WYSIWYG Editor for tokens and shortcodes insertion
-* More stable newsletter autocreation
-* Emails per hour preview
-* Support in WYSIWYG Editor for HTTPS administration
-
-
 
