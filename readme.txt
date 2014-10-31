@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.0
-Stable tag: 1.6.7
+Stable tag: 1.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 
 == Changelog ==
 
+= 1.6.8 =
+* Export subscribers tool now works like a charm
+* Solved bug: some installations haven't confirmation message / PHP error message on subscription form submision
+* Solved: Some newsletter links wasn't traced on stats
+* Solved automation newsletter bug: now you can set again the every amount of time value on admin side
+* Solved: PHP Error on SMTP test while test fails
+
 = 1.6.7 =
 * Improvements on submit script:
 - solved double submit bug after submit error
@@ -202,7 +209,7 @@ In any case, the degree of personalisation of our templates is immense, with tho
 - This bug was introduced on 1.6.5. Sorry guys!!!
 
 = 1.6.5 =
-* 591 domain blacklist added (keep mailing lists clean)
+* 591 domain blacklist added (keep mailing lists clean) from: https://github.com/martenson/disposable-email-domains
 * Clean scanning blacklist tool added for current subscribers
 * Automated newsletter creation timeout error proof
 * Open newsletter detection for users without tracking pixel configured
@@ -641,6 +648,13 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.6.8 =
+* Export subscribers tool now works like a charm
+* Solved bug: some installations haven't confirmation message / PHP error message on subscription form submision
+* Solved: Some newsletter links wasn't traced on stats
+* Solved automation newsletter bug: now you can set again the every amount of time value on admin side
+* Solved: PHP Error on SMTP test while test fails
+
 = 1.6.7 =
 * Improvements on submit script:
 - solved double submit bug after submit error
@@ -653,7 +667,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 - This bug was introduced on 1.6.5. Sorry guys!!!
 
 = 1.6.5 =
-* 591 domain blacklist added (keep mailing lists clean)
+* 591 domain blacklist added (keep mailing lists clean) from: https://github.com/martenson/disposable-email-domains
 * Clean scanning blacklist tool added for current subscribers
 * Automated newsletter creation timeout error proof
 * Open newsletter detection for users without tracking pixel configured
