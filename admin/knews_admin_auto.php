@@ -112,7 +112,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 				location.href='admin.php?page=knews_config&tab=pro';
 				return false;
 			})
-			.onchange(function() {
+			.change(function() {
 				return false;
 			});
 		});

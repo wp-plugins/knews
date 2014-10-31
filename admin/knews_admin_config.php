@@ -12,10 +12,10 @@ function knews_save_prefs() {
 	if (isset($_POST['update_KnewsAdminSettings'])) {
 		
 		$knewsOptions['multilanguage_knews'] = $Knews_plugin->post_safe('multilanguage_knews');
-		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews');
-		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews');
+		$knewsOptions['from_mail_knews'] = trim($Knews_plugin->post_safe('from_mail_knews'));
+		$knewsOptions['from_name_knews'] = trim($Knews_plugin->post_safe('from_name_knews'));
 		$knewsOptions['double_optin'] = $Knews_plugin->post_safe('double_optin_knews', '0');
-		$knewsOptions['notify_signups_email'] = $Knews_plugin->post_safe('notify_signups_knews', '');
+		$knewsOptions['notify_signups_email'] = trim($Knews_plugin->post_safe('notify_signups_knews', ''));
 		$knewsOptions['write_logs'] = $Knews_plugin->post_safe('write_logs_knews', 'no');
 		$knewsOptions['def_autom_post'] = $Knews_plugin->post_safe('def_autom_post_knews', '0');
 		$knewsOptions['edited_autom_post'] = $Knews_plugin->post_safe('edited_autom_post_knews', '0');
@@ -38,22 +38,22 @@ function knews_save_prefs() {
 
 	} elseif (isset($_POST['update_KnewsAdminSettingsAdv'])) {
 		
-		$knewsOptions['from_mail_knews'] = $Knews_plugin->post_safe('from_mail_knews');
-		$knewsOptions['from_name_knews'] = $Knews_plugin->post_safe('from_name_knews');
+		$knewsOptions['from_mail_knews'] = trim($Knews_plugin->post_safe('from_mail_knews'));
+		$knewsOptions['from_name_knews'] = trim($Knews_plugin->post_safe('from_name_knews'));
 		$knewsOptions['knews_cron'] = $Knews_plugin->post_safe('knews_cron');
 		$knewsOptions['smtp_knews'] = $Knews_plugin->post_safe('smtp_knews');
-		$knewsOptions['smtp_host_knews'] = $Knews_plugin->post_safe('smtp_host_knews');
-		$knewsOptions['smtp_port_knews'] = $Knews_plugin->post_safe('smtp_port_knews');
-		$knewsOptions['smtp_user_knews'] = $Knews_plugin->post_safe('smtp_user_knews');
-		$knewsOptions['smtp_pass_knews'] = $Knews_plugin->post_safe('smtp_pass_knews');
+		$knewsOptions['smtp_host_knews'] = trim($Knews_plugin->post_safe('smtp_host_knews'));
+		$knewsOptions['smtp_port_knews'] = trim($Knews_plugin->post_safe('smtp_port_knews'));
+		$knewsOptions['smtp_user_knews'] = trim($Knews_plugin->post_safe('smtp_user_knews'));
+		$knewsOptions['smtp_pass_knews'] = trim($Knews_plugin->post_safe('smtp_pass_knews'));
 		$knewsOptions['smtp_secure_knews'] = $Knews_plugin->post_safe('smtp_secure_knews');
 		$knewsOptions['is_sendmail'] = $Knews_plugin->post_safe('is_sendmail_knews');
 		$knewsOptions['pixel_tracking'] = $Knews_plugin->post_safe('knews_pixel_tracking', 0, 'int');
 
 	} elseif (isset($_POST['update_KnewsAdminRegister'])) {
 
-		$knewsOptions['registration_email'] = $Knews_plugin->post_safe('registration_email_knews');
-		$knewsOptions['registration_serial'] = $Knews_plugin->post_safe('registration_serial_knews');
+		$knewsOptions['registration_email'] = trim($Knews_plugin->post_safe('registration_email_knews'));
+		$knewsOptions['registration_serial'] = trim($Knews_plugin->post_safe('registration_serial_knews'));
 
 	}
 

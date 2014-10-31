@@ -27,9 +27,11 @@ if (count($targets) > 0) {
 	/*preg_match_all ("/a[\s]+[^>]*?href[\s]?=[\s\"\']+".
 		"(.*?)[\"\']+.*?>"."([^<]+|.*?)?<\/a>/", */
 
-	preg_match_all ("/(a|A)[\s]+[^>]*?href[\s]?=[\s\"\']+".
+/*	preg_match_all ("/(a|A)[\s]+[^>]*?href[\s]?=[\s\"\']+".
 		"(.*?)[\"\']+.*?>"."([^<]+|.*?)?<\/(a|A)>/", 
-		$theHtml, $matches);
+		$theHtml, $matches);*/
+		
+preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $theHtml, $matches);
 
 	$matches = $matches[2];
 

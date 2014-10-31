@@ -124,7 +124,7 @@ if ($Knews_plugin) {
 		if (count($submits)>0) {
 			if ($fp) {
 				$hour = date('d/m/Y H:i:s', current_time('timestamp'));
-				fwrite($fp, '* ' . $hour . ' | ok: ' . $ok_count . ' | error: ' . $error_count . "<br>\r\n");
+				fwrite($fp, '* KNEWS ' . KNEWS_VERSION . ' ' . $hour . ' | ok: ' . $ok_count . ' | error: ' . $error_count . "<br>\r\n");
 			}
 		} else {
 			$query = "SELECT * FROM " . KNEWS_NEWSLETTERS_SUBMITS_DETAILS . " WHERE status=2 AND submit=" . $submit_pend[0]->id;
@@ -164,7 +164,12 @@ if ($Knews_plugin) {
 				}
 				$users[$users_index]->tokens = $aux_array;
 				$users[$users_index]->unsubscribe = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=unsubscribe&e=' . urlencode($users[$users_index]->email) . '&k=' . $users[$users_index]->confkey . '&n=' . $id_newsletter . '&id=' . $submit_pend[0]->id);
-				$users[$users_index]->cant_read = $Knews_plugin->get_localized_home($users[$users_index]->lang, 'knews=readEmail&id=' . $id_newsletter . '&e=' . urlencode($users[$users_index]->email) . '&k=' . $submit_pend[0]->id);
+				
+				$url_news = $Knews_plugin->get_localized_home($user->lang, 'knews=readEmail&id=' . $id_newsletter);
+				$users[$users_index]->cant_read = $url_news . '&e=' . urlencode($users[$users_index]->email) . '&k=' . $submit_pend[0]->id;				
+				$users[$users_index]->fb_like = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url_news . '&share=fb');
+				$users[$users_index]->tweet = 'http://twitter.com/share?text=#news_title_encoded#&url=' . urlencode($url_news . '&share=tw');
+
 				
 				//$result=$Knews_plugin->sendMail( array( array('email' => $user->email, 'unsubscribe'=>get_bloginfo('url') ) ), $theSubject, $theHtml );
 				//$result=$Knews_plugin->sendMail( array( $user ), $theSubject, $theHtml );
