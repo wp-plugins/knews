@@ -907,8 +907,10 @@ function CallBackPost(n, lang, type) {
 		//alert("ie8b");
 	}
 
+		debug_alert("admin-ajax.php?action=knewsSelPost&ajaxid=" + n + "&lang=" + lang + "&type=" + type + "&tempid=" + template_id);
+
 	jQuery.ajax({
-		data: "action=knewsSelPost&ajaxid=" + n + "&lang=" + lang + "&type=" + type,
+		data: "action=knewsSelPost&ajaxid=" + n + "&lang=" + lang + "&type=" + type + "&tempid=" + template_id,
 		type: "GET",
 		dataType: "json",
 		//url: url_plugin + "/direct/select_post.php",
@@ -926,10 +928,14 @@ function CallBackPost(n, lang, type) {
 			module = jQuery(referer_module).closest('.droppable');
 			codi = jQuery(module).html();
 		
-			codi = absoluteReplace(codi, '%the_permalink_' + post_number_module + '%', data.permalink);
+			for (var name in data) {
+				codi = absoluteReplace(codi, '%' + name + '_' + post_number_module + '%', data[name]);
+			}
+
+			/*codi = absoluteReplace(codi, '%the_permalink_' + post_number_module + '%', data.permalink);
 			codi = absoluteReplace(codi, '%the_title_' + post_number_module + '%', data.title);
 			codi = absoluteReplace(codi, '%the_excerpt_' + post_number_module + '%', data.excerpt);
-			codi = absoluteReplace(codi, '%the_content_' + post_number_module + '%', data.content);
+			codi = absoluteReplace(codi, '%the_content_' + post_number_module + '%', data.content);*/
 			
 			jQuery(module).html(codi);
 			jQuery('span.chooser a.free_text_' + post_number_module, module).remove();
@@ -962,19 +968,99 @@ function CallBackPost(n, lang, type) {
 	});
 }
 
-function setCatcher() {
+function setCatcher(is_insertion) { //false by default
+	
+	is_insertion = typeof is_insertion !== 'undefined' ? is_insertion : false;
+	
+	if ( typeof wp !== 'undefined' && wp.media && wp.media.editor ) {
+		wp.media.editor.open( 'knews_media_uploader' );
+
+		wp.media.editor.send.attachment = function( aux, input_media) {
+			media = aux;
+			for (var attrname in input_media) { media[attrname] = input_media[attrname]; }
+			console.log('wp.media.editor.send.attachment');
+			console.log(media);
+			if (is_insertion) {
+				document.getElementById('knews_editor').contentWindow.b_insert_image(media);
+			} else {
+				must_update_this = '<img src="' + media.url + '" width="' + media.width + '" height="' + media.height + '" />';
+				callback_img(must_update_this);
+			}
+		};
+
+	} else {
+		parent.tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(window).height(), 10)-100));
+	}
+
 	window.send_to_editor = function(html) {
+		console.log('send_to_editor 1');
+		if (html=='') return false;
+		media = get_media_from_older_loader(html);
+		if (media == false) return false;
+		console.log(media);
+		if (is_insertion) {
+			document.getElementById('knews_editor').contentWindow.b_insert_image(media);
+		} else {
 		callback_img(html);
 	}
 }
+}
+/*
 function setCatcherInsertion() {
 	window.send_to_editor = function(html) {
+		console.log('send_to_editor 2');
+		if (html=='') return false;
+		console.log(html);
 		callback_img_insertion(html);
 	}
 }
+*/
+function get_media_from_older_loader(html) {
+	$parseDiv = jQuery('<div></div>').append( jQuery.parseHTML( html ) );
+	if (jQuery('img', $parseDiv).length != 1) return false;
 
+	var media = { id: get_image_id_from_classes( jQuery('img', $parseDiv).attr('class') ) };
 
+	media.width = jQuery('img', $parseDiv).attr('width');
+	media.height = jQuery('img', $parseDiv).attr('height');
 
+	media_align='';
+	if (html.indexOf('alignleft') != -1) media_align="left";
+	if (html.indexOf('aligncenter') != -1) media_align="center";
+	if (html.indexOf('alignright') != -1) media_align="right";
+	media.align = media_align;
+
+	if(html.indexOf('src="') !== -1) {
+		img_url=html.split('src="');
+		img_url=img_url[1].split('"');
+		img_url=img_url[0];
+
+	} else if(html.indexOf("src='") !== -1) {
+		img_url=html.split("src='");
+		img_url=img_url[1].split("'");
+		img_url=img_url[0];
+
+	} else {
+		return false;
+	}
+	media.url = img_url;
+
+	return media;
+}
+
+function get_image_id_from_classes(img_classes) {
+	img_classes = img_classes.split(' ');
+	media_id = 0;
+	for (x=0; x< img_classes.length; x++) {
+		if (img_classes[x].substr(0,9)=='wp-image-') {
+			media_id = parseInt(img_classes[x].substr(9), 10);
+			if (media_id != 0) return media_id;
+		}
+	}
+	return 0;
+}
+
+/*
 function callback_img_insertion(html) {
 	align='';
 	if (html.indexOf('alignleft') != -1) align="left";
@@ -995,6 +1081,7 @@ function callback_img_insertion(html) {
 
 	document.getElementById('knews_editor').contentWindow.b_insert_image(img_url, align);
 }
+*/
 function callback_img(html, a, b, hs, vs, align) {
 
 	a = a || ''; b = b || ''; hs = hs || ''; vs = vs || ''; align = align || '';
@@ -1023,7 +1110,6 @@ function callback_img(html, a, b, hs, vs, align) {
 		to_shitty_ie8 = setTimeout("callback_img('" + html + "')", 2000);
 		//alert("ie8b");
 	}
-	debug_alert('We will get the URL:', url_admin + 'admin-ajax.php?action=knewsResizeImg&urlimg=' + img_url + "&width=" + img_x + "&height=" + img_y);
 
 	referer_image_size_ajax=referer_image_size;
 
@@ -1033,8 +1119,10 @@ function callback_img(html, a, b, hs, vs, align) {
 	put_remove_attr('hspace',hs);
 	put_remove_attr('vspace',vs);
 
+	debug_alert('We will get the URL:', url_admin + "action=knewsResizeImg&urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y + "&template_id=" + template_id);
+
 	jQuery.ajax({
-		data: "action=knewsResizeImg&urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y,
+		data: "action=knewsResizeImg&urlimg=" + img_url + "&width=" + img_x + "&height=" + img_y + "&template_id=" + template_id,
 		type: "POST",
 		dataType: "json",
 		url: url_admin + 'admin-ajax.php',
@@ -1042,6 +1130,8 @@ function callback_img(html, a, b, hs, vs, align) {
 		success: function(data) {
 
 			debug_alert('The Ajax reply (success):', data);
+			console.log('1');
+			console.log(data);
 
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);
@@ -1059,6 +1149,8 @@ function callback_img(html, a, b, hs, vs, align) {
 
 					//alert('3* ' + a + ' - ' + b + ' - ' + hs + ' - ' + vs);
 
+					if (data.width && data.width != 0) jQuery(referer_image_size_ajax).attr('width', data.width);
+					if (data.height && data.height != 0) jQuery(referer_image_size_ajax).attr('height', data.height);
 					jQuery(referer_image_size_ajax)
 						.attr('src', data.url)
 						.load(function() {
@@ -1071,6 +1163,10 @@ function callback_img(html, a, b, hs, vs, align) {
 							put_remove_attr('hspace',hs);
 							put_remove_attr('vspace',vs);
 						});
+
+					tt = parseInt(jQuery(referer_image_size_ajax).offset().top, 10);
+					ll = parseInt(jQuery(referer_image_size_ajax).offset().left, 10);
+					document.getElementById('knews_editor').contentWindow.move_resize_handlers(data.width, data.height, tt, ll);
 				}
 			}
 		},
@@ -1208,8 +1304,7 @@ function insert_post(obj, n) {
 	}
 	referer_module=obj;
 	post_number_module=n;
-
-	tb_show('', url_admin + 'admin-ajax.php?action=knewsSelPost&lang=' + news_lang + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
+	tb_show('', url_admin + 'admin-ajax.php?action=knewsSelPost&lang=' + news_lang + '&tempid=' + template_id + '&width=640&height=' + (parseInt(jQuery(parent.window).height(), 10)-100)+'&TB_iframe=true');
 
 	//tb_show('', url_plugin + '/direct/select_post.php?lang=' + news_lang + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(parent.window).height(), 10)-100));
 }
@@ -1406,8 +1501,9 @@ function b_justify(j) {
 }
 function b_insert_image() {
 	saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();
-	setCatcherInsertion();
-	tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(window).height(), 10)-100));
+	//setCatcherInsertion();
+	setCatcher(true);
+	//tb_show('', 'media-upload.php?type=image&amp;post_id=' + parent.one_post_id + '&amp;TB_iframe=true&amp;width=640&amp;height=' + (parseInt(jQuery(window).height(), 10)-100));
 }
 function b_color() {
 	saved_range=document.getElementById('knews_editor').contentWindow.saveSelection();

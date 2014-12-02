@@ -313,7 +313,9 @@ if ($Knews_plugin->get_safe('tab')!='autoresponders') {
 					}
 					echo '</select></p>';
 				} else {
+					echo '<span style="color:#f00">';
 					echo __('You must first create a newsletter with insertable info (leave the %the_content%, %the_title% etc.)','knews') . '</p>';
+					echo '</span>';
 				}
 				?>
 				<p><input type="radio" name="auto_mode" autocomplete="off" value="1" checked="checked" /><?php printf(__('Create a newsletter every %s posts','knews'), '<input type="text" name="auto_posts" id="auto_posts" value="5" style="text-align:right; width:30px;" />');?></p>

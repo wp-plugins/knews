@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 4.0
-Stable tag: 1.6.8
+Tested up to: 4.0.1
+Stable tag: 1.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.6.9 =
+* The excerpt length can be set in Knews preferences
+* Solve the broken URLs in newsletter editor for some installations
 
 = 1.6.8 =
 * Export subscribers tool now works like a charm
@@ -647,6 +651,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.6.9 =
+* The excerpt length can be set in Knews preferences
+* Solve the broken URLs in newsletter editor for some installations
 
 = 1.6.8 =
 * Export subscribers tool now works like a charm

@@ -319,7 +319,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	</form>
 	<hr />
 	<h2><?php _e('Send the newsletter manually','knews');?>:</h2>
-	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+	<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" id="knewsFormSendManually">
 	<input type="hidden" name="action" id="action" value="submit_manual" />
 	<input type="hidden" name="idnews" id="idnews" value="<?php echo $id_newsletter; ?>" />
 	<p>E-mail: <input type="text" name="email" class="regular-text" /></p>

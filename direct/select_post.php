@@ -6,22 +6,33 @@ if ($Knews_plugin) {
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-	add_filter( 'excerpt_length', 'knews_excerpt_length', 999 );
-
 	require_once( KNEWS_DIR . '/includes/knews_util.php');
 
 	$ajaxid = $Knews_plugin->get_safe('ajaxid', 0, 'int');
 	$type = $Knews_plugin->get_safe('type', 'post');
 	$ajaxlang = $Knews_plugin->get_safe('lang', 'en');
+	$template_id = $Knews_plugin->get_safe('tempid', 'unknown');
 
-	function get_post_knews ($reply, $id, $type, $lang) {
+	function knews_custom_excerpt_length_fn ($length) {
+		
+		global $Knews_plugin, $knewsOptions;
+		
+		$length = $knewsOptions['excerpt_length'];
+		$length = apply_filters( 'knews_excerpt_length', $length);
+
+		$template_id = $Knews_plugin->get_safe('tempid', 'unknown');
+		return apply_filters( 'knews_excerpt_length_' . $template_id, $length );
+	}
+	add_filter( 'excerpt_length', 'knews_custom_excerpt_length_fn', 1, 999 );
+
+	function get_post_knews ($reply, $id, $type, $lang, $template_id = 'unknown') {
 		
 		if (is_array($reply) && isset($reply['skip'])) return $reply;
 		
 		global $post, $Knews_plugin, $knewsOptions;
 		
+		$template_id = $Knews_plugin->get_safe('tempid', $template_id);
 		$post = get_post($id);
-		
 		$permalink = get_permalink();
 
 		if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt' && function_exists('qtrans_convertURL')) {
@@ -54,12 +65,15 @@ if ($Knews_plugin) {
 		}
 			//$content = nl2br($content);
 
+		/*
 		$words = explode(' ', $excerpt, $excerpt_length + 1);
 		if (count($words) > $excerpt_length) {
 			array_pop($words);
 			//array_push($words, '[...]');
 			$excerpt = implode(' ', $words) . '...';
 		}
+		*/
+		
 		$featimg = '';
 		if ($Knews_plugin->im_pro()) {
 			if (has_post_thumbnail( $post->ID ) ) {
@@ -67,13 +81,13 @@ if ($Knews_plugin) {
 			}
 		}
 
-		return array('title' => get_the_title(), 'excerpt' => $excerpt, 'content' => $content, 'permalink' => $permalink, 'image' => $featimg);
+		return apply_filters( 'knews_get_post_' . $template_id, array('the_title' => get_the_title(), 'the_excerpt' => $excerpt, 'the_content' => $content, 'the_permalink' => $permalink, 'image' => $featimg), $post->ID );
 
 	}
 
 	if ($ajaxid != 0) {
 
-		$jsondata = apply_filters('knews_get_post', array(), $ajaxid, $type, $ajaxlang);
+		$jsondata = apply_filters('knews_get_post', array(), $ajaxid, $type, $ajaxlang, $template_id);
  		echo json_encode($jsondata);
 		
 	} else {
@@ -241,8 +255,20 @@ function select_post(n, lang, type) {
 		
 		//Posts / Pages
 		echo '<div class="pestanyes">';
-		echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
-		echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
+
+		$post_types = array('post','page');
+		$post_types = apply_filters( 'knews_post_types_' . $template_id, $post_types );
+		if (!in_array($type, $post_types)) $type = $post_types[0];
+
+		foreach ($post_types as $pt) {
+			$tab_caption = $pt;
+			if ($pt=='post') $tab_caption = 'Posts';
+			if ($pt=='page') $tab_caption = 'Pages';
+			echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=' . $pt . '&lang=' . $lang . '">' . __($tab_caption, 'knews') . '</a>';
+		}
+		// echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
+		// echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
+
 		echo '</div>';
 		
 		echo '<div class="filters">';

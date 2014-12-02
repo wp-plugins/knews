@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.6.8
+Version: 1.6.9
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -40,6 +40,7 @@ if (!class_exists("KnewsPlugin")) {
 		var $knews_form_n = 1;
 		var $polylang_options = '';
 		var $email_blacklist = '';
+		var $template_id = 'unknown';
 						
 		/******************************************************************************************
 		/*                                   INICIALITZAR
@@ -95,6 +96,7 @@ if (!class_exists("KnewsPlugin")) {
 				'allowed_content_tags' => '<br><i><em><b><strong><ul><li><ol>',
 				'email_blacklist' => 1,
 				'blacklist_scan' => 0,
+				'excerpt_length' => 40
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -1414,6 +1416,10 @@ if (!class_exists("KnewsPlugin")) {
 			if (! $this->initialized) $this->init();
 			require( KNEWS_DIR . "/admin/knews_admin_support.php");
 		}
+		function KnewsRegisteredTemplates() {
+			if (! $this->initialized) $this->init();
+			require( KNEWS_DIR . "/admin/knews_admin_registered_templates.php");
+		}
 		function knews_dashboard_widget(){
 			include_once KNEWS_DIR . '/includes/dashboard-widget.php';
 		}
@@ -1461,13 +1467,13 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.6.8');
+		define('KNEWS_VERSION', '1.6.9');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
 		add_filter( 'knews_get_cpt', array($Knews_plugin, 'get_cpt'), 10, 1 );
 		add_filter( 'knews_posts_preview', array($Knews_plugin, 'posts_preview'), 10, 8 );
-		add_filter( 'knews_get_post', 'get_post_knews', 10, 4 );
+		add_filter( 'knews_get_post', 'get_post_knews', 10, 5 );
 		add_action( 'knews_echo_ajax_reply', array($Knews_plugin, 'echo_ajax_reply'), 10, 3 );
 		add_action( 'knews_echo_dialog', array($Knews_plugin, 'echo_dialog'), 10, 5 );
 
@@ -1497,6 +1503,12 @@ if (!function_exists("Knews_plugin_ap")) {
 			add_submenu_page( 'knews_news', __('Stats','knews'), __('Stats','knews'), ($pro_menus ? 'knews_see_stats' : 'edit_posts'), 'knews_stats', array(&$Knews_plugin, 'KnewsAdminStats'), '');
 			add_submenu_page( 'knews_news', __('Configuration','knews'), __('Configuration','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_config', array(&$Knews_plugin, 'KnewsAdminConfig'), '');
 			add_submenu_page( 'knews_news', __('Prioritary Support','knews'), __('Prioritary Support','knews'), 'edit_posts', ($Knews_plugin->im_pro() ? 'knews_support' : 'knews_config&tab=pro'), array(&$Knews_plugin, 'KnewsAdminSupport'), '');
+
+			$registered_templates = apply_filters('knews_registered_templates','');
+			if (is_array($registered_templates)) {
+				add_submenu_page( 'knews_news', __('Registered templates','knews'), __('Registered templates','knews'), ($pro_menus ? 'knews_configure' : 'edit_posts'), 'knews_registered_templates', array(&$Knews_plugin, 'KnewsRegisteredTemplates'), '');
+			}
+			
 	        add_action('wp_dashboard_setup', array(&$Knews_plugin, 'dashboard_widget_setup'));
 			if ($Knews_plugin->im_pro()) add_action( "load-$hook_asm", 'knews_asm_add_option' );
 		}
@@ -1764,6 +1776,13 @@ if (!function_exists("Knews_plugin_ap")) {
 		$url_img= $Knews_plugin->post_safe('urlimg');
 		$width= intval($Knews_plugin->post_safe('width'));
 		$height= intval($Knews_plugin->post_safe('height'));
+		$Knews_plugin->template_id = $Knews_plugin->post_safe('template_id','unknown');
+		/*
+		$url_img = $Knews_plugin->get_safe('urlimg');
+		$width = intval($Knews_plugin->get_safe('width'));
+		$height = intval($Knews_plugin->get_safe('height'));
+		$Knews_plugin->template_id = $Knews_plugin->get_safe('template_id','unknown');
+		*/
 	
 		require( dirname(__FILE__) . "/includes/resize_img.php");
 
@@ -1921,11 +1940,8 @@ if (!function_exists("Knews_plugin_ap")) {
    		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' "
 					  . " AND post_date <= '" . $Knews_plugin->get_mysql_date() . "' AND post_status='publish'";
 	}
-	function knews_excerpt_length( $length ) {
-		return 40;
-	}
 
-	function knews_queryvars( $qvars ) {
+	function knews_init( $qvars ) {
 		global $wp;
 		$qvars=$wp->extra_query_vars;
 		if (isset($_GET['knews'])) {
@@ -1939,7 +1955,7 @@ if (!function_exists("Knews_plugin_ap")) {
 		}
 		$wp->extra_query_vars=$qvars;
 	}
-	add_filter('init', 'knews_queryvars' );
+	add_filter('init', 'knews_init' );
 
 }
 

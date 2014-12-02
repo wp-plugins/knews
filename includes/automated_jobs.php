@@ -7,10 +7,21 @@ knews_prevent_timeout();
 
 if ($Knews_plugin) {
 
-	add_filter( 'excerpt_length', 'knews_excerpt_length', 999 );
 	add_filter('posts_where', 'knews_aj_posts_where' );
 	
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
+
+	function knews_custom_excerpt_length_fn ($length) {
+		
+		global $Knews_plugin, $knewsOptions;
+		
+		$length = $knewsOptions['excerpt_length'];
+		$length = apply_filters( 'knews_excerpt_length', $length);
+
+		$template_id = $Knews_plugin->get_safe('tempid', 'unknown');
+		return apply_filters( 'knews_excerpt_length_' . $template_id, $length );
+	}
+	add_filter( 'excerpt_length', 'knews_custom_excerpt_length_fn', 1, 999 );
 
 	if ($knewsOptions['write_logs']=='yes') {
 		$hour = date('d-m-Y_H-i', current_time('timestamp'));
@@ -170,6 +181,8 @@ if ($Knews_plugin) {
 					$rightnews = false;
 					if (count($news) != 0) $rightnews=true;
 			
+					$Knews_plugin->template_id = $news[0]->template;
+
 					if ($rightnews) {
 						knews_debug('- there is a newsletter to build: ' . $news[0]->name . "\r\n");
 						require_once (KNEWS_DIR . '/includes/knews_util.php');
@@ -193,7 +206,7 @@ if ($Knews_plugin) {
 		if ($break_to_avoid_timeout) break;
 	}
 	remove_filter('posts_where', 'knews_aj_posts_where' );
-	remove_filter('excerpt_length', 'knews_excerpt_length' );
+	remove_filter('excerpt_length', 'knews_custom_excerpt_length_fn' );
 
 	if (is_file(KNEWS_DIR . '/tmp/lockfile2.txt')) unlink(KNEWS_DIR . '/tmp/lockfile2.txt');
 	if ($fp) fclose($fp);
@@ -371,13 +384,16 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			}
 			//$content = nl2br($content);
 	
+			/*
 			$words = explode(' ', $excerpt, $excerpt_length + 1);
 			if (count($words) > $excerpt_length) {
 				array_pop($words);
 				//array_push($words, '[...]');
 				$excerpt = implode(' ', $words) . '...';
 			}
+			*/
 
+			$data2replace = apply_filters( 'knews_get_post_' . $Knews_plugin->template_id, array('the_title' => $title, 'the_excerpt' => $excerpt, 'the_content' => $content, 'the_permalink' => $permalink), $post->ID );
 			
 			$s=0;
 			while ($news_mod_map[$s]==0 && $s < count($news_mod_map)) { $s++; }
@@ -394,11 +410,20 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			
 			if ($found) {
 				$news_mod_map[$s]--;
+				
+				while ($singledata = current($data2replace)) {
+					$news_mod2[$s] = str_replace('%' . key($data2replace) . '_' . $n . '%', $singledata, $news_mod2[$s]);
+					next($data2replace);
+				}
+				reset($data2replace);
+
+				/*
 				$news_mod2[$s] = str_replace('%the_permalink_' . $n . '%', $permalink, $news_mod2[$s]);
 				$news_mod2[$s] = str_replace('%the_title_' . $n . '%', $title, $news_mod2[$s]);
 				$news_mod2[$s] = str_replace('%the_excerpt_' . $n . '%', $excerpt, $news_mod2[$s]);
 				$news_mod2[$s] = str_replace('%the_content_' . $n . '%', $content, $news_mod2[$s]);
-				$subject = str_replace('%the_title_1%', $title, $subject);
+				*/
+				if (isset($data2replace['the_title'])) $subject = str_replace('%the_title_1%', $data2replace['the_title'], $subject);
 				
 				knews_debug('- included: ' . $pp->post_title . "\r\n");
 				

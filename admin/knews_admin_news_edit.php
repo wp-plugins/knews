@@ -29,6 +29,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 		$title=$results_news[0]->name;
 		$subject=$results_news[0]->subject;
 		$newstype=$results_news[0]->newstype;
+		$template_id=$results_news[0]->template;
 ?>
 <script type="text/javascript">
 	url_plugin = '<?php echo KNEWS_URL; ?>';
@@ -36,6 +37,8 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 	droppable_code='<?php echo $results_news[0]->html_container; ?>';
 	id_news='<?php echo $Knews_plugin->get_safe('idnews');?>';
 	newstype='<?php echo $newstype; ?>';
+	template_id='<?php echo $template_id; ?>';
+	
 	<?php
 	$one_post = get_posts(array('numberposts' => 1) );
 	if (count($one_post)!=1) $one_post = get_pages();

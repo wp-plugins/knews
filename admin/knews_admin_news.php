@@ -34,13 +34,17 @@
 		$url_template = $Knews_plugin->post_safe('url_' . $Knews_plugin->post_safe('template'));
 
 		$blog_url = get_option('home');
+		if (function_exists( 'qtrans_init')) $blog_url = site_url();
 		//$blog_url = get_bloginfo('url');
 		if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
 
 		//Support for https admin
 		if (substr($blog_url,0,5) == 'http:' && substr($url_template,0,5) == 'https') $blog_url = 'https:' . substr($blog_url,5);
 
-		if (strpos($url_template, $blog_url) === false) $url_template = $blog_url . $url_template;
+		$blog_url_base = explode('/',$blog_url); 
+		$blog_url_base = $blog_url_base[0] . '//' . $blog_url_base[2];
+
+		if (strpos($url_template, $blog_url_base) === false) $url_template = $blog_url_base . $url_template;
 
 		$lang_localized='';
 		if(!empty($languages)){
@@ -70,7 +74,8 @@
 	
 					if ($template != '') {
 	
-						$fileTemplate = $path_template . $Knews_plugin->post_safe('template') . (($mobile) ? '/mobile.html' : '/template.html');
+						//$fileTemplate = $path_template . $Knews_plugin->post_safe('template') . (($mobile) ? '/mobile.html' : '/template.html');
+						$fileTemplate = $path_template . (($mobile) ? '/mobile.html' : '/template.html');
 						$fh = fopen($fileTemplate, 'r');
 						$codeTemplate = fread($fh, filesize($fileTemplate));
 						fclose($fh);
@@ -119,8 +124,10 @@
 	
 						$bodyTemplate = knews_cut_code('<body>', '</body>', $codeTemplate, true);
 	
-						$bodyTemplate = str_replace('"images/', '"' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
-						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
+						//$bodyTemplate = str_replace('"images/', '"' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
+						//$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('"images/', '"' . $url_template . '/images/', $bodyTemplate);
+						$bodyTemplate = str_replace('url(images', 'url(' . $url_template . '/images/', $bodyTemplate);
 		
 						$count_modules=0; $found_module=true; $codeModule='';
 						while ($found_module) {
@@ -129,7 +136,8 @@
 							if (strpos($bodyTemplate, '[start module ' . ($count_modules + 1) . ']') !== false) {
 								$found_module=true;
 	
-								$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/' . ($mobile ? 'm_' : '') . 'module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
+								//$codeModule .= '<div class="insertable"><img src="' . $url_template . $Knews_plugin->post_safe('template') . '/modules/' . ($mobile ? 'm_' : '') . 'module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
+								$codeModule .= '<div class="insertable"><img src="' . $url_template . '/modules/' . ($mobile ? 'm_' : '') . 'module' . $Knews_plugin->post_safe('vp_' . $Knews_plugin->post_safe('template')) . '_' . ($count_modules + 1) . '.jpg" width="220" height="90" alt="" /><div class="html_content">';
 								
 								$extracted_module = knews_cut_code('<!--[start module ' . ($count_modules + 1) . ']-->', '<!--[end module ' . ($count_modules + 1) . ']-->', $bodyTemplate, true);
 								$codeModule .= $extracted_module . '</div></div>';
