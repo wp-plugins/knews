@@ -372,7 +372,7 @@ function knews_get_all_templates() {
 		chdir ($wp_dirs['basedir'] . '/knewstemplates');
 		$folders = scandir( '.' );
 		foreach ($folders as $folder) {
-			if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html')) {
+			if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/info.xml') && (is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.html') || is_file($wp_dirs['basedir'] . '/knewstemplates/' . $folder . '/template.php')) ) {
 				
 				if (!isset($templates[$folder])) $templates[$folder] = array('folder' => $wp_dirs['basedir'] . '/knewstemplates/' . $folder, 'url' => $wp_dirs['baseurl'] . '/knewstemplates/' . $folder, 'type' => 'old-template');
 			}
@@ -388,7 +388,7 @@ function knews_get_all_templates() {
 	chdir (KNEWS_DIR . '/templates');
 	$folders = scandir( '.' );
 	foreach ($folders as $folder) {
-		if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file(KNEWS_DIR . '/templates/' . $folder . '/info.xml') && is_file(KNEWS_DIR . '/templates/' . $folder . '/template.html')) {
+		if ($folder != '..' && $folder != '.' && is_dir($folder) && is_file(KNEWS_DIR . '/templates/' . $folder . '/info.xml') && (is_file(KNEWS_DIR . '/templates/' . $folder . '/template.html') || is_file(KNEWS_DIR . '/templates/' . $folder . '/template.php')) ) {
 
 			if (!isset($templates[$folder])) $templates[$folder] = array('folder' => KNEWS_DIR . '/templates/' . $folder, 'url' => KNEWS_URL . '/templates/' . $folder, 'type' => 'builtin-template');
 

@@ -17,6 +17,40 @@ function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 
 	$wp_dirs = wp_upload_dir();
 		
+	//Support for https admin
+	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') {
+		if (substr($url_img,0,5) == 'http:') $url_img = 'https:' . substr($url_img,5);
+		if (substr($blog_url,0,5) == 'http:') $blog_url = 'https:' . substr($blog_url,5);
+		if (substr($wp_dirs['baseurl'],0,5) == 'http:') $wp_dirs['baseurl'] = 'https:' . substr($wp_dirs['baseurl'],5);
+		//if (substr($wp_dirs['url'],0,5) == 'http:') $wp_dirs['url'] = 'https:' . substr($wp_dirs['url'],5);
+	}
+
+	if (strpos($url_img, $wp_dirs['baseurl']) === false) {
+		$look = str_replace('//','*doublehash*',$url_img);
+		$cut_folders = explode('/', $wp_dirs['baseurl']);
+		if (is_array($cut_folders) && isset($cut_folders[0]) ) {
+			$cut_folders[0] = str_replace('*doublehash*','//',$cut_folders[0]);
+		}
+		$x=count($cut_folders)-1;
+		$found=false;
+		while (!$found && $x>-1) {
+			$test_path=$cut_folders[0];
+			for ($a=1; $a<$x; $a++) {
+				$test_path .= '/' . $cut_folders[$a];
+			}
+			if (strpos($url_img, $test_path) !== false) {
+				$extra_path='';
+				for ($a=$x; $a<=count($cut_folders)-1; $a++) {
+					$extra_path .= '/' . $cut_folders[$a];
+				}
+				$wp_dirs['basedir'] = substr($wp_dirs['basedir'], 0, strpos($wp_dirs['basedir'], $extra_path) );
+				$wp_dirs['baseurl'] = substr($wp_dirs['baseurl'], 0, strpos($wp_dirs['baseurl'], $extra_path) );
+				$found=true;
+			}
+			$x--;	
+		}
+	}
+		
 	$file_extension = pathinfo($url_img, PATHINFO_EXTENSION);
 
 	if (strpos($url_img, "-knewsnocrop-") !== false) {
@@ -41,9 +75,6 @@ function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 		
 	}
 
-	$filename = pathinfo($url_img, PATHINFO_BASENAME);
-
-	/*
 	$pos = strrpos($url_img, "-");
 	if ($pos !== false) { 
 		$pos2 = strrpos($url_img, ".");
@@ -55,19 +86,12 @@ function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 			if (is_file($wp_dirs['basedir'] . $try_original2)) $url_img = $try_original;
 		}
 	}
-	*/
+	
+	$filename = pathinfo($url_img, PATHINFO_BASENAME);
 
 	$blog_url = get_bloginfo('url');
 	if (function_exists( 'qtrans_init')) $blog_url = site_url();
 	if (substr($blog_url, -1, 1) == '/') $blog_url = substr($blog_url, 0, strlen($blog_url)-1);
-	
-	//Support for https admin
-	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') {
-		if (substr($url_img,0,5) == 'http:') $url_img = 'https:' . substr($url_img,5);
-		if (substr($blog_url,0,5) == 'http:') $blog_url = 'https:' . substr($blog_url,5);
-		if (substr($wp_dirs['baseurl'],0,5) == 'http:') $wp_dirs['baseurl'] = 'https:' . substr($wp_dirs['baseurl'],5);
-		if (substr($wp_dirs['url'],0,5) == 'http:') $wp_dirs['url'] = 'https:' . substr($wp_dirs['url'],5);
-	}
 	
 	$blog_url_base = explode('/',$blog_url); 
 	$blog_url_base = $blog_url_base[0] . '//' . $blog_url_base[2];
@@ -99,7 +123,7 @@ function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 		$jsondata['result'] = 'error';
 		$jsondata['url'] = '';
 		$jsondata['message'] = __('Error: there is no image selected','knews');
-		//return $jsondata;		
+		return $jsondata;		
 	}
 
 	

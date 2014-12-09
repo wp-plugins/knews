@@ -60,7 +60,7 @@ var ratoliY_tb=0;
 var ratoli_offset_left=0;
 
 var save_var_module_callback='';
-var save_var_values=new Array();
+var save_var_values={};
 var is_saved=true;
 var knews_save_before='';
 
@@ -103,6 +103,16 @@ jQuery(window).load(function() {
 	
 	io=jQuery('#knews_editor').contents();
 
+	var nameEQ = "KnewsVars=";
+	var ca = document.cookie.split(';');
+	for (var i=0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) {
+			save_var_values = JSON.parse(c.substring(nameEQ.length,c.length));
+		}
+	}
+	
 	jQuery(io).ready( function () {
 		redraw_droppables();
 		jQuery('.droppable_empty', io).hide();
@@ -314,7 +324,6 @@ function update_preview() {
 			jQuery(this).removeClass('droppable_empty_hover');
 			nn++;
 			pos=jQuery(this).offset();
-			console.log(offset_iframe);
 			n = parseInt(pos.top, 10) + parseInt(iframe_pos.top, 10) - magic_offset - offset_iframe;
 			w = parseInt(pos.left, 10); // + iframe_pos.left;
 			e = w + jQuery(this).outerWidth();
@@ -626,6 +635,11 @@ function insert_vars() {
 		}
 	}
 	
+	var date = new Date();
+	date.setTime(date.getTime()+(365*24*60*60*1000));
+	var expires = "; expires="+date.toGMTString();
+	document.cookie = 'KnewsVars='+JSON.stringify(save_var_values)+expires+'; path=/';
+
 	jQuery(save_var_module_callback).html(code);
 	document.getElementById('knews_editor').contentWindow.listen_module(save_var_module_callback);
 	tb_remove();
@@ -774,6 +788,12 @@ function look_colours(ambit, obj) {
 				colours++;
 
 			} else if (look_for_css_property(jQuery(found_obj).attr('style'), 'background-color')) {
+				colours_array[colours]=Array();
+				colours_array[colours][0] = jQuery(found_obj).css('background-color');
+				colours_array[colours][1] = look_for_caption(jQuery(found_obj).attr('class'), 'color');
+				colours++;
+
+			} else if (look_for_css_property(jQuery(found_obj).attr('style'), 'background')) {
 				colours_array[colours]=Array();
 				colours_array[colours][0] = jQuery(found_obj).css('background-color');
 				colours_array[colours][1] = look_for_caption(jQuery(found_obj).attr('class'), 'color');
@@ -993,11 +1013,9 @@ function setCatcher(is_insertion) { //false by default
 	}
 
 	window.send_to_editor = function(html) {
-		console.log('send_to_editor 1');
 		if (html=='') return false;
 		media = get_media_from_older_loader(html);
 		if (media == false) return false;
-		console.log(media);
 		if (is_insertion) {
 			document.getElementById('knews_editor').contentWindow.b_insert_image(media);
 		} else {
@@ -1130,8 +1148,6 @@ function callback_img(html, a, b, hs, vs, align) {
 		success: function(data) {
 
 			debug_alert('The Ajax reply (success):', data);
-			console.log('1');
-			console.log(data);
 
 			if (to_shitty_ie8 != '' && to_shitty_ie8 != 'x') {
 				clearTimeout(to_shitty_ie8);

@@ -76,6 +76,7 @@ $sql =	"CREATE TABLE " .KNEWS_NEWSLETTERS . " (
 		html_modules mediumtext NOT NULL,
 		html_container mediumtext NOT NULL,
 		html_head mediumtext NOT NULL,
+		html_bodytag mediumtext NOT NULL DEFAULT '',
 		lang varchar(12) NOT NULL DEFAULT '', 
 		automated varchar(1) NOT NULL DEFAULT 0,
 

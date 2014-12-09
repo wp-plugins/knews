@@ -133,7 +133,6 @@ jQuery(document).ready(function() {
 			jQuery('input[name="email"]', this).focus();
 			return false;
 		}
-		return false;
 	});
 });
 

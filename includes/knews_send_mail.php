@@ -47,7 +47,7 @@
 					}
 					$mail->CharSet='UTF-8';
 
-					if (isset ($knewsOptions['bounce_on']) && $knewsOptions['bounce_on'] == '1') $mail->Sender=$knewsOptions['bounce_email'];
+
 					
 					$mail->From = $smtpdata['from_mail_knews'];
 					$mail->FromName = $smtpdata['from_name_knews'];

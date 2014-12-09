@@ -75,11 +75,18 @@
 					if ($template != '') {
 	
 						//$fileTemplate = $path_template . $Knews_plugin->post_safe('template') . (($mobile) ? '/mobile.html' : '/template.html');
-						$fileTemplate = $path_template . (($mobile) ? '/mobile.html' : '/template.html');
+						$fileTemplate = $path_template . (($mobile) ? '/mobile' : '/template');
+						if (is_file($fileTemplate . '.php')) {
+							$fileTemplate .= '.php';
+						} else {
+							$fileTemplate .= '.html';
+						}
 						$fh = fopen($fileTemplate, 'r');
 						$codeTemplate = fread($fh, filesize($fileTemplate));
 						fclose($fh);
 		
+						$codeTemplate = knews_extract_code('<?php', '?>', $codeTemplate, true);
+
 						$codeTemplate = str_replace('  ', ' ', $codeTemplate);
 						$codeTemplate = str_replace('<!-- ', '<!--', $codeTemplate);
 						$codeTemplate = str_replace(' -->', '-->', $codeTemplate);
@@ -122,7 +129,11 @@
 		
 						$headTemplate = substr($codeTemplate, 0, strpos($codeTemplate, '</head>')+7);
 	
-						$bodyTemplate = knews_cut_code('<body>', '</body>', $codeTemplate, true);
+						$bodyTag = knews_cut_code('<body', '>', $codeTemplate, false);
+						//$bodyTemplate = knews_cut_code('<body>', '</body>', $codeTemplate, true);
+						$bodyTemplate = knews_cut_code('<body', '</body>', $codeTemplate, false);
+						$bodyTemplate = str_replace($bodyTag, '', $bodyTemplate);
+						$bodyTemplate = str_replace('</body>', '', $bodyTemplate);
 	
 						//$bodyTemplate = str_replace('"images/', '"' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
 						//$bodyTemplate = str_replace('url(images', 'url(' . $url_template . $Knews_plugin->post_safe('template') . '/images/', $bodyTemplate);
@@ -166,7 +177,7 @@
 						$headTemplate = esc_sql($Knews_plugin->htmlentities_corrected($headTemplate));
 						$codeModule = esc_sql($Knews_plugin->htmlentities_corrected($codeModule));
 	
-						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_modules, html_container, subject, lang, automated, mobile, id_mobile, newstype) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0, " . (($mobile) ? "1" : "0") . ", 0, '" . $newstype . "')";
+						$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, subject, lang, automated, mobile, id_mobile, newstype) VALUES ('" . $name . "', '" . $date . "', '" . $date . "','" . $template . "','" . $bodyTemplate . "','" . $headTemplate . "','" . $bodyTag . "','" . $codeModule . "','" . $containerModulesTemplate . "','', '" . $Knews_plugin->post_safe('lang') . "', 0, " . (($mobile) ? "1" : "0") . ", 0, '" . $newstype . "')";
 						if ($wpdb->query($sql)) {
 							$id_edit = $Knews_plugin->real_insert_id();
 							

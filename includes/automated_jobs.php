@@ -454,7 +454,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			}
 			
 			knews_debug('- saving the created newsletter' . "\r\n");
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . date('d/m/Y') . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . date('d/m/Y') . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_bodytag) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
 			$results = $wpdb->query($sql);				
 			$id_newsletter = $Knews_plugin->real_insert_id();
 

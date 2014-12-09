@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.0.1
-Stable tag: 1.6.9
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,8 @@ Knews is a powerful multilingual plug-in that allows you to **build professional
 Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) editor. Based on templates, with no need to know HTML.
 
 = Features =
-* **NEW**: 591 domain blacklist added (keep mailing lists clean)
+* **NEW**: Partial support(1) for WooCommerce templates: [Lets Sharp](http://knewsplugin.com/shop/es/14-lets-sharp-template.html) & [Cool Shop](http://knewsplugin.com/shop/15-cool-shop-template.html)
+* 591 domain blacklist added (keep mailing lists clean)
 * **Finally! AUTORESPONDERS!!** please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
 * REMOTE SUBSCRIPTION ADDED: Now Knews give you an iframe HTML code for remote subscription in external websites.
 * **Tracking pixel**: Now Knews uses an image to track opened newsletters, not only user clicks.
@@ -39,6 +40,8 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 * Flexible, simple and intuitive **import wizard**: any order of columns and encoding will be correctly interpreted in a .CSV file.
 * **Statistics**: Sign ups, unsubscriptions, newsletter submits, user clicks, user can't read click, etc.
 * **Free and without limitations**.
+
+(1) Knews Free can't automate the use of the featured post image, you should also add the Product image manually. Knews Free can't automate the e-commerce newsletter creation.
 
 **Premium features:**
 
@@ -189,6 +192,10 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.7.0 =
+* Partial support for the new e-commenrce templates (for WooCommerce)
+* Add support for body inline styles on templates
 
 = 1.6.9 =
 * The excerpt length can be set in Knews preferences
@@ -652,6 +659,10 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.7.0 =
+* Partial support for the new e-commenrce templates (for WooCommerce)
+* Add support for body inline styles on templates
+
 = 1.6.9 =
 * The excerpt length can be set in Knews preferences
 * Solve the broken URLs in newsletter editor for some installations
@@ -663,34 +674,4 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Solved automation newsletter bug: now you can set again the every amount of time value on admin side
 * Solved: PHP Error on SMTP test while test fails
 
-= 1.6.7 =
-* Improvements on submit script:
-- solved double submit bug after submit error
-- PHP timeout error proof (really)
-- reset smtp after email send error
-- wait after 5 consecutive email send error
-
-= 1.6.6 =
-* Solved an stupid bug: the Knews preferences was deleted when you do an scanning blacklist (Now safe). 
-- This bug was introduced on 1.6.5. Sorry guys!!!
-
-= 1.6.5 =
-* 591 domain blacklist added (keep mailing lists clean) from: https://github.com/martenson/disposable-email-domains
-* Clean scanning blacklist tool added for current subscribers
-* Automated newsletter creation timeout error proof
-* Open newsletter detection for users without tracking pixel configured
-* Reliable email submit script (it will restart at the same point if some error like PHP timeout break the script)
-* Spaces in emails bug solved (on import, subscription and manual creation and edition)
-* Solved newsletter display over home page in some WP installations
-
-= 1.6.4 =
-* Added a quick status check pane on submit newsletter screen
-* Support for %the_content_1% ... %the_content_n% in custom newsletter 
-* You can add your custom speed in wp-config.php file: define ('KNEWS_CUSTOM_SPEED', x); //where x is emails sent every 10 minutes
-* Solved bug on multistep import: some users experienced fail in large files
-* Solved bug on admin submits screen pagination
-* Solved: In manual post insertion, it shows ALL articles, even those which are in trash.
-* In mailing lists, now count the total users well
-* Solved PHP warnings about temporary text file deletion (lockfile.txt and lockfile2.txt)
-* Minor bugs solved
 
