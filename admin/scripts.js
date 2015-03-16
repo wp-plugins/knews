@@ -137,7 +137,7 @@ jQuery(document).ready(function() {
 });
 
 function knews_checkmail(email) {
-	return /^[A-Za-z][A-Za-z0-9_\.-]*@[A-Za-z0-9_]+\.[A-Za-z0-9_.]+[A-za-z]$/.test(email);
+	return /^[A-Za-z][A-Za-z0-9_\.-]*@[A-Za-z0-9_\.-]+\.[A-Za-z0-9_\.-]+[A-za-z]$/.test(email);
 }
 /* automation creation */
 jQuery(document).ready(function() {

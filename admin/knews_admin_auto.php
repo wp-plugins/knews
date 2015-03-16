@@ -25,7 +25,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 	}
 
 	if ($Knews_plugin->get_safe('auto')==1 || $Knews_plugin->get_safe('auto',2)==0) {
-		$query = "UPDATE ".KNEWS_AUTOMATED." SET auto=" . $Knews_plugin->get_safe('auto') . " WHERE id=" . $Knews_plugin->get_safe('idauto', 0, 'int');
+		$query = "UPDATE ".KNEWS_AUTOMATED." SET auto=" . $Knews_plugin->get_safe('auto', 0, 'int') . " WHERE id=" . $Knews_plugin->get_safe('idauto', 0, 'int');
 		$result=$wpdb->query( $query );
 		echo '<div class="updated"><p>' . (($Knews_plugin->get_safe('auto')==1) ? __('Automated submit activated','knews') : __('Manual submit activated','knews')) . '</p></div>';
 	}
@@ -36,17 +36,17 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		$lang = $Knews_plugin->post_safe('auto_lang');
 		$news = $Knews_plugin->post_safe('auto_newsletter');
 		$target = $Knews_plugin->post_safe('auto_target');
-		$paused = $Knews_plugin->post_safe('auto_paused', 0);
-		$auto = $Knews_plugin->post_safe('auto_auto', 0);
-		$mode = $Knews_plugin->post_safe('auto_mode', 0);
-		$posts = $Knews_plugin->post_safe('auto_posts', 0);
-		$time = $Knews_plugin->post_safe('auto_time', 0);
-		$day = $Knews_plugin->post_safe('auto_dayweek', 0);
-		$at_once = $Knews_plugin->post_safe('emails_at_once', 50);
-		$id_smtp = $Knews_plugin->post_safe('knews_select_smtp', 1);
+		$paused = $Knews_plugin->post_safe('auto_paused', 0, 'int');
+		$auto = $Knews_plugin->post_safe('auto_auto', 0, 'int');
+		$mode = $Knews_plugin->post_safe('auto_mode', 0, 'int');
+		$posts = $Knews_plugin->post_safe('auto_posts', 0, 'int');
+		$time = $Knews_plugin->post_safe('auto_time', 0, 'int');
+		$day = $Knews_plugin->post_safe('auto_dayweek', 0, 'int');
+		$at_once = $Knews_plugin->post_safe('emails_at_once', 50, 'int');
+		$id_smtp = $Knews_plugin->post_safe('knews_select_smtp', 1, 'int');
 		
 		$event = $Knews_plugin->post_safe('auto_event');
-		$delay = $Knews_plugin->post_safe('auto_delay', 0);
+		$delay = $Knews_plugin->post_safe('auto_delay', 0, 'int');
 		$delay_unit = $Knews_plugin->post_safe('auto_delay_unit');	
 
 		$type = 'autocreate'; if ($Knews_plugin->post_safe('action')=='add_autoresponder') $type = 'autoresponder';

@@ -76,7 +76,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 		if ($Knews_plugin->get_safe('orderby') != '') {
 				
 			if ($Knews_plugin->get_safe('orderby') == 'email') {
-				$filtered_query .= ' ORDER BY ku.email ' . $Knews_plugin->get_safe('order', 'asc');
+				$filtered_query .= ' ORDER BY ku.email ' . ($Knews_plugin->get_safe('order', 'asc') == 'asc' ? 'asc' : 'desc');
 				
 			} elseif ($ef_order != 0) {
 				
@@ -89,7 +89,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					$filtered_query .= " WHERE ";
 				}
 				$filtered_query .= "ku.id = kue.user_id AND kue.field_id=" . $ef_order ;
-				$filtered_query .= " ORDER BY kue.value " . $Knews_plugin->get_safe('order', 'asc');
+				$filtered_query .= " ORDER BY kue.value " . ($Knews_plugin->get_safe('order', 'asc') == 'asc' ? 'asc' : 'desc');
 			}
 		}
 	}

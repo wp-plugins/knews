@@ -139,13 +139,12 @@ if ($Knews_plugin) {
 		
 			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') $sitepress->switch_lang($aj->lang);
 			while (!$break_to_avoid_timeout) :
-			
+				$doit = false;
 				if ($aj->every_mode ==1) {
 					$knews_aj_look_date = $aj->last_run;
 					$pend_posts = knews_search_posts($aj, $aj->every_posts);
 					if (count($pend_posts) == $aj->every_posts) $doit = true;
 					knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
-			
 				} else {
 					$time_lapsus = time();
 					if ($aj->every_time == 1) $time_lapsus = $time_lapsus - 24 * 60 * 60; //Daily
@@ -172,7 +171,6 @@ if ($Knews_plugin) {
 						knews_debug('- posts to send: ' .count($pend_posts) . "\r\n");
 					}
 				}
-			
 				if ($doit && count($pend_posts) != 0) {
 					
 					$query="SELECT * FROM " . KNEWS_NEWSLETTERS . " WHERE id=" . $aj->newsletter_id;
@@ -454,7 +452,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			}
 			
 			knews_debug('- saving the created newsletter' . "\r\n");
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . date('d/m/Y') . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_bodytag) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . $Knews_plugin->localize_date(time()) . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_bodytag) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
 			$results = $wpdb->query($sql);				
 			$id_newsletter = $Knews_plugin->real_insert_id();
 

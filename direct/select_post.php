@@ -246,7 +246,7 @@ function select_post(n, lang, type) {
 				if (!$first) echo ' | ';
 				$first=false;
 				if ($lang==$l['language_code']) echo '<strong>';
-				echo '<a href="' . $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&type=' . $type  . '&paged=' . $paged . '">' . $l['native_name'] . '</a>';
+				echo '<a href="' . $url_base . '?action=knewsSelPost&lang=' . $l['language_code'] . '&tempid=' . $template_id . '&type=' . $type  . '&paged=' . $paged . '">' . $l['native_name'] . '</a>';
 				if ($lang==$l['language_code']) echo '</strong>';
 			}
 			echo '</p>';
@@ -256,15 +256,19 @@ function select_post(n, lang, type) {
 		//Posts / Pages
 		echo '<div class="pestanyes">';
 
-		$post_types = array('post','page');
+		$post_types = array('post'=>array('name'=>'post', 'caption'=>'Posts'),'page'=>array('name'=>'page', 'caption'=>'Pages'));
 		$post_types = apply_filters( 'knews_post_types_' . $template_id, $post_types );
-		if (!in_array($type, $post_types)) $type = $post_types[0];
+		if ($Knews_plugin->im_pro()) {
+			$all_types = apply_filters('knews_get_cpt', $post_types );
+		}
+		//print_r($all_types);
+		if (!in_array($type, array_keys($all_types))) $type = $post_types[0]['name'];
 
-		foreach ($post_types as $pt) {
+		foreach (array_keys($post_types) as $pt) {
+			//print_r($post_types);
 			$tab_caption = $pt;
-			if ($pt=='post') $tab_caption = 'Posts';
-			if ($pt=='page') $tab_caption = 'Pages';
-			echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=' . $pt . '&lang=' . $lang . '">' . __($tab_caption, 'knews') . '</a>';
+			if (isset($post_types[$pt]['caption'])) $tab_caption = $post_types[$pt]['caption'];
+			echo (($type==$pt) ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=' . $pt . '&tempid=' . $template_id . '&lang=' . $lang . '">' . __($tab_caption, 'knews') . '</a>';
 		}
 		// echo (($type=='post') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=post&lang=' . $lang . '">' . __('Posts','knews') . '</a>';
 		// echo (($type=='page') ? '<a class="on"' : '<a') . ' href="' . $url_base . '?action=knewsSelPost&type=page&lang=' . $lang . '">' . __('Pages','knews') . '</a>';
@@ -287,6 +291,7 @@ function select_post(n, lang, type) {
 				echo '<form action="' . $url_base . '" method="get">';
 				echo '<input type="hidden" name="lang" value="' . $lang . '">';
 				echo '<input type="hidden" name="type" value="' . $type . '">';
+				echo '<input type="hidden" name="tempid" value="' . $template_id . '">';
 				echo '<input type="hidden" name="action" value="knewsSelPost">';
 				echo '<select name="cat" id="cat">';
 				echo '<option value="0">' . __('All categories','knews') . '</option>';
@@ -304,6 +309,7 @@ function select_post(n, lang, type) {
 		echo '<form action="' . $url_base . '" method="get">';
 		echo '<input type="hidden" name="lang" value="' . $lang . '">';
 		echo '<input type="hidden" name="type" value="' . $type . '">';
+		echo '<input type="hidden" name="tempid" value="' . $template_id . '">';
 		echo '<input type="hidden" name="action" value="knewsSelPost">';
 		echo '<input type="text" name="s" value="" class="texte">';
 		echo '<input type="submit" value="' . __('Search','knews') . '" class="button" />';
@@ -327,7 +333,7 @@ function select_post(n, lang, type) {
 		//global $wp_query; 
 		if (isset($myposts['found_posts'])) {
 	echo '<div class="tablenav bottom">';
-			knews_pagination($paged, ceil($myposts['found_posts']/ 10), $myposts['found_posts'], $url_base . '?action=knewsSelPost&lang=' . $lang . '&type=' . $type  . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
+			knews_pagination($paged, ceil($myposts['found_posts']/ 10), $myposts['found_posts'], $url_base . '?action=knewsSelPost&lang=' . $lang . '&type=' . $type  . '&tempid=' . $template_id . '&cat=' . $cat . '&orderbt=' . $orderbt . '&order=' . $order);
 	echo '</div>';
 		}
 	?>

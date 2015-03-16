@@ -2,6 +2,8 @@
 
 function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 
+	global $knewsOptions;
+	
     if ($url_img == '' || $url_img == 'undefined') {
 
 		$jsondata['result'] = 'error';
@@ -13,7 +15,7 @@ function knews_resize_img_fn($url_img, $width, $height, $media_id=0) {
 	$refresh = false;
 
 	global $Knews_plugin;
-	$crop = apply_filters('knews_image_crop_' . $Knews_plugin->template_id, true);
+	$crop = apply_filters('knews_image_crop_' . $Knews_plugin->template_id, ($knewsOptions['crop_knews'] == 'yes') );
 
 	$wp_dirs = wp_upload_dir();
 		

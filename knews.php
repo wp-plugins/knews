@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.7.0
+Version: 1.7.1
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -96,7 +96,8 @@ if (!class_exists("KnewsPlugin")) {
 				'allowed_content_tags' => '<br><i><em><b><strong><ul><li><ol>',
 				'email_blacklist' => 1,
 				'blacklist_scan' => 0,
-				'excerpt_length' => 20
+				'excerpt_length' => 20,
+				'crop_knews' => 'yes'
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -258,22 +259,34 @@ if (!class_exists("KnewsPlugin")) {
 			//LOCALIZED URLS (WPML different domains for language option)
 			$knews_localized_url = KNEWS_URL;
 			$knews_localized_admin = get_admin_url();
-			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml') {
-				if (function_exists('icl_get_languages')) {
+			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='wpml' && function_exists('icl_get_languages')) {
 					
-					global $sitepress_settings;
-					if (isset($sitepress_settings['language_negotiation_type']) && $sitepress_settings['language_negotiation_type']==2) {
-					
-						//$l = $this->pageLang();
-						//$knews_localized_url = $l['url'];
-						$knews_localized_url = icl_get_home_url();
+				global $sitepress_settings;
+				if (isset($sitepress_settings['language_negotiation_type']) && $sitepress_settings['language_negotiation_type']==2) {
+				
+					//$l = $this->pageLang();
+					//$knews_localized_url = $l['url'];
+					$knews_localized_url = icl_get_home_url();
 
-						if (substr($knews_localized_url, -1) != '/') $knews_localized_url .= '/';
-						$knews_localized_admin = $knews_localized_url . 'wp-admin/';
-						$knews_localized_url .= KNEWS_WP_CONTENT . '/plugins/knews';
-					}
+					if (substr($knews_localized_url, -1) != '/') $knews_localized_url .= '/';
+					$knews_localized_admin = $knews_localized_url . 'wp-admin/';
+					$knews_localized_url .= KNEWS_WP_CONTENT . '/plugins/knews';
 				}
 			}
+
+			if ((KNEWS_MULTILANGUAGE) && $knewsOptions['multilanguage_knews']=='pll' && function_exists('pll_home_url')) {
+				
+				global $polylang;
+				if ($polylang->options['force_lang']==3) {
+					//$l = $this->pageLang();
+					//$knews_localized_url = $l['url'];
+					$knews_localized_url = pll_home_url();
+					if (substr($knews_localized_url, -1) != '/') $knews_localized_url .= '/';
+					$knews_localized_admin = $knews_localized_url . 'wp-admin/';
+					$knews_localized_url .= KNEWS_WP_CONTENT . '/plugins/knews';
+				}
+			}
+						
 			define('KNEWS_LOCALIZED_URL', $knews_localized_url);
 			define('KNEWS_LOCALIZED_ADMIN', $knews_localized_admin);
 
@@ -346,22 +359,43 @@ if (!class_exists("KnewsPlugin")) {
 					}
 				}
 				if ($knewsOptions['multilanguage_knews']=='pll') {
-					global $polylang, $polylang_options;
 
-					if (isset($polylang)) {
+					global $polylang;
 						
-						if ($polylang_options=='') {
-							$polylang_options = get_option('polylang');
-							$polylang_options['wp_permalink_structure'] = get_option('permalink_structure','');
-						}
+					if (isset($polylang->options) && $polylang->options != '') 
+						$pll_options = $polylang->options;
+					else
+						$pll_options = get_option('polylang');
 
-						//$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
-						if ($user_lang != pll_default_language('slug') || $polylang_options['hide_default'] != 1) {
-							if ( $polylang_options['wp_permalink_structure'] != '' )
-								$url_home .= '/'. $user_lang . '/';
-							else
-								$url_home .= '/?lang='. $user_lang;
+					if ($pll_options['force_lang']==3) {
+						
+						if (isset($pll_options['domains'][$user_lang])) {
+							$url_home = $pll_options['domains'][$user_lang];
+							if (substr($url_home, -1) != '/') $url_home .= '/';
 						}
+					} elseif ($pll_options['hide_default'] == 0 || $user_lang != $pll_options['default_lang']) {
+							
+						if ($pll_options['force_lang']==2) {
+							
+							$url_home=str_replace('//', '//' . $user_lang . '.', $url_home);
+							
+						} elseif ($pll_options['force_lang']==1) {
+
+							if (substr($url_home, -1) != '/') $url_home .= '/';
+							$url_home .= ($pll_options['rewrite']==0 ? 'language/' : '') . $user_lang . '/';
+
+						} else {
+
+							$permalinks = get_option('permalink_structure','');
+							if (substr($url_home, -1) != '/') $url_home .= '/';
+							
+							if ( $permalinks != '' )
+								$url_home .= $user_lang . '/';
+							else
+								$url_home .= '?lang='. $user_lang;
+							
+						}
+	
 					}
 				}
 
@@ -473,7 +507,7 @@ if (!class_exists("KnewsPlugin")) {
 			if ($minute < 10) $minute = '0' . $minute;
 			$hour = $hour . ':' . $minute;
 			
-			$date_readable = date('d',$date) . '/' . date('m',$date) . '/' . date('Y',$date);
+			$date_readable = $this->localize_date($date);
 
 			if ($diference > 0) {
 				//Future or today
@@ -486,6 +520,20 @@ if (!class_exists("KnewsPlugin")) {
 				if ($diference < $day) return __('Yesterday, at','knews') . ' ' . $hour;
 				return $date_readable . ' ' . __('at','knews') . ' ' . $hour;
 			}
+		}
+		
+		function localize_date ($date) {
+
+			$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
+			$timezone_format = explode(' ', $timezone_format);
+			
+			if (!is_array($timezone_format) || !isset($timezone_format[0]) || strlen($timezone_format[0]) <5) {
+				$timezone_format = 'Y-m-d';
+			} else {
+				$timezone_format = $timezone_format[0];
+			}
+			
+			return date($timezone_format,$date);
 		}
 		
 		function get_extra_fields ($extra_sql='') {
@@ -1263,7 +1311,12 @@ if (!class_exists("KnewsPlugin")) {
 			echo $this->getForm(0, $args, $instance);
 		}
 		function get_cpt($cpt) {
-			$cpt = ($this->im_pro() ? $this->getCustomPostTypes() : array());
+			if ($this->im_pro()) {
+				$cpt2 = $this->getCustomPostTypes();
+				foreach (array_keys($cpt2) as $pt) {
+					$cpt[$pt] = $cpt2[$pt];
+				}
+			}
 			return $cpt;
 		}
 		function posts_preview ($posts, $lang, $type, $cat, $s, $paged, $status, $ppp) {
@@ -1467,7 +1520,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.7.0');
+		define('KNEWS_VERSION', '1.7.1');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1635,7 +1688,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			?>
 			<script type="text/javascript">
 			jQuery(document).ready(function() {
-				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id'); ?>&e=<?php echo $Knews_plugin->get_safe('e') . '&k=' . $Knews_plugin->get_safe('k'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
+				knews_launch_iframe('<?php echo KNEWS_LOCALIZED_ADMIN; ?>admin-ajax.php?action=knewsReadEmail&id=<?php echo $Knews_plugin->get_safe('id',0,'int'); ?>&e=<?php echo $Knews_plugin->get_safe('e') . '&k=' . $Knews_plugin->get_safe('k'); if ($Knews_plugin->get_safe('m') != '') echo '&m=' . $Knews_plugin->get_safe('m'); ?>');
 			});
 			</script>
 			<?php

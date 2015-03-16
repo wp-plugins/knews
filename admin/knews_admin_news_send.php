@@ -13,7 +13,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 
 	if (! $Knews_plugin->initialized) $Knews_plugin->init();
 
-	$id_newsletter = $Knews_plugin->get_safe('id');
+	$id_newsletter = $Knews_plugin->get_safe('id',0,'int');
 
 	if (isset($_POST['action'])) {
 		if ($_POST['action']=='submit_manual') {
@@ -39,7 +39,7 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 */
 
 			$user=$wpdb->get_row("SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $Knews_plugin->post_safe('email') . "'");
-			$id_smtp = $Knews_plugin->post_safe('knews_select_smtp',1);
+			$id_smtp = $Knews_plugin->post_safe('knews_select_smtp',1, 'int');
 			if (count($user)==1) {
 				$aux_array=array();
 				//array('token'=>$token->token, 'id'=>$token->id, 'default'=>$tokenfound[1])
@@ -109,8 +109,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					'paused' => $Knews_plugin->post_safe('paused'),
 					'priority' => $Knews_plugin->post_safe('priority'),
 					'strict_control' => $Knews_plugin->post_safe('strict_control'),
-					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once'),
-					'id_smtp' => $Knews_plugin->post_safe('knews_select_smtp',1)
+					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once', 0, 'int'),
+					'id_smtp' => $Knews_plugin->post_safe('knews_select_smtp',1, 'int')
 				);
 
 				require( KNEWS_DIR . "/includes/submit_batch.php");

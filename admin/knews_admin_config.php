@@ -1,4 +1,6 @@
 <?php
+global $Knews_plugin;
+
 //Security for CSRF attacks
 $knews_nonce_action='kn-config-page';
 $knews_nonce_name='_config';
@@ -204,7 +206,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 <?php if (!$Knews_plugin->im_pro()) { ?>
 				<p style="font-size:13px; line-height:20px;"><a href="admin.php?page=knews_config&tab=pro" class="knews_on_off knews_on_off_left" style="background-position: -50px 0px;">&nbsp;</a><label class="knews_processed knews_on_off_left"><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?><br /><strong>This is a Knews Pro feature</strong></label></p>
 <?php } else { ?>
-				<p style="font-size:13px; line-height:20px;"><a href="#" onclick="knews_cron_callme(); return false;"><img src="http://www.knewsplugin.com/look_cron.php?email=<?php echo $knewsOptions['registration_email']; ?>&serial=<?php echo $knewsOptions['registration_serial']; ?>&url=<?php echo urlencode($cron_main_url); ?>" style="vertical-align:middle; margin-right:10px;" /></a><label><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?></label></p>
+				<p style="font-size:13px; line-height:20px;"><a href="#" onclick="knews_cron_callme(); return false;"><img src="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https://' : 'http://www.'); ?>knewsplugin.com/look_cron.php?email=<?php echo $knewsOptions['registration_email']; ?>&serial=<?php echo $knewsOptions['registration_serial']; ?>&url=<?php echo urlencode($cron_main_url); ?>" style="vertical-align:middle; margin-right:10px;" /></a><label><?php _e('Use Knews CRON <strong>without configuration</strong> (We will trigger your script remotely)','knews'); ?></label></p>
 <?php } ?>
 				<div id="knews_cron_callme_status"></div>
 			</div>
@@ -406,19 +408,19 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			echo '<h3>' . __('Knews Pro is currently installed.','knews') . '</h3>';	
 		} else {
 			echo '<h3>' . __('Registration','knews') . '</h3>';
-			$look = wp_remote_get( 'http://www.knewsplugin.com/shop/be_pro.php' );
+			$look = wp_remote_get( (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https://' : 'http://www.') . 'knewsplugin.com/shop/be_pro.php' );
 			if (!is_wp_error($look)) {
 				if (isset($look['body'])) echo $look['body'];
 			} else {
 			?>
 			<script type="text/javascript">
-				if ('https:' == document.location.protocol) {
+				/*if ('https:' == document.location.protocol) {
 					starturl = 'https://';
 				} else {
 					starturl = 'http://www' + '.';
-				}
+				}*/
 				var knewsscript = document.createElement('script'); knewsscript.type = 'text/javascript'; knewsscript.async = true;
-				knewsscript.src = starturl + 'knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
+				knewsscript.src = '<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on' ? 'https://' : 'http://www.'); ?>knewsplugin.com/shop/look.js?w=<?php echo urlencode(get_bloginfo('version'));?>&v=<?php echo urlencode(KNEWS_VERSION); ?>&l=<?php echo WPLANG; ?>';
 				var knewsscript_s = document.getElementsByTagName('script')[0]; knewsscript_s.parentNode.insertBefore(knewsscript, knewsscript_s);
 				
 			</script>
@@ -489,8 +491,10 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 			<h3><?php _e('Alerts and logs','knews'); ?></h3>
 			<p><input type="checkbox" name="reset_alerts_knews" value="1" id="reset_alerts_knews" class="knews_on_off align_left" /><label><?php _e('Reset all alerts','knews'); ?></label></p>
 			<p><input type="checkbox" name="write_logs_knews" value="yes" id="write_logs_knews"<?php if ($knewsOptions['write_logs']=='yes') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Write logs (in /wp-content/plugins/knews/tmp directory) in submits','knews'); ?></label></p>
-
 			<hr />
+
+			<h3><?php _e('Image Insertion crop','knews'); ?></h3>
+			<p><input type="checkbox" name="crop_knews" value="yes" id="crop_knews"<?php if ($knewsOptions['crop_knews']=='yes') echo ' checked="checked"'; ?> class="knews_on_off align_left" /><label><?php _e('Image crop? (Some templates can override this preference)','knews'); ?></label></p>
 
 			<h3><?php _e('Post insertion options','knews'); ?></h3>
 			<p><label><strong><?php _e('Allow this tags in %the_content% post insertion (manual & automated):','knews'); echo '</strong><br />'; _e('Warning: some tags can break the newsletter design, add it at your own risk!','knews'); ?></label>

@@ -715,6 +715,7 @@ function tb_dialog_click (what, where) {
 }
 
 function rgb2hex(rgb) {
+	if (rgb===undefined) return '000000';
 	if(rgb.indexOf('rgb') == -1) {
 		if (rgb.indexOf('#')==0) rgb = rgb.substr(1);
 		return rgb;

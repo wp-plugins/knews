@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 4.0.1
-Stable tag: 1.7.0
+Tested up to: 4.1.1
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,6 +192,18 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.7.1 =
+- Crop image (on/off) on resize added as option
+- Support for polylang different domain per language
+- Localised time format on Knews admin pages
+- Added https support for CRONJOB url
+- Support for background styles on body tag on newsletter templates
+- Saffety bug solved on SQL injection attack
+- Bug solved into automated newsletter creation: a second newsletter somethimes was created with fewer posts
+- Some old installs can't create autometed newsletters. Now solved.
+- Solved bug on email testing: newsletters can't be sent manually to emails with hypens on domain
+- Bug solved in URL on newsletter can't read link
 
 = 1.7.0 =
 * Partial support for the new e-commenrce templates (for WooCommerce)
@@ -659,19 +671,18 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 
 == Upgrade Notice ==
 
+= 1.7.1 =
+- Crop image (on/off) on resize added as option
+- Support for polylang different domain per language
+- Localised time format on Knews admin pages
+- Added https support for CRONJOB url
+- Support for background styles on body tag on newsletter templates
+- Saffety bug solved on SQL injection attack
+- Bug solved into automated newsletter creation: a second newsletter somethimes was created with fewer posts
+- Some old installs can't create autometed newsletters. Now solved.
+- Solved bug on email testing: newsletters can't be sent manually to emails with hypens on domain
+- Bug solved in URL on newsletter can't read link
+
 = 1.7.0 =
 * Partial support for the new e-commenrce templates (for WooCommerce)
 * Add support for body inline styles on templates
-
-= 1.6.9 =
-* The excerpt length can be set in Knews preferences
-* Solve the broken URLs in newsletter editor for some installations
-
-= 1.6.8 =
-* Export subscribers tool now works like a charm
-* Solved bug: some installations haven't confirmation message / PHP error message on subscription form submision
-* Solved: Some newsletter links wasn't traced on stats
-* Solved automation newsletter bug: now you can set again the every amount of time value on admin side
-* Solved: PHP Error on SMTP test while test fails
-
-

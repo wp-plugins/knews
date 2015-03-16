@@ -434,7 +434,7 @@ if ($Knews_plugin->get_safe('tab')=='aux') $aux=true;
 							<?php
 							$query = 'SELECT * FROM ' . KNEWS_NEWSLETTERS_SUBMITS . ' WHERE blog_id=' . get_current_blog_id();
 							//if ($Knews_plugin->get_safe('news') != 'all') $query .= ' AND newsletter=' . $Knews_plugin->get_safe('news');
-							$news_id = $Knews_plugin->post_safe('news_id');
+							$news_id = $Knews_plugin->post_safe('news_id', 0, 'int');
 							if (is_array($news_id)) {
 								$n=0;
 								$query .= ' AND ';

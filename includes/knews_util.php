@@ -14,8 +14,8 @@ function knews_list_items($element, $all_elements) {
 function knews_print_mailinglists($new_way=false) {
 	global $Knews_plugin, $wpdb;
 	
-	$order_by = $Knews_plugin->get_safe('orderby', 'orderlist');
-	$order = $Knews_plugin->get_safe('order', 'asc');
+	$order_by = $Knews_plugin->get_safe('orderby', 'orderlist'); if ($order_by != 'name') $order_by = "orderlist";
+	$order = $Knews_plugin->get_safe('order', 'asc'); if ($order != 'asc') $order = "desc";
 
 	$query = "SELECT id, name, auxiliary FROM " . KNEWS_LISTS . " ORDER BY " . $order_by . " " . $order;
 	$lists_name = $wpdb->get_results( $query );
