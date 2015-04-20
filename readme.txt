@@ -17,9 +17,11 @@ Knews is a powerful multilingual plug-in that allows you to **build professional
 Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) editor. Based on templates, with no need to know HTML.
 
 = Features =
-* **NEW**: Partial support(1) for WooCommerce templates: [Lets Sharp](http://knewsplugin.com/shop/es/14-lets-sharp-template.html) & [Cool Shop](http://knewsplugin.com/shop/15-cool-shop-template.html)
+* **Contact Form 7** support added through [Knews + CF7 Glue](http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
+* Multiple mailing list subscription at once 
+* Partial support(1) for WooCommerce templates: [Lets Sharp](http://knewsplugin.com/shop/es/14-lets-sharp-template.html) & [Cool Shop](http://knewsplugin.com/shop/15-cool-shop-template.html)
 * 591 domain blacklist added (keep mailing lists clean)
-* **Finally! AUTORESPONDERS!!** please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
+* Autoresponders** please, take a look [here](http://www.knewsplugin.com/knews-have-autoresponders/)
 * REMOTE SUBSCRIPTION ADDED: Now Knews give you an iframe HTML code for remote subscription in external websites.
 * **Tracking pixel**: Now Knews uses an image to track opened newsletters, not only user clicks.
 * Support for **Polylang**: Now Knews support [Polylang](http://wordpress.org/plugins/polylang/), a high quality free multilingual plugin.
@@ -194,7 +196,7 @@ In any case, the degree of personalisation of our templates is immense, with tho
 == Changelog ==
 
 = 1.7.2 =
-- Contact Form 7 support added through [Knews + CF7 Glue] (http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
+- Contact Form 7 support added through [Knews + CF7 Glue](http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
 - Multiple mailing list subscription at once option added (chekboxes instead select on subscription widget as option)
 - Consistent local time info instead of GMT time on admin side
 
@@ -677,7 +679,7 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 == Upgrade Notice ==
 
 = 1.7.2 =
-- Contact Form 7 support added through [Knews + CF7 Glue] (http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
+- Contact Form 7 support added through [Knews + CF7 Glue](http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
 - Multiple mailing list subscription at once option added (chekboxes instead select on subscription widget as option)
 - Consistent local time info instead of GMT time on admin side
 
