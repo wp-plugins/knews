@@ -20,6 +20,9 @@ if ($Knews_plugin) {
 					'is_sendmail' => $Knews_plugin->post_safe('is_sendmail_knews')
 				);
 
+	$bounce = $Knews_plugin->post_safe('bounce_header_knews');
+	if ($bounce != '') $test_array['bounce_header_knews'] = $bounce;
+
 	$enviament = $Knews_plugin->sendMail($Knews_plugin->post_safe('email_test'), 'Test Knews', $theHtml, '', $test_array);
 	
 	if ($enviament['ok'] == 1) {

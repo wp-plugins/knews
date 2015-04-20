@@ -27,6 +27,7 @@ function knews_save_prefs() {
 		$knewsOptions['config_knews'] = 'yes';
 		$knewsOptions['allowed_content_tags'] = $Knews_plugin->post_safe('allowed_content_tags_knews', '');
 		$knewsOptions['excerpt_length'] = $Knews_plugin->post_safe('excerpt_length_knews', '');
+		$knewsOptions['crop_knews'] = $Knews_plugin->post_safe('crop_knews', '');
 		
 		if ($Knews_plugin->post_safe('reset_alerts_knews')=='1') {
 			$knewsOptions['no_warn_cron_knews'] = 'no';
@@ -318,7 +319,7 @@ if ($Knews_plugin->get_safe('tab')=='custom') {
 				</tbody>
 			</table>
 
-				<div style="width:420px; float:left; padding-left:30px;">
+				<div style="width:440px; float:left; padding-left:30px;">
 					<table cellpadding="0" cellspacing="0" border="0" style="font-size:12px">
 					<tr><td><?php _e('Sender name','knews');?>:</td><td><input type="text" name="from_name_knews" id="from_name_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_name_knews']; ?>" /></td></tr>
 					<tr><td><?php _e('Sender e-mail','knews');?>:</td><td><input type="text" name="from_mail_knews" id="from_mail_knews" class="regular-text" autocomplete="off" value="<?php echo $knews_smtp_multiple[$knews_smtp_editing]['from_mail_knews']; ?>" /></td></tr>

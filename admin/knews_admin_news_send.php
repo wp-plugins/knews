@@ -110,7 +110,8 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					'priority' => $Knews_plugin->post_safe('priority'),
 					'strict_control' => $Knews_plugin->post_safe('strict_control'),
 					'emails_at_once' => $Knews_plugin->post_safe('emails_at_once', 0, 'int'),
-					'id_smtp' => $Knews_plugin->post_safe('knews_select_smtp',1, 'int')
+					'id_smtp' => $Knews_plugin->post_safe('knews_select_smtp',1, 'int'),
+					'timezone' => 'local'
 				);
 
 				require( KNEWS_DIR . "/includes/submit_batch.php");

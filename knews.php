@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.7.1
+Version: 1.7.2
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -53,7 +53,7 @@ if (!class_exists("KnewsPlugin")) {
 				'smtp_knews' => '0',
 				'from_mail_knews' => get_bloginfo('admin_email'),
 				'from_name_knews' => 'Knews robot',
-				'smtp_host_knews' => 'smtp.knewsplugin.com',
+				'smtp_host_knews' => 'smtp.yourdomain.com',
 				'smtp_port_knews' => '25',
 				'smtp_user_knews' => '',
 				'smtp_pass_knews' => '',
@@ -97,7 +97,9 @@ if (!class_exists("KnewsPlugin")) {
 				'email_blacklist' => 1,
 				'blacklist_scan' => 0,
 				'excerpt_length' => 20,
-				'crop_knews' => 'yes'
+				'crop_knews' => 'yes',
+				'bounce_mode' => 'returnpath',
+				'should_advice_bounce_mode' => 0
 				);
 
 			$devOptions = get_option($this->adminOptionsName);
@@ -470,7 +472,8 @@ if (!class_exists("KnewsPlugin")) {
 			return $last_cron_time;
 		}
 		function get_mysql_date($when='now') {
-			if ($when=='now') return current_time('mysql');
+			if ($when=='now') $when=time();
+			//if ($when=='now') return current_time('mysql');
 			return date("Y-m-d H:i:s", $when);
 		}
 		
@@ -493,11 +496,11 @@ if (!class_exists("KnewsPlugin")) {
 			
 			if ($format=='mysql') $date = $this->sql2time($date);
 
-			//$gmt_offset = intval(get_option('gmt_offset')) * 60 * 60;
+			$gmt_offset = intval(get_option('gmt_offset')) * 60 * 60;
 			//$date = $date + $gmt_offset;
 			
 			$day = 60*60*24;
-			$today_start = mktime (0,0,0,date('n'),date('j'),date('Y')); // + $gmt_offset;
+			$today_start = mktime (0,0,0,date('n'),date('j'),date('Y')) + $gmt_offset;
 
 			$diference = $date - $today_start;
 
@@ -764,20 +767,26 @@ if (!class_exists("KnewsPlugin")) {
 			}
 			
 			if ($results) {
-				if (count($user_found)==0) {
-
-					$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $user_id . ", " . $id_list_news . ");";
-
-				} else {
-
-					$query = "SELECT * FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user_id . " AND id_list=" . $id_list_news;
-					$subscription_found = $wpdb->get_results( $query );
-					
-					if (count($subscription_found)==0) {
-						$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $user_id . ", " . $id_list_news . ");";
+				
+				if (!is_array($id_list_news)) $id_list_news = array($id_list_news);
+				
+				foreach ($id_list_news as $id_list) {
+				
+					if (count($user_found)==0) {
+	
+						$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $user_id . ", " . $id_list . ");";
+	
+					} else {
+	
+						$query = "SELECT * FROM " . KNEWS_USERS_PER_LISTS . " WHERE id_user=" . $user_id . " AND id_list=" . $id_list;
+						$subscription_found = $wpdb->get_results( $query );
+						
+						if (count($subscription_found)==0) {
+							$query = "INSERT INTO " . KNEWS_USERS_PER_LISTS . " (id_user, id_list) VALUES (" . $user_id . ", " . $id_list . ");";
+						}
 					}
+					$results = $wpdb->query( $query );
 				}
-				$results = $wpdb->query( $query );
 								
 				if ($submit_mail) {
 					
@@ -1119,7 +1128,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		/* end print deprecated functions */
 
-		function getListsSelector($lists, $mandatory_id=0) {
+		function getListsSelector($lists, $mandatory_id=0, $multiple='select') {
 			if ($mandatory_id != 0) {
 				if (isset($lists[$mandatory_id])) {
 					$lists = array();
@@ -1127,12 +1136,21 @@ if (!class_exists("KnewsPlugin")) {
 				}
 			}
 			if (count($lists) > 1) {
-				$response = '<fieldset><select name="user_knews_list">';
-				while ($list = current($lists)) {
-					$response .= '<option value="' . key($lists) . '">' . $list . '</option>';
-					next($lists);
+				if ($multiple=='checkbox') {
+					$response = '<fieldset>';
+					while ($list = current($lists)) {
+						$response .= '<input type="checkbox" name="user_knews_list[]" value="' . key($lists) . '" /> ' . $list . '<br />';
+						next($lists);
+					}
+					$response .= '</fieldset>';
+				} else {
+					$response = '<fieldset><select name="user_knews_list">';
+					while ($list = current($lists)) {
+						$response .= '<option value="' . key($lists) . '">' . $list . '</option>';
+						next($lists);
+					}
+					$response .= '</select></fieldset>';
 				}
-				$response .= '</select></fieldset>';
 			} else if (count($lists) == 1) {
 				$response = '<input type="hidden" name="user_knews_list" value="' . key($lists) . '" />';
 			} else {
@@ -1272,6 +1290,10 @@ if (!class_exists("KnewsPlugin")) {
 				if ($labelwhere == 'inside') $response .= strip_tags($this->get_custom_text('widget_label_email', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : '')) . '" title="' . strip_tags($this->get_custom_text('widget_label_email', $lang['localized_code']) . (($requiredtxt=='1') ? '*' : ''));
 				$response .= '"' . (($stylize) ? ' style="display:block; margin-bottom:10px;"' : '') . ' /></fieldset>';
 				
+				$response .= $this->getListsSelector($knews_lists, $mandatory_id, isset($instance['multiple']) ? $instance['multiple'] : '');
+				
+				$response .= $this->getLangHidden();
+				
 				if (isset($instance['terms']) && $instance['terms']=='1') {
 					$response .= '<fieldset class="knewsterms">';
 					if ($stylize) $response .='<span style="display:block; margin-bottom:10px;">';
@@ -1281,8 +1303,7 @@ if (!class_exists("KnewsPlugin")) {
 					if ($stylize) $response .='</span>';
 					$response .= '</fieldset>';
 				}
-				
-				$response .= $this->getListsSelector($knews_lists, $mandatory_id) . $this->getLangHidden();
+
 				$key = md5(date('dmY') . wp_create_nonce( 'knews-subscription' ));
 				$response .= '<input type="hidden" name="knewskey" value="' . $key . '" />
 						<textarea name="knewscomment" class="knewscomment" style="width:150px; height:80px" rows="5" cols="20"></textarea>';
@@ -1520,7 +1541,7 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.7.1');
+		define('KNEWS_VERSION', '1.7.2');
 
 		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
@@ -1922,16 +1943,24 @@ if (!function_exists("Knews_plugin_ap")) {
 	add_action('wp_ajax_nopriv_knewsHTMLedit', 'knews_ajax_deny' );
 	// Add the pointer javascript
 	function knews_add_pointer_scripts() {
-		global $Knews_plugin;
+		global $Knews_plugin, $knewsOptions;
 		$dismissed = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
 
 		if ( !in_array( 'knews_pro_welcome', $dismissed ) && $Knews_plugin->im_pro()) {
 			$content = '<h3>' . __('Welcome to Knews Pro','knews') . '</h3><p>' . sprintf(__('You can configure the new features <br />into %s Knews Pro Options tab','knews'), '<a href="admin.php?page=knews_config&tab=pro">') . '</a></p>';
 			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_pro_welcome');
 
-		} else if ( !in_array( 'knews_remote', $dismissed )  ) {
-			$content = '<h3>' . __('NEW Feature','knews') . '</h3><p>' . sprintf(__('&gt; Now you can add a subscription form in any remote website.<br><br />Get the %s iframe HTML code','knews'), '<a href="widgets.php">') . '</a></p>';
-			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_remote');
+		} else if ($knewsOptions['should_advice_bounce_mode']==1 && !in_array( 'knews_bounce_advice', $dismissed ) && $Knews_plugin->im_pro()  ) {
+			$content = '<h3>Changes on email headers for bounce</h3><p>We\\\'re added a new choice on email configuration for bounce. Please, <strong>check if email sending still working</strong>. If it not, adjust the <strong>Bounce header option</strong> (return-path / sender) <a href="' . ($knewsOptions['smtp_knews']==0 ? 'admin.php?page=knews_config&tab=advanced&subtab=2' : 'admin.php?page=knews_config&tab=pro&subtab=2') . '">here</a>.</p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_bounce_advice');
+
+		} else if (defined('WPCF7_VERSION') && !in_array( 'knews_cf7', $dismissed )  ) {
+			$content = '<h3>Knews loves Contact Form 7</h3><p>Now you can add a subscription to Knews lists on any <strong>Contact Form 7</strong> form, with our new free plugin: <a href="https://wordpress.org/plugins/knews-contact-form-7-glue/" target="_blank">Knews + Contact Form 7 Glue</a> hosted on wordpress.org</p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_cf7');
+
+		} else if (strpos($_SERVER['REQUEST_URI'],'widgets.php') !== false && !in_array( 'knews_multiple_lists', $dismissed )  ) {
+			$content = '<h3>Knews allow multiple subscription at once</h3><p>There is a new option in Knews subscription widget: <strong>Allow multiple subscription</strong>. It will change the combobox for one checkbox per every open mailing list.</p>';
+			knews_add_pointer_scripts_js($content, '#menu-appearance', 'knews_multiple_lists');
 		}
 
 	}
@@ -1990,8 +2019,8 @@ if (!function_exists("Knews_plugin_ap")) {
 	
 	function knews_aj_posts_where( $where ) {
 		global $knews_aj_look_date, $knewsOptions, $Knews_plugin;
-   		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified' : 'post_date') . " > '" . $knews_aj_look_date . "' "
-					  . " AND post_date <= '" . $Knews_plugin->get_mysql_date() . "' AND post_status='publish'";
+   		return $where . " AND " . ((intval($knewsOptions['edited_autom_post'])==1) ? 'post_modified_gmt' : 'post_date_gmt') . " > '" . $knews_aj_look_date . "' "
+					  . " AND post_date_gmt <= '" . $Knews_plugin->get_mysql_date() . "' AND post_status='publish'";
 	}
 
 	function knews_init( $qvars ) {

@@ -452,7 +452,7 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			}
 			
 			knews_debug('- saving the created newsletter' . "\r\n");
-			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . $Knews_plugin->localize_date(time()) . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_bodytag) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
+			$sql = "INSERT INTO " . KNEWS_NEWSLETTERS . "(name, subject, created, modified, template, html_mailing, html_head, html_bodytag, html_modules, html_container, lang, automated, mobile, id_mobile, newstype) VALUES ('" . esc_sql($news[0]->name) . " (" . $Knews_plugin->localize_date(current_time('timestamp') ) . ")', '" . esc_sql($subject) . "', '" . $Knews_plugin->get_mysql_date() . "', '" . $Knews_plugin->get_mysql_date() . "','" . $news[0]->template . "','" . esc_sql($news_mod) . "','" . esc_sql($news[0]->html_head) . "','" . esc_sql($news[0]->html_bodytag) . "','" . esc_sql($news[0]->html_modules) . "','" . esc_sql($news[0]->html_container) . "', '" . $news[0]->lang . "', 1, " . (($mobile) ? '1' : '0') . ", " . $mobile_news_id . ", 'automated')";
 			$results = $wpdb->query($sql);				
 			$id_newsletter = $Knews_plugin->real_insert_id();
 
@@ -475,16 +475,17 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			$query = "SELECT DISTINCT(" . KNEWS_USERS . ".id) FROM " . KNEWS_USERS . ", " . KNEWS_USERS_PER_LISTS . " WHERE " . KNEWS_USERS . ".id=" . KNEWS_USERS_PER_LISTS . ".id_user AND " . KNEWS_USERS . ".state='2' AND " . KNEWS_USERS_PER_LISTS . ".id_list=" . $aj->target_id;
 
 			$batch_opts = array (
-				'minute' => date("i"),
-				'hour' => date("H"),
-				'day' => date("d"),
-				'month' => date("m"),
-				'year' => date("Y"),
+				'minute' => date("i", time()),
+				'hour' => date("H", time()),
+				'day' => date("d", time()),
+				'month' => date("m", time()),
+				'year' => date("Y", time()),
 				'paused' => (($aj->auto==1) ? 0 : 1),
 				'priority' => 4,
 				'strict_control' => '',
 				'emails_at_once' => $aj->emails_at_once,
-				'id_smtp' => $aj->id_smtp
+				'id_smtp' => $aj->id_smtp,
+				'timezone' => 'utc'
 			);
 								
 			require( KNEWS_DIR . "/includes/submit_batch.php");

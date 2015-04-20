@@ -243,7 +243,7 @@ function knews_update_sql($sql) {
 	if (!$wpdb->query($sql)) {
 		echo '<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
 		_e('Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE).','knews');
-		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error;
+		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error . ' sql: ' . $sql;
 		echo '</div>';
 		return false;
 	}
@@ -260,7 +260,7 @@ function knews_add_column($table, $field, $typefield) {
 	if (!$wpdb->query($sql)) {
 		echo '<div style="background-color:#FFEBE8; border:#CC0000 1px solid; color:#555555; border-radius:3px; padding:5px 10px; margin:20px 15px 10px 0; text-align:left">';
 		_e('Knews cant update. Please, check user database permisions. (You must allow ALTER TABLE).','knews');
-		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error;
+		echo ' (ver. ' . get_option('knews_version','0.0.0') . ')' . ' ' . $wpdb->last_error . ' sql: ' . $sql;
 		echo '</div>';
 		return false;
 	}
