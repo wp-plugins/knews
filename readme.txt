@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.1.1
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,9 +173,9 @@ If sending is done by SMTP, the amount of e-mails reported as SPAM will drop. Kn
 
 No problem. Simply choose the option to use Cron emulation in JavaScript and send normally. You will have to keep a window open until the sending ends that's all.
 
-**Does Knews only have 5 templates?**
+**How many templates Knews has?**
 
-At the moment Knews only has 3 free templates. Just we launched our second premium template "Officina", in our [(new shop)](http://www.knewsplugin.com/ps/en/).
+At the moment Knews only has 3 free templates. We have 6 premium templates also. Just we launched a pair of WooCommerce compatible templates in our [(new shop)](http://www.knewsplugin.com/ps/en/).
 In any case, the degree of personalisation of our templates is immense, with thousands of different combinations available. You can also follow our tutorial to modify a template or create a new custom one for yourself.
 
 == Screenshots ==
@@ -192,6 +192,11 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.7.2 =
+- Contact Form 7 support added through [Knews + CF7 Glue] (http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
+- Multiple mailing list subscription at once option added (chekboxes instead select on subscription widget as option)
+- Consistent local time info instead of GMT time on admin side
 
 = 1.7.1 =
 - Crop image (on/off) on resize added as option
@@ -670,6 +675,11 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.7.2 =
+- Contact Form 7 support added through [Knews + CF7 Glue] (http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
+- Multiple mailing list subscription at once option added (chekboxes instead select on subscription widget as option)
+- Consistent local time info instead of GMT time on admin side
 
 = 1.7.1 =
 - Crop image (on/off) on resize added as option
