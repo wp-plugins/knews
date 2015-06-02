@@ -3,7 +3,7 @@
 Plugin Name: K-news
 Plugin URI: http://www.knewsplugin.com
 Description: Finally, newsletters are multilingual, quick and professional.
-Version: 1.7.3
+Version: 1.7.4
 Author: Carles Reverter
 Author URI: http://www.carlesrever.com
 License: GPLv2 or later
@@ -241,6 +241,8 @@ if (!class_exists("KnewsPlugin")) {
 			$this->knews_load_plugin_textdomain();
 			$knewsOptions = $this->getAdminOptions();
 		
+			wp_register_script ('knews_subscribe', KNEWS_URL . '/includes/knews_subscribe.js', array('jquery'), KNEWS_VERSION, true);
+
 			$this->basic_initialized=true;
 		}
 		
@@ -355,7 +357,11 @@ if (!class_exists("KnewsPlugin")) {
 					}
 				}
 				if ($knewsOptions['multilanguage_knews']=='qt') {
-					if (function_exists('qtrans_convertURL')) {
+
+					if (function_exists('qtranxf_convertURL')) {
+						$url_home = qtranxf_convertURL(get_bloginfo('url'), $user_lang);
+						
+					} elseif (function_exists('qtrans_convertURL')) {
 						//$user_lang = $Knews_plugin->get_user_lang($Knews_plugin->get_safe('e'));
 						$url_home = qtrans_convertURL(get_bloginfo('url'), $user_lang);
 					}
@@ -621,13 +627,21 @@ if (!class_exists("KnewsPlugin")) {
 			return $txt;
 		}
 	
-		function get_user_lang($email){
+		function get_user_lang($email_or_id){
 
 			if (! $this->initialized) $this->init();
 
 			global $wpdb;
+
+			$field = 'email';
 			
-			$query = "SELECT * FROM " . KNEWS_USERS . " WHERE email='" . $email . "'";
+			if (!$this->validEmail($email_or_id)) {
+				$email_or_id = intval($email_or_id);
+				if ($email_or_id==0) return 'en';
+				$field = 'id';
+			}
+			
+			$query = "SELECT * FROM " . KNEWS_USERS . " WHERE " . $field . "='" . $email_or_id . "'";
 			$user_found = $wpdb->get_results( $query );
 			return $user_found[0]->lang;
 		}
@@ -791,8 +805,8 @@ if (!class_exists("KnewsPlugin")) {
 				if ($submit_mail) {
 					
 					if ($bypass_confirmation) return 3;
-										
-					if (apply_filters('knews_submit_confirmation', $email, $confkey, $lang_locale, $lang)) {
+					
+					if (apply_filters('knews_submit_confirmation', $email, $confkey, $lang_locale, $lang, $user_id)) {
 					//if ($this->submit_confirmation ($email, $confkey, $lang_locale, $lang)) {
 						return 1; //Confirmation sent
 					} else {
@@ -812,15 +826,15 @@ if (!class_exists("KnewsPlugin")) {
 			}
 			
 		}
-		
-		function submit_confirmation ($email, $confkey, $lang_locale='en_US', $lang='en') {
+				
+		function submit_confirmation ($email, $confkey, $lang_locale='en_US', $lang='en', $user_id=0) {
 
 			global $knewsOptions;
 
 			$mailHtml = $this->get_custom_text('email_subscription_body', $lang_locale);
 			
 			//$url_confirm = KNEWS_LOCALIZED_ADMIN . 'admin-ajax.php?action=knewsConfirmUser&k=' . $confkey . '&e=' . urlencode($email);
-			$url_confirm = $this->get_localized_home($lang, 'knews=confirmUser&k=' . $confkey . '&e=' . urlencode($email) );
+			$url_confirm = $this->get_localized_home($lang, 'knews=confirmUser&k=' . $confkey . '&e=' . urlencode($user_id != 0 ? $user_id : $email) );
 
 			$mailHtml = str_replace('#url_confirm#', $url_confirm, $mailHtml);
 
@@ -870,7 +884,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function have_qtranslate() {
-			return (function_exists( 'qtrans_init') || function_exists( 'qtranxf_init'));
+			return (function_exists( 'qtrans_init') || function_exists( 'qtranxf_init') || defined( 'QTRANSLATE_FILE'));
 		}
 		
         function have_polylang() {
@@ -890,18 +904,24 @@ if (!class_exists("KnewsPlugin")) {
 			global $wpdb;
 			
 			$confkey = $this->get_safe('k');
-			$email = $this->get_safe('e');
 			$date = $this->get_mysql_date();
+
+			$email_or_id = $this->get_safe('e');
+			$field = 'email';
 			
-			if (!$this->validEmail($email)) return false;
+			if (!$this->validEmail($email_or_id)) {
+				$email_or_id = intval($email_or_id);
+				if ($email_or_id==0) return false;
+				$field = 'id';
+			}
 			if ($confkey=='') return false;
 			
-			$query = "SELECT * FROM ".KNEWS_USERS." WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
+			$query = "SELECT * FROM ".KNEWS_USERS." WHERE " . $field . "='" . $email_or_id . "' AND confkey='" . $confkey . "'";
 			$results = $wpdb->get_row( $query );
 			if (!isset($results->id)) return false;
 
 			$date = $this->get_mysql_date();
-			$query = "UPDATE ".KNEWS_USERS." SET state='2', joined='" . $date . "' WHERE email='" . $email . "' AND confkey='" . $confkey . "'";
+			$query = "UPDATE " . KNEWS_USERS . " SET state='2', joined='" . $date . "' WHERE " . $field . "='" . $email_or_id . "' AND confkey='" . $confkey . "'";
 			$results = $wpdb->query( $query );
 			
 			return true;
@@ -916,13 +936,19 @@ if (!class_exists("KnewsPlugin")) {
 			$submit_id = $this->get_safe('id', 0, 'int');
 			$id_newsletter = $this->get_safe('n', 0, 'int');
 			$confkey = $this->get_safe('k');
-			$email = $this->get_safe('e');
 			$date = $this->get_mysql_date();
+
+			$field = 'email';
+			$email_or_id = $this->get_safe('e');
+			if (!$this->validEmail($email_or_id)) {
+				$email_or_id = intval($email_or_id);
+				if ($email_or_id==0) return false;
+				$field = 'id';
+			}
 			
-			if (!$this->validEmail($email)) return false;
 			if ($confkey=='') return false;
 			
-			$query = "SELECT id FROM " . KNEWS_USERS . " WHERE confkey='" . $confkey . "' AND email='" . $email . "'";
+			$query = "SELECT id FROM " . KNEWS_USERS . " WHERE confkey='" . $confkey . "' AND " . $field . "='" . $email_or_id . "'";
 			$find_user = $wpdb->get_results( $query );
 			
 			if (count($find_user) != 1) return false;
@@ -1124,7 +1150,8 @@ if (!class_exists("KnewsPlugin")) {
 			echo $this->getLangHidden();
 		}
 		function printAjaxScript($container, $custom=false) {
-			echo $this->getAjaxScript($container, $custom=false);
+			//echo 
+			$this->getAjaxScript($container, $custom=false);
 		}
 		/* end print deprecated functions */
 
@@ -1180,51 +1207,7 @@ if (!class_exists("KnewsPlugin")) {
 		}
 		
 		function getAjaxScript($container, $custom=false) {
-
-			$response = '<script type="text/javascript">
-				jQuery(document).ready(function() {
-					knewsfunc = function() {
-						if (jQuery(this).attr(\'submitted\') !== "true") {
-							save_knews_form = jQuery(\'#knewsform_' . $this->knews_form_n . '\').html();
-							jQuery(this).attr(\'submitted\', "true");
-							jQuery("input:text", this).each(function() {
-								if (jQuery(this).attr("title") !== undefined) {
-									if (jQuery(this).val() == jQuery(this).attr("title")) jQuery(this).val("");
-								}
-							});
-							jQuery.post(jQuery(this).attr(\'action\'), jQuery(this).serialize(), function (data) { 
-								jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(data);
-								jQuery(\'#knewsform_' . $this->knews_form_n . ' a.knews_back\').click( function () {
-									jQuery(\'#knewsform_' . $this->knews_form_n . '\').html(save_knews_form);
-									return false;								
-								});
-							});
-						}
-						return false;
-					};
-					knewsfuncInputs = function() {
-						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
-							if (jQuery(this).val() == jQuery(this).attr(\'title\') ) jQuery(this).val(\'\');
-						}
-					};
-					knewsfuncInputsExit = function() {
-						if (typeof(jQuery(this).attr(\'title\')) != \'undefined\') {
-							if (jQuery(this).val() == \'\' ) jQuery(this).val( jQuery(this).attr(\'title\') );
-						}
-					};
-					if (parseInt(jQuery.fn.jquery.split(\'.\').join(\'\'), 10) >= 170) {
-						jQuery(document).on(\'submit\', \'#knewsform_' . $this->knews_form_n . ' form\', knewsfunc);
-						jQuery(document).on(\'focus\', \'#knewsform_' . $this->knews_form_n . ' input\', knewsfuncInputs);
-						jQuery(document).on(\'blur\', \'#knewsform_' . $this->knews_form_n . ' input\', knewsfuncInputsExit);
-					} else {
-						jQuery(\'#knewsform_' . $this->knews_form_n . ' form\').live(\'submit\', knewsfunc);						
-						jQuery(\'#knewsform_' . $this->knews_form_n . ' input\').live(\'focus\', knewsfuncInputs);						
-						jQuery(\'#knewsform_' . $this->knews_form_n . ' input\').live(\'blur\', knewsfuncInputsExit);						
-					}
-				})
-			</script>';
-
-			return $response;
+			wp_enqueue_script ('knews_subscribe');
 		}
 		
 		function getForm($mandatory_id=0, $args='', $instance=array(), $container='knews_add_user') {
@@ -1244,7 +1227,7 @@ if (!class_exists("KnewsPlugin")) {
 
 				if (is_array($args)) $response .= $args['before_widget'] . $args['before_title'] . $this->get_custom_text('widget_title', $lang['localized_code']) . $args['after_title'];
 				
-				$response .= '<div class="' . $container . '" id="knewsform_' . $this->knews_form_n . '">
+				$response .= '<div class="' . $container . ' knewsform_container" id="knewsform_' . $this->knews_form_n . '">
 					<style type="text/css">
 					div.' . $container . ' textarea.knewscomment {position:absolute; top:-3000px; left:-3000px;}
 					div.' . $container . ' fieldset {border:0;}';
@@ -1322,7 +1305,7 @@ if (!class_exists("KnewsPlugin")) {
 				</div>';
 
 				if (is_array($args)) $response .=  $args['after_widget'];
-				$js = 1; if (isset($instance['script'])) $js = $instance['script']; if ($js != '0') $response .= $this->getAjaxScript('div.' . $container);
+				$js = 1; if (isset($instance['script'])) $js = $instance['script']; if ($js != '0') $this->getAjaxScript('div.' . $container);
 			}
 			$this->knews_form_n++;
 			return $response;
@@ -1541,9 +1524,9 @@ if (!function_exists("Knews_plugin_ap")) {
 
 	if (class_exists("KnewsPlugin")) {
 		$Knews_plugin = new KnewsPlugin();
-		define('KNEWS_VERSION', '1.7.3');
+		define('KNEWS_VERSION', '1.7.4');
 
-		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 4 );
+		add_filter( 'knews_submit_confirmation', array($Knews_plugin, 'submit_confirmation'), 10, 5 );
 		add_filter( 'knews_add_user_db', array($Knews_plugin, 'add_user_db'), 10, 7 );
 		add_filter( 'knews_get_cpt', array($Knews_plugin, 'get_cpt'), 10, 1 );
 		add_filter( 'knews_posts_preview', array($Knews_plugin, 'posts_preview'), 10, 8 );
@@ -1719,7 +1702,7 @@ if (!function_exists("Knews_plugin_ap")) {
 			require_once( KNEWS_DIR . '/includes/dialogs.php');
 		}
 	}
-	add_action('wp_footer', 'knews_popup');
+	add_action('wp_footer', 'knews_popup', 100);
 	
 	function knews_admin_notice() {
 		require('includes/admin_notices.php');
@@ -1953,6 +1936,10 @@ if (!function_exists("Knews_plugin_ap")) {
 		} else if ($knewsOptions['should_advice_bounce_mode']==1 && !in_array( 'knews_bounce_advice', $dismissed ) && $Knews_plugin->im_pro()  ) {
 			$content = '<h3>Changes on email headers for bounce</h3><p>We\\\'re added a new choice on email configuration for bounce. Please, <strong>check if email sending still working</strong>. If it not, adjust the <strong>Bounce header option</strong> (return-path / sender) <a href="' . ($knewsOptions['smtp_knews']==0 ? 'admin.php?page=knews_config&tab=advanced&subtab=2' : 'admin.php?page=knews_config&tab=pro&subtab=2') . '">here</a>.</p>';
 			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_bounce_advice');
+
+		} else if (function_exists('is_plugin_active') && is_plugin_active('gravityforms/gravityforms.php') && !in_array( 'knews_gf', $dismissed )  ) {
+			$content = '<h3>Knews loves Gravity Forms</h3><p>Now you can add a subscription to Knews lists on any <strong>Gravity Forms</strong> form, with our new free plugin: <a href="https://wordpress.org/plugins/knews-gravity-forms-glue/" target="_blank">Knews + Gravity Forms Glue</a> hosted on wordpress.org</p>';
+			knews_add_pointer_scripts_js($content, '#toplevel_page_knews_news', 'knews_gf');
 
 		} else if (defined('WPCF7_VERSION') && !in_array( 'knews_cf7', $dismissed )  ) {
 			$content = '<h3>Knews loves Contact Form 7</h3><p>Now you can add a subscription to Knews lists on any <strong>Contact Form 7</strong> form, with our new free plugin: <a href="https://wordpress.org/plugins/knews-contact-form-7-glue/" target="_blank">Knews + Contact Form 7 Glue</a> hosted on wordpress.org</p>';

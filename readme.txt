@@ -3,8 +3,8 @@ Contributors: creverter
 Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
-Tested up to: 4.2.1
-Stable tag: 1.7.3
+Tested up to: 4.2.2
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Includes a custom, unique **modular WYSIWYG** (What You See Is What You Get) edi
 
 = Features =
 * **Multilingual**: it recognizes the languages of the blog or website automatically; compatible with Polylang, WPML and qTranslate / qTranslate X.
+* **Gravity Forms** support added through [Knews + GF Glue](http://www.wordpress.org/plugins/knews-gravity-forms-glue) free plugin: add easily a subscription checkbox to your GF forms
 * **Contact Form 7** support added through [Knews + CF7 Glue](http://www.wordpress.org/plugins/knews-contact-form-7-glue) free plugin: add easily a subscription checkbox to your CF7 forms
 * Multiple mailing list subscription at once 
 * Partial support(1) for WooCommerce templates: [Lets Sharp](http://knewsplugin.com/shop/es/14-lets-sharp-template.html) & [Cool Shop](http://knewsplugin.com/shop/15-cool-shop-template.html)
@@ -194,6 +195,12 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.7.4 =
+- Gravity Forms support added through [Knews + GF Glue](http://www.wordpress.org/plugins/knews-gravity-forms-glue) free plugin: add easily a subscription checkbox to your GF forms
+- Complaints [Google PII Adsense Policy] (https://support.google.com/adsense/answer/6156630?hl=en) (Personally Identifiable Information)
+- Support new qTranslate X 3.3 release(a qTranslate branch)
+- JavaScript front-end code enqueued in a WP standard way: subscription forms and subscription/unsubscription dialogs compatibles with jQuery loaded on footer.
 
 = 1.7.3 =
 - Support added for [qTranslateX](https://wordpress.org/plugins/qtranslate-x/) (a qTranslate branch)
@@ -680,6 +687,12 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.7.4 =
+- Gravity Forms support added through [Knews + GF Glue](http://www.wordpress.org/plugins/knews-gravity-forms-glue) free plugin: add easily a subscription checkbox to your GF forms
+- Complaints [Google PII Adsense Policy] (https://support.google.com/adsense/answer/6156630?hl=en) (Personally Identifiable Information)
+- Support new qTranslate X 3.3 release(a qTranslate branch)
+- JavaScript front-end code enqueued in a WP standard way: subscription forms and subscription/unsubscription dialogs compatibles with jQuery loaded on footer.
 
 = 1.7.3 =
 - Support added for [qTranslateX](https://wordpress.org/plugins/qtranslate-x/) (a qTranslate branch)

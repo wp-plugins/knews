@@ -48,9 +48,9 @@ if (!empty($_POST)) $w=check_admin_referer($knews_nonce_action, $knews_nonce_nam
 					$aux_array[] = array( 'token' => $token['token'], 'value' => $Knews_plugin->get_user_field($user->id, $token['id'], $token['defaultval']) );
 				}
 				$user->tokens = $aux_array;
-				$user->unsubscribe = $Knews_plugin->get_localized_home($user->lang, 'knews=unsubscribe&e=' . urlencode($user->email) . '&k=' . $user->confkey);
+				$user->unsubscribe = $Knews_plugin->get_localized_home($user->lang, 'knews=unsubscribe&e=' . $user->id . '&k=' . $user->confkey);
 				$url_news = $Knews_plugin->get_localized_home($user->lang, 'knews=readEmail&id=' . $id_newsletter);
-				$user->cant_read = $url_news . '&e=' . urlencode($user->email);
+				$user->cant_read = $url_news . '&e=' . $user->id;
 				$user->fb_like = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url_news . '&share=fb');
 				$user->tweet = 'http://twitter.com/share?text=#news_title_encoded#&url=' . urlencode($url_news . '&share=tw');
 

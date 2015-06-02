@@ -348,11 +348,19 @@ function knews_create_news($aj, $pend_posts, $news, $fp, $mobile, $mobile_news_i
 			global $post;
 			$post = get_post($pp->ID);
 
-			//qTranslate support
 			$permalink = get_permalink();
-			if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt' && function_exists('qtrans_convertURL')) {
-				$post = qtrans_use($aj->lang, $post, false);
-				$permalink = qtrans_convertURL($permalink, $aj->lang, true);
+
+			//qTranslate support
+			if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt') {
+	
+				if (function_exists('qtranxf_convertURL')) {
+					$post = qtranxf_use($aj->lang, $post, false);
+					$permalink = qtranxf_convertURL($permalink, $aj->lang, true);
+	
+				} elseif (function_exists('qtrans_convertURL')) {
+					$post = qtrans_use($aj->lang, $post, false);
+					$permalink = qtrans_convertURL($permalink, $aj->lang, true);
+				}
 			}
 			//End qT
 			setup_postdata($post);

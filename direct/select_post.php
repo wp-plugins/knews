@@ -35,9 +35,16 @@ if ($Knews_plugin) {
 		$post = get_post($id);
 		$permalink = get_permalink();
 
-		if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt' && function_exists('qtrans_convertURL')) {
-			$post = qtrans_use($lang, $post, false);
-			$permalink = qtrans_convertURL($permalink, $lang, true);
+		if (KNEWS_MULTILANGUAGE && $knewsOptions['multilanguage_knews']=='qt') {
+
+			if (function_exists('qtranxf_convertURL')) {
+				$post = qtranxf_use($lang, $post, false);
+				$permalink = qtranxf_convertURL($permalink, $lang, true);
+
+			} elseif (function_exists('qtrans_convertURL')) {
+				$post = qtrans_use($lang, $post, false);
+				$permalink = qtrans_convertURL($permalink, $lang, true);
+			}
 		}
 		
 		setup_postdata($post);
