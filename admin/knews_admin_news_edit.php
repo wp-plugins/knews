@@ -123,7 +123,7 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 							<a title="Apply changes and refresh image" class="rredraw_image" href="#"></a>
 							<a title="Undo image changes" class="uundo_image" href="#"></a>*/?>
 						</span>
-						<p><label><?php _e('Image URL:','knews'); ?></label><a href="#" class="change_image"></a><input type="text" name="image_url" id="image_url" readonly="readonly" /></p>
+						<p><label><?php _e('Image URL:','knews'); ?></label><a href="#" class="change_image"></a><input type="text" name="image_url" id="image_url" readonly /></p>
 						<p><label><?php _e('Image link:','knews'); ?> <a href="#" title="<?php _e('Put a url if you want to put link around the image, for example: http://www.mysite.com/mypage.html.','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/help2.gif" width="16" height="16" alt="" /></a></label><input type="text" name="image_link" id="image_link" /></p>
 						<p><label><?php _e('Image alt:','knews'); ?> <a href="#" title="<?php _e('The alternate text is very important, because most mail clients block initial image load and show the alternate image text.','knews'); ?>"><img src="<?php echo KNEWS_URL; ?>/images/help2.gif" width="16" height="16" alt="" /></a></label><textarea name="image_alt" id="image_alt"></textarea></p>
 						<div class="alignable"><p><?php _e('Image align:','knews'); ?> <select name="image_align" id="image_align"><option value="">none</option>
@@ -147,8 +147,10 @@ alert('<?php _e("Warning! IE 6/7 can't edit newsletters! The editor uses HTML5 p
 						<?php /*<a href="#" class="toggle_handlers toggle_handlers_off" title="<?php _e('Show/hide handlers','knews'); ?>"></a>*/?>
 						<span class="clear"></span>
 					</div>
+					<div class="resultats_test_pro"></div>
 					<div class="save_button">
-						<a href="#" class="button-primary" onClick="save_news(); return false;"><?php _e('Save','knews');?></a>
+						<p><a <?php echo ($Knews_plugin->im_pro()) ? ' href="#" onClick="spam_check(); return false;" ' : ' href="admin.php?page=knews_config&tab=pro" target="_blank" '; ?> class="button" ><?php _e('Real Spam Test','knews');?></a> <a href="http://knewsplugin.com/real-spam-test-for-smtp-configuration-and-newsletters/" style="background:url(<?php echo KNEWS_URL; ?>/images/help.png) no-repeat 5px 0; padding:3px 0 3px 30px; color:#0646ff; font-size:15px; vertical-align:middle;" target="_blank" rel="noreferrer" title="About Real Spam Test"></a>
+						<a href="#" class="button-primary" onClick="save_news(); return false;" style="float:right;"><?php _e('Save','knews');?></a></a>
 					</div>
 					<div class="plegable">
 					<?php 

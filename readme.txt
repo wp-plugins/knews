@@ -4,7 +4,7 @@ Donate link: http://www.knewsplugin.com/multi-language/
 Tags: newsletter, newsletters, automated newsletter, newsletter multilingual, wysiwyg newsletter editor, batch sending, newsletter signup, email subscribe, email capture, subscription, subscribers
 Requires at least: 3.1
 Tested up to: 4.2.2
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -195,6 +195,13 @@ In any case, the degree of personalisation of our templates is immense, with tho
 10. The Officina Template.
 
 == Changelog ==
+
+= 1.7.6 =
+- Real Spam Test: check easily your SMTP configuration with real Spam Assassin diagnose results
+- Text version added on every newsletter sent. It will get better (automatic extraction from HTML content)
+- Solved warning about WPLANG on admin dashboard
+- Better pixel tracking code script
+- Solved some auto-creation newsletter issues
 
 = 1.7.5 =
 - Solved the missing  /wp-content/plugins/knews/includes/knews_subscribe.js?ver=1.7.4 bug. Bug introduced in 1.7.4. (Sorry guys!)
@@ -690,6 +697,13 @@ Solved a Cross-Site Scripting Vulnerability (XSS) in the file: knews/wysiwyg/fon
 * Habemus Plugin!!!
 
 == Upgrade Notice ==
+
+= 1.7.6 =
+- Real Spam Test: check easily your SMTP configuration with real Spam Assassin diagnose results
+- Text version added on every newsletter sent. It will get better (automatic extraction from HTML content)
+- Solved warning about WPLANG on admin dashboard
+- Better pixel tracking code script
+- Solved some auto-creation newsletter issues
 
 = 1.7.5 =
 - Solved the missing  /wp-content/plugins/knews/includes/knews_subscribe.js?ver=1.7.4 bug. Bug introduced in 1.7.4. (Sorry guys!)

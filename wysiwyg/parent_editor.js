@@ -1020,9 +1020,9 @@ function setCatcher(is_insertion) { //false by default
 		if (is_insertion) {
 			document.getElementById('knews_editor').contentWindow.b_insert_image(media);
 		} else {
-		callback_img(html);
+			callback_img(html);
+		}
 	}
-}
 }
 /*
 function setCatcherInsertion() {

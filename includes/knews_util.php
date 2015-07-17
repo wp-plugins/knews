@@ -237,6 +237,13 @@ function knews_rgb2hex($code) {
 	}
 	return $code;
 }
+function clean_permalinks($code) {
+	for ($n=0; $n<21; $n++) {
+		$code = str_replace('%the_permalink_' . $n . '%', '#', $code);
+	}
+	return $code;
+}
+
 function knews_examine_template($templateID, $template_path, $template_url, $popup=false, $mode='selection') {
 	global $Knews_plugin;
 	$xml_info = array (
